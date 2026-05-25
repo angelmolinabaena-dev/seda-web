@@ -739,10 +739,11 @@ export default function PropietariosPage() {
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-8">
                   {[
-                    ["TripAdvisor",       "Certificado de Excelencia 2024"],
-                    ["Booking.com",       "Traveller Award 2026"],
-                    ["Core Masters",      "Hotel del Año España"],
-                    ["Expedia · Orbitz",  "Traveler Award"],
+                    ["TripAdvisor",  "Travellers' Choice 2024"],
+                    ["Booking.com",  "Traveller Review Award 2026"],
+                    ["Core Masters", "Hotel of the Year · España"],
+                    ["Expedia",      "Traveler Preferred Award"],
+                    ["Orbitz",       "Traveler Preferred Award"],
                   ].map(([org, award]) => (
                     <div key={award} className="flex items-start gap-3">
                       <Star
