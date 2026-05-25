@@ -15,6 +15,8 @@ const nextConfig = {
     remotePatterns: [
       { protocol: "https", hostname: "v3.fal.media" },
       { protocol: "https", hostname: "fal.media" },
+      // Award badge images served directly from Hotel Estepona Plaza WordPress
+      { protocol: "https", hostname: "hotelesteponaplaza.com" },
     ],
   },
   async redirects() {

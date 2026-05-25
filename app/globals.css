@@ -71,6 +71,20 @@
       animation: none;
     }
   }
+
+  /* Scroll-reveal — used by /nosotros and any page that imports useReveal() */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.9s ease, transform 1s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .reveal-in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+  }
 }
 
 @layer base {
