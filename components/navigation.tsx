@@ -623,7 +623,7 @@ export function Navigation() {
                           isActive ? "bg-foreground" : "bg-transparent"
                         }`}
                       />
-                      <span className="font-serif font-medium text-[1.15rem] md:text-[1.25rem] leading-[1.15] tracking-tight text-muted-foreground group-hover:text-foreground transition-colors">
+                      <span className="font-serif font-bold text-[1.15rem] md:text-[1.25rem] leading-[1.15] tracking-tight text-muted-foreground group-hover:text-foreground transition-colors">
                         {t(link.tKey)}
                       </span>
                     </Link>
