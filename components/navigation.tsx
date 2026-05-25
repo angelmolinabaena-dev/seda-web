@@ -453,19 +453,6 @@ export function Navigation() {
         // user perceives "closed" within a single frame after their tap.
       >
         <div className="h-full flex flex-col pt-20 pb-6 px-6 md:px-12 overflow-y-auto overscroll-contain">
-          {/* Drawer eyebrow only. The language switcher used to live here;
-              it now sits in the mobile header (always visible) per design
-              decision — locale is a top-level affordance, not menu-gated.
-              The eyebrow itself reveals first in the stagger sequence. */}
-          <p
-            className={`font-mono text-[10px] tracking-[0.3em] uppercase text-muted-foreground mb-5 mt-1 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-              isOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
-            }`}
-            style={{ transitionDelay: isOpen ? "60ms" : "0ms" }}
-          >
-            — {t("mobile.navegacion")}
-          </p>
-
           {/* Three differentiated sections — each group has its own visual
               identity, not just spatial separation:
               - HUÉSPEDES (primary audience, warm): default cream bg, gold
@@ -535,7 +522,7 @@ export function Navigation() {
               (cancels the parent's px-6) for a magazine-spread feel. */}
           <section className="mt-8 -mx-6 px-6 md:-mx-12 md:px-12 py-7 bg-[hsl(var(--olive))]/[0.07] border-y border-[hsl(var(--olive))]/20">
             <p
-              className={`font-mono text-[10px] tracking-[0.3em] uppercase text-[hsl(var(--olive))] mb-4 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+              className={`font-mono text-[10px] tracking-[0.3em] uppercase text-[hsl(var(--gold))] mb-4 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                 isOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
               }`}
               style={{ transitionDelay: isOpen ? "300ms" : "0ms" }}
@@ -587,7 +574,7 @@ export function Navigation() {
               destination. */}
           <section className="mt-8">
             <p
-              className={`font-mono text-[10px] tracking-[0.3em] uppercase text-muted-foreground mb-3 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+              className={`font-mono text-[10px] tracking-[0.3em] uppercase text-[hsl(var(--gold))] mb-3 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                 isOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
               }`}
               style={{ transitionDelay: isOpen ? "440ms" : "0ms" }}
@@ -623,7 +610,7 @@ export function Navigation() {
                           isActive ? "bg-foreground" : "bg-transparent"
                         }`}
                       />
-                      <span className="font-serif font-bold text-[1.15rem] md:text-[1.25rem] leading-[1.15] tracking-tight text-muted-foreground group-hover:text-foreground transition-colors">
+                      <span className="font-serif font-bold text-[1.55rem] md:text-[1.7rem] leading-[1.1] tracking-tight text-muted-foreground group-hover:text-foreground transition-colors">
                         {t(link.tKey)}
                       </span>
                     </Link>
