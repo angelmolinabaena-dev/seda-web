@@ -7,6 +7,19 @@
     text-wrap: balance;
   }
 
+  /* Mobile drawer ripple effect */
+  @keyframes ripple-expand {
+    to { transform: scale(4); opacity: 0; }
+  }
+  .ripple-wave {
+    position: absolute;
+    border-radius: 50%;
+    transform: scale(0);
+    opacity: 0.35;
+    animation: ripple-expand 500ms ease-out forwards;
+    pointer-events: none;
+  }
+
   /* ---- Semantic card tokens — adopt these in new code for consistency.
      Existing cards (~30 uses across pages) intentionally not swept; the
      tokens are additive and reduce future drift. */

@@ -214,6 +214,18 @@ export function Navigation() {
     }
   }, [isOpen])
 
+  // Ripple effect — contextual color per drawer group
+  const ripple = useCallback((e: React.PointerEvent<HTMLAnchorElement>, color: string) => {
+    const el = e.currentTarget
+    const rect = el.getBoundingClientRect()
+    const d = Math.max(el.offsetWidth, el.offsetHeight)
+    const span = document.createElement("span")
+    span.className = "ripple-wave"
+    span.style.cssText = `width:${d}px;height:${d}px;left:${e.clientX - rect.left - d / 2}px;top:${e.clientY - rect.top - d / 2}px;background:${color};`
+    el.appendChild(span)
+    span.addEventListener("animationend", () => span.remove(), { once: true })
+  }, [])
+
   return (
     <>
       <header
@@ -397,10 +409,10 @@ export function Navigation() {
             per-element transition-delay (see below). The combined
             effect reads like an editorial curtain reveal. */}
       <div
-        className={`lg:hidden fixed inset-0 z-40 bg-background transition-opacity duration-200 ease-out ${
+        className={`lg:hidden fixed inset-0 z-40 bg-background ${
           isOpen
-            ? "opacity-100 pointer-events-auto"
-            : "opacity-0 pointer-events-none"
+            ? "opacity-100 pointer-events-auto transition-opacity duration-200 ease-out"
+            : "opacity-0 pointer-events-none transition-opacity duration-150 ease-in"
         }`}
         aria-hidden={!isOpen}
         // `inert` would be ideal here but support is uneven on older Safari;
@@ -462,8 +474,9 @@ export function Navigation() {
                     <Link
                       href={link.href}
                       onClick={handleNavTap(link.href)}
+                      onPointerDown={(e) => ripple(e, "hsl(38 50% 50% / 0.2)")}
                       aria-current={isActive ? "page" : undefined}
-                      className={`group flex items-baseline gap-2.5 -mx-2 px-2 py-0.5 transition-colors ${
+                      className={`group relative overflow-hidden flex items-baseline gap-2.5 -mx-2 px-2 py-0.5 transition-colors ${
                         isActive
                           ? "bg-gradient-to-r from-[hsl(var(--gold))]/12 via-transparent to-transparent"
                           : ""
@@ -512,8 +525,9 @@ export function Navigation() {
                     <Link
                       href={link.href}
                       onClick={handleNavTap(link.href)}
+                      onPointerDown={(e) => ripple(e, "hsl(88 18% 32% / 0.18)")}
                       aria-current={isActive ? "page" : undefined}
-                      className={`group flex items-baseline gap-2.5 -mx-2 px-2 py-0.5 transition-colors ${
+                      className={`group relative overflow-hidden flex items-baseline gap-2.5 -mx-2 px-2 py-0.5 transition-colors ${
                         isActive
                           ? "bg-gradient-to-r from-[hsl(var(--olive))]/15 via-transparent to-transparent"
                           : ""
@@ -563,8 +577,9 @@ export function Navigation() {
                     <Link
                       href={link.href}
                       onClick={handleNavTap(link.href)}
+                      onPointerDown={(e) => ripple(e, "hsl(36 8% 12% / 0.1)")}
                       aria-current={isActive ? "page" : undefined}
-                      className={`group flex items-baseline gap-2 -mx-2 px-2 py-0.5 transition-colors ${
+                      className={`group relative overflow-hidden flex items-baseline gap-2 -mx-2 px-2 py-0.5 transition-colors ${
                         isActive
                           ? "bg-gradient-to-r from-foreground/8 via-transparent to-transparent"
                           : ""
@@ -609,36 +624,26 @@ export function Navigation() {
               <span>{primaryCta.label}</span>
               <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" strokeWidth={1.75} />
             </Link>
-            {/* Secondary access tier — also bumped: py-4, text-[12px], semibold.
-                Visually clearly a button (filled background) but one step
-                quieter than the primary CTA. */}
-            <div className="grid grid-cols-2 gap-2">
+            <div className="flex items-center gap-4 pt-1 font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground">
               <a
                 href={GUEST_APP_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setIsOpen(false)}
-                className="group flex items-center justify-center gap-2 px-3 py-4 bg-secondary text-foreground border border-border hover:bg-foreground hover:text-background hover:border-foreground font-mono font-semibold text-[12px] tracking-[0.2em] uppercase transition-colors"
+                className="hover:text-foreground transition-colors"
               >
-                <span>{t("nav.acceso_huespedes")}</span>
-                <ArrowUpRight className="h-3.5 w-3.5 shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" strokeWidth={1.75} />
+                {t("nav.acceso_huespedes")}
               </a>
+              <span aria-hidden className="text-border">·</span>
               <a
                 href={OWNERS_PORTAL_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setIsOpen(false)}
-                className="group flex items-center justify-center gap-2 px-3 py-4 bg-secondary text-foreground border border-border hover:bg-foreground hover:text-background hover:border-foreground font-mono font-semibold text-[12px] tracking-[0.2em] uppercase transition-colors"
+                className="hover:text-foreground transition-colors"
               >
-                <span>{t("nav.acceso_propietarios")}</span>
-                <ArrowUpRight className="h-3.5 w-3.5 shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" strokeWidth={1.75} />
+                {t("nav.acceso_propietarios")}
               </a>
-            </div>
-            <div className="flex items-center justify-between pt-2 font-mono text-[9.5px] tracking-[0.2em] uppercase text-muted-foreground">
-              <a href="tel:+34686980798" className="hover:text-foreground transition-colors tabular-nums">
-                +34 686 980 798
-              </a>
-              <span>Costa del Sol · 24/7</span>
             </div>
           </div>
         </div>
