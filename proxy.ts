@@ -1,9 +1,8 @@
 import createMiddleware from "next-intl/middleware"
 import { routing } from "./i18n/routing"
 
-export default createMiddleware(routing)
+export const proxy = createMiddleware(routing)
 
-// Match all routes except API, internal Next.js paths, and static assets.
-export const config = {
+export const proxyConfig = {
   matcher: ["/((?!api|_next|_vercel|.*\\..*).*)"],
 }
