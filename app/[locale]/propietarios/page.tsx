@@ -22,6 +22,7 @@ import {
   Bell,
 } from "lucide-react"
 import { useTranslations } from "next-intl"
+import Image from "next/image"
 
 const URL_PROPIETARIO = "https://portal.sedaprivatehomes.com/admin/reservas"
 
@@ -665,6 +666,124 @@ export default function PropietariosPage() {
                 <p className="text-[0.85rem] leading-[1.6] text-muted-foreground">{body}</p>
               </article>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FUNDADOR */}
+      <section className="px-6 md:px-12 lg:px-20 py-24 md:py-32 bg-background">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-[5fr_7fr] gap-12 lg:gap-20 items-start">
+
+            {/* Foto */}
+            <div className="relative">
+              <div className="relative overflow-hidden rounded-2xl aspect-[3/4]">
+                <Image
+                  src="/angel-molina.jpg"
+                  alt="Ángel Molina Baena, fundador de Seda Private Homes"
+                  fill
+                  className="object-cover object-top"
+                  sizes="(max-width: 1024px) 100vw, 42vw"
+                />
+              </div>
+              <div className="absolute bottom-5 left-5 right-5 bg-foreground/92 px-4 py-3.5 rounded-xl">
+                <p className="font-mono text-[9px] tracking-[0.22em] uppercase text-[hsl(var(--gold))]">Propietario</p>
+                <p className="font-serif text-[1.05rem] text-background mt-0.5 leading-tight">Hotel Estepona Plaza ★★★</p>
+                <a
+                  href="https://hotelesteponaplaza.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-mono text-[9px] tracking-[0.14em] uppercase text-background/45 hover:text-background/70 transition-colors mt-1 inline-flex items-center gap-1"
+                >
+                  hotelesteponaplaza.com <ArrowUpRight className="h-2.5 w-2.5" strokeWidth={1.5} />
+                </a>
+              </div>
+            </div>
+
+            {/* Bio */}
+            <div className="flex flex-col justify-start lg:pt-3">
+              <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-[hsl(var(--gold))] mb-5">
+                Fundador
+              </p>
+              <h2 className="font-serif font-light text-4xl md:text-5xl leading-[1.05] tracking-[-0.02em]">
+                Ángel Molina <span className="italic">Baena</span>
+              </h2>
+              <p className="text-base leading-[1.7] text-muted-foreground mt-6 max-w-[52ch]">
+                Hotelero de formación (Les Roches School of Hotel Management) y de oficio durante más de una
+                década en Iberostar. Fundé el Hotel Estepona Plaza como propietario-operador y aprendí que
+                la diferencia entre una propiedad que rinde y una que decepciona no es la ubicación: es la
+                gestión. Seda es esa gestión, trasladada a las villas de lujo de la Costa del Sol.
+              </p>
+
+              {/* Credentials */}
+              <div className="mt-7 flex flex-wrap gap-2">
+                {[
+                  "Les Roches · Hotellerie",
+                  "Iberostar · 8+ años",
+                  "Hotel Estepona Plaza · Fundador",
+                  "Hotel Estepona Patio · Próxima apertura",
+                ].map((c) => (
+                  <span
+                    key={c}
+                    className="font-mono text-[10px] tracking-[0.1em] uppercase px-3 py-1.5 border border-border rounded-full text-foreground/60"
+                  >
+                    {c}
+                  </span>
+                ))}
+              </div>
+
+              {/* Awards */}
+              <div className="mt-10 pt-8 border-t border-border">
+                <p className="font-mono text-[10px] tracking-[0.25em] uppercase text-muted-foreground mb-5">
+                  Premios & Reconocimientos
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-8">
+                  {[
+                    ["TripAdvisor",       "Certificado de Excelencia 2024"],
+                    ["Booking.com",       "Traveller Award 2026"],
+                    ["Core Masters",      "Hotel del Año España"],
+                    ["Expedia · Orbitz",  "Traveler Award"],
+                  ].map(([org, award]) => (
+                    <div key={award} className="flex items-start gap-3">
+                      <Star
+                        className="h-3.5 w-3.5 text-[hsl(var(--gold))] mt-0.5 shrink-0"
+                        fill="currentColor"
+                        strokeWidth={0}
+                      />
+                      <div>
+                        <p className="font-mono text-[9.5px] tracking-[0.14em] uppercase text-foreground/45 leading-none mb-0.5">
+                          {org}
+                        </p>
+                        <p className="text-[0.875rem] text-foreground/85 leading-snug">{award}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* External links */}
+              <div className="mt-9 flex flex-wrap gap-6">
+                <a
+                  href="https://www.linkedin.com/in/angel-molina-119aa352/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group inline-flex items-center gap-2 font-mono text-[11px] tracking-[0.2em] uppercase text-foreground/65 hover:text-foreground transition-colors"
+                >
+                  LinkedIn
+                  <ArrowUpRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" strokeWidth={1.75} />
+                </a>
+                <a
+                  href="https://hotelesteponaplaza.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group inline-flex items-center gap-2 font-mono text-[11px] tracking-[0.2em] uppercase text-foreground/65 hover:text-foreground transition-colors"
+                >
+                  Hotel Estepona Plaza
+                  <ArrowUpRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" strokeWidth={1.75} />
+                </a>
+              </div>
+            </div>
+
           </div>
         </div>
       </section>
