@@ -52,6 +52,7 @@ const navGroups: NavGroup[] = [
     group: "seda",
     titleKey: "mobile.seda",
     links: [
+      { tKey: "nav.nosotros",  href: "/nosotros" },
       { tKey: "nav.filosofia", href: "/descubre" },
       { tKey: "nav.faq",       href: "/faq" },
       { tKey: "nav.contacto",  href: "/contacto" },
@@ -84,6 +85,7 @@ const desktopGroups: DesktopGroup[] = [
   {
     id: "general",
     links: [
+      { tKey: "nav.nosotros", href: "/nosotros" },
       { tKey: "nav.contacto", href: "/contacto" },
     ],
   },
