@@ -118,6 +118,8 @@ export function Navigation() {
   const [isOpen, setIsOpen] = useState(false)
   const [pastHero, setPastHero] = useState(false)
   const [hidden, setHidden] = useState(false)
+  const [isAccessOpen, setIsAccessOpen] = useState(false)
+  const accessRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
   const [, startTransition] = useTransition()
 
@@ -214,6 +216,21 @@ export function Navigation() {
     }
   }, [isOpen])
 
+  // Close Acceso dropdown on outside click or Escape key
+  useEffect(() => {
+    if (!isAccessOpen) return
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setIsAccessOpen(false) }
+    const onDown = (e: MouseEvent) => {
+      if (!accessRef.current?.contains(e.target as Node)) setIsAccessOpen(false)
+    }
+    document.addEventListener("keydown", onKey)
+    document.addEventListener("mousedown", onDown)
+    return () => {
+      document.removeEventListener("keydown", onKey)
+      document.removeEventListener("mousedown", onDown)
+    }
+  }, [isAccessOpen])
+
   // Ripple effect — contextual color per drawer group
   const ripple = useCallback((e: React.PointerEvent<HTMLAnchorElement>, color: string) => {
     const el = e.currentTarget
@@ -280,7 +297,7 @@ export function Navigation() {
                       key={link.tKey}
                       href={link.href}
                       aria-current={isActive ? "page" : undefined}
-                      className={`relative text-[11px] tracking-[0.18em] uppercase transition-colors duration-500 ${
+                      className={`group relative text-[11px] tracking-[0.18em] uppercase transition-colors duration-500 ${
                         scrolled
                           ? isActive
                             ? "text-foreground"
@@ -291,6 +308,11 @@ export function Navigation() {
                       } ${isActive ? "font-medium" : ""}`}
                     >
                       {t(link.tKey)}
+                      <span
+                        className={`absolute inset-x-0 -bottom-px h-px origin-left bg-current transition-transform duration-300 ease-out ${
+                          isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+                        }`}
+                      />
                     </Link>
                   )
                 })}
@@ -307,23 +329,33 @@ export function Navigation() {
             </div>
 
             {/* Acceso dropdown — collapses 2 ghost CTAs into 1 hover-menu.
-                Reduces header cognitive load from 8 → 6 visible decisions. */}
-            <div className="relative group/access">
+                Keyboard-accessible: Enter/Space toggles, Escape closes.
+                Mouse: opens on hover via onMouseEnter/Leave on the container. */}
+            <div
+              ref={accessRef}
+              className="relative"
+              onMouseEnter={() => setIsAccessOpen(true)}
+              onMouseLeave={() => setIsAccessOpen(false)}
+            >
               <button
                 type="button"
+                onClick={() => setIsAccessOpen(v => !v)}
                 className={`inline-flex items-center gap-1.5 px-3 py-2.5 font-mono text-[10px] tracking-[0.22em] uppercase transition-colors duration-500 ${
                   scrolled
-                    ? "text-muted-foreground group-hover/access:text-foreground"
-                    : "text-background/85 group-hover/access:text-background"
+                    ? isAccessOpen ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+                    : isAccessOpen ? "text-background" : "text-background/85 hover:text-background"
                 }`}
                 aria-haspopup="menu"
+                aria-expanded={isAccessOpen}
               >
                 {t("nav.acceso")}
-                <span className="ml-1 text-[8px] opacity-70">▼</span>
+                <span className={`ml-1 text-[8px] opacity-70 transition-transform duration-200 inline-block ${isAccessOpen ? "rotate-180" : ""}`}>▼</span>
               </button>
               <div
                 role="menu"
-                className="absolute right-0 top-full pt-2 opacity-0 invisible group-hover/access:opacity-100 group-hover/access:visible transition-all duration-200 min-w-[220px] z-10"
+                className={`absolute right-0 top-full pt-2 transition-all duration-200 min-w-[220px] z-10 ${
+                  isAccessOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"
+                }`}
               >
                 <div className="bg-background border border-border shadow-xl py-2">
                   <a
