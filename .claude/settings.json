@@ -1,0 +1,10 @@
+{
+  "extraKnownMarketplaces": {
+    "seda-private": {
+      "source": { "source": "github", "repo": "angelmolinabaena-dev/seda-claude" }
+    }
+  },
+  "enabledPlugins": {
+    "seda@seda-private": true
+  }
+}
