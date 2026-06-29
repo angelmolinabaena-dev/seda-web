@@ -450,16 +450,16 @@
       "body": "Tranquilidad total. Automatizamos y gestionamos todo el marco legal y fiscal aplicable a su propiedad, operando siempre bajo normativa.",
       "items": {
         "rd": {
-          "t": "RD 633/2021",
-          "b": "Registro automatizado de viajeros conforme a normativa."
+          "t": "RD 933/2021",
+          "b": "Registro de viajeros integrado, preparado para SES.Hospedajes."
         },
         "ses": {
           "t": "SES Hospedajes",
-          "b": "Conexión directa telemática con autoridades policiales."
+          "b": "Verificación de identidad del huésped en el check-in."
         },
         "m179": {
           "t": "Modelo 179",
-          "b": "Declaración informativa trimestral de cesión automatizada."
+          "b": "Preparación de la declaración informativa trimestral (Modelo 179)."
         },
         "irnr": {
           "t": "Liquidación IRNR",
@@ -593,7 +593,7 @@
         },
         "q3": {
           "q": "¿Qué pasa con la fiscalidad de mi propiedad?",
-          "a": "SEDA OS automatiza la declaración del Modelo 179 (cesión de vivienda con fines turísticos) cada trimestre, conecta con SES.Hospedajes y mantiene el cumplimiento del RD 933/2021. Para no residentes (IRNR), nuestro equipo fiscal genera la documentación y le soporta en la presentación."
+          "a": "SEDA OS prepara la declaración del Modelo 179 cada trimestre e incluye registro de viajeros integrado, preparado para la comunicación a SES.Hospedajes (RD 933/2021). Para no residentes (IRNR), nuestro equipo fiscal genera la documentación y le soporta en la presentación."
         },
         "q4": {
           "q": "¿Tengo que estar en España para empezar?",
@@ -787,7 +787,7 @@
         "privacy_t": "Privacidad",
         "privacy_b": "Datos cifrados. Sin tracking de terceros.",
         "compliance_t": "Compliance",
-        "compliance_b": "RD 633/2021 · SES Hospedajes · firma digital."
+        "compliance_b": "RD 933/2021 · SES Hospedajes · firma digital."
       }
     },
     "marquee": {

@@ -450,16 +450,16 @@
       "body": "Complete peace of mind. We automate and manage the entire legal and tax framework applicable to your property, always operating within regulation.",
       "items": {
         "rd": {
-          "t": "RD 633/2021",
-          "b": "Automated traveller registration in line with regulation."
+          "t": "RD 933/2021",
+          "b": "Integrated guest registration, ready for SES.Hospedajes."
         },
         "ses": {
           "t": "SES Hospedajes",
-          "b": "Direct telematic connection to police authorities."
+          "b": "Guest identity verification at check-in."
         },
         "m179": {
           "t": "Modelo 179",
-          "b": "Automated quarterly informative declaration for property letting."
+          "b": "Quarterly informational declaration prepared (Modelo 179)."
         },
         "irnr": {
           "t": "IRNR settlement",
@@ -593,7 +593,7 @@
         },
         "q3": {
           "q": "What about the tax obligations on my property?",
-          "a": "SEDA OS automates the Modelo 179 declaration (residential letting for tourism) every quarter, connects to SES.Hospedajes and maintains compliance with RD 933/2021. For non-residents (IRNR), our tax team prepares the documentation and supports you through filing."
+          "a": "SEDA OS prepares the Modelo 179 declaration each quarter and includes integrated guest registration, ready for reporting to SES.Hospedajes (RD 933/2021). For non-residents (IRNR), our tax team prepares the documentation and supports you through filing."
         },
         "q4": {
           "q": "Do I need to be in Spain to begin?",
@@ -787,7 +787,7 @@
         "privacy_t": "Privacy",
         "privacy_b": "Encrypted data. No third-party tracking.",
         "compliance_t": "Compliance",
-        "compliance_b": "RD 633/2021 · SES Hospedajes · digital signature."
+        "compliance_b": "RD 933/2021 · SES Hospedajes · digital signature."
       }
     },
     "marquee": {

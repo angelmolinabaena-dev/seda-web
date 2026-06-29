@@ -450,16 +450,16 @@
       "body": "Une tranquillité d'esprit complète. Nous automatisons et gérons l'ensemble du cadre juridique et fiscal applicable à votre propriété, toujours dans le respect de la réglementation.",
       "items": {
         "rd": {
-          "t": "RD 633/2021",
-          "b": "Enregistrement des voyageurs automatisé, conforme à la réglementation."
+          "t": "RD 933/2021",
+          "b": "Enregistrement des voyageurs intégré, prêt pour SES.Hospedajes."
         },
         "ses": {
           "t": "SES Hospedajes",
-          "b": "Connexion télématique directe avec les autorités de police."
+          "b": "Vérification d'identité du voyageur à l'arrivée."
         },
         "m179": {
           "t": "Modelo 179",
-          "b": "Déclaration informative trimestrielle automatisée pour la location de propriétés."
+          "b": "Préparation de la déclaration informative trimestrielle (Modelo 179)."
         },
         "irnr": {
           "t": "Liquidation IRNR",
@@ -593,7 +593,7 @@
         },
         "q3": {
           "q": "Qu'en est-il des obligations fiscales sur ma propriété ?",
-          "a": "SEDA OS automatise la déclaration Modelo 179 (location résidentielle touristique) chaque trimestre, se connecte à SES.Hospedajes et maintient la conformité avec le RD 933/2021. Pour les non-résidents (IRNR), notre équipe fiscale prépare la documentation et vous accompagne lors du dépôt."
+          "a": "SEDA OS prépare la déclaration du Modelo 179 chaque trimestre et inclut un enregistrement des voyageurs intégré, prêt pour la communication à SES.Hospedajes (RD 933/2021). Pour les non-résidents (IRNR), notre équipe fiscale prépare la documentation et vous accompagne lors du dépôt."
         },
         "q4": {
           "q": "Dois-je être en Espagne pour commencer ?",
@@ -787,7 +787,7 @@
         "privacy_t": "Confidentialité",
         "privacy_b": "Données chiffrées. Aucun pistage tiers.",
         "compliance_t": "Conformité",
-        "compliance_b": "RD 633/2021 · SES Hospedajes · signature numérique."
+        "compliance_b": "RD 933/2021 · SES Hospedajes · signature numérique."
       }
     },
     "marquee": {
