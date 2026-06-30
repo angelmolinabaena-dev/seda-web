@@ -81,7 +81,7 @@ export function Footer() {
             {t("home.footer.cumplimiento")}
           </p>
           <div className="flex flex-col gap-2 font-mono text-[10px] tracking-[0.18em] uppercase text-muted-foreground/65">
-            <span>RD 633/2021</span>
+            <span>RD 933/2021</span>
             <span>Modelo 179</span>
             <span>VTAR/MA/27.143</span>
           </div>
