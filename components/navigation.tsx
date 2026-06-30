@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef, useTransition, useCallback } from "react"
-import { Menu, X, ArrowUpRight } from "lucide-react"
+import { Menu, X, ArrowUpRight, Lock } from "lucide-react"
 import { useLocale, useTranslations } from "next-intl"
 import { Link, usePathname, useRouter } from "@/i18n/navigation"
 import { LanguageSwitcher } from "@/components/language-switcher"
@@ -60,11 +60,11 @@ const navGroups: NavGroup[] = [
   },
 ]
 
-// Desktop nav — split into explicit groups so the GUEST path and the
-// OWNER path are visually separated by a hairline gold divider. Mirrors
-// the mobile mega-menu IA so a returning visitor reads the same map on
-// either device. The trailing "general" group holds Contacto by itself
-// — it's neutral (works for both audiences) and earns its own column.
+// Desktop nav — 5 primary items only.
+// Guest App + Ecosistema SEDA OS moved to the Portal dropdown so the
+// primary strip never exceeds a single reading line, eliminating the
+// collision risk against the utility cluster on the right.
+// Audience logic: estancia (guest-facing) | propietarios (owner) | general (utility)
 type DesktopGroup = { id: "estancia" | "propietarios" | "general"; links: { tKey: string; href: string }[] }
 const desktopGroups: DesktopGroup[] = [
   {
@@ -72,14 +72,12 @@ const desktopGroups: DesktopGroup[] = [
     links: [
       { tKey: "nav.coleccion",    href: "/coleccion" },
       { tKey: "nav.experiencias", href: "/experiencias" },
-      { tKey: "nav.guestapp",     href: "/guestapp" },
     ],
   },
   {
     id: "propietarios",
     links: [
       { tKey: "nav.propietarios", href: "/propietarios" },
-      { tKey: "nav.ecosistema",   href: "/ecosistema" },
     ],
   },
   {
@@ -90,6 +88,20 @@ const desktopGroups: DesktopGroup[] = [
     ],
   },
 ]
+
+// Portal dropdown — collects the two internal product pages (Guest App,
+// Ecosistema SEDA OS) plus the two external access portals. Visually
+// separated into "discover" (internal) and "sign in" (external) groups.
+const portalItems = {
+  discover: [
+    { tKey: "nav.guestapp",   href: "/guestapp" },
+    { tKey: "nav.ecosistema", href: "/ecosistema" },
+  ],
+  access: [
+    { tKey: "nav.acceso_huespedes",    href: GUEST_APP_URL },
+    { tKey: "nav.acceso_propietarios", href: OWNERS_PORTAL_URL },
+  ],
+}
 
 // Routes where the visitor is in "owner intent" mode — primary CTA mirrors that.
 // Anywhere else (home, /coleccion, /experiencias, /guestapp, /villa/*, /faq, /descubre)
@@ -253,7 +265,7 @@ export function Navigation() {
         } ${
           scrolled || isOpen
             ? "bg-background/95 backdrop-blur-md border-b border-border"
-            : "bg-transparent"
+            : "bg-[rgba(20,16,14,0.72)] backdrop-blur-md"
         }`}
       >
         <nav className="flex items-center justify-between px-6 py-5 md:px-12 lg:px-20">
@@ -299,7 +311,7 @@ export function Navigation() {
                       key={link.tKey}
                       href={link.href}
                       aria-current={isActive ? "page" : undefined}
-                      className={`group relative text-[11px] tracking-[0.18em] uppercase transition-colors duration-500 ${
+                      className={`group relative inline-flex items-center min-h-[44px] text-[11px] tracking-[0.18em] uppercase transition-colors duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current rounded-sm ${
                         scrolled
                           ? isActive
                             ? "text-foreground"
@@ -311,7 +323,7 @@ export function Navigation() {
                     >
                       {t(link.tKey)}
                       <span
-                        className={`absolute inset-x-0 -bottom-px h-px origin-left bg-current transition-transform duration-300 ease-out ${
+                        className={`absolute inset-x-0 -bottom-px h-px origin-left bg-current transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] ${
                           isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
                         }`}
                       />
@@ -322,7 +334,7 @@ export function Navigation() {
             ))}
           </div>
 
-          <div className="hidden lg:flex items-center gap-2 xl:gap-3">
+          <div className="hidden lg:flex items-center gap-2 xl:gap-3 flex-shrink-0">
             {/* Language switcher — ES/EN, persists in localStorage */}
             <div className={`pr-3 mr-1 border-r transition-colors duration-500 ${
               scrolled ? "border-border" : "border-background/25"
@@ -330,7 +342,9 @@ export function Navigation() {
               <LanguageSwitcher darkOnLight={scrolled} />
             </div>
 
-            {/* Acceso dropdown — collapses 2 ghost CTAs into 1 hover-menu.
+            {/* Portal dropdown — houses Guest App + Ecosistema (discover)
+                and the two external sign-in portals (access), separated by
+                a hairline rule so the two audiences read as distinct tiers.
                 Keyboard-accessible: Enter/Space toggles, Escape closes.
                 Mouse: opens on hover via onMouseEnter/Leave on the container. */}
             <div
@@ -342,7 +356,7 @@ export function Navigation() {
               <button
                 type="button"
                 onClick={() => setIsAccessOpen(v => !v)}
-                className={`inline-flex items-center gap-1.5 px-3 py-2.5 font-mono text-[10px] tracking-[0.22em] uppercase transition-colors duration-500 ${
+                className={`inline-flex items-center gap-1.5 px-3 min-h-[44px] font-mono text-[10px] tracking-[0.22em] uppercase transition-colors duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current rounded-sm ${
                   scrolled
                     ? isAccessOpen ? "text-foreground" : "text-muted-foreground hover:text-foreground"
                     : isAccessOpen ? "text-background" : "text-background/85 hover:text-background"
@@ -350,50 +364,63 @@ export function Navigation() {
                 aria-haspopup="menu"
                 aria-expanded={isAccessOpen}
               >
-                {t("nav.acceso")}
-                <span className={`ml-1 text-[8px] opacity-70 transition-transform duration-200 inline-block ${isAccessOpen ? "rotate-180" : ""}`}>▼</span>
+                <Lock className="h-3 w-3 shrink-0" strokeWidth={1.5} />
+                {t("nav.portal")}
+                <span className={`ml-0.5 text-[8px] opacity-70 transition-transform duration-200 inline-block ${isAccessOpen ? "rotate-180" : ""}`}>▼</span>
               </button>
               <div
                 role="menu"
-                className={`absolute right-0 top-full pt-2 transition-all duration-200 min-w-[220px] z-10 ${
+                className={`absolute right-0 top-full pt-2 transition-all duration-200 min-w-[240px] z-10 ${
                   isAccessOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"
                 }`}
               >
                 <div className="bg-background border border-border shadow-xl py-2">
-                  <a
-                    href={GUEST_APP_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    role="menuitem"
-                    className="flex items-center justify-between gap-3 px-5 py-3 font-mono text-[10px] tracking-[0.22em] uppercase text-muted-foreground hover:text-foreground hover:bg-secondary/60 transition-colors"
-                  >
-                    {t("nav.acceso_huespedes")}
-                    <ArrowUpRight className="h-3 w-3" strokeWidth={1.5} />
-                  </a>
-                  <a
-                    href={OWNERS_PORTAL_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    role="menuitem"
-                    className="flex items-center justify-between gap-3 px-5 py-3 font-mono text-[10px] tracking-[0.22em] uppercase text-muted-foreground hover:text-foreground hover:bg-secondary/60 transition-colors"
-                  >
-                    {t("nav.acceso_propietarios")}
-                    <ArrowUpRight className="h-3 w-3" strokeWidth={1.5} />
-                  </a>
+                  {/* Discover tier — internal marketing pages */}
+                  {portalItems.discover.map((item) => (
+                    <Link
+                      key={item.tKey}
+                      href={item.href}
+                      role="menuitem"
+                      onClick={() => setIsAccessOpen(false)}
+                      className="flex items-center justify-between gap-3 px-5 py-3 font-mono text-[10px] tracking-[0.22em] uppercase text-muted-foreground hover:text-foreground hover:bg-secondary/60 transition-colors"
+                    >
+                      {t(item.tKey)}
+                      <ArrowUpRight className="h-3 w-3 shrink-0" strokeWidth={1.5} />
+                    </Link>
+                  ))}
+                  {/* Separator between discover and sign-in tiers */}
+                  <div className="my-1.5 mx-5 h-px bg-border" aria-hidden />
+                  {/* Access tier — external portals */}
+                  {portalItems.access.map((item) => (
+                    <a
+                      key={item.tKey}
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      role="menuitem"
+                      className="flex items-center justify-between gap-3 px-5 py-3 font-mono text-[10px] tracking-[0.22em] uppercase text-muted-foreground hover:text-foreground hover:bg-secondary/60 transition-colors"
+                    >
+                      {t(item.tKey)}
+                      <ArrowUpRight className="h-3 w-3 shrink-0" strokeWidth={1.5} />
+                    </a>
+                  ))}
                 </div>
               </div>
             </div>
 
             <Link
               href={primaryCta.href}
-              className={`group inline-flex items-center gap-2 px-5 py-2.5 font-mono text-[10px] tracking-[0.22em] uppercase transition-all duration-500 ${
+              className={`group inline-flex items-center gap-3 pl-5 pr-1.5 py-1.5 rounded-full font-mono text-[10px] tracking-[0.22em] uppercase transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current focus-visible:ring-offset-2 ${
                 scrolled
-                  ? "bg-foreground text-background hover:bg-foreground/90"
-                  : "bg-background text-foreground hover:bg-background/90"
+                  ? "bg-foreground text-background hover:opacity-90"
+                  : "bg-background text-foreground hover:opacity-90"
               }`}
             >
               {primaryCta.label}
-              <ArrowUpRight className="h-3 w-3" strokeWidth={1.75} />
+              {/* Arrow circle — w-8 h-8 makes the overall button ~44px tall */}
+              <span className="w-8 h-8 rounded-full bg-current/[0.12] flex items-center justify-center transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:scale-110">
+                <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={1.75} />
+              </span>
             </Link>
           </div>
 
@@ -411,19 +438,29 @@ export function Navigation() {
             >
               <LanguageSwitcher darkOnLight={scrolled || isOpen} />
             </div>
+            {/* Hamburger → X morph: both icons layered, cross-fade
+                with counter-rotation so the transition reads as a single
+                continuous gesture. cubic-bezier matches the CTA pill. */}
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className={`p-2 -mr-2 transition-colors duration-500 ${
+              className={`relative -mr-2 w-10 h-10 flex items-center justify-center transition-colors duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current rounded-sm ${
                 scrolled || isOpen ? "text-foreground" : "text-background"
               }`}
               aria-label={isOpen ? t("nav.close_menu") : t("nav.open_menu")}
               aria-expanded={isOpen}
             >
-              {isOpen ? (
-                <X className="h-5 w-5" strokeWidth={1.5} />
-              ) : (
-                <Menu className="h-5 w-5" strokeWidth={1.5} />
-              )}
+              <Menu
+                className={`absolute h-5 w-5 transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] ${
+                  isOpen ? "opacity-0 rotate-45 scale-75" : "opacity-100 rotate-0 scale-100"
+                }`}
+                strokeWidth={1.5}
+              />
+              <X
+                className={`absolute h-5 w-5 transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] ${
+                  isOpen ? "opacity-100 rotate-0 scale-100" : "opacity-0 -rotate-45 scale-75"
+                }`}
+                strokeWidth={1.5}
+              />
             </button>
           </div>
         </nav>
@@ -443,7 +480,7 @@ export function Navigation() {
             per-element transition-delay (see below). The combined
             effect reads like an editorial curtain reveal. */}
       <div
-        className={`lg:hidden fixed inset-0 z-40 bg-background ${
+        className={`lg:hidden fixed inset-0 z-40 bg-background/[0.98] backdrop-blur-md ${
           isOpen
             ? "opacity-100 pointer-events-auto transition-opacity duration-200 ease-out"
             : "opacity-0 pointer-events-none transition-opacity duration-150 ease-in"

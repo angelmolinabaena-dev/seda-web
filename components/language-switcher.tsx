@@ -61,12 +61,12 @@ export function LanguageSwitcher({
               className={`transition-colors ${
                 active
                   ? darkOnLight
-                    ? "text-foreground"
-                    : "text-background"
+                    ? "text-foreground font-semibold"
+                    : "text-background font-semibold"
                   : darkOnLight
                   ? "text-muted-foreground hover:text-foreground"
                   : "text-background/55 hover:text-background"
-              } ${active ? "border-b border-current" : ""} pb-px`}
+              }`}
             >
               {l.label}
             </button>
