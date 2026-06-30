@@ -415,10 +415,14 @@ export function Navigation() {
               <button
                 type="button"
                 onClick={() => setIsAccessOpen(v => !v)}
-                className={`inline-flex items-center gap-1.5 px-3 min-h-[44px] font-mono text-[10px] tracking-[0.22em] uppercase transition-colors duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current rounded-sm ${
+                className={`inline-flex items-center gap-1.5 px-4 min-h-[44px] rounded-full border font-mono text-[10px] tracking-[0.22em] uppercase transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current ${
                   scrolled
-                    ? isAccessOpen ? "text-foreground" : "text-muted-foreground hover:text-foreground"
-                    : isAccessOpen ? "text-background" : "text-background/85 hover:text-background"
+                    ? isAccessOpen
+                      ? "text-foreground border-foreground/40 bg-foreground/[0.04]"
+                      : "text-foreground border-foreground/25 hover:border-foreground/45 hover:bg-foreground/[0.04]"
+                    : isAccessOpen
+                      ? "text-background border-background/40 bg-background/[0.06]"
+                      : "text-background border-background/25 hover:border-background/45 hover:bg-background/[0.06]"
                 }`}
                 aria-haspopup="menu"
                 aria-expanded={isAccessOpen}
