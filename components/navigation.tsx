@@ -60,24 +60,15 @@ const navGroups: NavGroup[] = [
   },
 ]
 
-// Desktop nav — 5 primary items only.
-// Guest App + Ecosistema SEDA OS moved to the Portal dropdown so the
-// primary strip never exceeds a single reading line, eliminating the
-// collision risk against the utility cluster on the right.
-// Audience logic: estancia (guest-facing) | propietarios (owner) | general (utility)
-type DesktopGroup = { id: "estancia" | "propietarios" | "general"; links: { tKey: string; href: string }[] }
+// Desktop nav layout: Colección · Experiencias | SEDA OS ▼ | Nosotros · Contacto
+// SEDA OS is an inline dropdown in the primary nav strip (not the utility cluster).
+type DesktopGroup = { id: "estancia" | "general"; links: { tKey: string; href: string }[] }
 const desktopGroups: DesktopGroup[] = [
   {
     id: "estancia",
     links: [
       { tKey: "nav.coleccion",    href: "/coleccion" },
       { tKey: "nav.experiencias", href: "/experiencias" },
-    ],
-  },
-  {
-    id: "propietarios",
-    links: [
-      { tKey: "nav.propietarios", href: "/propietarios" },
     ],
   },
   {
@@ -89,19 +80,18 @@ const desktopGroups: DesktopGroup[] = [
   },
 ]
 
-// Portal dropdown — collects the two internal product pages (Guest App,
-// Ecosistema SEDA OS) plus the two external access portals. Visually
-// separated into "discover" (internal) and "sign in" (external) groups.
-const portalItems = {
-  discover: [
-    { tKey: "nav.guestapp",   href: "/guestapp" },
-    { tKey: "nav.ecosistema", href: "/ecosistema" },
-  ],
-  access: [
-    { tKey: "nav.acceso_huespedes",    href: GUEST_APP_URL },
-    { tKey: "nav.acceso_propietarios", href: OWNERS_PORTAL_URL },
-  ],
-}
+// SEDA OS dropdown — product/owner pages as an inline dropdown in the primary nav.
+const sedaOsItems = [
+  { tKey: "nav.propietarios", href: "/propietarios" },
+  { tKey: "nav.ecosistema",   href: "/ecosistema" },
+  { tKey: "nav.guestapp",     href: "/guestapp" },
+]
+
+// Portal dropdown — external sign-in portals only.
+const portalItems = [
+  { tKey: "nav.acceso_huespedes",    href: GUEST_APP_URL },
+  { tKey: "nav.acceso_propietarios", href: OWNERS_PORTAL_URL },
+]
 
 // Routes where the visitor is in "owner intent" mode — primary CTA mirrors that.
 // Anywhere else (home, /coleccion, /experiencias, /guestapp, /villa/*, /faq, /descubre)
@@ -134,6 +124,8 @@ export function Navigation() {
   const [hidden, setHidden] = useState(false)
   const [isAccessOpen, setIsAccessOpen] = useState(false)
   const accessRef = useRef<HTMLDivElement>(null)
+  const [isSedaOsOpen, setIsSedaOsOpen] = useState(false)
+  const sedaOsRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
   const [, startTransition] = useTransition()
 
@@ -245,6 +237,21 @@ export function Navigation() {
     }
   }, [isAccessOpen])
 
+  // Close SEDA OS dropdown on outside click or Escape key
+  useEffect(() => {
+    if (!isSedaOsOpen) return
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setIsSedaOsOpen(false) }
+    const onDown = (e: MouseEvent) => {
+      if (!sedaOsRef.current?.contains(e.target as Node)) setIsSedaOsOpen(false)
+    }
+    document.addEventListener("keydown", onKey)
+    document.addEventListener("mousedown", onDown)
+    return () => {
+      document.removeEventListener("keydown", onKey)
+      document.removeEventListener("mousedown", onDown)
+    }
+  }, [isSedaOsOpen])
+
   // Ripple effect — contextual color per drawer group
   const ripple = useCallback((e: React.PointerEvent<HTMLAnchorElement>, color: string) => {
     const el = e.currentTarget
@@ -288,50 +295,102 @@ export function Navigation() {
             </span>
           </Link>
 
-          {/* Desktop nav — groups separated by a hairline gold divider.
-              Same IA as the mobile mega-menu so the map reads identical
-              on either device. */}
+          {/* Desktop nav: Colección · Experiencias | SEDA OS ▼ | Nosotros · Contacto */}
           <div className="hidden lg:flex items-center gap-5 xl:gap-7">
-            {desktopGroups.map((group, gi) => (
-              <div key={group.id} className="contents">
-                {gi > 0 && (
-                  <span
-                    aria-hidden
-                    className={`h-3.5 w-px transition-colors duration-500 ${
-                      scrolled
-                        ? "bg-[hsl(var(--gold))]/45"
-                        : "bg-background/35"
-                    }`}
-                  />
-                )}
-                {group.links.map((link) => {
-                  const isActive = pathname === link.href
-                  return (
-                    <Link
-                      key={link.tKey}
-                      href={link.href}
-                      aria-current={isActive ? "page" : undefined}
-                      className={`group relative inline-flex items-center min-h-[44px] text-[11px] tracking-[0.18em] uppercase transition-colors duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current rounded-sm ${
-                        scrolled
-                          ? isActive
-                            ? "text-foreground"
-                            : "text-muted-foreground hover:text-foreground"
-                          : isActive
-                          ? "text-background"
-                          : "text-background/85 hover:text-background"
-                      } ${isActive ? "font-medium" : ""}`}
-                    >
-                      {t(link.tKey)}
-                      <span
-                        className={`absolute inset-x-0 -bottom-px h-px origin-left bg-current transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] ${
-                          isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+            {/* Group 1: Estancia */}
+            {desktopGroups[0].links.map((link) => {
+              const isActive = pathname === link.href
+              return (
+                <Link
+                  key={link.tKey}
+                  href={link.href}
+                  aria-current={isActive ? "page" : undefined}
+                  className={`group relative inline-flex items-center min-h-[44px] text-[11px] tracking-[0.18em] uppercase transition-colors duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current rounded-sm ${
+                    scrolled
+                      ? isActive ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+                      : isActive ? "text-background" : "text-background/85 hover:text-background"
+                  } ${isActive ? "font-medium" : ""}`}
+                >
+                  {t(link.tKey)}
+                  <span className={`absolute inset-x-0 -bottom-px h-px origin-left bg-current transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] ${isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"}`} />
+                </Link>
+              )
+            })}
+
+            <span aria-hidden className={`h-3.5 w-px transition-colors duration-500 ${scrolled ? "bg-[hsl(var(--gold))]/45" : "bg-background/35"}`} />
+
+            {/* SEDA OS inline dropdown */}
+            <div
+              ref={sedaOsRef}
+              className="relative"
+              onMouseEnter={() => setIsSedaOsOpen(true)}
+              onMouseLeave={() => setIsSedaOsOpen(false)}
+            >
+              <button
+                type="button"
+                onClick={() => setIsSedaOsOpen(v => !v)}
+                className={`inline-flex items-center gap-1.5 min-h-[44px] font-mono text-[11px] tracking-[0.18em] uppercase transition-colors duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current rounded-sm ${
+                  scrolled
+                    ? isSedaOsOpen ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+                    : isSedaOsOpen ? "text-background" : "text-background/85 hover:text-background"
+                }`}
+                aria-haspopup="menu"
+                aria-expanded={isSedaOsOpen}
+              >
+                {t("nav.seda_os")}
+                <span className={`text-[8px] opacity-70 transition-transform duration-200 inline-block ${isSedaOsOpen ? "rotate-180" : ""}`}>▼</span>
+              </button>
+              <div
+                role="menu"
+                className={`absolute left-0 top-full pt-2 transition-all duration-200 min-w-[220px] z-10 ${
+                  isSedaOsOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"
+                }`}
+              >
+                <div className="bg-background border border-border shadow-xl py-2">
+                  {sedaOsItems.map((item) => {
+                    const isActive = pathname === item.href
+                    return (
+                      <Link
+                        key={item.tKey}
+                        href={item.href}
+                        role="menuitem"
+                        onClick={() => setIsSedaOsOpen(false)}
+                        className={`flex items-center justify-between gap-3 px-5 py-3 font-mono text-[10px] tracking-[0.22em] uppercase transition-colors ${
+                          isActive
+                            ? "text-foreground bg-secondary/60"
+                            : "text-muted-foreground hover:text-foreground hover:bg-secondary/60"
                         }`}
-                      />
-                    </Link>
-                  )
-                })}
+                      >
+                        {t(item.tKey)}
+                        {isActive && <span className="w-1 h-1 rounded-full bg-[hsl(var(--gold))] shrink-0" />}
+                      </Link>
+                    )
+                  })}
+                </div>
               </div>
-            ))}
+            </div>
+
+            <span aria-hidden className={`h-3.5 w-px transition-colors duration-500 ${scrolled ? "bg-[hsl(var(--gold))]/45" : "bg-background/35"}`} />
+
+            {/* Group 2: General */}
+            {desktopGroups[1].links.map((link) => {
+              const isActive = pathname === link.href
+              return (
+                <Link
+                  key={link.tKey}
+                  href={link.href}
+                  aria-current={isActive ? "page" : undefined}
+                  className={`group relative inline-flex items-center min-h-[44px] text-[11px] tracking-[0.18em] uppercase transition-colors duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current rounded-sm ${
+                    scrolled
+                      ? isActive ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+                      : isActive ? "text-background" : "text-background/85 hover:text-background"
+                  } ${isActive ? "font-medium" : ""}`}
+                >
+                  {t(link.tKey)}
+                  <span className={`absolute inset-x-0 -bottom-px h-px origin-left bg-current transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] ${isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"}`} />
+                </Link>
+              )
+            })}
           </div>
 
           <div className="hidden lg:flex items-center gap-2 xl:gap-3 flex-shrink-0">
@@ -375,23 +434,7 @@ export function Navigation() {
                 }`}
               >
                 <div className="bg-background border border-border shadow-xl py-2">
-                  {/* Discover tier — internal marketing pages */}
-                  {portalItems.discover.map((item) => (
-                    <Link
-                      key={item.tKey}
-                      href={item.href}
-                      role="menuitem"
-                      onClick={() => setIsAccessOpen(false)}
-                      className="flex items-center justify-between gap-3 px-5 py-3 font-mono text-[10px] tracking-[0.22em] uppercase text-muted-foreground hover:text-foreground hover:bg-secondary/60 transition-colors"
-                    >
-                      {t(item.tKey)}
-                      <ArrowUpRight className="h-3 w-3 shrink-0" strokeWidth={1.5} />
-                    </Link>
-                  ))}
-                  {/* Separator between discover and sign-in tiers */}
-                  <div className="my-1.5 mx-5 h-px bg-border" aria-hidden />
-                  {/* Access tier — external portals */}
-                  {portalItems.access.map((item) => (
+                  {portalItems.map((item) => (
                     <a
                       key={item.tKey}
                       href={item.href}
