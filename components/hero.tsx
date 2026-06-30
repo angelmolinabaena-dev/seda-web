@@ -74,7 +74,7 @@ export function Hero() {
   }, [reduced])
 
   return (
-    <section ref={ref} className="relative h-screen flex flex-col overflow-hidden">
+    <section ref={ref} className="relative min-h-[100dvh] flex flex-col overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 z-0">
         <div ref={parallaxRef} className="absolute inset-0 will-change-transform bg-foreground">
@@ -108,7 +108,7 @@ export function Hero() {
 
       {/* Top meta strip (coords left + SEDA · 2026 right) */}
       <div
-        className={`relative z-10 flex items-center justify-between px-6 md:px-12 lg:px-20 pt-24 md:pt-28 font-mono text-[11px] tracking-[0.25em] uppercase text-background/65 ${
+        className={`relative z-10 flex items-center justify-between px-6 md:px-12 lg:px-20 pt-24 md:pt-28 font-mono text-[11px] tracking-[0.25em] uppercase text-background/90 ${
           reduced ? "" : "transition-opacity duration-1000 delay-300"
         } ${visible ? "opacity-100" : "opacity-0"}`}
       >
