@@ -82,9 +82,9 @@ const desktopGroups: DesktopGroup[] = [
 
 // SEDA OS dropdown — product/owner pages as an inline dropdown in the primary nav.
 const sedaOsItems = [
-  { tKey: "nav.propietarios", href: "/propietarios" },
-  { tKey: "nav.ecosistema",   href: "/ecosistema" },
   { tKey: "nav.guestapp",     href: "/guestapp" },
+  { tKey: "nav.ecosistema",   href: "/ecosistema" },
+  { tKey: "nav.propietarios", href: "/propietarios" },
 ]
 
 // Portal dropdown — external sign-in portals only.
