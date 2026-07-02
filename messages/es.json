@@ -449,7 +449,7 @@
         "italic": "Centro de confianza",
         "after": "& Cumplimiento"
       },
-      "body": "Tranquilidad total. Automatizamos y gestionamos todo el marco legal y fiscal aplicable a su propiedad, operando siempre bajo normativa.",
+      "body": "Tranquilidad total. Automatizamos la gestión del marco legal y fiscal aplicable a su propiedad, operando siempre bajo normativa.",
       "items": {
         "rd": {
           "t": "RD 933/2021",
@@ -460,8 +460,8 @@
           "b": "Verificación de identidad del huésped en el check-in."
         },
         "m179": {
-          "t": "Modelo 179",
-          "b": "Preparación de la declaración informativa trimestral (Modelo 179)."
+          "t": "Informativas AEAT",
+          "b": "Preparación de las declaraciones informativas de cesión turística (Modelo 179/238, según normativa vigente)."
         },
         "irnr": {
           "t": "Liquidación IRNR",
@@ -595,7 +595,7 @@
         },
         "q3": {
           "q": "¿Qué pasa con la fiscalidad de mi propiedad?",
-          "a": "SEDA OS prepara la declaración del Modelo 179 cada trimestre e incluye registro de viajeros integrado, preparado para la comunicación a SES.Hospedajes (RD 933/2021). Para no residentes (IRNR), nuestro equipo fiscal genera la documentación y le soporta en la presentación."
+          "a": "SEDA OS prepara las declaraciones informativas de cesión turística (Modelo 179/238, según normativa vigente) e incluye registro de viajeros integrado, preparado para la comunicación a SES.Hospedajes (RD 933/2021). Para no residentes (IRNR), nuestro equipo fiscal genera la documentación y le soporta en la presentación."
         },
         "q4": {
           "q": "¿Tengo que estar en España para empezar?",
@@ -1234,8 +1234,8 @@
         "a": "Verificación de huéspedes, seguros específicos, inventario digital, inspección entre estancias y protocolos de cuidado. Su residencia se trata como si fuera nuestra."
       },
       "q6": {
-        "q": "Cumplimiento fiscal? Modelo 179, RD 933, IRNR.",
-        "a": "Todo automatizado desde el alta de la villa en SEDA OS. Su gestor fiscal recibe los datos cuadrados, exportables en el formato que su asesor pida."
+        "q": "Cumplimiento fiscal? Informativas AEAT, RD 933, IRNR.",
+        "a": "Automatizado desde el alta de la villa en SEDA OS. Su gestor fiscal recibe los datos cuadrados, exportables en el formato que su asesor pida."
       }
     }
   },

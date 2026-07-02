@@ -449,7 +449,7 @@
         "italic": "Trust centre",
         "after": "& Compliance"
       },
-      "body": "Complete peace of mind. We automate and manage the entire legal and tax framework applicable to your property, always operating within regulation.",
+      "body": "Complete peace of mind. We automate the management of the legal and tax framework applicable to your property, always operating within regulation.",
       "items": {
         "rd": {
           "t": "RD 933/2021",
@@ -460,8 +460,8 @@
           "b": "Guest identity verification at check-in."
         },
         "m179": {
-          "t": "Modelo 179",
-          "b": "Quarterly informational declaration prepared (Modelo 179)."
+          "t": "AEAT reporting",
+          "b": "Preparation of the tourist-rental informational declarations (Modelo 179/238, as per current regulation)."
         },
         "irnr": {
           "t": "IRNR settlement",
@@ -595,7 +595,7 @@
         },
         "q3": {
           "q": "What about the tax obligations on my property?",
-          "a": "SEDA OS prepares the Modelo 179 declaration each quarter and includes integrated guest registration, ready for reporting to SES.Hospedajes (RD 933/2021). For non-residents (IRNR), our tax team prepares the documentation and supports you through filing."
+          "a": "SEDA OS prepares the tourist-rental informational declarations (Modelo 179/238, as per current regulation) and includes integrated guest registration, ready for reporting to SES.Hospedajes (RD 933/2021). For non-residents (IRNR), our tax team prepares the documentation and supports you through filing."
         },
         "q4": {
           "q": "Do I need to be in Spain to begin?",
@@ -1234,8 +1234,8 @@
         "a": "Guest verification, specific insurance, digital inventory, between-stay inspections and care protocols. Your residence is treated as if it were our own."
       },
       "q6": {
-        "q": "Tax compliance? Modelo 179, RD 933, IRNR.",
-        "a": "All automated from the moment the villa is set up in SEDA OS. Your tax adviser receives reconciled data, exportable in whichever format they request."
+        "q": "Tax compliance? AEAT reporting, RD 933, IRNR.",
+        "a": "Automated from the moment the villa is set up in SEDA OS. Your tax adviser receives reconciled data, exportable in whichever format they request."
       }
     }
   },
