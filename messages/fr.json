@@ -449,7 +449,7 @@
         "italic": "Centre de confiance",
         "after": "& Conformité"
       },
-      "body": "Une tranquillité d'esprit complète. Nous automatisons et gérons l'ensemble du cadre juridique et fiscal applicable à votre propriété, toujours dans le respect de la réglementation.",
+      "body": "Une tranquillité d'esprit complète. Nous automatisons la gestion du cadre juridique et fiscal applicable à votre propriété, toujours dans le respect de la réglementation.",
       "items": {
         "rd": {
           "t": "RD 933/2021",
@@ -460,8 +460,8 @@
           "b": "Vérification d'identité du voyageur à l'arrivée."
         },
         "m179": {
-          "t": "Modelo 179",
-          "b": "Préparation de la déclaration informative trimestrielle (Modelo 179)."
+          "t": "Déclarations AEAT",
+          "b": "Préparation des déclarations informatives de location touristique (Modelo 179/238, selon la réglementation en vigueur)."
         },
         "irnr": {
           "t": "Liquidation IRNR",
@@ -595,7 +595,7 @@
         },
         "q3": {
           "q": "Qu'en est-il des obligations fiscales sur ma propriété ?",
-          "a": "SEDA OS prépare la déclaration du Modelo 179 chaque trimestre et inclut un enregistrement des voyageurs intégré, prêt pour la communication à SES.Hospedajes (RD 933/2021). Pour les non-résidents (IRNR), notre équipe fiscale prépare la documentation et vous accompagne lors du dépôt."
+          "a": "SEDA OS prépare les déclarations informatives de location touristique (Modelo 179/238, selon la réglementation en vigueur) et inclut un enregistrement des voyageurs intégré, prêt pour la communication à SES.Hospedajes (RD 933/2021). Pour les non-résidents (IRNR), notre équipe fiscale prépare la documentation et vous accompagne lors du dépôt."
         },
         "q4": {
           "q": "Dois-je être en Espagne pour commencer ?",
@@ -1234,8 +1234,8 @@
         "a": "Vérification des voyageurs, assurance spécifique, inventaire numérique, inspections entre séjours et protocoles de soin. Votre résidence est traitée comme si elle était la nôtre."
       },
       "q6": {
-        "q": "Conformité fiscale ? Modelo 179, RD 933, IRNR.",
-        "a": "Tout est automatisé dès l'intégration de la villa dans SEDA OS. Votre conseiller fiscal reçoit des données rapprochées, exportables dans le format qu'il souhaite."
+        "q": "Conformité fiscale ? Déclarations AEAT, RD 933, IRNR.",
+        "a": "Automatisé dès l'intégration de la villa dans SEDA OS. Votre conseiller fiscal reçoit des données rapprochées, exportables dans le format qu'il souhaite."
       }
     }
   },

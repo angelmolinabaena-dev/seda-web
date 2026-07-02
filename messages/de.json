@@ -449,7 +449,7 @@
         "italic": "Trust Center",
         "after": "& Compliance"
       },
-      "body": "Vollständige Ruhe. Wir automatisieren und verwalten den gesamten rechtlichen und steuerlichen Rahmen, der auf Ihre Immobilie anwendbar ist — stets innerhalb der Regulierung.",
+      "body": "Vollständige Ruhe. Wir automatisieren die Verwaltung des rechtlichen und steuerlichen Rahmens, der auf Ihre Immobilie anwendbar ist — stets innerhalb der Regulierung.",
       "items": {
         "rd": {
           "t": "RD 933/2021",
@@ -460,8 +460,8 @@
           "b": "Identitätsprüfung des Gastes beim Check-in."
         },
         "m179": {
-          "t": "Modelo 179",
-          "b": "Vorbereitung der vierteljährlichen Informationserklärung (Modelo 179)."
+          "t": "AEAT-Meldungen",
+          "b": "Vorbereitung der Informationserklärungen zur touristischen Vermietung (Modelo 179/238, gemäß geltender Vorschrift)."
         },
         "irnr": {
           "t": "IRNR-Abrechnung",
@@ -595,7 +595,7 @@
         },
         "q3": {
           "q": "Wie steht es um die steuerlichen Pflichten meiner Immobilie?",
-          "a": "SEDA OS bereitet die Modelo-179-Erklärung jedes Quartal vor und umfasst eine integrierte Gästeregistrierung, vorbereitet für die Meldung an SES.Hospedajes (RD 933/2021). Für Nicht-Residenten (IRNR) bereitet unser Steuerteam die Unterlagen vor und unterstützt Sie bei der Einreichung."
+          "a": "SEDA OS bereitet die Informationserklärungen zur touristischen Vermietung vor (Modelo 179/238, gemäß geltender Vorschrift) und umfasst eine integrierte Gästeregistrierung, vorbereitet für die Meldung an SES.Hospedajes (RD 933/2021). Für Nicht-Residenten (IRNR) bereitet unser Steuerteam die Unterlagen vor und unterstützt Sie bei der Einreichung."
         },
         "q4": {
           "q": "Muss ich für den Beginn in Spanien sein?",
@@ -1234,8 +1234,8 @@
         "a": "Gästeverifizierung, spezifische Versicherung, digitales Inventar, Inspektionen zwischen Aufenthalten und Pflegeprotokolle. Ihre Residenz wird behandelt, als wäre sie unsere eigene."
       },
       "q6": {
-        "q": "Steuerliche Compliance? Modelo 179, RD 933, IRNR.",
-        "a": "Alles automatisiert ab dem Moment, in dem die Villa in SEDA OS eingerichtet ist. Ihr Steuerberater erhält abgestimmte Daten, exportierbar in jedem gewünschten Format."
+        "q": "Steuerliche Compliance? AEAT-Meldungen, RD 933, IRNR.",
+        "a": "Automatisiert ab dem Moment, in dem die Villa in SEDA OS eingerichtet ist. Ihr Steuerberater erhält abgestimmte Daten, exportierbar in jedem gewünschten Format."
       }
     }
   },
