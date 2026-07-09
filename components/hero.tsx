@@ -21,11 +21,18 @@ export function Hero() {
     return () => mq.removeEventListener("change", apply)
   }, [])
 
+  // Reduced-motion users skip the entrance delay and see the hero at once.
+  // This is a render-phase adjustment (React's "you might not need an Effect"
+  // pattern), NOT an effect: doing it here keeps `visible` sticky-true — so a
+  // later OS reduced-motion → off toggle never re-hides/re-animates the hero —
+  // while removing the post-commit setState-in-effect cascade. The `!visible`
+  // guard makes it fire at most once and converge (no infinite render loop).
+  if (reduced && !visible) {
+    setVisible(true)
+  }
+
   useEffect(() => {
-    if (reduced) {
-      setVisible(true)
-      return
-    }
+    if (reduced) return
     const timer = setTimeout(() => setVisible(true), 200)
     return () => clearTimeout(timer)
   }, [reduced])

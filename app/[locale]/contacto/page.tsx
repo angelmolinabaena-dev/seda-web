@@ -218,6 +218,16 @@ export default function ContactoPage() {
     const sp = new URLSearchParams(window.location.search)
     const qType = sp.get("type")
     if (qType === "guest" || qType === "owner" || qType === "other") {
+      // One-time bootstrap read of ?type= after mount. This genuinely needs an
+      // effect: `window` doesn't exist during this Client Component's SSR pass,
+      // so it can't be derived at render time — a lazy useState initializer
+      // reading window.location would diverge between the SSR fallback ("guest")
+      // and the client value, a hydration mismatch since `type` gates three
+      // structurally different form subtrees. `type` is also freely mutated by
+      // the selector buttons afterward, so it isn't a reactive derived value
+      // (ruling out useSyncExternalStore). useSearchParams would work but forces
+      // a Suspense/dynamic-rendering opt-in this page deliberately avoids.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setType(qType)
     }
     const v = sp.get("villa")
