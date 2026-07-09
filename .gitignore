@@ -11,3 +11,8 @@ node_modules/
 .env*.local
 .DS_Store
 .vercel
+*.tsbuildinfo
+
+.claude/
+.impeccable/
+.worktrees/
