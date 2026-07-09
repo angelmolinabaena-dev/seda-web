@@ -128,6 +128,9 @@ export function Navigation() {
   const sedaOsRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
   const [, startTransition] = useTransition()
+  // Mirrors `pathname` as of the last committed render, so the render-phase
+  // reset below can detect a route change without a setState-in-effect.
+  const [prevPathnameForVisibility, setPrevPathnameForVisibility] = useState(pathname)
 
   /**
    * Mobile nav-link click handler.
@@ -158,7 +161,11 @@ export function Navigation() {
         router.push(href)
       })
     },
-    [router]
+    // `setIsOpen`'s identity is guaranteed stable by React, so listing it is a
+    // no-op for how often this callback is recreated (still gated by `router`);
+    // it's required only to satisfy react-hooks/preserve-manual-memoization,
+    // which does literal dependency-list matching rather than stability reasoning.
+    [router, setIsOpen]
   )
   // `lastScrollY` is a transient frequent value (updated on every scroll).
   // Keeping it in a ref avoids re-rendering Navigation on every pixel of
@@ -191,9 +198,23 @@ export function Navigation() {
 
   // Reset visibility/scroll-derived state on route change so a stale "hidden"
   // from the previous page doesn't carry over and hide the nav on arrival.
-  useEffect(() => {
+  //
+  // Render-phase adjustment (React docs: "Adjusting some state when a prop
+  // changes") instead of an effect that unconditionally calls setState: when
+  // `pathname` differs from the last committed value we correct hidden/pastHero
+  // in this same render pass, before it commits, rather than one paint later.
+  // The header element never unmounts across a route change, so the browser's
+  // CSS transition still animates between its last painted frame and the next
+  // committed one — the discarded intermediate render is never painted.
+  if (pathname !== prevPathnameForVisibility) {
+    setPrevPathnameForVisibility(pathname)
     setHidden(false)
     setPastHero(false)
+  }
+  // `lastScrollYRef` is a ref, not state, so resetting it never trips
+  // set-state-in-effect. Kept in a post-commit effect (unchanged [pathname]
+  // trigger) rather than the render body to avoid mutating a ref during render.
+  useEffect(() => {
     lastScrollYRef.current = 0
   }, [pathname])
 
@@ -204,12 +225,22 @@ export function Navigation() {
   // are already on, where next-intl shortcircuits navigation, and
   // switching language from the always-visible header switcher while the
   // drawer is open, which doesn't change `pathname` since next-intl's
-  // `usePathname` strips the locale prefix). React bails out cheaply if
-  // isOpen is already false, so the cost is zero in the common case.
+  // `usePathname` strips the locale prefix).
+  //
+  // Render-phase adjustment with its OWN prev-trackers (distinct from
+  // `prevPathnameForVisibility` above) so this [pathname, locale] trigger
+  // stays independent from the [pathname]-only visibility reset — a same-route
+  // locale switch must close the drawer without touching header visibility.
+  // `setIsOpen(false)` still bails out cheaply when isOpen is already false
+  // (React skips the re-render for a same-value update), same as before.
   const locale = useLocale()
-  useEffect(() => {
+  const [prevPathnameForDrawer, setPrevPathnameForDrawer] = useState(pathname)
+  const [prevLocaleForDrawer, setPrevLocaleForDrawer] = useState(locale)
+  if (pathname !== prevPathnameForDrawer || locale !== prevLocaleForDrawer) {
+    setPrevPathnameForDrawer(pathname)
+    setPrevLocaleForDrawer(locale)
     setIsOpen(false)
-  }, [pathname, locale])
+  }
 
   // Lock body scroll when mega-menu is open
   useEffect(() => {
