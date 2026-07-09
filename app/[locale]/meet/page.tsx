@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import Link from "next/link"
+import { Link } from "@/i18n/navigation"
 import { setRequestLocale } from "next-intl/server"
 import { Calendar, Shield, Mail, ArrowRight } from "lucide-react"
 
@@ -121,7 +121,7 @@ const COPY: Record<
     fallbackTitle: "Prefer to write first?",
     fallbackBody: "Email me directly at:",
     fallbackLink: "angel@sedaprivatehomes.com",
-    contextLink: "/en/founding-owners",
+    contextLink: "/founding-owners",
     contextLinkLabel: "Read about the programme before booking →",
     footer: "Seda Private Homes S.L. · Marbella · Spain",
   },
@@ -155,7 +155,7 @@ const COPY: Record<
     fallbackTitle: "Préférez-vous écrire d'abord ?",
     fallbackBody: "Écrivez-moi directement à :",
     fallbackLink: "angel@sedaprivatehomes.com",
-    contextLink: "/fr/founding-owners",
+    contextLink: "/founding-owners",
     contextLinkLabel: "En savoir plus sur le programme avant de réserver →",
     footer: "Seda Private Homes S.L. · Marbella · Espagne",
   },
@@ -189,7 +189,7 @@ const COPY: Record<
     fallbackTitle: "Möchten Sie lieber zuerst schreiben?",
     fallbackBody: "Schreiben Sie mir direkt an:",
     fallbackLink: "angel@sedaprivatehomes.com",
-    contextLink: "/de/founding-owners",
+    contextLink: "/founding-owners",
     contextLinkLabel: "Mehr über das Programm vor der Buchung lesen →",
     footer: "Seda Private Homes S.L. · Marbella · Spanien",
   },
