@@ -13,6 +13,7 @@ import {
   MessageCircle,
 } from "lucide-react"
 import { useTranslations } from "next-intl"
+import { Link } from "@/i18n/navigation"
 import { useScrollReveal } from "@/hooks/use-scroll-reveal"
 import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion"
 
@@ -315,7 +316,7 @@ export function GuestAppSection() {
             ))}
           </ul>
 
-          <a
+          <Link
             href="/guestapp"
             className="group inline-flex items-center gap-3 font-mono text-[11px] tracking-[0.25em] uppercase text-foreground border-b border-foreground/30 hover:border-foreground transition-colors pb-1"
           >
@@ -324,7 +325,7 @@ export function GuestAppSection() {
               className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1"
               strokeWidth={1.75}
             />
-          </a>
+          </Link>
         </div>
 
         {/* Phone column */}
