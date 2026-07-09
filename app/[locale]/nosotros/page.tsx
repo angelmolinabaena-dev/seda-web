@@ -198,10 +198,10 @@ export default function NosotrosPage() {
             La pregunta que lo cambió todo
           </p>
           <blockquote className="reveal font-serif italic font-light text-[clamp(28px,4vw,48px)] leading-[1.2] tracking-[-0.02em] text-[hsl(var(--olive))] max-w-[760px] mx-auto text-balance relative">
-            <span className="absolute top-[-0.3em] left-[-0.3em] font-serif text-[hsl(var(--gold))] opacity-40 text-[1.4em] not-italic">"</span>
+            <span className="absolute top-[-0.3em] left-[-0.3em] font-serif text-[hsl(var(--gold))] opacity-40 text-[1.4em] not-italic">&ldquo;</span>
             ¿Por qué las villas de lujo de la Costa del Sol no se gestionan con los mismos
             estándares que un hotel de cinco estrellas?
-            <span className="absolute bottom-[-0.5em] right-[-0.2em] font-serif text-[hsl(var(--gold))] opacity-40 text-[1.4em] not-italic">"</span>
+            <span className="absolute bottom-[-0.5em] right-[-0.2em] font-serif text-[hsl(var(--gold))] opacity-40 text-[1.4em] not-italic">&rdquo;</span>
           </blockquote>
           <p className="reveal font-mono text-[10.5px] tracking-[0.28em] uppercase text-muted-foreground mt-10">
             — La pregunta que fundó Seda

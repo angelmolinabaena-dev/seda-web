@@ -16,3 +16,5 @@ node_modules/
 .claude/
 .impeccable/
 .worktrees/
+
+lint-output.txt
