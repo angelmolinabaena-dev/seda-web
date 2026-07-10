@@ -12,12 +12,14 @@ Registro de cierre por iteración con evidencia. Los PRs quedan en borrador: **A
 | A4 | H-08 gate factura | **PR portal-propietarios #157** — `assertFacturacionLive()` fail-closed en las 3 vías de emisión + flag `SEDA_FLAG_FACTURACION_LIVE` + bloqueo NIF ficticio | `tsc` 0 err · 59 tests de área · suite 1314 pass / 7 fail preexistentes (#151) | **APTO** (2 LOW cosméticos anotados en el PR) |
 | A5 | H-09 Redis fail-open | **PR guest-app #59** — fail-closed en prod real (señal `VERCEL_ENV`), fail-fast al boot sin Upstash, previews fail-open | `tsc` 0 err · vitest **1151/1151** | **APTO CON CAMBIOS → cambios aplicados** (`dc08cce`): VERCEL_ENV, boot fail-fast, comentario corregido |
 | A6 | H-13 crons n8n | **PR guest-app #58** — GET-delegate en las 8 rutas sin export GET + test de delegación. **Hallazgo mayor**: el scheduler n8n está caído (solo 2 llamadas en 26h, ambas 405) | `tsc` 0 err · vitest **1144/1144** · preview Ready | Sonnet + evidencia runtime; sin dinero/auth |
+| A9 | H-14 Sentry ciego | **PR guest-app #60** — el cableado logger→Sentry YA existía en main (premisa de la auditoría corregida); se cierra un **bug de PII** (`captureError` enviaba fields sin redactar a Sentry) + `sendDefaultPii:false` en los 3 runtimes. Falta solo el DSN (Angel) | `tsc` 0 err · vitest **1146/1146** | Ejecutor Opus + diff verificado por el orquestador |
 
 ## Correcciones a la auditoría original (hechas por los ejecutores)
 
 - **H-09**: `magic_link_consumptions=0` NO era evidencia de Redis ausente — es una tabla huérfana del diseño pre-Redis (candidata a `DROP`, post-venta).
 - **H-05**: ya estaba resuelto en main antes de arrancar el loop; la auditoría lo capturó entre el incidente y el deploy del fix.
 - **A6**: el problema de los crons no era solo "verificación pendiente": el scheduler está efectivamente caído (2/24 endpoints llamados, método incorrecto).
+- **H-14/A9**: el cableado logger→Sentry ya existía en main (PL-016); lo que falta es solo el DSN en Vercel. El hallazgo real de la iteración fue un bug de PII en `captureError` (corregido en #60).
 
 ## Orden de merge sugerido (todo tuyo)
 
