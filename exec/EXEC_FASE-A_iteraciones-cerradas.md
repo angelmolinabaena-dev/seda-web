@@ -23,6 +23,12 @@ Registro de cierre por iteración con evidencia. Los PRs quedan en borrador: **A
 - **H-23 sigue vivo**: previews sin vars Supabase rebotaron a 2 usuarios más hoy 13:13 UTC (7 eventos acumulados). Pendiente: copiar las 3 vars al scope Preview o desactivar previews públicos.
 - Pendientes de merge: #58 (crons GET), #35 (privacidad), portal #151/#157, cadena #51/#53/#52.
 
+## Actualización 2026-07-11 (tarde) — re-auditoría + H-27/H-28
+
+- **Re-auditoría de verificación** entregada (`HALLAZGOS_VERIFICACION_2026-07-11.md`): cero regresiones en RD933/NUKI/Redis/Stripe tras ~10 merges; 1 regresión nueva crítica (V-01, gate #56 sobre /api/cron/* y webhook) + V-02 (DSN) + V-03 (H-26 sin guard).
+- **H-27 + H-28 ✅ mergeados (#67)** — ejecutor Opus + revisión Opus (APTO CON CAMBIOS, aplicado): DSN alineada en los 3 gates de servidor (`lib/sentry-dsn.ts`); guard fail-closed de placeholders fiscales en `sendEmail()` + sustitución por `SEDA_RAZON_SOCIAL`/`SEDA_NIF_FISCAL`/`SEDA_DOMICILIO_SOCIAL`; verificado que un envío bloqueado no sella `*_sent_at`. 1200/1200 tests.
+- **Pendiente de Angel**: `NEXT_PUBLIC_SENTRY_DSN` en Vercel (cierra A9 tras error de prueba) · **orden para V-01** (crítico: sin él, n8n arreglado seguiría muriendo con 307) · n8n en Railway · merges #35/portal#151/#157.
+
 ## Correcciones a la auditoría original (hechas por los ejecutores)
 
 - **H-09**: `magic_link_consumptions=0` NO era evidencia de Redis ausente — es una tabla huérfana del diseño pre-Redis (candidata a `DROP`, post-venta).
