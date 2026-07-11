@@ -14,6 +14,15 @@ Registro de cierre por iteración con evidencia. Los PRs quedan en borrador: **A
 | A6 | H-13 crons n8n | **PR guest-app #58** — GET-delegate en las 8 rutas sin export GET + test de delegación. **Hallazgo mayor**: el scheduler n8n está caído (solo 2 llamadas en 26h, ambas 405) | `tsc` 0 err · vitest **1144/1144** · preview Ready | Sonnet + evidencia runtime; sin dinero/auth |
 | A9 | H-14 Sentry ciego | **PR guest-app #60** — el cableado logger→Sentry YA existía en main (premisa de la auditoría corregida); se cierra un **bug de PII** (`captureError` enviaba fields sin redactar a Sentry) + `sendDefaultPii:false` en los 3 runtimes. Falta solo el DSN (Angel) | `tsc` 0 err · vitest **1146/1146** | Ejecutor Opus + diff verificado por el orquestador |
 
+## Actualización 2026-07-11 (mañana de merges de Angel)
+
+- **A5/H-09 ✅** — #59 mergeado con Upstash provisionado antes (prod 200, boot limpio 12:28 UTC).
+- **A9 (código) ✅** — #60 mergeado + #63 (endpoint temporal de prueba). Pendiente: DSN en Vercel (Sentry sigue a 0 eventos en 24h) → luego forzar error y verificar redacción.
+- **H-10 ✅** — #56 (access gate global) mergeado Y migración `session_version` aplicada (verificada por query 13:15 UTC).
+- **A3 avanza** — portal #136 mergeado (el índice ya estaba aplicado en BD). Faltan #51 → #53 → #52.
+- **H-23 sigue vivo**: previews sin vars Supabase rebotaron a 2 usuarios más hoy 13:13 UTC (7 eventos acumulados). Pendiente: copiar las 3 vars al scope Preview o desactivar previews públicos.
+- Pendientes de merge: #58 (crons GET), #35 (privacidad), portal #151/#157, cadena #51/#53/#52.
+
 ## Correcciones a la auditoría original (hechas por los ejecutores)
 
 - **H-09**: `magic_link_consumptions=0` NO era evidencia de Redis ausente — es una tabla huérfana del diseño pre-Redis (candidata a `DROP`, post-venta).
