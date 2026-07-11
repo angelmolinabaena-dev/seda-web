@@ -19,7 +19,7 @@ Registro de cierre por iteración con evidencia. Los PRs quedan en borrador: **A
 - **A5/H-09 ✅** — #59 mergeado con Upstash provisionado antes (prod 200, boot limpio 12:28 UTC).
 - **A9 (código) ✅** — #60 mergeado + #63 (endpoint temporal de prueba). Pendiente: DSN en Vercel (Sentry sigue a 0 eventos en 24h) → luego forzar error y verificar redacción.
 - **H-10 ✅** — #56 (access gate global) mergeado Y migración `session_version` aplicada (verificada por query 13:15 UTC).
-- **A3 avanza** — portal #136 mergeado (el índice ya estaba aplicado en BD). Faltan #51 → #53 → #52.
+- **A3 código ✅ COMPLETO (13:33 UTC)** — cadena entera en producción: portal #136 + guest-app #51 (gate completitud) + #53 (upsert idempotente) + #52 (nudge welcome-back) + #62 (gate duro NUKI por roster, H-25). Índice verificado en BD, deploy prod READY, 0 errores nuevos. Pendiente SOLO el smoke de Angel con huésped de prueba (criterio A3: registrar 2 acompañantes con el mismo documento → 200 idempotente, una fila; finalizar incompleto → 409).
 - **H-23 sigue vivo**: previews sin vars Supabase rebotaron a 2 usuarios más hoy 13:13 UTC (7 eventos acumulados). Pendiente: copiar las 3 vars al scope Preview o desactivar previews públicos.
 - Pendientes de merge: #58 (crons GET), #35 (privacidad), portal #151/#157, cadena #51/#53/#52.
 
