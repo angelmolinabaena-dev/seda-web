@@ -2,6 +2,7 @@
 
 import { Link } from "@/i18n/navigation"
 import { useTranslations } from "next-intl"
+import { generalContact } from "@/lib/site-contact"
 
 /*
   Footer link audit (post-migration):
@@ -11,11 +12,6 @@ import { useTranslations } from "next-intl"
   - Social column collapsed: placeholder `href="#"` removed (was a dead link
     from a UX & SEO standpoint). Will be re-introduced when real handles exist.
 */
-
-const generalContact = {
-  email: "info@sedaprivatehomes.com",
-  phone: "+34 686 980 798",
-}
 
 export function Footer() {
   const t = useTranslations()

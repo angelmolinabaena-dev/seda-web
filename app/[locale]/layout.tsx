@@ -6,6 +6,43 @@ import { Navigation } from "@/components/navigation"
 import { Footer } from "@/components/footer"
 import { KeyboardShortcuts } from "@/components/keyboard-shortcuts"
 import { routing } from "@/i18n/routing"
+import { SITE_URL } from "@/lib/seo-urls"
+import { generalContact, TOURISM_LICENSE } from "@/lib/site-contact"
+
+// Site-wide Organization + LodgingBusiness JSON-LD — rendered on every
+// route via this shared locale layout. Uses ONLY data already present in
+// `components/footer.tsx` (contact + tourism license) — no new claims.
+// Deliberately has no `priceRange`: SEDA operates per-property pricing
+// (see VILLA_PRICING placeholders in the villa page), not a single
+// business-wide range.
+const businessJsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${SITE_URL}/#organization`,
+      name: "SEDA Private Homes",
+      url: SITE_URL,
+      email: generalContact.email,
+      telephone: generalContact.phone.replace(/\s/g, ""),
+    },
+    {
+      "@type": "LodgingBusiness",
+      "@id": `${SITE_URL}/#lodgingbusiness`,
+      name: "SEDA Private Homes",
+      url: SITE_URL,
+      email: generalContact.email,
+      telephone: generalContact.phone.replace(/\s/g, ""),
+      identifier: TOURISM_LICENSE,
+      areaServed: "Costa del Sol",
+      address: {
+        "@type": "PostalAddress",
+        addressRegion: "Costa del Sol",
+        addressCountry: "ES",
+      },
+    },
+  ],
+}
 
 /*
   Per-locale layout. Validates the URL locale, opts the page into static
@@ -48,6 +85,10 @@ export default async function LocaleLayout({
 
   return (
     <NextIntlClientProvider>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(businessJsonLd) }}
+      />
       <SkipLink />
       <Navigation />
       {children}

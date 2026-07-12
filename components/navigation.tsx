@@ -8,7 +8,9 @@ import { LanguageSwitcher } from "@/components/language-switcher"
 
 // External app URLs — sourced from seda4/shared.jsx (Claude design reference)
 const GUEST_APP_URL = "https://guests.sedaprivatehomes.com/villa/apartamento-torremolinos/d1389271-1fbc-4d8a-8bb1-bfc0464d3bfc"
-const OWNERS_PORTAL_URL = "https://portal.sedaprivatehomes.com/admin/reservas"
+// Owner PORTAL home — was pointing at the internal /admin panel (bounces a
+// prospective owner to an admin login). "/" is the owner-facing portal home.
+const OWNERS_PORTAL_URL = "https://portal.sedaprivatehomes.com/"
 
 // Mobile mega-menu IA — reorganised to match professional luxury
 // hospitality patterns (Aman, Belmond, Le Collectionist, Oku).

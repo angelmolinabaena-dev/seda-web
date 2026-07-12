@@ -1,6 +1,7 @@
 import { ChevronRight } from "lucide-react"
 import { Link } from "@/i18n/navigation"
 import { getTranslations, getLocale } from "next-intl/server"
+import { localeUrl } from "@/lib/seo-urls"
 
 /*
   Server-rendered breadcrumb trail.
@@ -40,13 +41,11 @@ export async function Breadcrumbs({
     ...items,
   ]
 
-  // Build absolute URLs for JSON-LD. next-intl `as-needed` prefix:
-  // ES routes are bare ("/"), EN routes are "/en/...".
-  const base = "https://sedaprivatehomes.com"
-  const localized = (path: string) => {
-    if (locale === "es") return path === "/" ? base + "/" : base + path
-    return path === "/" ? base + "/en" : base + "/en" + path
-  }
+  // Build absolute URLs for JSON-LD via the shared `localeUrl` helper —
+  // covers all 4 locales (`as-needed` prefix: es is bare "/", en/fr/de get
+  // "/{locale}/..."). Previously hardcoded to es/en only, so fr and de
+  // breadcrumb JSON-LD silently emitted "/en/..." URLs.
+  const localized = (path: string) => localeUrl(locale, path === "/" ? "" : path)
 
   const jsonLd = {
     "@context": "https://schema.org",
