@@ -46,6 +46,16 @@ Registro de cierre por iteración con evidencia. Los PRs quedan en borrador: **A
 
 **Sin prisa**: Angel lo hará con calma — los crons de guest-app quedan inertes hasta el import, y los 11 crons de `portal-propietarios` siguen dormidos por la variable de repo `SEDA_OPERATION_ACTIVE` (GitHub Actions, `docs/PRE_LAUNCH_CHECKLIST.md:40-49`), que Angel activará el día que opere de verdad. Ninguno de los dos interruptores se toca en este loop.
 
+## Decisión de Angel 2026-07-13 (noche) — PR #35 cerrado a propósito, split confirmado
+
+**PR #35 (guest-app, `compliance P1-2/P1-4`) queda CERRADO sin merge — decisión deliberada, NO reabrir, NO rehacer.**
+
+Se dividió en dos piezas de riesgo distinto:
+- **P1-4 (pii_access_log audit trail)** → salió al **PR #72**, ya **mergeado y verificado en producción** (fila real insertada en `pii_access_log`). Cerrado.
+- **P1-2 (reescritura de política de privacidad)** → **PAUSADO**, gated por **H-18** (constitución de la empresa + responsable del tratamiento real). No se publica una política nueva sin entidad legal ni DPO detrás.
+
+**Etiqueta correcta**: la política de privacidad NO es deuda de código ni un hallazgo pendiente del loop — es un **ítem de día-1 de operación**, junto al resto de lo gated por H-18 (NIF real, SEPA, footer fiscal de emails). No aparece en ninguna lista de "PRs pendientes de mergear" de aquí en adelante.
+
 ## Correcciones a la auditoría original (hechas por los ejecutores)
 
 - **H-09**: `magic_link_consumptions=0` NO era evidencia de Redis ausente — es una tabla huérfana del diseño pre-Redis (candidata a `DROP`, post-venta).
