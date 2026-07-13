@@ -36,6 +36,16 @@ Registro de cierre por iteración con evidencia. Los PRs quedan en borrador: **A
   - **Confirmado también por curl de Angel**: 200 con Bearer válido, 401 con inválido, ya no 307.
   - **Cadena de desbloqueo del pipeline de emails COMPLETA**: V-01 (gate) → #69 (dispatcher Madrid-aware con lock atómico) → 23 crons. n8n ya pinga `/api/cron/dispatch` (HEAD requests en logs). El dispatcher evalúa las 22 ventanas; dispara cuando una coincide en hora Madrid.
 
+## Resumen nocturno 2026-07-13 — único paso pendiente del pipeline de crons
+
+**Falsa alarma descartada (sin código):** Angel reportó el dispatcher #69 calculando en UTC sin soporte de minutos ("Opción B"). Verificado leyendo `lib/cron-dispatch.ts` en main (`8291e81`): usa `Intl.DateTimeFormat({timeZone:'Europe/Madrid', hourCycle:'h23'})` (DST correcto vía ICU, cero `getUTCHours()`) y `CronSchedule` ya soporta `hour`+`minute` (slots reales en :30/:45). Tests de borde ya cubren spring-forward, fall-back, medianoche y el ejemplo exacto de Angel (`morning-of-arrival` estable a las 09:00 Madrid cruzando DST). **La confusión era el workflow n8n VIEJO** (Code node con `getUTCHours()`, ya confirmado roto en vivo por Angel — "no hay crons a esta hora UTC 18"), no el dispatcher nuevo. Angel lo confirmó tras ver la evidencia. Sin PR, sin ejecutor lanzado.
+
+**Único paso pendiente para que el pipeline de emails quede 100% operativo:**
+1. Importar `exec/n8n-seda-crons-dispatcher-v3.json` en n8n (Schedule Trigger cada 15 min + HTTP GET a `/api/cron/dispatch` con Bearer `CRON_SECRET`).
+2. **Desactivar el workflow viejo "SEDA — Crons guest-app (v2 simple)"** antes de activar el nuevo (evitar doble ejecución — el lock de `cron_dispatch_runs` protege el dispatcher de sí mismo, pero no del viejo workflow disparando crons individuales por su cuenta).
+
+**Sin prisa**: Angel lo hará con calma — los crons de guest-app quedan inertes hasta el import, y los 11 crons de `portal-propietarios` siguen dormidos por la variable de repo `SEDA_OPERATION_ACTIVE` (GitHub Actions, `docs/PRE_LAUNCH_CHECKLIST.md:40-49`), que Angel activará el día que opere de verdad. Ninguno de los dos interruptores se toca en este loop.
+
 ## Correcciones a la auditoría original (hechas por los ejecutores)
 
 - **H-09**: `magic_link_consumptions=0` NO era evidencia de Redis ausente — es una tabla huérfana del diseño pre-Redis (candidata a `DROP`, post-venta).
