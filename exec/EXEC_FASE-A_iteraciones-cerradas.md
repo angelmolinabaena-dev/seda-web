@@ -29,6 +29,13 @@ Registro de cierre por iteración con evidencia. Los PRs quedan en borrador: **A
 - **H-27 + H-28 ✅ mergeados (#67)** — ejecutor Opus + revisión Opus (APTO CON CAMBIOS, aplicado): DSN alineada en los 3 gates de servidor (`lib/sentry-dsn.ts`); guard fail-closed de placeholders fiscales en `sendEmail()` + sustitución por `SEDA_RAZON_SOCIAL`/`SEDA_NIF_FISCAL`/`SEDA_DOMICILIO_SOCIAL`; verificado que un envío bloqueado no sella `*_sent_at`. 1200/1200 tests.
 - **Pendiente de Angel**: `NEXT_PUBLIC_SENTRY_DSN` en Vercel (cierra A9 tras error de prueba) · **orden para V-01** (crítico: sin él, n8n arreglado seguiría muriendo con 307) · n8n en Railway · merges #35/portal#151/#157.
 
+## Actualización 2026-07-13 — V-01 cerrado con evidencia runtime
+
+- **V-01 (regresión del gate de #56) ✅ CERRADO** — PR #73 mergeado (main `8291e81`). Ejecutor Opus + revisión Opus adversarial (APTO CON CAMBIOS → aplicado: ancla `api/stripe/webhook$` + tests del matcher regex y over-exemption). Auditadas las 23 rutas cron + webhook: **todas con auth propia** (Bearer `CRON_SECRET` vía `isCronAuthorized`/`verifyCronAuth`, o firma HMAC); cero rutas huérfanas; `/api/stripe/identity` correctamente NO exentada (cookie del huésped). 1293/1293 tests.
+  - **Evidencia runtime (before/after en la misma ventana de logs Vercel):** deploy viejo `dpl_EjENZ4U` → `HEAD /api/cron/dispatch` **307** (source `serverless-middleware` = el gate) a las 21:26 UTC. Deploy V-01 `dpl_3rkZ4w` READY → **401** sin Bearer (21:49-21:50, auth propia del handler) y **200** con tick real del dispatcher (21:51: `cron.dispatch.tick`, madrid 23:51, evaluated 22, dueCount 0). El 307 del gate desapareció.
+  - **Confirmado también por curl de Angel**: 200 con Bearer válido, 401 con inválido, ya no 307.
+  - **Cadena de desbloqueo del pipeline de emails COMPLETA**: V-01 (gate) → #69 (dispatcher Madrid-aware con lock atómico) → 23 crons. n8n ya pinga `/api/cron/dispatch` (HEAD requests en logs). El dispatcher evalúa las 22 ventanas; dispara cuando una coincide en hora Madrid.
+
 ## Correcciones a la auditoría original (hechas por los ejecutores)
 
 - **H-09**: `magic_link_consumptions=0` NO era evidencia de Redis ausente — es una tabla huérfana del diseño pre-Redis (candidata a `DROP`, post-venta).
