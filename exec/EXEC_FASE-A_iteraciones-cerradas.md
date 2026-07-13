@@ -56,6 +56,26 @@ Se dividió en dos piezas de riesgo distinto:
 
 **Etiqueta correcta**: la política de privacidad NO es deuda de código ni un hallazgo pendiente del loop — es un **ítem de día-1 de operación**, junto al resto de lo gated por H-18 (NIF real, SEPA, footer fiscal de emails). No aparece en ninguna lista de "PRs pendientes de mergear" de aquí en adelante.
 
+## Revisión de la cola nocturna 2026-07-14 (7 PRs de la otra sesión, portal-propietarios)
+
+Angel encargó revisar 7 PRs generados por una sesión nocturna sin supervisión (H-29/H-30/H-31 + 4 features admin). Revisión con 6 agentes en paralelo (Opus adversarial para auth/dinero/seguridad-física; Sonnet para UI/tests), cada uno leyendo código real + ejecutando tsc/vitest/build en worktree aislado.
+
+| PR | Qué | Veredicto | Resolución |
+|----|-----|-----------|------------|
+| #161 | Test allow-path gate B4 | APTO | — |
+| #162 | H-30/H-31 endurecer nuki_code + numero_personas | APTO CON CAMBIOS → **CORREGIDO** | Bypass de tipo verificado (nuki_code numérico `{"nuki_code":1234}` saltaba `typeof==='string'` y en PATCH persistía el PIN débil crudo). Fix: coerción `String(val)` en los 3 verbos + 8 tests de rama numérica. Revisión Opus del fix: APTO. 29/29 tests. Pusheado a su rama `claude/h30-h31-reserva-hardening` (Draft). |
+| #163 | Panel solo-lectura estado motor | APTO | **Conflicto de nav con #166 resuelto** (Gauge+ConciergeBell juntos en import, ambas entradas de nav). Merge commit pusheado a `claude/motor-reservas-status`; mergea limpio. |
+| #164 | Errores login infra vs credenciales | APTO (cambios menores UX) | — |
+| #165 | Botón reenviar email admin | APTO | Gate fiscal doble-barrera verificado |
+| #166 | Página /admin/solicitudes | APTO CON CAMBIO menor (MAX_RESULTS 50→100 compartido) | Mergeado por Angel |
+| #167 | Contraste AA del pill | APTO | Mergeado por Angel |
+
+**Orden de merge de los 5 restantes (Angel):** #161 → #164 → #165 → #163 → #162. Los 3 primeros independientes; #163 y #162 ya con sus ramas resueltas/corregidas.
+
+**Regla del loop respetada:** cero commits a main, cero merges de mi parte. Las dos ramas que toqué (#162 fix, #163 merge) se pushearon a sus ramas de PR en Draft — Angel mergea. Todos los worktrees de revisión/fix borrados; repo compartido intacto.
+
+**Cierre de la tanda:** Angel mergea los 5 en ese orden y da la cola nocturna por cerrada.
+
 ## Correcciones a la auditoría original (hechas por los ejecutores)
 
 - **H-09**: `magic_link_consumptions=0` NO era evidencia de Redis ausente — es una tabla huérfana del diseño pre-Redis (candidata a `DROP`, post-venta).
