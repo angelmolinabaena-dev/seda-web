@@ -1,0 +1,9 @@
+# Git hooks must stay LF regardless of a contributor's local
+# core.autocrlf setting. This repo is edited from Windows (this
+# checkout has core.autocrlf=true), which checks text files out with
+# CRLF unless overridden — a CRLF shebang line breaks under Git's `sh`
+# on push/commit, so a contributor with autocrlf=true checking out a
+# fresh clone would silently get a hook that never fires. Force LF at
+# checkout time so this can't happen no matter who clones the repo or
+# how their git is configured.
+.githooks/* text eol=lf
