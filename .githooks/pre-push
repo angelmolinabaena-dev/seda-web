@@ -1,0 +1,44 @@
+#!/usr/bin/env sh
+# Pre-push hook: refuse to push directly to `main`.
+#
+# `main` auto-deploys to production via the Vercel <-> GitHub
+# integration. This repo is private on the GitHub Free plan — branch
+# protection (and rulesets, same boundary) is only available on public
+# repos with Free, or on private repos with Pro/Team/Enterprise. There
+# is no server-side gate stopping `git push origin main` today, and
+# there won't be one without paying for it.
+#
+# This hook is the client-side substitute. It costs nothing, but it's
+# also only a local check: it doesn't run for anyone who hasn't had
+# `npm install` wire up core.hooksPath (see scripts/setup-hooks.mjs),
+# and it never sees a PR merge — `gh pr merge` / the "Merge pull
+# request" button are API calls, no hook involved there. See
+# .github/workflows/main-push-guard.yml for the detective half that
+# covers those two gaps after the fact.
+#
+# The real flow is: open a PR, then `gh pr merge --squash`.
+#
+# Bypass in an actual emergency with `git push --no-verify`. Documented
+# here on purpose, same as .githooks/pre-commit's bypass — hiding it
+# doesn't make this safer, it just means the next person who finds it
+# trusts the rest of this file less.
+
+set -e
+
+while read -r local_ref local_sha remote_ref remote_sha; do
+  if [ "$remote_ref" = "refs/heads/main" ]; then
+    echo "✗ pre-push: refusing to push to main" >&2
+    echo "" >&2
+    echo "  main auto-deploys to production (Vercel <-> GitHub integration)." >&2
+    echo "  This repo has no server-side branch protection — private repo" >&2
+    echo "  on the GitHub Free plan, which requires Pro/Team/Enterprise" >&2
+    echo "  for that on private repos." >&2
+    echo "" >&2
+    echo "  Open a PR instead:  gh pr create ...  then  gh pr merge --squash" >&2
+    echo "" >&2
+    echo "  Bypass (emergencies only): git push --no-verify" >&2
+    exit 1
+  fi
+done
+
+exit 0
