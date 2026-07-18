@@ -12,6 +12,7 @@ node_modules/
 .DS_Store
 .vercel
 *.tsbuildinfo
+next-env.d.ts
 
 .claude/
 .impeccable/
