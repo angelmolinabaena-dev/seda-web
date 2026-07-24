@@ -63,12 +63,30 @@ export const metadata: Metadata = {
     title: "SEDA Private Homes — Villas privadas en la Costa del Sol",
     description:
       "Gestión de villas privadas en la Costa del Sol, operada sobre software propio.",
+    images: [
+      {
+        url: "/brand/og/og-stone.jpg",
+        width: 1200,
+        height: 630,
+        alt: "SEDA Private Homes",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "SEDA Private Homes",
     description:
       "Villas privadas en la Costa del Sol. Hospitalidad mediterránea, operada sobre software propio.",
+    images: ["/brand/og/og-stone.jpg"],
+  },
+  icons: {
+    icon: [
+      { url: "/brand/favicon/favicon.svg", type: "image/svg+xml" },
+      { url: "/brand/favicon/favicon-32.png", sizes: "32x32", type: "image/png" },
+      { url: "/brand/favicon/favicon-16.png", sizes: "16x16", type: "image/png" },
+    ],
+    apple: [{ url: "/brand/favicon/apple-touch-icon.png", sizes: "180x180" }],
+    shortcut: ["/brand/favicon/favicon.ico"],
   },
 }
 
