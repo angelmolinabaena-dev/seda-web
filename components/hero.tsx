@@ -81,7 +81,7 @@ export function Hero() {
   }, [reduced])
 
   return (
-    <section ref={ref} className="relative min-h-[100dvh] flex flex-col overflow-hidden">
+    <section id="hero" ref={ref} className="relative min-h-[100dvh] flex flex-col overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 z-0">
         <div ref={parallaxRef} className="absolute inset-0 will-change-transform bg-foreground">

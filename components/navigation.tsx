@@ -310,19 +310,55 @@ export function Navigation() {
           <Link
             href="/"
             onClick={() => setIsOpen(false)}
-            className={`flex items-baseline gap-2 transition-colors duration-500 ${
-              scrolled || isOpen ? "text-foreground" : "text-background"
-            }`}
+            aria-label="SEDA Private Homes — inicio"
+            className="relative block shrink-0"
           >
-            <span className="text-sm font-semibold tracking-[0.35em] uppercase">
-              SEDA
+            {/* Wordmark (desktop, ≥sm) — crossfade blanco (hero) <-> color (secciones claras).
+                Dimensiones fijas (ratio 2.162:1) para evitar CLS mientras cargan los SVG. */}
+            <span className="hidden sm:block relative h-[34px] w-[74px]">
+              <img
+                src="/brand/svg/seda-wordmark-white.svg"
+                alt={scrolled || isOpen ? "" : "SEDA Private Homes"}
+                aria-hidden={scrolled || isOpen ? "true" : undefined}
+                width={74}
+                height={34}
+                className={`absolute inset-0 h-[34px] w-[74px] transition-opacity duration-500 motion-reduce:transition-none ${
+                  scrolled || isOpen ? "opacity-0" : "opacity-100"
+                }`}
+              />
+              <img
+                src="/brand/svg/seda-wordmark-color.svg"
+                alt={scrolled || isOpen ? "SEDA Private Homes" : ""}
+                aria-hidden={scrolled || isOpen ? undefined : "true"}
+                width={74}
+                height={34}
+                className={`absolute inset-0 h-[34px] w-[74px] transition-opacity duration-500 motion-reduce:transition-none ${
+                  scrolled || isOpen ? "opacity-100" : "opacity-0"
+                }`}
+              />
             </span>
-            <span
-              className={`hidden sm:inline font-mono text-[9px] tracking-[0.25em] uppercase transition-opacity duration-500 ${
-                scrolled || isOpen ? "text-muted-foreground" : "text-background/65"
-              }`}
-            >
-              Private Homes
+            {/* Isotipo (móvil, <sm) — mismo patrón de crossfade. Ratio 1.495:1. */}
+            <span className="sm:hidden relative block h-[30px] w-[45px]">
+              <img
+                src="/brand/svg/seda-isotipo-white.svg"
+                alt={scrolled || isOpen ? "" : "SEDA Private Homes"}
+                aria-hidden={scrolled || isOpen ? "true" : undefined}
+                width={45}
+                height={30}
+                className={`absolute inset-0 h-[30px] w-[45px] transition-opacity duration-500 motion-reduce:transition-none ${
+                  scrolled || isOpen ? "opacity-0" : "opacity-100"
+                }`}
+              />
+              <img
+                src="/brand/svg/seda-isotipo-ink.svg"
+                alt={scrolled || isOpen ? "SEDA Private Homes" : ""}
+                aria-hidden={scrolled || isOpen ? undefined : "true"}
+                width={45}
+                height={30}
+                className={`absolute inset-0 h-[30px] w-[45px] transition-opacity duration-500 motion-reduce:transition-none ${
+                  scrolled || isOpen ? "opacity-100" : "opacity-0"
+                }`}
+              />
             </span>
           </Link>
 
