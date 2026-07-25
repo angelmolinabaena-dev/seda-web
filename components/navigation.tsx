@@ -313,39 +313,16 @@ export function Navigation() {
             aria-label="SEDA Private Homes — inicio"
             className="relative block shrink-0"
           >
-            {/* Wordmark (desktop, ≥sm) — crossfade blanco (hero) <-> color (secciones claras).
-                Dimensiones fijas (ratio 2.162:1) para evitar CLS mientras cargan los SVG. */}
-            <span className="hidden sm:block relative h-[34px] w-[74px]">
-              <img
-                src="/brand/svg/seda-wordmark-white.svg"
-                alt={scrolled || isOpen ? "" : "SEDA Private Homes"}
-                aria-hidden={scrolled || isOpen ? "true" : undefined}
-                width={74}
-                height={34}
-                className={`absolute inset-0 h-[34px] w-[74px] transition-opacity duration-500 motion-reduce:transition-none ${
-                  scrolled || isOpen ? "opacity-0" : "opacity-100"
-                }`}
-              />
-              <img
-                src="/brand/svg/seda-wordmark-color.svg"
-                alt={scrolled || isOpen ? "SEDA Private Homes" : ""}
-                aria-hidden={scrolled || isOpen ? undefined : "true"}
-                width={74}
-                height={34}
-                className={`absolute inset-0 h-[34px] w-[74px] transition-opacity duration-500 motion-reduce:transition-none ${
-                  scrolled || isOpen ? "opacity-100" : "opacity-0"
-                }`}
-              />
-            </span>
-            {/* Isotipo (móvil, <sm) — mismo patrón de crossfade. Ratio 1.495:1. */}
-            <span className="sm:hidden relative block h-[30px] w-[45px]">
+            {/* Isotipo (todos los breakpoints) — sello discreto; el lockup completo ya vive en el hero.
+                Crossfade blanco (hero) <-> ink (secciones claras). Ratio 1.4948:1. */}
+            <span className="relative block h-[30px] w-[45px] md:h-[34px] md:w-[51px]">
               <img
                 src="/brand/svg/seda-isotipo-white.svg"
                 alt={scrolled || isOpen ? "" : "SEDA Private Homes"}
                 aria-hidden={scrolled || isOpen ? "true" : undefined}
                 width={45}
                 height={30}
-                className={`absolute inset-0 h-[30px] w-[45px] transition-opacity duration-500 motion-reduce:transition-none ${
+                className={`absolute inset-0 h-[30px] w-[45px] md:h-[34px] md:w-[51px] transition-opacity duration-500 motion-reduce:transition-none ${
                   scrolled || isOpen ? "opacity-0" : "opacity-100"
                 }`}
               />
@@ -355,7 +332,7 @@ export function Navigation() {
                 aria-hidden={scrolled || isOpen ? undefined : "true"}
                 width={45}
                 height={30}
-                className={`absolute inset-0 h-[30px] w-[45px] transition-opacity duration-500 motion-reduce:transition-none ${
+                className={`absolute inset-0 h-[30px] w-[45px] md:h-[34px] md:w-[51px] transition-opacity duration-500 motion-reduce:transition-none ${
                   scrolled || isOpen ? "opacity-100" : "opacity-0"
                 }`}
               />
