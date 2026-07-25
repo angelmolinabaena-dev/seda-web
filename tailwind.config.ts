@@ -11,9 +11,6 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      screens: {
-        nav: '1360px',
-      },
       fontFamily: {
         sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
         serif: ['var(--font-serif)', 'Georgia', 'serif'],
