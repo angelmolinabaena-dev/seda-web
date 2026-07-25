@@ -314,25 +314,25 @@ export function Navigation() {
             className="relative block shrink-0"
           >
             {/* Wordmark (desktop, ≥sm) — crossfade blanco (hero) <-> color (secciones claras).
-                Dimensiones fijas (ratio 2.162:1) para evitar CLS mientras cargan los SVG. */}
-            <span className="hidden sm:block relative h-[34px] w-[74px]">
+                Dimensiones fijas (ratio 3.619:1) para evitar CLS mientras cargan los SVG. */}
+            <span className="hidden sm:block relative h-[34px] w-[123px]">
               <img
-                src="/brand/svg/seda-wordmark-white.svg"
+                src="/brand/svg/seda-solo-white.svg"
                 alt={scrolled || isOpen ? "" : "SEDA Private Homes"}
                 aria-hidden={scrolled || isOpen ? "true" : undefined}
-                width={74}
+                width={123}
                 height={34}
-                className={`absolute inset-0 h-[34px] w-[74px] transition-opacity duration-500 motion-reduce:transition-none ${
+                className={`absolute inset-0 h-[34px] w-[123px] transition-opacity duration-500 motion-reduce:transition-none ${
                   scrolled || isOpen ? "opacity-0" : "opacity-100"
                 }`}
               />
               <img
-                src="/brand/svg/seda-wordmark-color.svg"
+                src="/brand/svg/seda-solo-color.svg"
                 alt={scrolled || isOpen ? "SEDA Private Homes" : ""}
                 aria-hidden={scrolled || isOpen ? undefined : "true"}
-                width={74}
+                width={123}
                 height={34}
-                className={`absolute inset-0 h-[34px] w-[74px] transition-opacity duration-500 motion-reduce:transition-none ${
+                className={`absolute inset-0 h-[34px] w-[123px] transition-opacity duration-500 motion-reduce:transition-none ${
                   scrolled || isOpen ? "opacity-100" : "opacity-0"
                 }`}
               />
