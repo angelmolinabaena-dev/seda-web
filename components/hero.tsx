@@ -136,7 +136,17 @@ export function Hero() {
               reduced ? "" : "transition-all duration-1000 delay-700"
             } ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
           >
-            <h1 className="font-serif font-light text-[clamp(2.5rem,7vw,6rem)] leading-[1.02] tracking-[-0.015em] text-background text-balance">
+            <img
+              src="/brand/svg/seda-wordmark-white.svg"
+              alt=""
+              aria-hidden="true"
+              width={205}
+              height={95}
+              loading="eager"
+              className="w-[205px] h-[95px] md:w-[260px] md:h-[120px]"
+            />
+            <div className="w-[26px] md:w-[36px] h-px bg-[rgba(255,249,240,0.40)] mt-[26px] md:mt-[30px]" />
+            <h1 className="mt-[24px] md:mt-[28px] font-serif font-light text-[clamp(2.5rem,7vw,6rem)] leading-[1.02] tracking-[-0.015em] text-background text-balance">
               {t("home.hero.h1.line1")}
               <br className="hidden md:block" />
               <span className="italic">{t("home.hero.h1.line2")}</span>
