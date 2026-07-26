@@ -1,0 +1,77 @@
+name: conflict-markers-check
+
+# Guardarraíl M-036 — falla el build si aparece un marcador de conflicto de
+# merge (<<<<<<< / ======= / >>>>>>>) sin resolver en el árbol versionado.
+#
+# El 26-jul-2026 un caso real llegó a `main` de seda_os:
+# app/api/cron/nuki-delivery/route.ts (commit eb9e990, PR #199) tenía los
+# tres marcadores dentro de un bloque JSDoc. Sobrevivieron a `tsc --noEmit`,
+# `next build` y 1.554 tests porque ningún paso de CI los buscaba —
+# TypeScript no se queja de basura dentro de un comentario. Se descubrió por
+# casualidad al tocar ese fichero por otro motivo (PR #213). El origen fue el
+# historial de ramas apiladas, que también es el flujo de trabajo de este
+# repo: puede pasar aquí igual. Ficha de origen:
+# seda_os/docs/audit/eje-1-motor/HALLAZGOS.md → M-036.
+#
+# `git grep` sobre el árbol versionado (no un `grep -r` del filesystem):
+# solo mira ficheros tracked, así que node_modules/.next/dist/build ya quedan
+# fuera por estar gitignored — el pathspec de exclusión de abajo es cinturón
+# y tirantes por si algo se colara tracked por error.
+#
+# El patrón exige el marcador al PRINCIPIO de línea, seguido de espacio o fin
+# de línea: una cadena "=======" suelta aparece legítimamente en separadores
+# de comentario de este mismo repo (ver app/[locale]/guestapp/page.tsx,
+# app/[locale]/propietarios/page.tsx) — solo el marcador real de git
+# (exactamente 7 caracteres, nada más en la línea salvo la etiqueta de rama)
+# dispara la alarma.
+#
+# Este repo no tiene workflow `ci.yml` propio (es el sitio de marketing, sin
+# suite de tests); este guardarraíl es independiente y no depende de ninguno.
+#
+# No añade dependencias: `git grep` está disponible en el runner sin instalar
+# nada.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: conflict-markers-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  conflict-markers:
+    name: conflict-markers (marcadores de merge sin resolver)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Buscar marcadores de conflicto sin resolver
+        run: |
+          set +e
+          MATCHES=$(git grep -n -E '^(<{7}|={7}|>{7})( |$)' -- \
+            '.' \
+            ':(exclude,glob)**/node_modules/**' \
+            ':(exclude,glob)**/.next/**' \
+            ':(exclude,glob)**/dist/**' \
+            ':(exclude,glob)**/build/**')
+          STATUS=$?
+          set -e
+          if [ "$STATUS" -eq 0 ]; then
+            echo "::error::Marcadores de conflicto de merge sin resolver en el árbol:"
+            echo "$MATCHES"
+            exit 1
+          elif [ "$STATUS" -eq 1 ]; then
+            echo "Sin marcadores de conflicto. Árbol limpio."
+          else
+            echo "::error::git grep falló con código $STATUS"
+            exit "$STATUS"
+          fi
