@@ -74,3 +74,8 @@ ficheros quedan allí, para poder consolidarlos antes de commitear.
 > Cada vez hubo que copiar a mano `navigation.tsx`, `hero.tsx` y `tailwind.config.ts`
 > desde `.claude/worktrees/seda-web-logo-hero-a494f0` al repo principal antes del
 > commit. Riesgo real: commitear los assets sin el código que los usa, o al revés.
+
+## Verificar la rama ANTES de empezar
+
+`git branch --show-current` antes de tocar el primer fichero. Crear la rama y olvidarlo
+no deja ninguna senal hasta el push, cuando ya se ha trabajado sobre la rama equivocada.
