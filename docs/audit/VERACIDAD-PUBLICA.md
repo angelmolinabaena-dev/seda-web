@@ -1,0 +1,480 @@
+# Auditoría de veracidad pública — seda-web
+
+**Fecha:** 2026-08-01
+**Repo:** `seda-web` (sedaprivatehomes.com) · rama `claude/seda-web-audit-fiscal-ea9006`
+**Alcance:** toda cifra, referencia normativa y afirmación comparativa servida al público.
+**Modelo:** Opus 5 · esfuerzo alto.
+**Auditoría previa:** ninguna. Este es el primer documento de `docs/audit/` en este repo.
+
+> **Criterio aplicado:** una afirmación es `CORRECTO` solo si es reproducible desde
+> el código o desde una fuente primaria citable. «Suena razonable» no es CORRECTO;
+> es `NO_TRAZABLE`. No se ha inventado criterio fiscal en ningún punto: cuando la
+> respuesta exigía norma, la entrada se marca `PENDIENTE_ÁNGEL`.
+
+---
+
+## 0. Resumen ejecutivo
+
+| Estado | Nº |
+|---|---|
+| `CORRECTO` | 6 |
+| `ERRÓNEO` | 4 |
+| `NO_TRAZABLE` | 12 |
+
+**Tres conclusiones que condicionan todo lo demás:**
+
+1. **El sitio se contradice a sí mismo sobre el tamaño de SEDA.** `/founding-owners`
+   declara «2 propietarios en programa». `/propietarios` declara «cartera SEDA Q4 2025
+   vs Costa del Sol compset (**12.480 reservas analizadas**)» y «Más del **60%** de los
+   propietarios SEDA son no residentes». Con n=2 propietarios, ni el compset de 12.480
+   reservas ni el porcentaje del 60% pueden existir. Todas las métricas de rendimiento
+   del sitio (+24% RevPAR, +12% pricing, 99,98% uptime) cuelgan de esa cartera
+   inexistente. Es el hallazgo de mayor exposición del repo.
+
+2. **Se publican cuatro tasas de comisión implícitas distintas, ninguna igual al 22% pactado.**
+   18% (mockup de liquidación), 19% (`/meet`, `/founding-owners`), 25% (simulador de
+   ingresos), y «sobre ingresos **netos**» vs «sobre ingresos **brutos**» según la página.
+   Ver §3.
+
+3. **El defecto ×4 del Modelo 238 no está en este repo.** Está en
+   `seda_os/lib/savings-calculator.ts:231`, detrás de auth en `/portal/comparativa`.
+   Confirmado y con root cause identificado (§5), pero **no es corregible desde un PR de
+   `seda-web`**: son repositorios git distintos. Parche listo para aplicar en §5.4.
+
+---
+
+## 1. Inventario de afirmaciones
+
+Barrido sobre `messages/{es,en,fr,de}.json` (880 claves × 4 idiomas, **paridad
+verificada al 100%**: 0 claves divergentes) + literales hardcodeados en `app/` y
+`components/`.
+
+> **Nota de alcance:** el repo tiene **4 idiomas** (`es`, `en`, `fr`, `de`) —
+> ver [i18n/routing.ts:11](../../i18n/routing.ts). El encargo mencionaba 5. No existe
+> `it` en este repo. No hay divergencia de contenido entre idiomas: cada afirmación
+> listada abajo aparece en los 4, salvo donde se indique.
+
+### 1.1 Cifras de rendimiento y comparativas
+
+| fichero:línea | idioma | afirmación literal | tipo |
+|---|---|---|---|
+| [messages/es.json:349](../../messages/es.json) `prop.hero.citation` | ×4 | «Datos · cartera SEDA Q4 2025 vs Costa del Sol compset (12.480 reservas analizadas)» | comparativa |
+| `messages/*.json` `prop.hero.stat.revpar` | ×4 | «+24% RevPAR vs mercado» | comparativa |
+| [propietarios/page.tsx:915](../../app/[locale]/propietarios/page.tsx) | hardcoded | `["+24%", …]` (repetición del claim en sección final) | comparativa |
+| `messages/*.json` `prop.marketing.pricing_delta` | ×4 | «↑ 12% vs baseline» | comparativa |
+| `messages/*.json` `prop.os.kpi.ingresos_d` | ×4 | «+12% vs prev.» | cifra |
+| `messages/*.json` `home.dashboard.kpi.ocupacion_sub` | ×4 | «+6 pts vs. mes anterior» | cifra |
+| `messages/*.json` `prop.arch.stats.uptime_v` | ×4 | «99,98%» (uptime) | cifra |
+| `messages/es.json` `prop.marketing.conv_body` | ×4 | «Mejora media de listings SEDA frente a baseline del mercado» | comparativa |
+| `messages/*.json` `prop.faq.items.q4.a` | ×4 | «Más del 60% de los propietarios SEDA son no residentes» | cifra |
+
+### 1.2 Comisión y economía del propietario
+
+| fichero:línea | idioma | afirmación literal | tipo |
+|---|---|---|---|
+| [propietarios/page.tsx:238](../../app/[locale]/propietarios/page.tsx) | n/a (código) | `annualNet = annualGross * 0.75` → comisión implícita **25%** | cifra |
+| [propietarios/page.tsx:125](../../app/[locale]/propietarios/page.tsx) | hardcoded | «€ 10.890 / − € 1.960 / − € 510» → comisión implícita **18,0%** | cifra |
+| [meet/page.tsx:86](../../app/[locale]/meet/page.tsx) (+120, 154, 188) | es/en/fr/de | «5 plazas · 3 disponibles · **19% comisión** durante 24 meses» | cifra |
+| [founding-owners/page.tsx:45](../../app/[locale]/founding-owners/page.tsx) | ×4 | «Una comisión fija sobre **ingresos netos**» | cifra |
+| `messages/*.json` `faq.owners_items.q2.a` | ×4 | «comisión sobre **ingresos brutos**» | cifra |
+| [propietarios/page.tsx:236](../../app/[locale]/propietarios/page.tsx) | n/a (código) | `annualGross = (occ/100) * 365 * adr` | cifra |
+| `messages/*.json` `prop.sim.disclaimer` | ×4 | «Estimaciones basadas en compset histórico Costa del Sol 2023–2025 y modelo SEDA OS» | comparativa |
+
+### 1.3 Referencias normativas
+
+| fichero:línea | idioma | afirmación literal | tipo |
+|---|---|---|---|
+| `messages/*.json` `prop.trust.items.m179.b` | ×4 | «Modelo 179/238, según normativa vigente» | norma |
+| `messages/*.json` `prop.faq.items.q3.a` | ×4 | «Modelo 179/238, según normativa vigente … SES.Hospedajes (RD 933/2021) … Para no residentes (IRNR), **nuestro equipo fiscal** genera la documentación y le soporta en la presentación» | norma |
+| `messages/*.json` `prop.trust.items.rd.t` / `.b` | ×4 | «RD 933/2021» · «Registro de viajeros integrado, preparado para SES.Hospedajes» | norma |
+| `messages/*.json` `prop.trust.items.irnr.t` | ×4 | «**Liquidación IRNR**» | norma |
+| `messages/*.json` `prop.arch.mod.finanzas.body` | ×4 | «IRNR y reporting fiscal **trimestral**» | norma / plazo |
+| `messages/*.json` `guestapp.features.items.compliance_b` | ×4 | «RD 933/2021 · SES Hospedajes · firma digital» | norma |
+| `messages/*.json` `faq.owners_items.q6.q` | ×4 | «Cumplimiento fiscal? Informativas AEAT, RD 933, IRNR» | norma |
+| [founding-owners/page.tsx:49](../../app/[locale]/founding-owners/page.tsx) | ×4 | «RD 933/2021, **Modelo 179**, IRNR para no residentes. Lo gestionamos todo. **Cero multas** y cero sorpresas con Hacienda o Interior» | norma / comparativa |
+| [founding-owners/page.tsx:35,48](../../app/[locale]/founding-owners/page.tsx) | ×4 | «cumplimiento legal **100%**» | comparativa |
+| [meet/page.tsx:75](../../app/[locale]/meet/page.tsx) | ×4 | «RD 933/2021, **Modelo 210 trimestral** y SES.HOSPEDAJES» | norma / plazo |
+
+### 1.4 Credenciales
+
+| fichero:línea | idioma | afirmación literal | tipo |
+|---|---|---|---|
+| [founding-owners/page.tsx:35,53](../../app/[locale]/founding-owners/page.tsx) | ×4 | «8 años en Iberostar + Les Roches MHM» | cifra |
+| [founding-owners/page.tsx:36](../../app/[locale]/founding-owners/page.tsx) | ×4 | «2 propietarios en programa» / «Quedan 3 plazas fundadoras» | cifra |
+
+---
+
+## 2. Verificación — entradas `CORRECTO`
+
+| # | Afirmación | Reproducción | Estado |
+|---|---|---|---|
+| C-01 | Mockup de liquidación cuadra internamente | 10.890 − 1.960 − 510 = **8.420** = valor mostrado | `CORRECTO` |
+| C-02 | «5 plazas · 3 disponibles» vs «2 propietarios en programa» | 2 + 3 = 5 ✅ coherente entre `/meet` y `/founding-owners` | `CORRECTO` |
+| C-03 | `annualGross = (occ/100) × 365 × adr` | Fórmula RevPAR anual estándar. 0,72 × 365 × 1.450 = **381.060 €**, coincide con lo renderizado. Aritmética correcta. | `CORRECTO` |
+| C-04 | «Modelo 179/238, según normativa vigente» | Formulación cubierta: no fija cuál está vigente. Coherente con la sustitución 179→238 (RD 117/2024). | `CORRECTO` |
+| C-05 | «RD 933/2021 · SES.Hospedajes · registro de viajeros» | Referencia normativa correcta y no sobredimensionada («preparado para la comunicación», no «comunicamos»). | `CORRECTO` |
+| C-06 | Paridad i18n de las 880 claves × 4 idiomas | Verificado programáticamente: 0 claves faltantes, 0 sobrantes. Ninguna afirmación existe en un idioma y no en otro. | `CORRECTO` |
+
+---
+
+## 3. Verificación — entradas `ERRÓNEO`
+
+### E-01 · El simulador ignora 4 de sus 6 entradas
+
+**Fichero:** [app/[locale]/propietarios/page.tsx:220-260](../../app/[locale]/propietarios/page.tsx)
+
+El simulador pide al visitante **Ubicación**, **Tipología**, **Dormitorios** y
+**Disponibilidad**, y el cálculo solo consume `occ` y `adr`:
+
+```js
+const annualGross = Math.round((occ / 100) * 365 * adr)
+```
+
+`loc`, `propType`, `beds` y `avail` se guardan en estado y **no entran en ninguna
+fórmula**. El copy promete lo contrario: *«Ajuste los parámetros y descubra el impacto
+de SEDA OS en su rentabilidad anual.»*
+
+**El caso grave es `Disponibilidad`.** Sus opciones son `Todo el año` / `Temporada alta`
+/ `Solo verano` / `A medida`. Se multiplica siempre por **365 días**, elija lo que elija:
+
+| Selección | Muestra | Reproducción a mano (occ 72%, ADR 1.450 €) | Sobrestimación |
+|---|---|---|---|
+| Todo el año | 381.060 € | 0,72 × 365 × 1.450 = 381.060 € | — |
+| Solo verano | **381.060 €** | 0,72 × ~92 × 1.450 = **96.048 €** | **×3,97** |
+
+Un propietario que declara alquilar solo en verano recibe una proyección **casi cuatro
+veces superior** a la que corresponde a su propio input. Es el mismo orden de magnitud
+que el ×4 del Modelo 238, por una causa distinta.
+
+**Estado:** `ERRÓNEO`.
+**No se corrige en este PR.** El arreglo exige decidir el mapeo opción→días
+(`Temporada alta` = ¿cuántos días?; `A medida` no admite mapeo numérico alguno). Eso es
+criterio de producto, no aritmética. → §7 `PENDIENTE_ÁNGEL`.
+
+### E-02 · «Cero multas y cero sorpresas con Hacienda o Interior»
+
+**Fichero:** [app/[locale]/founding-owners/page.tsx:49](../../app/[locale]/founding-owners/page.tsx) — en los 4 idiomas.
+
+Garantía absoluta de un resultado sancionador que no está bajo control de SEDA. Una
+inspección de AEAT o Interior puede sancionar por hechos ajenos al gestor (datos que
+aporte el propietario, criterio del actuario, cambio normativo retroactivo). Es la
+afirmación de mayor riesgo publicitario del sitio, agravada por acompañarse de
+«cumplimiento legal **100%**».
+
+**Estado:** `ERRÓNEO` (promesa de resultado). Redacción condicionada propuesta en §6.
+
+### E-03 · `/founding-owners` cita el Modelo 179 como vigente, sin la cobertura del resto del sitio
+
+**Fichero:** [app/[locale]/founding-owners/page.tsx:49](../../app/[locale]/founding-owners/page.tsx)
+
+Dice «RD 933/2021, **Modelo 179**, IRNR». El resto del sitio usa sistemáticamente la
+fórmula cubierta «Modelo **179/238**, según normativa vigente» (§C-04). Esta página es
+la excepción y cita el modelo sustituido como si fuera el actual.
+
+**Estado:** `ERRÓNEO` por inconsistencia interna verificable — no hace falta criterio
+fiscal externo para detectarlo: el propio sitio se contradice. La corrección natural es
+alinear con la fórmula ya usada en las otras 8 apariciones.
+**No se aplica en este PR:** tocar copy normativo sin asesoría contratada entra en la
+regla 1 del encargo. → §7.
+
+### E-04 · «Nuestro equipo fiscal»
+
+**Fichero:** `messages/{es,en,fr,de}.json` → `prop.faq.items.q3.a`
+
+«Para no residentes (IRNR), **nuestro equipo fiscal** genera la documentación y le
+soporta en la presentación.»
+
+El contexto del encargo lo desmiente de forma explícita: *«No hay asesoría contratada a
+fecha de hoy.»* Se publica en 4 idiomas una capacidad de servicio que no existe.
+
+**Estado:** `ERRÓNEO`. Redacción condicionada en §6. No se aplica aquí: define qué
+servicio presta SEDA, que es decisión de Ángel.
+
+---
+
+## 4. Verificación — entradas `NO_TRAZABLE`
+
+Ninguna se corrige en este PR. Ángel decide si se corrigen o se retiran.
+
+| # | Afirmación | Por qué no es trazable |
+|---|---|---|
+| N-01 | «12.480 reservas analizadas · cartera SEDA Q4 2025» | No existe dataset, fichero ni consulta que produzca esa cifra en ninguno de los tres repos. Incompatible con «2 propietarios en programa». |
+| N-02 | «+24% RevPAR vs mercado» (×2 apariciones) | Depende de N-01. Sin compset no hay baseline contra el que medir. |
+| N-03 | «Más del 60% de los propietarios SEDA son no residentes» | Estadística sobre una base de 2 propietarios. |
+| N-04 | «↑ 12% vs baseline» (pricing) | Sin fuente. No hay motor de pricing en este repo ni serie histórica. |
+| N-05 | «+12% vs prev.» (ingresos) | Mockup de dashboard, pero no está rotulado como ilustrativo. |
+| N-06 | «+6 pts vs. mes anterior» (ocupación) | Ídem N-05. |
+| N-07 | «99,98% uptime» | Afirmación de nivel SLA. No hay página de estado, monitor ni histórico que la respalde. |
+| N-08 | «compset histórico Costa del Sol 2023–2025» (disclaimer del simulador) | Cita una fuente de datos que no consta en el repo. El disclaimer aporta falsa trazabilidad. |
+| N-09 | Comisión implícita **25%** (`× 0.75`) | Ver §3 abajo. No coincide con el 22% pactado y no hay nada que documente qué representa el 25%. |
+| N-10 | Comisión implícita **18,0%** (mockup 1.960/10.890) | Ídem. Tercera tasa distinta. |
+| N-11 | «19% comisión durante 24 meses» | Plausible como condición fundadora promocional sobre el 22%, pero no hay documento en el repo que lo fije. Solo Ángel puede confirmarlo. |
+| N-12 | «8 años en Iberostar + Les Roches MHM» | Credencial personal, no verificable desde código. Se señala porque **diverge del signal registrado** para SEDA (fundador de Hotel Estepona Plaza + 5 premios de sector), que no aparece en la web. |
+
+### Nota sobre la base de comisión (N-09, N-10 y §1.2)
+
+El encargo prohíbe tocar el modelo de comisión (22%) y pide únicamente **verificar que
+lo publicado coincide con lo pactado**. No coincide. Lo publicado hoy:
+
+| Superficie | Tasa implícita | Base declarada |
+|---|---|---|
+| Simulador `/propietarios` (`× 0.75`) | **25%** | — |
+| Mockup de liquidación `/propietarios` | **18,0%** | — |
+| `/meet` y `/founding-owners` | **19%** (24 meses) | — |
+| FAQ propietarios | — | sobre ingresos **brutos** |
+| `/founding-owners` | — | sobre ingresos **netos** |
+| **Pactado** | **22%** | bruto (`reservas.importe_bruto` en seda_os) |
+
+Dos problemas distintos:
+
+1. **Ninguna tasa publicada es el 22%.** El simulador, con el ADR y ocupación por
+   defecto, muestra **285.795 €** de neto; al 22% pactado serían **297.227 €**. Diferencia:
+   **11.432 €/año** — infraestimando el neto del propietario. La dirección del error no
+   es publicitariamente agresiva, pero contradice lo pactado.
+2. **La base cambia según la página.** «Sobre ingresos netos» y «sobre ingresos brutos»
+   son cantidades materialmente distintas. En `seda_os` la comisión se calcula sobre
+   `importe_bruto`, lo que respalda la formulación de la FAQ y deja `/founding-owners`
+   como la incorrecta.
+
+No lo arreglo porque cambiar `0.75` exige saber si ese 25% pretendía ser solo comisión o
+comisión + otros costes, y esa respuesta no está en el código. → §7.
+
+---
+
+## 5. El ×4 del Modelo 238
+
+### 5.1 Ubicación real — no está en `seda-web`
+
+El encargo lo situaba en el `savings-calculator` de este repo. **No existe aquí.**
+Búsqueda en los tres repos (`seda-web`, `seda_os`, `guest-app`):
+
+```
+seda_os/lib/savings-calculator.ts   ← única copia canónica
+guest-app/                          ← sin coincidencias
+seda-web/                           ← sin coincidencias
+```
+
+Consume `seda_os/lib/competitor-pricing.ts` y alimenta `/portal/comparativa`, que está
+**detrás de autenticación**. No es contenido de marketing público: la exposición es
+frente al propietario ya registrado, no frente al visitante anónimo.
+
+### 5.2 El defecto
+
+`seda_os/lib/savings-calculator.ts:230-231`:
+
+```js
+const m238Quarterly = pick(comp.modelo238FeeQuarterlyRange)
+const modelo238Annual = m238Quarterly * 4
+```
+
+### 5.3 Por qué aparece el ×4 — root cause
+
+**No es un error de tecleo: es un residuo de la sustitución Modelo 179 → Modelo 238.**
+
+El Modelo 179 (declaración informativa de cesión de uso de viviendas con fines
+turísticos) era de presentación **trimestral**. El Modelo 238 que lo sustituye —vía
+RD 117/2024, transposición de DAC7— es de presentación **anual**. El propio fichero
+documenta la sustitución en su cabecera («*Modelo 179 → 238 per RD 117/2024 / DAC7*»),
+pero el campo conservó el nombre y la semántica antiguos:
+
+```js
+modelo238FeeQuarterlyRange: [200, 350]   // ← "Quarterly" heredado del 179
+```
+
+Cuando el modelo pasó a ser anual, la conversión trimestral→anual (`× 4`) dejó de tener
+base: ya solo hay **una presentación al año**. El `× 4` sobrevivió al rename del campo.
+
+Es decir: **es un error de escala trimestral→anual mal aplicado**, no un problema de
+«por propiedad vs por titular» (esa dimensión sí está bien resuelta: `rd933AnnualFee` y
+`setupFee` sí multiplican por `propertyCount`, y el fee del 238 correctamente **no** lo
+hace, porque la declaración es por titular).
+
+**Impacto — reproducción a mano** (banda `mid` de cada competidor):
+
+| Competidor | Fee mid | Publicado (`×4`) | Correcto (anual) | Inflación |
+|---|---|---|---|---|
+| Sunstay | 275 € | 1.100 € | 275 € | +825 €/año |
+| MálagaSuite | 275 € | 1.100 € | 275 € | +825 €/año |
+| Costasolproperty | 325 € | 1.300 € | 325 € | +975 €/año |
+| AirHost | 100 € | 400 € | 100 € | +300 €/año |
+
+El fee inflado entra en `totalCost` del competidor → reduce `competitorNet` → **infla
+directamente el "ahorro anual con SEDA"** entre 300 y 975 €/año por propietario. **La
+dirección del error favorece a SEDA**, que es exactamente la dirección que genera
+exposición publicitaria.
+
+### 5.4 Por qué no está en este PR
+
+`seda_os` es **otro repositorio git**. Un PR sobre `seda-web` no puede contener ese
+commit. Además `seda_os` está ahora mismo en la rama `feat/ui-permanencia`, no en `main`
+— y CLAUDE.md exige que toda rama nueva salga de `main` actualizado.
+
+**Parche listo para aplicar en `seda_os`, en rama propia desde `main`:**
+
+```diff
+--- a/lib/competitor-pricing.ts
++++ b/lib/competitor-pricing.ts
+-  /** Modelo 238 fee in EUR; [0,0] if included. */
+-  modelo238FeeQuarterlyRange: [number, number]
++  /**
++   * Modelo 238 fee in EUR **per annual filing**; [0,0] if included.
++   * El 238 (RD 117/2024, DAC7) se presenta UNA vez al año — sustituye al
++   * 179, que era trimestral. No multiplicar por 4.
++   */
++  modelo238FeeAnnualRange: [number, number]
+```
+
+```diff
+--- a/lib/savings-calculator.ts
++++ b/lib/savings-calculator.ts
+-  const m238Quarterly = pick(comp.modelo238FeeQuarterlyRange)
+-  const modelo238Annual = m238Quarterly * 4
++  // El Modelo 238 es de presentación anual (RD 117/2024 / DAC7). El `× 4`
++  // anterior era residuo del Modelo 179, que sí era trimestral.
++  const modelo238Annual = pick(comp.modelo238FeeAnnualRange)
+```
+
+Los 4 literales de `COMPETITORS` se renombran sin cambiar valor (`[200,350]`,
+`[200,350]`, `[250,400]`, `[0,200]`): el valor ya estaba expresado por presentación.
+
+**Tests exigidos (3 casos), para `seda_os/tests/savings-calculator.test.ts`:**
+
+| Caso | Entrada | Esperado antes (falla) | Esperado después (pasa) |
+|---|---|---|---|
+| 1 propietario, 1 propiedad | 12 meses de reservas, `propertyCount: 1` | `modelo238AvoidedAvg === 1100` (Sunstay) | `=== 275` |
+| 2 propiedades | mismo set, `propertyCount: 2` | `1100` (no escala — correcto) | `275`, **sigue sin escalar** con `propertyCount` (la declaración es por titular, no por inmueble) |
+| Importe cero | `reservas: []` | `annualGross 0`; el fee del 238 sigue entrando en `totalCost` e infla el ahorro sobre base cero | `bestCaseAnnualSavings` no se dispara por un fee fantasma |
+
+El caso 2 es el que fija la semántica «por titular» y evita que un futuro arreglo
+reintroduzca el error multiplicando por `propertyCount`.
+
+### 5.5 ¿Contamina el mismo error de escala otras salidas del calculador?
+
+Revisadas las cuatro conversiones temporales restantes de `competitorEffectiveCost`:
+
+| Salida | Conversión | Veredicto |
+|---|---|---|
+| `commission` | `annualGross × baseRate` — sin conversión temporal | ✅ correcto |
+| `cleaningMarkupAnnual` | `propertyCount × baseline anual × rate` | ✅ correcto (baseline ya anual) |
+| `rd933Annual` | `pick(rd933AnnualFeeRange) × propertyCount` | ✅ correcto (campo ya anual) |
+| `setupAmortisedAnnual` | `setupFee × propertyCount / 3` | ✅ correcto (36 meses → /3 años), aunque el comentario dice «/3» sin explicitar años |
+| `annualisationFactor` | `12 / monthsObserved` sobre `monthSpan` inclusivo | ⚠️ ver abajo |
+
+**Un hallazgo colateral:** `monthSpan()` es **inclusivo** (`+1`), de modo que un set de
+reservas concentrado en un único mes da `monthsObserved = 1` y anualiza `× 12`. Un
+propietario con una sola reserva de temporada alta ve una proyección anual 12 veces su
+único mes. No es el ×4 y no lo arreglo aquí, pero pertenece al mismo género de error de
+escala y merece revisión en el mismo PR de `seda_os`.
+
+---
+
+## 6. Barrido de riesgo publicitario
+
+Afirmaciones que prometen un resultado económico o legal concreto sin condicionar.
+**Redacciones propuestas — NO aplicadas**, listadas aparte según el encargo.
+
+| # | Actual | Propuesta condicionada |
+|---|---|---|
+| R-01 | «Cero multas y cero sorpresas con Hacienda o Interior» | «Preparamos y documentamos las obligaciones de RD 933/2021 y las informativas de cesión turística para que lleguen completas y en plazo a tu asesor fiscal.» |
+| R-02 | «Cumplimiento legal 100%» | «Cumplimiento legal documentado y trazable.» |
+| R-03 | «Nuestro equipo fiscal genera la documentación y le soporta en la presentación» | «Generamos la documentación necesaria para que su asesor fiscal realice la presentación.» |
+| R-04 | «Liquidación IRNR» (badge) | «Documentación IRNR» — evita afirmar que SEDA liquida. Ver aviso de gate abajo. |
+| R-05 | «+24% RevPAR vs mercado» | Retirar hasta disponer de cartera y compset reales. No admite condicionado: el dato no existe. |
+| R-06 | «Más del 60% de los propietarios SEDA son no residentes» | Retirar. Con n=2 no hay porcentaje publicable. |
+| R-07 | «99,98%» uptime | Retirar o sustituir por objetivo declarado («objetivo de disponibilidad 99,9%»), nunca por un histórico no medido. |
+| R-08 | Simulador: «Neto para el propietario» | Añadir que es estimación antes de impuestos y de gastos no incluidos, y que la disponibilidad seleccionada no está aplicada (mientras E-01 siga abierto). |
+
+> ⚠️ **Gate IRNR respetado.** R-04 se limita a evitar que el badge afirme que SEDA
+> liquida. **Este documento no fija ninguna postura de SEDA sobre retención de IRNR**;
+> el flag `SEDA_FLAG_IRNR_RETENEDOR` sigue cerrado y requiere confirmación escrita de la
+> asesoría que se contrate. La web puede explicar el marco citando norma; no puede decir
+> «SEDA retiene» ni «SEDA no retiene».
+
+---
+
+## 7. `PENDIENTE_ÁNGEL`
+
+Ninguna de estas se resuelve sin decisión tuya o sin asesoría contratada.
+
+**Fiscal / normativo — requiere asesoría**
+
+1. **`Modelo 210 trimestral`** (`/meet`) y **`reporting fiscal trimestral`**
+   (`prop.arch.mod.finanzas.body`, 4 idiomas). Hay indicios de que la periodicidad de
+   presentación del Modelo 210 por rendimientos de alquiler de no residentes cambió de
+   trimestral a anual en una orden ministerial reciente. **No lo he corregido ni lo
+   afirmo**: exige confirmación contra AEAT/BOE. Si se confirma, ambos textos están
+   desactualizados en los 4 idiomas.
+2. **E-03** — alinear `/founding-owners` («Modelo 179») con la fórmula cubierta
+   «Modelo 179/238, según normativa vigente» ya usada en el resto del sitio.
+3. **E-04 / R-03** — ¿existe o existirá un equipo fiscal? Mientras no, el texto es falso
+   en 4 idiomas.
+4. **R-04** — redacción del badge «Liquidación IRNR» sin tocar el gate.
+
+**Económico — requiere tu decisión, no asesoría**
+
+5. **N-09 · `× 0.75` del simulador.** ¿El 25% pretendía ser solo comisión (y debe ser
+   `0.78` para el 22% pactado) o comisión + otros costes? Si es lo segundo, hay que
+   documentar qué costes, o el número no es publicable.
+6. **N-10 · mockup al 18%.** Ajustar los tres importes para que la comisión implícita sea
+   la pactada, o rotular el bloque como ilustrativo.
+7. **N-11 · «19% durante 24 meses».** ¿Condición fundadora real y vigente? Si sí, debe
+   constar en un documento de pricing citable.
+8. **§1.2 · base de comisión.** `/founding-owners` dice «sobre ingresos **netos**»; la
+   FAQ y `seda_os` dicen **bruto**. Uno de los dos textos es incorrecto.
+9. **E-01 · mapeo de `Disponibilidad`.** Necesito de ti: días/año para `Temporada alta`
+   y `Solo verano`, y qué hacer con `A medida` (lo natural: que deshabilite la proyección
+   y lleve al formulario de contacto). Con eso el arreglo pasa a ser mecánico.
+
+**Datos de rendimiento — requiere cartera real**
+
+10. **N-01 a N-08.** Todas las métricas de rendimiento del sitio dependen de una cartera
+    que hoy no existe. Decisión binaria: retirarlas hasta tener datos, o mantenerlas
+    rotuladas inequívocamente como objetivo/ilustración. No hay término medio: hoy se
+    presentan como medición histórica.
+
+---
+
+## 8. Marcado de frescura y fuente (tarea 4) — no aplicado, con motivo
+
+El encargo pide añadir a cada bloque normativo fecha visible de última actualización,
+enlace a fuente primaria (BOE/AEAT) y autoría atribuible.
+
+**No lo he aplicado, y creo que aplicarlo hoy sería un defecto de veracidad en sí mismo.**
+Marcar un bloque con «Actualizado 2026-08-01 · Fuente: BOE» certifica ante el lector —y
+ante los buscadores generativos, que es justamente el objetivo— que el contenido ha sido
+verificado. Cuatro de los bloques normativos están en `PENDIENTE_ÁNGEL` (§7.1–7.4): uno
+posiblemente desactualizado en periodicidad, otro citando un modelo sustituido, otro
+afirmando un equipo que no existe. Sellarlos como verificados los volvería más citables
+siendo dudosos, que es el peor resultado posible.
+
+**Orden correcto:** resolver §7.1–7.4 → aplicar el marcado. La plantilla queda lista:
+
+```
+Actualizado: AAAA-MM-DD · Fuente: <enlace BOE/AEAT> · Criterio: Ángel Molina, fundador
+```
+
+Con la restricción de que cada enlace apunte a la norma consolidada en BOE o a la página
+de AEAT del modelo, nunca a un blog ni a un agregador.
+
+---
+
+## 9. Cobertura y límites de esta auditoría
+
+**Cubierto:** `messages/{es,en,fr,de}.json` completos (880 claves × 4, paridad verificada);
+literales numéricos hardcodeados en `app/` y `components/`; el simulador de ingresos; el
+`savings-calculator` de `seda_os` con sus consumidores; búsqueda cruzada en los tres repos
+antes de declarar ausente el `savings-calculator`.
+
+**No cubierto — y por qué:**
+
+- **Marcado estructurado y metadatos** (JSON-LD, OG, hreflang): asignado al otro prompt.
+- **`.tmp/seda4/*.jsx`** — contienen afirmaciones con cifras y **están trackeados en git**,
+  pero no los sirve ninguna ruta de Next. No se auditan como contenido público; conviene
+  confirmar que no se reactivan.
+- **Verificación de las tasas de la competencia** (`competitor-pricing.ts`): todas marcadas
+  `verification: 'estimated'` con origen en entrevistas internas. No son verificables desde
+  código ni desde fuente pública, y el propio fichero advierte del riesgo LCD art. 9. Fuera
+  del alcance de una auditoría de código.
+- **Credenciales del fundador** (N-12): solo Ángel es fuente.
+</content>
+</invoke>
