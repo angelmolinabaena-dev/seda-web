@@ -778,5 +778,85 @@ render real, no razonamiento sobre el código:
 - `.tmp/check-i18n.mjs`: **837 claves × 4 idiomas, 0 divergencias** (eran 838 tras §10.7;
   se retira 1: `home.footer.cumplimiento`).
 - `grep` de `VTAR` sobre `app/`, `components/`, `lib/`, `messages/`: 0 apariciones.
+
+### 10.9 Ficha nueva — `TOURISM_LICENSE` retirado de `lib/site-contact.ts` y del JSON-LD (2026-08-02)
+
+**Contexto:** rama `claude/seo-geo-mechanical-fixes` (commit `b9d14e4`, 2026-07-13 — anterior
+a §10.8) introdujo `lib/site-contact.ts` con `export const TOURISM_LICENSE =
+"VTAR/MA/27.143"`, consumida en dos sitios: `components/footer.tsx` (columna
+«Cumplimiento», ya retirada en §10.8 sobre `main`) y `app/[locale]/layout.tsx` (el campo
+`identifier` del JSON-LD `LodgingBusiness` sitewide). Al rebasar esta rama sobre
+`origin/main` — que ya traía §10.8 mergeada — `footer.tsx` quedó resuelto igual que en
+main (columna completa fuera). El JSON-LD de `layout.tsx` seguía sin tocar: mismo defecto
+de origen que motivó §10.8.
+
+**Retirado**, mismo motivo que §10.8 (no se repite aquí el análisis completo):
+
+- `lib/site-contact.ts`: `export const TOURISM_LICENSE = "VTAR/MA/27.143"` eliminado por
+  completo. El módulo ahora solo exporta `generalContact`; su comentario de cabecera se
+  ha corregido («contact data», ya no «contact + tourism-license data»).
+- `app/[locale]/layout.tsx`: el campo `identifier: TOURISM_LICENSE,` del objeto
+  `LodgingBusiness` eliminado — **el campo se omite, no se deja vacío ni con
+  placeholder**. Import ajustado (`generalContact` solo). Comentario añadido explicando
+  la omisión sin repetir el código inventado en el propio comentario (para que
+  `git grep VTAR` sobre código de aplicación quede limpio, no solo el valor en sí).
+
+**Por qué no hace falta repetir aquí el porqué:** el argumento (VTAR es la figura
+equivocada — suelo rústico — y el código además es inventado; no hay número de registro
+turístico real que poner en su lugar) es el mismo de §10.8. Un `identifier` de negocio en
+schema.org/LodgingBusiness es tan verificable como el badge del footer — omitirlo es la
+única opción honesta mientras no exista una licencia real que citar.
+
+**Verificación — código, no razonamiento:**
+
+- `git grep -n VTAR` (repo completo): dos apariciones esperadas y correctas —
+  `docs/audit/VERACIDAD-PUBLICA.md` (este documento, registrando la retirada — se
+  espera que la contenga) y `.tmp/seda4/shared.jsx:447` (prototipo decorativo, sin ruta
+  de Next que lo sirva, ya fuera de alcance por §9). **Cero apariciones en `app/`,
+  `components/`, `lib/`** — verificado con `git grep -n VTAR -- app/ components/ lib/`
+  (código de aplicación), que sale vacío.
+- `npx tsc --noEmit`: limpio.
+- `npm run build`: compila y genera las 70 páginas estáticas sin error, incluida
+  `/[locale]/villa/[slug]`.
+- **JSON-LD verificado en navegador — home y una ficha de villa, contenido real, no
+  razonado:**
+  - **Home** (`http://localhost:3777/`, dev server levantado desde el propio checkout
+    de esta rama): 2 `<script type="application/ld+json">` — el `@graph` de
+    Organization+LodgingBusiness (sin `identifier`) y el `FAQPage`. Verificado
+    parseando cada uno con `JSON.parse` sobre el DOM real, no sobre el código fuente.
+  - **`/villa/villa-alboran`**: 3 bloques — el mismo Organization+LodgingBusiness
+    sitewide (sin `identifier`), el `Accommodation` de la villa, y el `BreadcrumbList`.
+    Ninguno de los tres contiene ningún campo `identifier` ni de licencia.
+
+**Incidente de sesión — verificación inicial dio un falso negativo, corregido antes de
+cerrar:**
+
+1. El primer intento de verificar el JSON-LD en navegador usó el `preview_start` de la
+   sesión, que arranca el dev server desde el **worktree por defecto de la sesión**
+   (`C:\...\rebase-origin-main-conflict-141c71`), el cual resuelve al **checkout
+   principal del repo** (`C:\Users\AngelMolina\seda-web`) — **no** a este worktree
+   (`claude/seo-geo-mechanical-fixes`, un *linked worktree* real y separado de git). El
+   servidor servía la rama `main` del checkout principal, que nunca tuvo el JSON-LD
+   añadido: por eso ningún `<script type="application/ld+json">` aparecía, en home ni en
+   ninguna ruta — no por ningún defecto de esta rama. Confirmado con un `<div>` canario
+   colocado directamente en `app/layout.tsx` de este worktree: tampoco aparecía en el
+   HTML servido, prueba de que el servidor no leía absolutamente ningún fichero de este
+   checkout. Diagnóstico, no conjetura: se comparó `git rev-parse --show-toplevel` del
+   worktree por defecto (`C:/Users/AngelMolina/seda-web`) contra el de este worktree.
+   Corregido: servidor de dev levantado a mano (`npm run dev -p 3777`) con `cwd` fijado
+   explícitamente a este checkout.
+2. Con el servidor correcto, `/villa/villa-alboran` seguía devolviendo 404 pese a que
+   `app-path-routes-manifest.json` sí registraba la ruta. Causa: `.next/` mezclaba una
+   compilación de `next build` anterior con la caché de `next dev` del mismo directorio.
+   `rm -rf .next` + reinicio limpio lo resolvió — la ruta sirvió `200` de inmediato y el
+   JSON-LD de `Accommodation`/`BreadcrumbList` apareció.
+
+Ninguno de los dos problemas tiene relación con el cambio de `TOURISM_LICENSE`: ambos son
+artefactos del entorno de verificación de esta sesión, documentados aquí porque sin
+diagnosticarlos el resultado habría sido «no se puede verificar» — o peor, un «verificado»
+falso construido sobre una respuesta 404/una rama equivocada. Ver
+`superpowers:verification-before-completion` / la regla de este repo «un test en verde no
+demuestra corrección»: aquí el equivalente fue casi «un browser vacío no demuestra un
+bug» — el vacío era del entorno, no del código.
 </content>
 </invoke>

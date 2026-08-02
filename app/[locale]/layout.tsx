@@ -7,14 +7,19 @@ import { Footer } from "@/components/footer"
 import { KeyboardShortcuts } from "@/components/keyboard-shortcuts"
 import { routing } from "@/i18n/routing"
 import { SITE_URL } from "@/lib/seo-urls"
-import { generalContact, TOURISM_LICENSE } from "@/lib/site-contact"
+import { generalContact } from "@/lib/site-contact"
 
 // Site-wide Organization + LodgingBusiness JSON-LD — rendered on every
 // route via this shared locale layout. Uses ONLY data already present in
-// `components/footer.tsx` (contact + tourism license) — no new claims.
+// `components/footer.tsx` (contact) — no new claims.
 // Deliberately has no `priceRange`: SEDA operates per-property pricing
 // (see VILLA_PRICING placeholders in the villa page), not a single
 // business-wide range.
+// Deliberately has no `identifier` (tourism license): the code retired here
+// was invented, and of the wrong regulatory figure besides. No real
+// registration number exists to put in its place — omit the field, don't
+// ship a placeholder or an empty string. See docs/audit/VERACIDAD-PUBLICA.md
+// §10.8/§10.9 for the retirement record.
 const businessJsonLd = {
   "@context": "https://schema.org",
   "@graph": [
@@ -33,7 +38,6 @@ const businessJsonLd = {
       url: SITE_URL,
       email: generalContact.email,
       telephone: generalContact.phone.replace(/\s/g, ""),
-      identifier: TOURISM_LICENSE,
       areaServed: "Costa del Sol",
       address: {
         "@type": "PostalAddress",
