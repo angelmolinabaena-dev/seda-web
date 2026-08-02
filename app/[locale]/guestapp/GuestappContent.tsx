@@ -22,7 +22,10 @@ import {
 } from "lucide-react"
 import { useTranslations } from "next-intl"
 
-const URL_HUESPED = "https://guests.sedaprivatehomes.com/villa/apartamento-torremolinos/d1389271-1fbc-4d8a-8bb1-bfc0464d3bfc"
+// Was a real reservation's UUID, exposed in this page's public HTML on every
+// route (same defect as components/navigation.tsx's GUEST_APP_URL). /acceso
+// is the generic sign-in (locator + email), not a specific stay.
+const URL_HUESPED = "https://guests.sedaprivatehomes.com/acceso"
 
 /* ========== PHONE FRAME ========== */
 function PhoneFrame({
@@ -662,7 +665,7 @@ export function GuestappContent() {
             </Link>
           </div>
           <p className="font-mono text-[10.5px] tracking-[0.16em] text-background/50 mt-8 break-all">
-            guests.sedaprivatehomes.com/villa/apartamento-torremolinos
+            guests.sedaprivatehomes.com/acceso
           </p>
         </div>
       </section>
