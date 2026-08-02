@@ -1,8 +1,7 @@
 import type { MetadataRoute } from "next"
 import { VILLAS } from "@/lib/villas"
 import { routing } from "@/i18n/routing"
-
-const BASE_URL = "https://sedaprivatehomes.com"
+import { localeUrl, buildAlternates } from "@/lib/seo-urls"
 
 /*
   Multilingual sitemap with hreflang alternates.
@@ -10,6 +9,10 @@ const BASE_URL = "https://sedaprivatehomes.com"
   - EN URLs render at /en/<path>.
   Each entry exposes `alternates.languages` so Google + Bing can correctly
   associate language variants and avoid duplicate-content penalties.
+
+  `localeUrl`/`buildAlternates` live in `@/lib/seo-urls` so every page's
+  `generateMetadata` can build the exact same canonical/hreflang URLs as
+  this sitemap — one source of truth, no drift.
 */
 
 const STATIC_PATHS = [
@@ -20,26 +23,10 @@ const STATIC_PATHS = [
   { path: "/experiencias", priority: 0.85, changeFrequency: "monthly" as const },
   { path: "/ecosistema",   priority: 0.85, changeFrequency: "monthly" as const },
   { path: "/contacto",     priority: 0.85, changeFrequency: "monthly" as const },
+  { path: "/nosotros",     priority: 0.75, changeFrequency: "monthly" as const },
   { path: "/descubre",     priority: 0.8,  changeFrequency: "monthly" as const },
   { path: "/faq",          priority: 0.7,  changeFrequency: "monthly" as const },
 ]
-
-function localeUrl(locale: string, path: string) {
-  // With `localePrefix: 'as-needed'`, default locale (es) drops the prefix.
-  if (locale === routing.defaultLocale) {
-    return `${BASE_URL}${path || "/"}`
-  }
-  return `${BASE_URL}/${locale}${path}`
-}
-
-function buildAlternates(path: string) {
-  const languages: Record<string, string> = {}
-  for (const loc of routing.locales) {
-    languages[loc] = localeUrl(loc, path)
-  }
-  languages["x-default"] = localeUrl(routing.defaultLocale, path)
-  return languages
-}
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date()

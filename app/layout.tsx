@@ -45,16 +45,13 @@ export const metadata: Metadata = {
   },
   description:
     "Gestión de villas privadas en la Costa del Sol, operada sobre software propio. Hospitalidad mediterránea para huéspedes, transparencia total para propietarios.",
-  alternates: {
-    canonical: "https://sedaprivatehomes.com",
-    languages: {
-      es: "https://sedaprivatehomes.com",
-      en: "https://sedaprivatehomes.com/en",
-      fr: "https://sedaprivatehomes.com/fr",
-      de: "https://sedaprivatehomes.com/de",
-      "x-default": "https://sedaprivatehomes.com",
-    },
-  },
+  // No root-level `alternates` here on purpose: this metadata is the
+  // fallback for EVERY route, and a single hardcoded canonical/hreflang
+  // pointing at the homepage was being inherited by all 13 non-home routes
+  // (verified in prod) — telling Google the whole site was a duplicate of
+  // "/". Each route now sets its own `alternates.canonical` + `.languages`
+  // via `generateMetadata` (see `@/lib/seo-urls`); no canonical here is
+  // strictly better than one that's wrong everywhere except "/".
   openGraph: {
     type: "website",
     locale: "es_ES",

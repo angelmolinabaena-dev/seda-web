@@ -1,9 +1,10 @@
 import { Link } from "@/i18n/navigation"
 import { notFound } from "next/navigation"
-import { getTranslations } from "next-intl/server"
+import { getTranslations, getLocale } from "next-intl/server"
 import { ArrowRight, ArrowUpRight, Users, BedDouble, Waves, Sparkles } from "lucide-react"
 import { Breadcrumbs } from "@/components/breadcrumbs"
 import { VILLAS, getVillaBySlug } from "@/lib/villas"
+import { localeUrl, buildAlternates } from "@/lib/seo-urls"
 
 const PREFIX_KEYS: Record<string, "villa" | "atico" | "finca" | "residencia"> = {
   Villa: "villa",
@@ -24,13 +25,23 @@ export async function generateMetadata({
   const { slug } = await params
   const villa = getVillaBySlug(slug)
   const t = await getTranslations("villa")
+  const locale = await getLocale()
+  const path = `/villa/${slug}`
   if (!villa) return { title: t("not_found_title") }
   const prefix = t(`prefix.${PREFIX_KEYS[villa.prefix] ?? "villa"}`)
   const sublocation = t(`items.${villa.slug}.sublocation`)
   const capacity = t(`items.${villa.slug}.capacity`)
   return {
-    title: `${prefix} ${villa.italic} — SEDA Private Homes`,
+    // No manual "— SEDA Private Homes" suffix: the root layout's title
+    // template (`%s · SEDA Private Homes`) already appends the brand name.
+    // The old manual suffix produced "Villa Alborán — SEDA Private Homes ·
+    // SEDA Private Homes" in prod.
+    title: `${prefix} ${villa.italic}`,
     description: `${sublocation}. ${capacity}. ${t("meta_suffix")}`,
+    alternates: {
+      canonical: localeUrl(locale, path),
+      languages: buildAlternates(path),
+    },
   }
 }
 
@@ -44,6 +55,25 @@ const VILLA_PRICING: Record<string, { desdeNoche: string }> = {
   "residencia-duna-estepona":  { desdeNoche: "€3.500" },
 }
 
+// Parses the canonical (Spanish, `lib/villas.ts`) capacity string —
+// "8 huéspedes · 4 suites · 400 m² · piscina infinita" — into the numeric
+// fields schema.org/Accommodation expects. The leading digit of each
+// "·"-separated segment is locale-stable (only the trailing word changes
+// across es/en/fr/de), so parsing the raw ES string once is sufficient —
+// no need to parse the localized display string per-locale.
+function parseCapacity(raw: string) {
+  const segments = raw.split("·").map((s) => s.trim())
+  const leadingNumber = (segment?: string) => {
+    const match = segment?.match(/\d+/)
+    return match ? Number(match[0]) : undefined
+  }
+  return {
+    occupancy: leadingNumber(segments[0]),
+    numberOfBedrooms: leadingNumber(segments[1]),
+    floorSizeSqm: leadingNumber(segments[2]),
+  }
+}
+
 export default async function VillaPage({
   params,
 }: {
@@ -55,6 +85,7 @@ export default async function VillaPage({
 
   const t = await getTranslations("villa")
   const tb = await getTranslations("breadcrumb")
+  const locale = await getLocale()
 
   const localizedPrefix = t(`prefix.${PREFIX_KEYS[villa.prefix] ?? "villa"}`)
   const localizedSublocation = t(`items.${villa.slug}.sublocation`)
@@ -72,8 +103,40 @@ export default async function VillaPage({
     { label: villaLabel }, // last item = current page, no href
   ]
 
+  // schema.org/Accommodation JSON-LD. Deliberately omits `image` and any
+  // pricing (`priceRange`/`offers`): the photos are fal.ai renders and
+  // VILLA_PRICING is an explicit placeholder ("until PMS integration") —
+  // shipping either as machine-readable structured data would be worse
+  // than omitting them (see CLAUDE.md pre-launch data-fiction discipline).
+  const { occupancy, numberOfBedrooms, floorSizeSqm } = parseCapacity(villa.capacity)
+  const [addressLocality] = villa.sublocation.split(",").map((s) => s.trim())
+  const accommodationJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Accommodation",
+    name: villaLabel,
+    description: localizedDescription,
+    url: localeUrl(locale, `/villa/${slug}`),
+    address: {
+      "@type": "PostalAddress",
+      addressLocality,
+      addressRegion: "Costa del Sol",
+      addressCountry: "ES",
+    },
+    ...(occupancy !== undefined && {
+      occupancy: { "@type": "QuantitativeValue", value: occupancy, unitText: "guests" },
+    }),
+    ...(numberOfBedrooms !== undefined && { numberOfBedrooms }),
+    ...(floorSizeSqm !== undefined && {
+      floorSize: { "@type": "QuantitativeValue", value: floorSizeSqm, unitCode: "MTK" },
+    }),
+  }
+
   return (
     <main id="main-content">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(accommodationJsonLd) }}
+      />
       {/* HERO with primary booking CTA */}
       <section className="relative min-h-[88vh] flex flex-col justify-end overflow-hidden bg-foreground">
         <div className="absolute inset-0 z-0">
