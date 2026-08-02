@@ -858,5 +858,82 @@ falso construido sobre una respuesta 404/una rama equivocada. Ver
 `superpowers:verification-before-completion` / la regla de este repo «un test en verde no
 demuestra corrección»: aquí el equivalente fue casi «un browser vacío no demuestra un
 bug» — el vacío era del entorno, no del código.
+
+### 10.10 Ficha nueva — UUID de una reserva real en los enlaces «Acceso huéspedes» (2026-08-02)
+
+**El problema.** `components/navigation.tsx` (`GUEST_APP_URL`) y
+`app/[locale]/guestapp/GuestappContent.tsx` (`URL_HUESPED`, dos CTA y una línea de
+muestra) enlazaban a:
+
+```
+https://guests.sedaprivatehomes.com/villa/apartamento-torremolinos/d1389271-1fbc-4d8a-8bb1-bfc0464d3bfc
+```
+
+No es un login: el UUID final identifica **una reserva real concreta**. Ese enlace
+aparecía en el HTML público de **todas las páginas** del sitio (footer/nav global) y,
+además, en dos botones destacados de `/guestapp` (hero CTA y CTA final) — la ruta de
+mayor intención de "probar" el producto. Cualquier visitante podía copiarlo y abrir la
+Guest App de un huésped ajeno.
+
+**Origen:** copiado del prototipo `.tmp/seda4/shared.jsx:306` /
+`page-guestapp.jsx:3` sin sustituir por un enlace genérico — mismo patrón que el
+`VTAR/MA/27.143` de §10.8/§10.9 (dato de maqueta que llegó a producción sin verificar).
+
+**Corrección aplicada — sustituir, no retirar.** A diferencia de §10.2 (donde «lo que no
+se puede sostener se retira, no se reetiqueta», porque no existía ninguna cifra real que
+poner en su lugar), aquí **sí existe un destino real y correcto**: `guest-app` ya sirve
+`https://guests.sedaprivatehomes.com/acceso`, una pantalla de acceso genérica
+(localizador + email) que no identifica a ningún huésped concreto — confirmado por
+Ángel. El fix es una sustitución de URL, no una retirada de funcionalidad:
+
+- `components/navigation.tsx` — `GUEST_APP_URL` apunta a `/acceso`. Cubre las dos
+  apariciones del enlace (desplegable de escritorio, cajón móvil) con una sola edición,
+  porque ambas ya consumían la misma constante.
+- `app/[locale]/guestapp/GuestappContent.tsx` — `URL_HUESPED` apunta a `/acceso`, lo que
+  corrige automáticamente los dos CTA (`nav.acceso_huespedes` en el hero,
+  `guestapp.final.cta_acceso` en la banda final) que ya la consumían. La línea de texto
+  decorativa bajo el CTA final (`guests.sedaprivatehomes.com/villa/apartamento-torremolinos`,
+  sin el UUID, pero sí con la ruta interna real de la reserva) se actualizó a
+  `guests.sedaprivatehomes.com/acceso` para que la muestra visible coincida con el
+  destino real del botón.
+
+**Nota de proceso — el primer intento fue el fix equivocado, corregido antes de cerrar.**
+La primera pasada de esta sesión interpretó el encargo como «retira el enlace»: quitó
+el ítem del desplegable «Portal» (colapsándolo a un enlace directo de propietario, ya
+que quedaba con un solo ítem) y borró los dos CTA de `/guestapp` sin sustituto. Sin
+llegar a hacer commit sobre `/guestapp`, el usuario corrigió el encargo: el destino
+correcto no es «ningún enlace», es `/acceso` — el fix es una sustitución, y toda la
+estructura original (desplegable de dos ítems, dos CTA) se conserva intacta. Los cambios
+estructurales de la primera pasada se revirtieron (`git restore`) antes de aplicar la
+sustitución real. Queda anotado porque es el mismo tipo de error que motiva la regla de
+este documento sobre no cerrar sin verificar: la solución "obviamente correcta" (retirar)
+no lo era una vez se conoció el hecho completo (existe un destino seguro real).
+
+**`.tmp/seda4` — NO tocado, fuera de alcance.** El mismo UUID sigue en
+`.tmp/seda4/shared.jsx:306` y `.tmp/seda4/page-guestapp.jsx:3`. Ya fichado como fuera de
+cobertura en §9 («contienen afirmaciones con cifras y están trackeados en git, pero no
+los sirve ninguna ruta de Next»), y desde el PR #27 (`.tmp/seda4/LEEME.md`) el propio
+directorio lleva una advertencia explícita de que ninguno de sus datos —incluido este
+UUID— es real ni debe copiarse. No se retira aquí por el mismo motivo que nunca se ha
+tocado ese directorio en esta auditoría: no es contenido público servido.
+
+**Verificado:**
+
+- `git grep -n d1389271-1fbc-4d8a-8bb1-bfc0464d3bfc` (repo completo): **solo quedan las
+  2 apariciones en `.tmp/seda4/`** — 0 en `app/`, `components/`, `lib/`, `messages/`.
+- `git grep -n guests.sedaprivatehomes.com` fuera de `.tmp/`: 3 líneas, las 3 con
+  `/acceso` (`navigation.tsx`, y `GuestappContent.tsx` ×2 — constante + muestra).
+- `npx tsc --noEmit`: limpio. `npx eslint` sobre los dos ficheros: 0 errores (solo los
+  warnings preexistentes y ajenos de `<img>`).
+- **Verificado en navegador con dev server real** (no solo lectura de código): en la
+  home, `document.querySelectorAll('a')` sobre el DOM real confirma que los dos
+  `<a href>` que apuntan a `guests.sedaprivatehomes.com` (desplegable de escritorio +
+  cajón móvil, ambos presentes en el DOM independientemente de si el desplegable está
+  visualmente abierto) resuelven a `https://guests.sedaprivatehomes.com/acceso`.
+  Disparando un `click` real sobre el botón «Portal» se confirmó además que
+  `aria-expanded` pasa a `"true"` — el desplegable sigue siendo interactivo, no se rompió
+  al tocar solo la constante de URL. En `/guestapp`, los 4 anclas que enlazan al dominio
+  (2 heredadas del `Navigation` global + las 2 propias del CTA hero/final) y la línea de
+  muestra debajo del CTA final resuelven todas a `/acceso`.
 </content>
 </invoke>
