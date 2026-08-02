@@ -103,3 +103,23 @@ misma sesión no cuenta.
 
 Aplica especialmente a: importes y comisiones, plazos legales, obligaciones
 fiscales, y cualquier cifra que se muestre a un propietario o a un huésped.
+
+## «No mergees» no significa «no termines»
+
+Un encargo termina con el trabajo **empujado y con PR abierto**. Que el prompt diga «no mergees» solo excluye el merge: no excluye commitear, pushear ni abrir el PR.
+
+Antes de dar por cerrada una sesión, ejecuta y pega el resultado:
+
+```
+git rev-parse --show-toplevel     # ¿en qué repo estoy?
+git branch --show-current          # ¿en qué rama?
+git status --short                 # ¿queda algo sin commitear?
+git log origin/main..HEAD --oneline # ¿el commit está por encima de main?
+gh pr view --json number,url       # ¿existe el PR?
+```
+
+Si `git status --short` no está vacío, **la sesión no ha terminado**. Si `git log origin/main..HEAD` sale vacío, no hay commit y la rama está vacía por mucho que se haya pusheado.
+
+**No afirmes haber hecho commit, push o PR sin haberlo comprobado con estos comandos.** Ocurrió cuatro veces el 2026-08-02: en un caso el trabajo quedó sin commitear en un worktree cuyo nombre no correspondía a la tarea, y solo se descubrió al fallar `gh pr create` con «could not find any commits between origin/main and la rama».
+
+**Sobre los worktrees:** el directorio desde el que arranca la sesión puede no ser el que anuncia, puede desregistrarse a mitad, o ser una copia plana sin `.git` cuyos comandos operan sobre el checkout principal. Comprueba con `git rev-parse --git-dir` antes de tocar nada, y di en el resumen final **desde qué ruta exacta** trabajaste.
