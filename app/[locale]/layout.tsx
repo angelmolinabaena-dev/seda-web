@@ -12,9 +12,10 @@ import { generalContact } from "@/lib/site-contact"
 // Site-wide Organization + LodgingBusiness JSON-LD — rendered on every
 // route via this shared locale layout. Uses ONLY data already present in
 // `components/footer.tsx` (contact) — no new claims.
-// Deliberately has no `priceRange`: SEDA operates per-property pricing
-// (see VILLA_PRICING placeholders in the villa page), not a single
-// business-wide range.
+// Deliberately has no `priceRange`: SEDA operates per-property pricing, not
+// a single business-wide range. (The old note here pointed at the
+// `VILLA_PRICING` placeholders of `/villa/[slug]`; esa ruta se retiró con
+// las cuatro residencias ficticias — ver docs/audit/RETIRADA-COLECCION.md.)
 // Deliberately has no `identifier` (tourism license): the code retired here
 // was invented, and of the wrong regulatory figure besides. No real
 // registration number exists to put in its place — omit the field, don't

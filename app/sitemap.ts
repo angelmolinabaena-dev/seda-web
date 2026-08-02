@@ -1,5 +1,4 @@
 import type { MetadataRoute } from "next"
-import { VILLAS } from "@/lib/villas"
 import { routing } from "@/i18n/routing"
 import { localeUrl, buildAlternates } from "@/lib/seo-urls"
 
@@ -42,17 +41,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
   )
 
-  // Villa detail routes — same structure, per slug.
-  const villaRoutes: MetadataRoute.Sitemap = VILLAS.flatMap((villa) => {
-    const path = `/villa/${villa.slug}`
-    return routing.locales.map((locale) => ({
-      url: localeUrl(locale, path),
-      lastModified: now,
-      changeFrequency: "monthly" as const,
-      priority: 0.8,
-      alternates: { languages: buildAlternates(path) },
-    }))
-  })
-
-  return [...staticRoutes, ...villaRoutes]
+  // Las 16 entradas `/villa/<slug>` (4 slugs × 4 locales) se retiraron con
+  // las cuatro residencias ficticias. Esas URLs ya no se listan aquí y
+  // responden 410 desde `proxy.ts` — ver docs/audit/RETIRADA-COLECCION.md §3.
+  return staticRoutes
 }

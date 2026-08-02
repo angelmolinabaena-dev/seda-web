@@ -48,15 +48,6 @@
       "eyebrow": "— SEDA Private Homes",
       "body": "Redefinimos la hospitalidad en la Costa del Sol — residencias excepcionales y estancias a medida, conectando huéspedes, propietarios y administración en tiempo real."
     },
-    "projects": {
-      "eyebrow": "— 01 · Colección destacada",
-      "h2": {
-        "line1": "Una colección",
-        "italic": "editorial,",
-        "line2": "no un catálogo."
-      },
-      "villas_count_label": "Villas"
-    },
     "editorial": {
       "image_alt": "Terraza de villa mediterránea al atardecer en la Costa del Sol",
       "eyebrow": "— 02 · Quiénes somos",
@@ -799,10 +790,6 @@
       "body": "Un especialista responderá personalmente en menos de 24 horas con una propuesta a medida.",
       "cta": "Enviar otro mensaje"
     },
-    "villa": {
-      "label": "Villa solicitada",
-      "interest_note": "Interesado/a en {name}.\n\n"
-    },
     "error": {
       "send": "No hemos podido enviar el mensaje. Inténtalo de nuevo o escríbenos a info@sedaprivatehomes.com"
     },
@@ -877,56 +864,7 @@
       "italic": "colección privada",
       "line2": "en la Costa del Sol."
     },
-    "body": "Residencias seleccionadas por ubicación, arquitectura, privacidad y potencial de experiencia. Cada una operada bajo el mismo estándar SEDA.",
-    "managed_badge": "SEDA Managed",
-    "price_badge": "Bajo consulta",
-    "meta": {
-      "tag": "Colección 2026",
-      "count": "residencias curadas",
-      "geo": "Costa del Sol · Marbella → Casares"
-    },
-    "standard": {
-      "eyebrow": "— SEDA Standard",
-      "h2": {
-        "line1": "Todas las residencias SEDA",
-        "italic": "incluyen."
-      },
-      "items": {
-        "checkin": {
-          "t": "Check-in organizado",
-          "b": "Llegada coordinada con instrucciones detalladas y soporte en persona si se solicita."
-        },
-        "support": {
-          "t": "Soporte durante la estancia",
-          "b": "Equipo SEDA disponible 24/7 desde la Guest App. Respuesta inmediata."
-        },
-        "standard": {
-          "t": "Estándar SEDA",
-          "b": "Limpieza, mantenimiento y dotación verificados antes de cada llegada."
-        },
-        "guestapp": {
-          "t": "Guest App",
-          "b": "Acceso, guía, concierge, experiencias y comunicación en una sola interfaz."
-        },
-        "services": {
-          "t": "Servicios bajo petición",
-          "b": "Chef, transfers, masajes, reservas, niñeras, charters, golf."
-        },
-        "privacy": {
-          "t": "Privacidad",
-          "b": "Equipos discretos, datos protegidos, presencia mínima."
-        }
-      }
-    },
-    "cta": {
-      "eyebrow": "— Estancia a medida",
-      "h2": {
-        "line1": "¿No encuentra la villa",
-        "italic": "exacta?"
-      },
-      "body": "Tenemos residencias fuera de catálogo para estancias largas o grupos privados. Cuéntenos sus fechas y preferencias.",
-      "button": "Solicitar propuesta"
-    }
+    "body": "La colección abre en octubre de 2026. Hasta entonces no publicamos ninguna residencia; si desea reservar una estancia o incorporar su propiedad, escríbanos."
   },
   "exp": {
     "eyebrow": "— SEDA Experiences",
@@ -1286,74 +1224,13 @@
       "cta": "Ver modelo de gestión"
     }
   },
-  "villa": {
-    "back_link": "— También en la colección",
-    "back_h2": {
-      "line1": "Otras",
-      "italic": "residencias privadas."
-    },
-    "see_all": "Ver colección completa",
-    "from": "Desde",
-    "per_night": "/ noche",
-    "book_cta": "Reservar esta villa",
-    "check_availability": "Consultar disponibilidad",
-    "response_note": "Respuesta personal en menos de 24 h",
-    "quick": {
-      "guests": "Huéspedes",
-      "bedrooms": "Dormitorios",
-      "area": "Superficie",
-      "feature": "Distintivo"
-    },
-    "section_eyebrow": "— La residencia",
-    "section_h2": {
-      "after_name": ", en sus palabras."
-    },
-    "section_note": "Nuestro equipo SEDA puede confirmar disponibilidad, tarifas privadas y experiencias adicionales (chef, transfer, masaje, beach club) bajo solicitud directa.",
-    "book_villa": "Reservar",
-    "see_others": "Ver otras villas",
-    "sticky": {
-      "from": "Desde",
-      "book": "Reservar"
-    },
-    "not_found_title": "Villa no encontrada — SEDA Private Homes",
-    "meta_suffix": "Villa privada gestionada por SEDA Private Homes en la Costa del Sol.",
-    "price_unavailable": "Bajo consulta",
-    "prefix": {
-      "villa": "Villa",
-      "atico": "Ático",
-      "finca": "Finca",
-      "residencia": "Residencia"
-    },
-    "items": {
-      "villa-alboran": {
-        "sublocation": "Marbella, Costa del Sol",
-        "capacity": "8 huéspedes · 4 suites · 400 m² · piscina infinita",
-        "description": "Una residencia contemporánea con piscina infinita y vistas abiertas al Mediterráneo, en Marbella. Arquitectura de líneas largas que privilegia la luz, los olivos centenarios del jardín y el mar como horizonte permanente."
-      },
-      "atico-marina-puerto-banus": {
-        "sublocation": "Puerto Banús, Costa del Sol",
-        "capacity": "4 huéspedes · 2 suites · 280 m² · vistas panorámicas",
-        "description": "Ático con vistas panorámicas sobre Puerto Banús — terraza envolvente, materiales contemporáneos y la cercanía discreta al muelle. Para estancias urbanas sin renunciar al mar."
-      },
-      "finca-los-olivos-casares": {
-        "sublocation": "Casares, Costa del Sol",
-        "capacity": "10 huéspedes · 5 suites · 390 m² · spa privado",
-        "description": "Una finca andaluza entre olivos centenarios en las colinas de Casares — spa privado, patio interior con limonero y la quietud de la sierra. Para reuniones largas, familias o grupos que buscan retiro."
-      },
-      "residencia-duna-estepona": {
-        "sublocation": "Estepona, Costa del Sol",
-        "capacity": "6 huéspedes · 3 suites · 460 m² · primera línea de playa",
-        "description": "Residencia a primera línea de playa en Estepona — terrazas en cascada, acceso directo a la arena y arquitectura minimalista que cede el protagonismo al horizonte. La estancia más cercana al mar de la colección."
-      }
-    }
-  },
   "notfound": {
     "title": "Página no encontrada — SEDA Private Homes",
     "description": "Esta página se ha tomado un momento. Vuelva al inicio o explore la colección.",
     "eyebrow": "— 404 · Página no encontrada",
     "h1_line1": "Esta página se ha tomado",
     "h1_italic": "un momento.",
-    "body": "Es posible que el enlace haya cambiado o que la dirección no exista. Vuelva al inicio o explore directamente la colección de villas.",
+    "body": "Es posible que el enlace haya cambiado o que la dirección no exista. Vuelva al inicio o explore directamente la colección.",
     "back_home": "Volver al inicio",
     "see_collection": "Ver la colección"
   },
