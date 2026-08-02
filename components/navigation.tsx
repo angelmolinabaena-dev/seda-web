@@ -35,55 +35,65 @@ type NavGroup = {
   titleKey: string
   links: { tKey: string; href: string }[]
 }
-const navGroups: NavGroup[] = [
-  {
-    group: "estancia",
-    titleKey: "mobile.huespedes",
-    links: [
-      { tKey: "nav.coleccion",    href: "/coleccion" },
-      { tKey: "nav.experiencias", href: "/experiencias" },
-      { tKey: "nav.guestapp",     href: "/guestapp" },
-    ],
-  },
-  {
-    group: "propietarios",
-    titleKey: "mobile.propietarios",
-    links: [
-      { tKey: "nav.modelo",     href: "/propietarios" },
-      { tKey: "nav.ecosistema", href: "/ecosistema" },
-    ],
-  },
-  {
-    group: "seda",
-    titleKey: "mobile.seda",
-    links: [
-      { tKey: "nav.nosotros",  href: "/nosotros" },
-      { tKey: "nav.filosofia", href: "/descubre" },
-      { tKey: "nav.faq",       href: "/faq" },
-      { tKey: "nav.contacto",  href: "/contacto" },
-    ],
-  },
-]
+// `guias` link is spliced in conditionally (see `buildNavGroups`/
+// `buildDesktopGroups` below) — only rendered once `haySeccionGuias()` is
+// true (at least one published guide). Per docs/prompts/SUPERFICIE-CONTENIDO.md
+// §5: zero guides published ⇒ the section is not linked anywhere.
+function buildNavGroups(showGuias: boolean): NavGroup[] {
+  return [
+    {
+      group: "estancia",
+      titleKey: "mobile.huespedes",
+      links: [
+        { tKey: "nav.coleccion",    href: "/coleccion" },
+        { tKey: "nav.experiencias", href: "/experiencias" },
+        { tKey: "nav.guestapp",     href: "/guestapp" },
+      ],
+    },
+    {
+      group: "propietarios",
+      titleKey: "mobile.propietarios",
+      links: [
+        { tKey: "nav.modelo",     href: "/propietarios" },
+        { tKey: "nav.ecosistema", href: "/ecosistema" },
+      ],
+    },
+    {
+      group: "seda",
+      titleKey: "mobile.seda",
+      links: [
+        { tKey: "nav.nosotros",  href: "/nosotros" },
+        { tKey: "nav.filosofia", href: "/descubre" },
+        ...(showGuias ? [{ tKey: "nav.guias", href: "/guias" }] : []),
+        { tKey: "nav.faq",       href: "/faq" },
+        { tKey: "nav.contacto",  href: "/contacto" },
+      ],
+    },
+  ]
+}
 
 // Desktop nav layout: Colección · Experiencias | SEDA OS ▼ | Nosotros · Contacto
 // SEDA OS is an inline dropdown in the primary nav strip (not the utility cluster).
 type DesktopGroup = { id: "estancia" | "general"; links: { tKey: string; href: string }[] }
-const desktopGroups: DesktopGroup[] = [
-  {
-    id: "estancia",
-    links: [
-      { tKey: "nav.coleccion",    href: "/coleccion" },
-      { tKey: "nav.experiencias", href: "/experiencias" },
-    ],
-  },
-  {
-    id: "general",
-    links: [
-      { tKey: "nav.nosotros", href: "/nosotros" },
-      { tKey: "nav.contacto", href: "/contacto" },
-    ],
-  },
-]
+function buildDesktopGroups(showGuias: boolean): DesktopGroup[] {
+  return [
+    {
+      id: "estancia",
+      links: [
+        { tKey: "nav.coleccion",    href: "/coleccion" },
+        { tKey: "nav.experiencias", href: "/experiencias" },
+      ],
+    },
+    {
+      id: "general",
+      links: [
+        { tKey: "nav.nosotros", href: "/nosotros" },
+        ...(showGuias ? [{ tKey: "nav.guias", href: "/guias" }] : []),
+        { tKey: "nav.contacto", href: "/contacto" },
+      ],
+    },
+  ]
+}
 
 // SEDA OS dropdown — product/owner pages as an inline dropdown in the primary nav.
 const sedaOsItems = [
@@ -111,6 +121,11 @@ function isOwnerRoute(pathname: string | null) {
 export function Navigation() {
   const pathname = usePathname()
   const t = useTranslations()
+  // Recomputed per render (cheap — filters a small in-memory array), so a
+  // guide published mid-session doesn't need a nav code change to appear.
+  const showGuias = haySeccionGuias()
+  const navGroups = buildNavGroups(showGuias)
+  const desktopGroups = buildDesktopGroups(showGuias)
   // Only the home page has a dark video hero. Every other route starts with
   // a light/cream hero — the nav must render its "solid" (light-bg, dark
   // text) state from the first paint or it goes white-on-white.
