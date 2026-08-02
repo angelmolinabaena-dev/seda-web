@@ -935,5 +935,117 @@ tocado ese directorio en esta auditoría: no es contenido público servido.
   al tocar solo la constante de URL. En `/guestapp`, los 4 anclas que enlazan al dominio
   (2 heredadas del `Navigation` global + las 2 propias del CTA hero/final) y la línea de
   muestra debajo del CTA final resuelven todas a `/acceso`.
-</content>
-</invoke>
+
+### 10.11 Ficha nueva — retirada de la colección de villas ficticias (2026-08-02)
+
+**Rama:** `claude/remove-fictional-villas-2c2b96` · **Modelo:** Opus 5 · esfuerzo alto.
+**Inventario completo y razonamiento:** [`RETIRADA-COLECCION.md`](./RETIRADA-COLECCION.md).
+Aquí solo el cierre, para no duplicar.
+
+**El problema.** `/coleccion` publicaba cuatro residencias con nombre propio, ubicación,
+capacidad, superficie y badge **«SEDA Managed»**: Villa *Alborán* (Marbella), Ático
+*Marina* (Puerto Banús), Finca *Los Olivos* (Casares), Residencia *Duna* (Estepona).
+**Ninguna existe**, y cada una tenía ficha propia indexable en `/villa/<slug>` con JSON-LD
+`Accommodation` —datos estructurados legibles por máquina— y precio «Desde €4.200/noche».
+Mismo origen que todo lo retirado en §10.2/§10.8/§10.10: el prototipo `.tmp/seda4/`. El
+rastro más claro es que **los ficheros de imagen ni siquiera coinciden con la villa que
+ilustran** (`villa-liria.jpg` bajo «Villa Alborán», `casa-almazara.jpg` bajo «Ático
+Marina»). El pie declaraba que las imágenes son «representaciones conceptuales», pero no
+que las propiedades no existen: **«SEDA Managed» sobre una propiedad inventada afirma un
+servicio prestado, no una ilustración.**
+
+**Decisión de Ángel: retirar, no reetiquetar** — mismo criterio que gobierna §10. Cuatro
+casas con nombre, metros y capacidad no se leen como ejemplos por mucho aviso que se ponga.
+
+**Retirado:** `lib/villas.ts`, la ruta `app/[locale]/villa/[slug]/` (página + imagen OG),
+`components/projects-section.tsx` (rejilla de la home), las 16 entradas `/villa/*` del
+sitemap, el JSON-LD `Accommodation`, el manejo de `?villa=<slug>` en `/contacto`, y **71
+claves i18n × 4 idiomas**. `/coleccion` queda con encabezado + un bloque de texto +
+contacto huésped/propietario. `Organization` y `LodgingBusiness` del layout **no se
+tocaron** (solo un comentario que apuntaba a código eliminado).
+
+**Las 16 URLs indexadas responden `410 Gone`, no redirección.** Un `301` a `/coleccion`
+afirmaría que el recurso «está ahora» ahí; las villas no se han movido, no existen —
+Google lo trataría como *soft 404* y la URL sobreviviría en el índice con su título
+antiguo. `410` es la afirmación correcta («existió, retirado de forma permanente») y la
+señal de desindexación más rápida. El cuerpo servido desde `proxy.ts` lleva enlace a
+`/coleccion` en el idioma de la URL, para que el visitante humano no quede sin salida.
+
+**Texto nuevo — marcado para revisión de Ángel (§2.1 de RETIRADA-COLECCION.md):** una sola
+cadena, `coleccion.body` en 4 idiomas («La colección abre en octubre de 2026…»), más la
+primera línea del cuerpo del 410 («Esta residencia ya no está publicada.»). Octubre de 2026
+es la fecha fijada por Ángel; no se añade ninguna otra fecha, cifra ni promesa de resultado.
+Las etiquetas de los CTA **no son nuevas**: reutilizan `cta.solicitar_estancia` y
+`cta.valorar_propiedad`, ya usadas por `components/navigation.tsx`.
+
+**Dos puntos que requieren tu decisión, reportados y NO aplicados:**
+
+1. **Segunda frase de `home.footer.disclaimer`** — «La fotografía profesional **de cada
+   villa** está disponible bajo solicitud directa al equipo SEDA». La primera frase sigue
+   siendo necesaria (quedan renders de propiedad en `/descubre`, hero, `/experiencias`); la
+   segunda presupone un conjunto de villas identificables que ya no existe. Propuesta:
+   conservar la primera, retirar la segunda. Ver RETIRADA-COLECCION.md §4.
+2. **Sección «SEDA Standard» de `/coleccion`** (6 tarjetas, 15 claves) — retirada por
+   juicio, no por obligación: el encargo fija la página en tres elementos y esta no es
+   ninguno, y su copy está en presente sobre una cartera vacía («Todas las residencias SEDA
+   incluyen…»). El texto queda en git y en RETIRADA-COLECCION.md §2.2 por si quieres
+   recolocarlo en `/propietarios` o `/guestapp`. **Merece tu visto bueno explícito.**
+
+**Verificado — medido, no razonado:**
+
+- `npx tsc --noEmit` limpio. `npx eslint` sobre los 6 ficheros tocados: 0 errores, 0 warnings.
+- `npm run build` limpio: **54 páginas estáticas** (eran 70 — desaparecen las 16 de villa).
+  Ninguna ruta rota.
+- `git grep` de los 4 slugs sobre `app/ components/ lib/ messages/ i18n/ hooks/ styles/`:
+  **0 apariciones**. De los 4 nombres: solo `prop.marketing.desc_quote` ×4 idiomas, que
+  cita **el mar de Alborán** —el accidente geográfico real, no la villa—; se conserva.
+  Fuera del código de aplicación quedan `proxy.ts` (la lista de slugs del 410, que es su
+  razón de ser), este documento y `.tmp/seda4/` (fuera de alcance por §9).
+- **Servidor de producción real** (`next start`, puerto 3801, arrancado con `cwd` fijado a
+  este worktree — la precaución de §10.9): las **16 URLs** `/villa/<slug>` × 4 locales
+  devuelven **410**, cuerpo correcto y en el idioma de la URL (`<html lang>`, enlace a
+  `/coleccion` con prefijo de locale correcto). `/villa/villa-alboran/opengraph-image` →
+  410 también. `/villa/no-existe` → **404**, que es lo correcto: no fue retirada, nunca
+  existió.
+- **Sitemap:** 40 `<loc>` (10 rutas × 4 locales), **0 referencias a villa**, y las 40 URLs
+  comprobadas una a una devuelven **200**. Ninguna URL del sitemap da error.
+- **Paridad i18n** (`.tmp/check-i18n.mjs`): **766 claves × 4 idiomas, 0 divergencias**
+  (eran 837 tras §10.8; se retiran 71).
+- **Render medido con `getBoundingClientRect()` sobre el DOM real** (sin pane de navegador
+  visible en esta sesión, `computer.screenshot` sigue fallando igual que en §10.8):
+  - `/coleccion` **1280**: dos columnas del grid alineadas al pie (`items-end`, ambas
+    `bottom: 482`), nav sin solaparse con el `h1` (nav termina en 86, `h1` empieza en 241),
+    los dos CTA en fila (`x` 753 y 967) encajando exacto en el borde derecho de la columna
+    (1185 = 753 + 432). Sin desbordamiento horizontal. Página no vacía: encabezado, bloque
+    de texto y dos CTA presentes y con el texto esperado.
+  - `/coleccion` **375**: grid a 1 columna (327 px), los dos CTA apilados a ancho completo.
+    Sin desbordamiento horizontal.
+  - **Home 1280 y 375**: `#projects` **no existe**, `a[href*="/villa/"]` = **0**, y los
+    **12** hijos de `<main>` son contiguos — todos los huecos verticales entre secciones
+    miden **0 px**. `ValueProp` termina en 1281 y `EditorialBreak` (`#about`) empieza en
+    1281: no queda hueco donde estaban las tarjetas. `document.body.innerText` escaneado
+    para los 4 nombres: **0 apariciones**.
+  - **JSON-LD verificado parseando el DOM real**: home → `Organization+LodgingBusiness` +
+    `FAQPage`, exactamente los de antes. `/coleccion` en los 4 idiomas → solo
+    `Organization+LodgingBusiness`. **Ningún `Accommodation` en ninguna página**, y ningún
+    `BreadcrumbList` (su único emisor era la ficha de villa).
+- `<meta name="description">` y `<link rel="canonical">` de `/coleccion` correctos en los 4
+  idiomas, con el texto nuevo y el canonical por locale (`/coleccion`, `/en/coleccion`, …).
+- `/contacto?type=guest&villa=villa-alboran` → **200**, `?type=` sigue honrándose y el
+  banner «Villa solicitada» aparece **0 veces**: el parámetro heredado se ignora sin romper.
+
+**Imágenes: ninguna borrada, y ninguna queda huérfana por esta retirada.** Auditados los
+126 ficheros de `public/villas/` contra todo el código: las cuatro que ilustraban las
+fichas siguen consumidas por `/descubre` (Marbella, Estepona, Benahavís, Casares). Los 106
+ficheros sin consumidor ya lo estaban **antes** de este PR —volcado de trabajo del
+prototipo— y no se tocan: la limpieza de `public/` no entra en el encargo. Lista en
+RETIRADA-COLECCION.md §1.6.
+
+**Residuo fichado, no borrado:** `components/breadcrumbs.tsx` queda sin consumidor (su
+única llamada era la ficha de villa). No se retira porque es infraestructura correcta, no
+una afirmación de negocio, y volverá a hacer falta con la primera ruta profunda. Ver
+RETIRADA-COLECCION.md §5.
+
+**Corrección de higiene aplicada en este PR:** el final de este fichero arrastraba dos
+líneas de basura (`</content>` y `</invoke>`) escritas por error en una sesión anterior.
+Eliminadas.

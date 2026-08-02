@@ -2,7 +2,6 @@
 
 import { useEffect, useState, type ReactNode } from "react"
 import { ArrowUpRight } from "lucide-react"
-import { getVillaBySlug } from "@/lib/villas"
 import { useTranslations } from "next-intl"
 
 type ContactType = "guest" | "owner" | "other"
@@ -56,12 +55,8 @@ function FormRow({ children }: { children: ReactNode }) {
   return <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">{children}</div>
 }
 
-function GuestForm({ villaName }: { villaName: string | null }) {
+function GuestForm() {
   const t = useTranslations()
-  // When the visitor lands here from a /villa/[slug] page, we surface a small
-  // banner so they immediately see that their interest in that property has
-  // been captured, and we pre-seed the notes textarea with the villa name.
-  const noteSeed = villaName ? t("contacto.villa.interest_note", { name: villaName }) : ""
   return (
     <div className="flex flex-col gap-8">
       <div>
@@ -73,14 +68,6 @@ function GuestForm({ villaName }: { villaName: string | null }) {
         </h3>
       </div>
 
-      {villaName && (
-        <div className="flex items-center gap-3 bg-[hsl(var(--olive))]/10 border-l-2 border-[hsl(var(--olive))] px-4 py-3">
-          <span className="font-mono text-[10px] tracking-[0.22em] uppercase text-[hsl(var(--olive))]">
-            {t("contacto.villa.label")}
-          </span>
-          <span className="font-serif italic text-foreground">{villaName}</span>
-        </div>
-      )}
       <FormRow>
         <Field name="arrival"  label={t("contacto.form.labels.arrival")} placeholder={t("contacto.form.placeholders.date")} required />
         <Field name="departure" label={t("contacto.form.labels.departure")}  placeholder={t("contacto.form.placeholders.date")} required />
@@ -99,7 +86,6 @@ function GuestForm({ villaName }: { villaName: string | null }) {
         </span>
         <textarea
           name="notes"
-          defaultValue={noteSeed}
           placeholder={t("contacto.form.placeholders.notes_guest")}
           rows={4}
           className="bg-transparent border border-border focus:border-foreground transition-colors p-3 text-base text-foreground placeholder:text-muted-foreground/60 focus:outline-none resize-none"
@@ -197,7 +183,6 @@ export function ContactoContent() {
   const t = useTranslations()
   const [type, setType] = useState<ContactType>("guest")
   const [sent, setSent] = useState(false)
-  const [villaName, setVillaName] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
 
@@ -211,7 +196,9 @@ export function ContactoContent() {
   // Read URL query string client-side after mount.
   // Honored params:
   //   ?type=guest|owner|other  — preselects the form variant
-  //   ?villa=<slug>            — surfaces a "Villa solicitada" banner + seeds notes
+  // `?villa=<slug>` se dejó de honrar al retirar las cuatro residencias
+  // ficticias: no hay catálogo del que venir. Ver
+  // docs/audit/RETIRADA-COLECCION.md §1.3.
   // Using window.location keeps this Suspense-free (vs useSearchParams).
   useEffect(() => {
     if (typeof window === "undefined") return
@@ -229,11 +216,6 @@ export function ContactoContent() {
       // a Suspense/dynamic-rendering opt-in this page deliberately avoids.
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setType(qType)
-    }
-    const v = sp.get("villa")
-    if (v) {
-      const villa = getVillaBySlug(v)
-      if (villa) setVillaName(`${villa.prefix} ${villa.italic}`)
     }
   }, [])
 
@@ -362,8 +344,6 @@ export function ContactoContent() {
                   fd.forEach((v, k) => {
                     if (typeof v === "string" && v.trim().length > 0) fields[k] = v
                   })
-                  if (villaName && !fields.villa) fields.villa = villaName
-
                   setIsSubmitting(true)
                   try {
                     const res = await fetch("/api/contact", {
@@ -387,7 +367,7 @@ export function ContactoContent() {
                   }
                 }}
               >
-                {type === "guest" && <GuestForm villaName={villaName} />}
+                {type === "guest" && <GuestForm />}
                 {type === "owner" && <OwnerForm />}
                 {type === "other" && <OtherForm />}
 

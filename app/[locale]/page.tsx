@@ -2,7 +2,6 @@ import type { Metadata } from "next"
 import { getLocale, getTranslations } from "next-intl/server"
 import { Hero } from "@/components/hero"
 import { ValueProp } from "@/components/value-prop"
-import { ProjectsSection } from "@/components/projects-section"
 import { EditorialBreak } from "@/components/editorial-break"
 import { JourneySection } from "@/components/journey-section"
 import { DualConversion } from "@/components/dual-conversion"
@@ -55,7 +54,10 @@ export default async function Page() {
       />
       <Hero />
       <ValueProp />
-      <ProjectsSection />
+      {/* `ProjectsSection` (rejilla de las 4 villas + contador) retirada:
+          las cuatro residencias no existen. Ver
+          docs/audit/RETIRADA-COLECCION.md §2.3 — no se sustituye por nada,
+          `ValueProp` → `EditorialBreak` enlaza sin bloque intermedio. */}
       <EditorialBreak />
       <JourneySection />
       <DualConversion />

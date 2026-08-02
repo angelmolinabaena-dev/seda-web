@@ -48,15 +48,6 @@
       "eyebrow": "— SEDA Private Homes",
       "body": "Redefining hospitality on the Costa del Sol — exceptional residences and tailored stays, connecting guests, owners and operations in real time."
     },
-    "projects": {
-      "eyebrow": "— 01 · Featured collection",
-      "h2": {
-        "line1": "An",
-        "italic": "editorial collection,",
-        "line2": "not a catalogue."
-      },
-      "villas_count_label": "Villas"
-    },
     "editorial": {
       "image_alt": "Mediterranean villa terrace at sunset on the Costa del Sol",
       "eyebrow": "— 02 · Who we are",
@@ -799,10 +790,6 @@
       "body": "A specialist will reply personally within 24 hours with a tailored proposal.",
       "cta": "Send another message"
     },
-    "villa": {
-      "label": "Requested villa",
-      "interest_note": "Interested in {name}.\n\n"
-    },
     "error": {
       "send": "We couldn't send your message. Please try again or write to info@sedaprivatehomes.com"
     },
@@ -877,56 +864,7 @@
       "italic": "private collection",
       "line2": "on the Costa del Sol."
     },
-    "body": "Residences selected for location, architecture, privacy and experience potential. Each operated under the same SEDA standard.",
-    "managed_badge": "SEDA Managed",
-    "price_badge": "On request",
-    "meta": {
-      "tag": "Collection 2026",
-      "count": "curated residences",
-      "geo": "Costa del Sol · Marbella → Casares"
-    },
-    "standard": {
-      "eyebrow": "— SEDA Standard",
-      "h2": {
-        "line1": "Every SEDA residence",
-        "italic": "includes."
-      },
-      "items": {
-        "checkin": {
-          "t": "Organised check-in",
-          "b": "Coordinated arrival with detailed instructions and in-person support on request."
-        },
-        "support": {
-          "t": "In-stay support",
-          "b": "SEDA team available 24/7 through the Guest App. Immediate response."
-        },
-        "standard": {
-          "t": "SEDA standard",
-          "b": "Cleaning, maintenance and provisioning verified before every arrival."
-        },
-        "guestapp": {
-          "t": "Guest App",
-          "b": "Access, guide, concierge, experiences and communication in a single interface."
-        },
-        "services": {
-          "t": "Services on request",
-          "b": "Chef, transfers, massages, reservations, nannies, charters, golf."
-        },
-        "privacy": {
-          "t": "Privacy",
-          "b": "Discreet teams, protected data, minimal presence."
-        }
-      }
-    },
-    "cta": {
-      "eyebrow": "— Bespoke stay",
-      "h2": {
-        "line1": "Can't find the",
-        "italic": "exact villa?"
-      },
-      "body": "We have off-catalogue residences for long stays or private groups. Tell us your dates and preferences.",
-      "button": "Request a proposal"
-    }
+    "body": "The collection opens in October 2026. Until then we publish no residences; if you would like to book a stay or place your property with us, write to us."
   },
   "exp": {
     "eyebrow": "— SEDA Experiences",
@@ -1286,74 +1224,13 @@
       "cta": "See the management model"
     }
   },
-  "villa": {
-    "back_link": "— Also in the collection",
-    "back_h2": {
-      "line1": "Other",
-      "italic": "private residences."
-    },
-    "see_all": "See the full collection",
-    "from": "From",
-    "per_night": "/ night",
-    "book_cta": "Book this villa",
-    "check_availability": "Check availability",
-    "response_note": "Personal response within 24 hours",
-    "quick": {
-      "guests": "Guests",
-      "bedrooms": "Bedrooms",
-      "area": "Area",
-      "feature": "Signature"
-    },
-    "section_eyebrow": "— The residence",
-    "section_h2": {
-      "after_name": ", in its own words."
-    },
-    "section_note": "Our SEDA team can confirm availability, private rates and additional experiences (chef, transfer, massage, beach club) on direct request.",
-    "book_villa": "Book",
-    "see_others": "See other villas",
-    "sticky": {
-      "from": "From",
-      "book": "Book"
-    },
-    "not_found_title": "Villa not found — SEDA Private Homes",
-    "meta_suffix": "Private villa managed by SEDA Private Homes on the Costa del Sol.",
-    "price_unavailable": "On request",
-    "prefix": {
-      "villa": "Villa",
-      "atico": "Penthouse",
-      "finca": "Finca",
-      "residencia": "Residence"
-    },
-    "items": {
-      "villa-alboran": {
-        "sublocation": "Marbella, Costa del Sol",
-        "capacity": "8 guests · 4 suites · 400 m² · infinity pool",
-        "description": "A contemporary residence with an infinity pool and open Mediterranean views, in Marbella. Long-lined architecture that favours light, the centuries-old olive trees in the garden, and the sea as a permanent horizon."
-      },
-      "atico-marina-puerto-banus": {
-        "sublocation": "Puerto Banús, Costa del Sol",
-        "capacity": "4 guests · 2 suites · 280 m² · panoramic views",
-        "description": "A penthouse with panoramic views over Puerto Banús — wrap-around terrace, contemporary materials and the discreet closeness of the marina. For urban stays without giving up the sea."
-      },
-      "finca-los-olivos-casares": {
-        "sublocation": "Casares, Costa del Sol",
-        "capacity": "10 guests · 5 suites · 390 m² · private spa",
-        "description": "An Andalusian finca among centuries-old olive trees in the hills of Casares — private spa, inner patio with a lemon tree, and the stillness of the sierra. For longer gatherings, families or groups seeking retreat."
-      },
-      "residencia-duna-estepona": {
-        "sublocation": "Estepona, Costa del Sol",
-        "capacity": "6 guests · 3 suites · 460 m² · beachfront",
-        "description": "A beachfront residence in Estepona — cascading terraces, direct access to the sand and minimalist architecture that lets the horizon take the lead. The closest stay to the sea in the collection."
-      }
-    }
-  },
   "notfound": {
     "title": "Page not found — SEDA Private Homes",
     "description": "This page has taken a moment. Return home or explore the collection.",
     "eyebrow": "— 404 · Page not found",
     "h1_line1": "This page has taken",
     "h1_italic": "a moment.",
-    "body": "The link may have changed or the address may no longer exist. Return to the homepage or go straight to the villa collection.",
+    "body": "The link may have changed or the address may no longer exist. Return to the homepage or go straight to the collection.",
     "back_home": "Return home",
     "see_collection": "See the collection"
   },
