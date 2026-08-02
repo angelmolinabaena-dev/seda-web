@@ -83,10 +83,8 @@ function SedaOSWindow() {
       {/* Content */}
       <div className="p-5 flex flex-col gap-3 bg-white">
         {/* KPI row */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5">
+        <div className="grid grid-cols-2 gap-2.5">
           {[
-            { l: t("prop.os.kpi.ingresos"), v: "€45.000", d: t("prop.os.kpi.ingresos_d"), up: true },
-            { l: t("prop.os.kpi.ocupacion"), v: "78%",    d: t("prop.os.kpi.ocupacion_d"), up: true },
             { l: t("prop.os.kpi.llegadas"),  v: "3",      d: t("prop.os.kpi.llegadas_d"),  avatars: true },
             { l: t("prop.os.kpi.mant"),      v: "1",      d: t("prop.os.kpi.mant_d"),      warn: true },
           ].map((k) => (
@@ -103,8 +101,8 @@ function SedaOSWindow() {
                   </div>
                 )}
               </div>
-              <p className={`text-[10px] mt-1.5 ${k.up ? "text-[#3a9a64]" : k.warn ? "text-[hsl(var(--gold))]" : "text-muted-foreground"}`}>
-                {k.up && "↗ "}{k.d}
+              <p className={`text-[10px] mt-1.5 ${k.warn ? "text-[hsl(var(--gold))]" : "text-muted-foreground"}`}>
+                {k.d}
               </p>
             </div>
           ))}
@@ -465,26 +463,6 @@ export default function PropietariosPage() {
 
           {/* 12-col bento grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-3.5">
-            {/* Conversión +42% — tall */}
-            <article className="md:row-span-2 bg-background border border-border rounded-2xl p-7 flex flex-col">
-              <p className="font-mono text-[10px] tracking-[0.18em] uppercase text-[hsl(var(--olive))]">{t("prop.marketing.conv_label")}</p>
-              <p className="font-serif font-light text-[clamp(3.5rem,5vw,5rem)] leading-none text-[hsl(var(--olive))] mt-5">
-                +42<span className="text-[hsl(var(--gold))]">%</span>
-              </p>
-              <p className="text-[0.85rem] leading-[1.65] text-muted-foreground mt-3 max-w-[30ch]">
-                {t("prop.marketing.conv_body")}
-              </p>
-              <div className="mt-auto pt-6">
-                <div className="flex items-end gap-1 h-12">
-                  {[20, 28, 24, 32, 38, 35, 42, 48].map((h, i) => (
-                    <div key={i} style={{ height: `${h}%` }}
-                      className={`flex-1 ${i % 2 === 0 ? "bg-[hsl(var(--gold))]" : "bg-[hsl(var(--olive))]"} rounded-sm`} />
-                  ))}
-                </div>
-                <p className="font-mono text-[9px] tracking-[0.14em] uppercase text-muted-foreground mt-2">{t("prop.marketing.conv_range")}</p>
-              </div>
-            </article>
-
             {/* Campañas multilingües */}
             <article className="bg-background border border-border rounded-2xl p-7">
               <div className="flex justify-between items-start">

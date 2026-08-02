@@ -510,7 +510,7 @@ reescribe cuando existe una afirmación verdadera y comprobable que ocupe su sit
 
 | §7 | Ficha | Estado | Decisión aplicada |
 |---|---|---|---|
-| 1 | `Modelo 210 trimestral` (`/meet`) y `reporting fiscal trimestral` (`prop.arch.mod.finanzas.body`) | **`PENDIENTE_ÁNGEL`** | Ver §10.3 |
+| 1 | `Modelo 210 trimestral` (`/meet`) y `reporting fiscal trimestral` (`prop.arch.mod.finanzas.body`) | **`RESUELTA` por retirada (parcial)** | «trimestral» retirado de `prop.arch.mod.finanzas.body` en los 4 idiomas — retirar una afirmación falsa no exige criterio fiscal, solo sustituirla lo exigiría (criterio A-03). La periodicidad correcta sigue sin fijarse — ver §10.3 |
 | 2 | E-03 · `/founding-owners` cita «Modelo 179» como vigente | **`RESUELTA`** | Alineado con la fórmula cubierta «Modelo 179/238, según normativa vigente» en los 4 idiomas |
 | 3 | E-04 / R-03 · «nuestro equipo fiscal» | **`RESUELTA`** | Retirado en los 4 idiomas. Sustituido por el hecho (criterio 2): SEDA prepara la documentación, la gestoría del propietario presenta |
 | 4 | R-04 · badge «Liquidación IRNR» | **`RESUELTA`** | → «Documentación IRNR». Sin postura sobre retención (gate intacto) |
@@ -552,12 +552,16 @@ tráfico— tenía la misma tasa implícita: 6.915 / 38.420 = 18,0%. Ambos corre
 
 ### 10.3 Lo que sigue `PENDIENTE_ÁNGEL`, y por qué
 
-**P-1 · Periodicidad del reporting fiscal (§7.1).** Sigue abierta, sin cambios respecto al
-2026-08-01: exige confirmación contra AEAT/BOE y no hay asesoría contratada. Este PR **sí**
-ha retirado de `/meet` la afirmación de que SEDA gestiona el Modelo 210 (choca con el
-criterio 2), pero `prop.arch.mod.finanzas.body` sigue diciendo «reporting fiscal
-trimestral» en los 4 idiomas. No se toca sin la confirmación normativa: cambiarlo a
-«anual» sería inventar criterio fiscal, que es lo que el encargo prohíbe.
+**P-1 · Periodicidad del reporting fiscal (§7.1).** Exige confirmación contra AEAT/BOE y
+no hay asesoría contratada, así que **sigue sin fijarse una periodicidad**. Lo que sí ha
+cambiado en la segunda pasada (2026-08-02): `prop.arch.mod.finanzas.body` decía «reporting
+fiscal trimestral» en los 4 idiomas — «trimestral» queda **retirado**, sin sustituirlo por
+«anual» ni por ningún otro plazo. El texto queda «… IRNR y reporting fiscal.», sin
+periodicidad. Esto no exige criterio fiscal porque no afirma nada sobre cuándo se
+presenta — solo deja de afirmar algo no confirmado (mismo criterio que A-03: retirar una
+falsedad no requiere asesoría; *sustituirla por otra cifra* sí la requeriría). `/meet` ya
+no menciona el Modelo 210 desde la primera pasada. Sigue abierta la pregunta de fondo:
+qué periodicidad es correcta, si se quiere volver a afirmar una.
 
 **P-2 · Mapeo temporada → días del simulador (§7.9).** El encargo prohíbe explícitamente
 inventarlo. Se ha tomado la salida 2 (retirar el control) porque el mapeo **no existe en
@@ -595,10 +599,11 @@ alcance de este encargo, y todas son del mismo género que lo retirado:
 
 | Afirmación | Fichero | Por qué se señala |
 |---|---|---|
-| «+42%» de conversión en ficha | `propietarios/page.tsx` (hardcoded) | Aparece en el inventario §1.1 sin código `N-`. Sin fuente ni serie histórica |
-| «+12% vs prev.» · «+6 pts vs. mes anterior» | `prop.os.kpi.*`, `home.dashboard.kpi.*` | N-05 y N-06. Van dentro de mockups de dashboard, pero **ninguno está rotulado como ilustrativo** |
 | «Modelo 179/238, según normativa vigente» | 8 apariciones | `CORRECTO` (C-04): formulación cubierta. Se mantiene |
-| Marcado de frescura y fuente (§8) | bloques normativos | Sigue sin aplicarse: P-1 continúa abierta, y sellar como verificado un bloque dudoso es peor que no sellarlo |
+| Marcado de frescura y fuente (§8) | bloques normativos | Sigue sin aplicarse: P-1 continúa abierta (queda por fijar la periodicidad correcta), y sellar como verificado un bloque dudoso es peor que no sellarlo |
+
+> «+42% de conversión en ficha» y «+12% vs prev. · +6 pts vs. mes anterior» estaban aquí
+> hasta la segunda pasada (2026-08-02). Ya no están adyacentes — se retiraron. Ver §10.7.
 
 ### 10.6 Verificación ejecutada
 
@@ -613,5 +618,73 @@ alcance de este encargo, y todas son del mismo género que lo retirado:
 - **Render comprobado**, no solo `tsc`: las secciones de las que se retiraron bloques (hero
   de `/propietarios`, strip de arquitectura, panel del simulador, stats del CTA final, hero
   de `/guestapp`) se han revisado ya recompuestas.
+
+### 10.7 Segunda pasada — conversión, KPIs de mockup y periodicidad fiscal (2026-08-02)
+
+**Encargo:** retirar «+42% de conversión» y las KPI de ingresos/ocupación de los mockups
+`SedaOSWindow` (`/propietarios`) y `DashboardMockup` (home), y retirar «trimestral» de
+`prop.arch.mod.finanzas.body`. Mismo criterio que §10.2: **se retira, no se reetiqueta**,
+salvo que exista un valor real que ocupe el sitio.
+
+**Origen verificado — mismo prototipo decorativo que los 12.480/99,98% de §10.2.**
+`.tmp/seda4/page-home.jsx:578-579`, `page-propietarios.jsx:383-384` y
+`page-ecosistema.jsx:354-355` comparten el mismo bloque KPI de maqueta:
+
+```jsx
+{ label: "Ingresos previstos", value: "€45.000", delta: "+12% vs prev." },
+{ label: "Ocupación", value: "78%", delta: "+6 pts" },
+```
+
+Ni `€45.000` ni `78%` ni los deltas `+12% vs prev.` / `+6 pts` tienen fuente distinta del
+prototipo — es la misma maqueta `AnimatedNumber`/KPI que ya se documentó como no trazable
+en §10.2. Un delta retirado sobre una cifra inventada no la arregla: se retiran cifra y
+delta juntos, no solo el delta.
+
+**Retirado:**
+
+- `app/[locale]/propietarios/page.tsx` — el KPI `Ingresos previstos: €45.000 (+12% vs
+  prev.)` y el KPI `Ocupación: 78% (+6 pts)` del mockup `SedaOSWindow`. Quedan `Llegadas
+  hoy` y `Mantenimiento`, los dos únicos KPI de esa fila con valor operativo (no de
+  cartera).
+- `app/[locale]/propietarios/page.tsx` — la tarjeta completa «Conversión en ficha +42%»
+  del bento de marketing (bloque `prop.marketing.conv_*`): mismo motivo que R-05 (§6),
+  cifra de conversión sin serie histórica ni fuente distinta del texto mismo.
+- `components/dashboard-mockup.tsx` — el KPI `Ocupación: 78% (+6 pts vs. mes anterior)`
+  del mockup de la home. Quedan `Ingresos` (€142.300, cifra distinta de los €45.000 de la
+  maqueta retirada, no señalada como no trazable) y `Reservas activas`.
+- `messages/{es,en,de,fr}.json` — 9 claves retiradas en los 4 idiomas: `prop.os.kpi.
+  {ingresos,ingresos_d,ocupacion,ocupacion_d}`, `home.dashboard.kpi.{ocupacion,
+  ocupacion_sub}`, `prop.marketing.{conv_label,conv_body,conv_range}`.
+- `prop.arch.mod.finanzas.body` (4 idiomas) — «trimestral» retirado sin sustituir por
+  ningún otro plazo. Ver §10.1 fila 1 y §10.3 P-1.
+
+**Ajuste de layout para no dejar los mockups descuadrados:**
+
+- `SedaOSWindow`: la fila de KPI pasa de 4 tarjetas (`grid-cols-2 md:grid-cols-4`) a 2
+  (`grid-cols-2`, sin breakpoint `md`) — 2 columnas en todos los tamaños, sin celdas
+  vacías. El texto que dependía de `k.up` (flecha «↗» y color verde de tendencia) se
+  retira: ninguno de los dos KPI restantes (`Llegadas hoy`, `Mantenimiento`) la usaba —
+  era exclusiva de los dos KPI retirados.
+- `DashboardMockup`: la fila de KPI pasa de 3 tarjetas (`sm:grid-cols-3`) a 2
+  (`sm:grid-cols-2`).
+- Bento de marketing: al retirar la única tarjeta con `md:row-span-2`, el grid de 3
+  columnas queda en flujo automático uniforme (7 tarjetas, ninguna con `row-span`) — sin
+  huecos, sin necesidad de `grid-flow-dense`.
+
+**Verificado, no asumido:**
+
+- `npx tsc --noEmit`: limpio. (Detectó y forzó corregir una referencia residual a `k.up`
+  en `SedaOSWindow` que solo existía para los dos KPI ya retirados.)
+- `npx eslint` sobre los dos ficheros tocados: 0 errores (1 warning preexistente y ajeno,
+  `no-img-element`).
+- `grep` de las 9 claves retiradas sobre `app/` y `components/`: 0 referencias residuales.
+- **Paridad i18n**, `.tmp/check-i18n.mjs`: **838 claves × 4 idiomas, 0 divergencias**
+  (eran 847 tras §10.6; se retiran 9).
+
+**No verificado en navegador** — sin entorno de preview disponible en esta sesión. La
+composición del grid se razonó desde CSS Grid auto-flow (sin `row-span`/`col-span`
+residual que dependiera de los elementos retirados) y se confirmó por tipos y lint, no por
+captura visual. Si quieres confirmación visual, pide una captura de `/propietarios` y home
+antes de mergear.
 </content>
 </invoke>

@@ -200,8 +200,6 @@
       "topbar": "Eigentümer-Reporting",
       "location": "Marbella · Heute",
       "kpi": {
-        "ocupacion": "Belegung",
-        "ocupacion_sub": "+6 Pkt. ggü. Vormonat",
         "ingresos": "Erlösprognose",
         "ingresos_sub": "Q3 2026",
         "reservas": "Aktive Buchungen",
@@ -359,10 +357,6 @@
       "live": "SEDA OS · LIVE",
       "operative": "OPERATIV",
       "kpi": {
-        "ingresos": "Erlösprognose",
-        "ingresos_d": "+12% ggü. Vorperiode",
-        "ocupacion": "Belegung",
-        "ocupacion_d": "+6 Pkt.",
         "llegadas": "Ankünfte heute",
         "llegadas_d": "2 bestätigt",
         "mant": "Wartung",
@@ -413,9 +407,6 @@
         "italic": "SEO."
       },
       "body": "Ein transparenter Einblick in Ihre Investition und ein unermüdlicher Marketing-Motor. Betriebliche, finanzielle und rechtliche Informationen in Echtzeit.",
-      "conv_label": "Listing-Conversion",
-      "conv_body": "Kontinuierliche A/B-Tests auf Bilder und Texte. Durchschnittliche Steigerung von SEDA-Inseraten gegenüber der Marktreferenz.",
-      "conv_range": "Jan. — Aug. 2026",
       "campaign_h3": "Mehrsprachige Kampagnen",
       "campaign_body": "Strategien, abgestimmt auf die Schlüsselmärkte der Costa del Sol.",
       "desc_h3": "Premium-Beschreibungen",
@@ -510,7 +501,7 @@
         "finanzas": {
           "name": "Finanzen",
           "label": "Abrechnungen",
-          "body": "Automatisierte Abrechnungen, Bankabgleich, IRNR und vierteljährliches Steuerreporting."
+          "body": "Automatisierte Abrechnungen, Bankabgleich, IRNR und Steuerreporting."
         },
         "propietario": {
           "name": "Eigentümer",

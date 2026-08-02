@@ -14,7 +14,6 @@ export function DashboardMockup() {
   const t = useTranslations()
 
   const kpis = [
-    { label: t("home.dashboard.kpi.ocupacion"), value: "78%", sub: t("home.dashboard.kpi.ocupacion_sub") },
     { label: t("home.dashboard.kpi.ingresos"), value: "€ 142.300", sub: t("home.dashboard.kpi.ingresos_sub") },
     { label: t("home.dashboard.kpi.reservas"), value: "14", sub: t("home.dashboard.kpi.reservas_sub") },
   ]
@@ -43,7 +42,7 @@ export function DashboardMockup() {
       </div>
 
       {/* KPIs */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
         {kpis.map((k) => (
           <div
             key={k.label}
