@@ -12,6 +12,7 @@
     "filosofia": "Filosofía",
     "modelo": "Modelo de gestión",
     "faq": "FAQ",
+    "guias": "Guías",
     "nosotros": "Nosotros",
     "portal": "Portal",
     "seda_os": "SEDA OS",
@@ -321,6 +322,7 @@
         "propietarios": "Propietarios",
         "descubre": "Descubre",
         "faq": "FAQ",
+        "guias": "Guías",
         "contacto": "Contacto"
       }
     }
@@ -1257,6 +1259,33 @@
       "contacto": "Contacto",
       "help": "Mostrar / ocultar atajos",
       "esc": "Cerrar este panel"
+    }
+  },
+  "guias": {
+    "index": {
+      "eyebrow": "— Guías SEDA",
+      "h1": {
+        "line1": "El marco legal,",
+        "italic": "explicado",
+        "line2": "con claridad."
+      },
+      "intro": "Guías de referencia sobre el marco normativo del alquiler turístico en la Costa del Sol.",
+      "empty_state": "Estamos preparando las primeras guías. Vuelva pronto.",
+      "leer_mas": "Leer guía"
+    },
+    "ficha": {
+      "publicada_el": "Publicada el {fecha}",
+      "revisada_el": "Última revisión: {fecha}",
+      "autor_por": "Por {autor}",
+      "fuentes_titulo": "Fuentes",
+      "borrador_badge": "Borrador — no publicado",
+      "pendiente": "Pendiente",
+      "volver": "Volver a Guías"
+    },
+    "autor": {
+      "eyebrow": "— Autor",
+      "hechos_titulo": "Sobre {nombre}",
+      "guias_de": "Guías de {nombre}"
     }
   }
 }

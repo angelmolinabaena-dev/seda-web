@@ -12,6 +12,7 @@
     "filosofia": "Philosophy",
     "modelo": "Management model",
     "faq": "FAQ",
+    "guias": "Guides",
     "nosotros": "About",
     "portal": "Portal",
     "seda_os": "SEDA OS",
@@ -321,6 +322,7 @@
         "propietarios": "Owners",
         "descubre": "Discover",
         "faq": "FAQ",
+        "guias": "Guides",
         "contacto": "Contact"
       }
     }
@@ -1257,6 +1259,33 @@
       "contacto": "Contact",
       "help": "Show / hide shortcuts",
       "esc": "Close this panel"
+    }
+  },
+  "guias": {
+    "index": {
+      "eyebrow": "— SEDA Guides",
+      "h1": {
+        "line1": "The legal framework,",
+        "italic": "explained",
+        "line2": "with clarity."
+      },
+      "intro": "Reference guides on the regulatory framework for vacation rentals on the Costa del Sol.",
+      "empty_state": "We're preparing the first guides. Check back soon.",
+      "leer_mas": "Read guide"
+    },
+    "ficha": {
+      "publicada_el": "Published on {fecha}",
+      "revisada_el": "Last reviewed: {fecha}",
+      "autor_por": "By {autor}",
+      "fuentes_titulo": "Sources",
+      "borrador_badge": "Draft — not published",
+      "pendiente": "Pending",
+      "volver": "Back to Guides"
+    },
+    "autor": {
+      "eyebrow": "— Author",
+      "hechos_titulo": "About {nombre}",
+      "guias_de": "Guides by {nombre}"
     }
   }
 }

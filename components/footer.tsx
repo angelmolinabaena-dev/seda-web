@@ -3,6 +3,7 @@
 import { Link } from "@/i18n/navigation"
 import { useTranslations } from "next-intl"
 import { generalContact } from "@/lib/site-contact"
+import { haySeccionGuias } from "@/lib/guias"
 
 /*
   Footer link audit (post-migration):
@@ -24,6 +25,12 @@ export function Footer() {
     { label: t("home.footer.links.propietarios"), href: "/propietarios" },
     { label: t("home.footer.links.descubre"),     href: "/descubre" },
     { label: t("home.footer.links.faq"),          href: "/faq" },
+    // Enlace de `/guias` solo cuando exista al menos una guía publicada —
+    // ver docs/prompts/SUPERFICIE-CONTENIDO.md §5. Con cero guías
+    // publicadas la sección no se enlaza en absoluto.
+    ...(haySeccionGuias()
+      ? [{ label: t("home.footer.links.guias"), href: "/guias" }]
+      : []),
     { label: t("home.footer.links.contacto"),     href: "/contacto" },
   ]
   return (

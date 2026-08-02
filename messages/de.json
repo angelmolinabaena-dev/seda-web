@@ -12,6 +12,7 @@
     "filosofia": "Philosophie",
     "modelo": "Verwaltungsmodell",
     "faq": "FAQ",
+    "guias": "Leitfäden",
     "nosotros": "Über uns",
     "portal": "Portal",
     "seda_os": "SEDA OS",
@@ -321,6 +322,7 @@
         "propietarios": "Eigentümer",
         "descubre": "Entdecken",
         "faq": "FAQ",
+        "guias": "Leitfäden",
         "contacto": "Kontakt"
       }
     }
@@ -1257,6 +1259,33 @@
       "contacto": "Kontakt",
       "help": "Kürzel anzeigen / ausblenden",
       "esc": "Dieses Panel schließen"
+    }
+  },
+  "guias": {
+    "index": {
+      "eyebrow": "— SEDA Leitfäden",
+      "h1": {
+        "line1": "Der rechtliche Rahmen,",
+        "italic": "klar",
+        "line2": "erklärt."
+      },
+      "intro": "Referenzleitfäden zum regulatorischen Rahmen der Ferienvermietung an der Costa del Sol.",
+      "empty_state": "Wir bereiten die ersten Leitfäden vor. Schauen Sie bald wieder vorbei.",
+      "leer_mas": "Leitfaden lesen"
+    },
+    "ficha": {
+      "publicada_el": "Veröffentlicht am {fecha}",
+      "revisada_el": "Letzte Überprüfung: {fecha}",
+      "autor_por": "Von {autor}",
+      "fuentes_titulo": "Quellen",
+      "borrador_badge": "Entwurf — nicht veröffentlicht",
+      "pendiente": "Ausstehend",
+      "volver": "Zurück zu Leitfäden"
+    },
+    "autor": {
+      "eyebrow": "— Autor",
+      "hechos_titulo": "Über {nombre}",
+      "guias_de": "Leitfäden von {nombre}"
     }
   }
 }
