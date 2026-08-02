@@ -536,16 +536,9 @@ export default function GuestAppPage() {
                 {t("guestapp.hero.cta.explorar")} <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" strokeWidth={1.75} />
               </Link>
             </div>
-            <div className="flex items-center gap-4 mt-10">
-              <div className="flex">
-                {["AGP", "MJ", "T", "L"].map((c, i) => (
-                  <span key={i} className={`w-8 h-8 rounded-full ${i % 2 ? "bg-[hsl(var(--gold))]" : "bg-[hsl(var(--olive))]"} text-background grid place-items-center text-[10px] font-bold border-2 border-background ${i ? "-ml-2" : ""}`}>
-                    {c}
-                  </span>
-                ))}
-              </div>
-              <p className="text-[12px] text-muted-foreground">{t("guestapp.hero.stat")}</p>
-            </div>
+            {/* Retirado «12.480 estancias coordinadas desde la App en 2026» junto con
+                la fila de avatares que lo acompañaba: la cifra es la misma del
+                prototipo .tmp/seda4 y no corresponde a ninguna operación real. */}
           </div>
 
           {/* Phone stack — 3 phones offset (desktop) */}

@@ -32,7 +32,7 @@ const COPY: Record<
     badge: "PROPIETARIOS FUNDADORES · PLAZAS LIMITADAS",
     seatsLeft: "Quedan 3 plazas fundadoras",
     h1: ["El estándar hotelero", "para tu villa."],
-    body: "Somos Ángel Molina (8 años en Iberostar + Les Roches MHM) y equipo. En la Costa del Sol construimos la primera gestión de villas al nivel de un hotel de lujo: transparencia total, tecnología propia y cumplimiento legal 100%.",
+    body: "Somos Ángel Molina (8 años en Iberostar + Les Roches MHM) y equipo. En la Costa del Sol construimos la primera gestión de villas al nivel de un hotel de lujo: transparencia total y tecnología propia.",
     trust: ["8 años Iberostar", "Les Roches MHM", "2 propietarios en programa"],
     cta: "Reservar reunión privada",
     diffs: [
@@ -42,11 +42,11 @@ const COPY: Record<
       },
       {
         title: "Comisión justa y clara",
-        body: "Una comisión fija sobre ingresos netos. Sin letra pequeña ni costes ocultos de gestión. Sabes exactamente cuánto cobras cada mes.",
+        body: "Una comisión del 22% sobre los ingresos brutos de cada reserva. Sin letra pequeña ni costes ocultos de gestión. Sabes exactamente cuánto cobras cada mes.",
       },
       {
-        title: "Cumplimiento legal 100%",
-        body: "RD 933/2021, Modelo 179, IRNR para no residentes. Lo gestionamos todo. Cero multas y cero sorpresas con Hacienda o Interior.",
+        title: "Cumplimiento documentado",
+        body: "Registro de viajeros integrado (RD 933/2021), preparado para la comunicación a SES.Hospedajes. Preparamos la documentación de las informativas de cesión turística (Modelo 179/238, según normativa vigente) y del IRNR de no residentes para que tu gestoría la presente.",
       },
     ],
     founderTitle: "Quiénes somos",
@@ -62,7 +62,7 @@ const COPY: Record<
     badge: "FOUNDING OWNERS · LIMITED SEATS",
     seatsLeft: "3 founding seats remaining",
     h1: ["Hotel standards", "for your villa."],
-    body: "We're Ángel Molina (8 years at Iberostar + Les Roches MHM) and team. On the Costa del Sol we're building the first villa management at true luxury-hotel level: full transparency, proprietary technology, and 100% legal compliance.",
+    body: "We're Ángel Molina (8 years at Iberostar + Les Roches MHM) and team. On the Costa del Sol we're building the first villa management at true luxury-hotel level: full transparency and proprietary technology.",
     trust: ["8 years Iberostar", "Les Roches MHM", "2 owners in programme"],
     cta: "Book a private call",
     diffs: [
@@ -72,11 +72,11 @@ const COPY: Record<
       },
       {
         title: "Fair, clear commission",
-        body: "One fixed commission on net revenue. No fine print, no hidden management fees. You always know exactly what you earn each month.",
+        body: "A 22% commission on the gross revenue of each booking. No fine print, no hidden management fees. You always know exactly what you earn each month.",
       },
       {
-        title: "100% legal compliance",
-        body: "RD 933/2021, Modelo 179, IRNR for non-residents. We handle everything. Zero fines and zero surprises with Spanish authorities.",
+        title: "Documented compliance",
+        body: "Integrated guest registration (RD 933/2021), ready for reporting to SES.Hospedajes. We prepare the documentation for the tourist-rental informational declarations (Modelo 179/238, as per current regulation) and for non-resident IRNR, so your tax adviser can file it.",
       },
     ],
     founderTitle: "Who we are",
@@ -92,7 +92,7 @@ const COPY: Record<
     badge: "PROPRIÉTAIRES FONDATEURS · PLACES LIMITÉES",
     seatsLeft: "Il reste 3 places fondatrices",
     h1: ["Les standards hôteliers", "pour votre villa."],
-    body: "Nous sommes Ángel Molina (8 ans chez Iberostar + Les Roches MHM) et notre équipe. Sur la Costa del Sol, nous construisons la première gestion de villas au niveau d'un hôtel de luxe : transparence totale et conformité légale à 100%.",
+    body: "Nous sommes Ángel Molina (8 ans chez Iberostar + Les Roches MHM) et notre équipe. Sur la Costa del Sol, nous construisons la première gestion de villas au niveau d'un hôtel de luxe : transparence totale et technologie propriétaire.",
     trust: ["8 ans Iberostar", "Les Roches MHM", "2 propriétaires dans le programme"],
     cta: "Réserver un entretien",
     diffs: [
@@ -102,11 +102,11 @@ const COPY: Record<
       },
       {
         title: "Commission juste et claire",
-        body: "Une commission fixe sur les revenus nets. Sans clause cachée ni frais dissimulés. Vous savez exactement ce que vous percevez chaque mois.",
+        body: "Une commission de 22% sur les revenus bruts de chaque réservation. Sans clause cachée ni frais dissimulés. Vous savez exactement ce que vous percevez chaque mois.",
       },
       {
-        title: "Conformité légale 100%",
-        body: "RD 933/2021, Modèle 179, IRNR pour les non-résidents. Nous gérons tout. Zéro amende avec les autorités espagnoles.",
+        title: "Conformité documentée",
+        body: "Enregistrement des voyageurs intégré (RD 933/2021), prêt pour la communication à SES.Hospedajes. Nous préparons la documentation des déclarations informatives de location touristique (Modelo 179/238, selon la réglementation en vigueur) et de l'IRNR des non-résidents pour que votre cabinet comptable la dépose.",
       },
     ],
     founderTitle: "Qui sommes-nous",
@@ -122,7 +122,7 @@ const COPY: Record<
     badge: "GRÜNDUNGS-EIGENTÜMER · BEGRENZTE PLÄTZE",
     seatsLeft: "Noch 3 Gründerplätze verfügbar",
     h1: ["Hotelstandards", "für Ihre Villa."],
-    body: "Wir sind Ángel Molina (8 Jahre bei Iberostar + Les Roches MHM) und unser Team. An der Costa del Sol bauen wir das erste Villenmanagement auf echtem Luxushotel-Niveau: vollständige Transparenz und 100% rechtliche Konformität.",
+    body: "Wir sind Ángel Molina (8 Jahre bei Iberostar + Les Roches MHM) und unser Team. An der Costa del Sol bauen wir das erste Villenmanagement auf echtem Luxushotel-Niveau: vollständige Transparenz und eigene Technologie.",
     trust: ["8 Jahre Iberostar", "Les Roches MHM", "2 Eigentümer im Programm"],
     cta: "Privates Gespräch buchen",
     diffs: [
@@ -132,11 +132,11 @@ const COPY: Record<
       },
       {
         title: "Faire, klare Provision",
-        body: "Eine feste Provision auf den Nettoumsatz. Kein Kleingedrucktes, keine versteckten Kosten. Sie wissen genau, was Sie verdienen.",
+        body: "Eine Provision von 22% auf den Bruttoerlös jeder Buchung. Kein Kleingedrucktes, keine versteckten Kosten. Sie wissen genau, was Sie verdienen.",
       },
       {
-        title: "100% Rechtskonformität",
-        body: "RD 933/2021, Modell 179, IRNR für Nichtansässige. Wir übernehmen alles. Null Bußgelder mit den spanischen Behörden.",
+        title: "Dokumentierte Compliance",
+        body: "Integrierte Gästeregistrierung (RD 933/2021), vorbereitet für die Meldung an SES.Hospedajes. Wir bereiten die Unterlagen für die Informationserklärungen zur touristischen Vermietung (Modelo 179/238, gemäß geltender Vorschrift) und für die IRNR von Nichtansässigen vor, damit Ihr Steuerberater sie einreichen kann.",
       },
     ],
     founderTitle: "Wer wir sind",

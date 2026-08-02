@@ -17,7 +17,6 @@ import {
   Activity,
   List,
   Building2,
-  Minus,
   Plus,
   Bell,
 } from "lucide-react"
@@ -84,10 +83,8 @@ function SedaOSWindow() {
       {/* Content */}
       <div className="p-5 flex flex-col gap-3 bg-white">
         {/* KPI row */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5">
+        <div className="grid grid-cols-2 gap-2.5">
           {[
-            { l: t("prop.os.kpi.ingresos"), v: "€45.000", d: t("prop.os.kpi.ingresos_d"), up: true },
-            { l: t("prop.os.kpi.ocupacion"), v: "78%",    d: t("prop.os.kpi.ocupacion_d"), up: true },
             { l: t("prop.os.kpi.llegadas"),  v: "3",      d: t("prop.os.kpi.llegadas_d"),  avatars: true },
             { l: t("prop.os.kpi.mant"),      v: "1",      d: t("prop.os.kpi.mant_d"),      warn: true },
           ].map((k) => (
@@ -104,8 +101,8 @@ function SedaOSWindow() {
                   </div>
                 )}
               </div>
-              <p className={`text-[10px] mt-1.5 ${k.up ? "text-[#3a9a64]" : k.warn ? "text-[hsl(var(--gold))]" : "text-muted-foreground"}`}>
-                {k.up && "↗ "}{k.d}
+              <p className={`text-[10px] mt-1.5 ${k.warn ? "text-[hsl(var(--gold))]" : "text-muted-foreground"}`}>
+                {k.d}
               </p>
             </div>
           ))}
@@ -116,13 +113,15 @@ function SedaOSWindow() {
           <div className="bg-white border border-border rounded-xl p-4">
             <p className="font-mono text-[9px] tracking-[0.18em] uppercase text-muted-foreground">{t("prop.os.liq_title")}</p>
             <div className="flex justify-between items-end mt-1.5">
-              <p className="font-serif text-2xl">€ 8.420</p>
+              <p className="font-serif text-2xl">€ 7.984</p>
               <span className="inline-flex items-center gap-1 text-[10px] text-[hsl(var(--olive))]">
                 <Building2 className="h-3 w-3" strokeWidth={1.5} /> {t("prop.os.liq_sepa")}
               </span>
             </div>
             <div className="grid grid-cols-3 gap-2 mt-3">
-              {[[t("prop.os.liq_ingresos"), "€ 10.890"], [t("prop.os.liq_comision"), "− € 1.960"], [t("prop.os.liq_servicios"), "− € 510"]].map(([k, v]) => (
+              {/* Comisión = 22% sobre ingresos brutos (10.890 × 0,22 = 2.395,80 → 2.396).
+                  Neto = 10.890 − 2.396 − 510 = 7.984. Cuadra con el total mostrado arriba. */}
+              {[[t("prop.os.liq_ingresos"), "€ 10.890"], [t("prop.os.liq_comision"), "− € 2.396"], [t("prop.os.liq_servicios"), "− € 510"]].map(([k, v]) => (
                 <div key={k} className="bg-secondary/60 rounded-md px-2.5 py-2">
                   <p className="text-[9px] text-muted-foreground">{k}</p>
                   <p className="font-mono text-[11px] font-semibold mt-0.5">{v}</p>
@@ -218,40 +217,29 @@ function FaqItem({ q, a }: { q: string; a: string }) {
   )
 }
 
-/* -------- Simulador de ingresos -------- */
+/* -------- Simulador de ingresos --------
+   Ubicación, Tipología, Dormitorios y Disponibilidad se han RETIRADO como controles.
+   Los cuatro se guardaban en estado y no entraban en ninguna fórmula: el cálculo solo
+   consume `occ` y `adr`. El caso grave era Disponibilidad — «Solo verano» seguía
+   multiplicando por 365 días y sobrestimaba ×3,97.
+   No se han honrado porque el mapeo opción→días (y opción→ADR/ocupación) no existe en
+   ningún punto del repo; inventarlo es una decisión de negocio, no aritmética. Un input
+   retirado no miente; un input ignorado sí. Ver docs/audit/VERACIDAD-PUBLICA.md §7.9. */
 function Projection() {
   const t = useTranslations()
-  const locOpts = [
-    t("prop.sim.opts.loc1"), t("prop.sim.opts.loc2"), t("prop.sim.opts.loc3"),
-    t("prop.sim.opts.loc4"), t("prop.sim.opts.loc5"), t("prop.sim.opts.loc6"),
-  ]
-  const typeOpts = [t("prop.sim.opts.type1"), t("prop.sim.opts.type2"), t("prop.sim.opts.type3"), t("prop.sim.opts.type4")]
-  const availOpts = [t("prop.sim.opts.avail1"), t("prop.sim.opts.avail2"), t("prop.sim.opts.avail3"), t("prop.sim.opts.avail4")]
-  const [beds, setBeds] = useState(4)
   const [occ, setOcc] = useState(72)
   const [adr, setAdr] = useState(1450)
-  const [loc, setLoc] = useState(locOpts[0])
-  const [propType, setPropType] = useState(typeOpts[0])
-  const [avail, setAvail] = useState(availOpts[0])
 
   const annualGross = Math.round((occ / 100) * 365 * adr)
-  const annualNet = Math.round(annualGross * 0.75)
+  // Comisión pactada: 22% sobre ingresos brutos (seda_os/lib/reserva-financials.ts,
+  // docs/PRICING.md). Antes 0.75, que implicaba un 25% no pactado.
+  const annualNet = Math.round(annualGross * 0.78)
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       {/* Inputs */}
       <div className="bg-background border border-border rounded-2xl p-8 md:p-10">
         <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-muted-foreground">{t("prop.sim.configure")}</p>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-6">
-          <SimSelect label={t("prop.sim.location")} value={loc} onChange={setLoc}
-            options={locOpts} />
-          <SimSelect label={t("prop.sim.type")} value={propType} onChange={setPropType}
-            options={typeOpts} />
-          <SimCounter label={t("prop.sim.bedrooms")} value={beds} onChange={setBeds} min={1} max={10} />
-          <SimSelect label={t("prop.sim.availability")} value={avail} onChange={setAvail}
-            options={availOpts} />
-        </div>
 
         <SimSlider label={t("prop.sim.occupancy")} value={occ} min={20} max={95} suffix="%"
           ticks={[t("prop.sim.occupancy_tick_low"), t("prop.sim.occupancy_tick_high")]} onChange={setOcc} />
@@ -283,19 +271,14 @@ function Projection() {
         <div className="mt-8">
           <p className="font-mono text-[10px] tracking-[0.18em] uppercase text-muted-foreground">{t("prop.sim.net")}</p>
           <p className="font-serif font-light text-5xl md:text-[3.5rem] leading-none mt-1.5 tabular-nums text-[hsl(var(--olive))]">€{annualNet.toLocaleString("es")}</p>
+          {/* La base se enuncia junto al tipo: 22% NO es lo mismo sobre netos que sobre brutos. */}
+          <p className="text-[0.8rem] leading-relaxed text-muted-foreground mt-2">{t("prop.sim.net_note")}</p>
         </div>
 
-        <div className="mt-8 bg-[hsl(var(--olive))] text-background rounded-xl p-5 flex justify-between items-center">
-          <div>
-            <p className="font-mono text-[10px] tracking-[0.18em] uppercase text-[hsl(var(--gold))]">{t("prop.sim.improvement")}</p>
-            <p className="font-serif text-2xl mt-0.5">+24% RevPAR</p>
-          </div>
-          <svg width="64" height="22">
-            <polyline points="0,18 8,15 16,15 24,12 32,10 40,9 48,6 56,4 64,2" fill="none" stroke="hsl(var(--gold))" strokeWidth="1.5" strokeLinecap="round" />
-          </svg>
-        </div>
+        {/* Retirado el bloque «Mejora vs mercado · +24% RevPAR»: no hay compset ni
+            cartera contra la que medir esa mejora. */}
 
-        <p className="text-xs leading-relaxed text-muted-foreground mt-4">
+        <p className="text-xs leading-relaxed text-muted-foreground mt-8">
           {t("prop.sim.disclaimer")}
         </p>
       </div>
@@ -303,34 +286,7 @@ function Projection() {
   )
 }
 
-function SimSelect({ label, value, onChange, options }: { label: string; value: string; onChange: (v: string) => void; options: string[] }) {
-  return (
-    <div>
-      <p className="font-mono text-[10px] tracking-[0.18em] uppercase text-muted-foreground">{label}</p>
-      <select value={value} onChange={(e) => onChange(e.target.value)}
-        className="w-full border border-border rounded-lg px-3 py-2.5 mt-1.5 text-sm bg-background appearance-none">
-        {options.map((o) => <option key={o}>{o}</option>)}
-      </select>
-    </div>
-  )
-}
-
-function SimCounter({ label, value, onChange, min, max }: { label: string; value: number; onChange: (n: number) => void; min: number; max: number }) {
-  return (
-    <div>
-      <p className="font-mono text-[10px] tracking-[0.18em] uppercase text-muted-foreground">{label}</p>
-      <div className="flex items-center justify-between border border-border rounded-lg px-3 py-2 mt-1.5">
-        <button onClick={() => onChange(Math.max(min, value - 1))} className="text-[hsl(var(--olive))]" aria-label="-1">
-          <Minus className="h-4 w-4" strokeWidth={1.5} />
-        </button>
-        <span className="font-serif text-xl">{value}</span>
-        <button onClick={() => onChange(Math.min(max, value + 1))} className="text-[hsl(var(--olive))]" aria-label="+1">
-          <Plus className="h-4 w-4" strokeWidth={1.5} />
-        </button>
-      </div>
-    </div>
-  )
-}
+/* SimSelect y SimCounter eliminados junto con los cuatro controles que no se usaban. */
 
 function SimSlider({ label, value, min, max, step = 1, prefix, suffix, ticks, onChange }: { label: string; value: number; min: number; max: number; step?: number; prefix?: string; suffix?: string; ticks: string[]; onChange: (n: number) => void }) {
   return (
@@ -478,14 +434,10 @@ export default function PropietariosPage() {
                 {t("nav.acceso_propietarios")} <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={1.75} />
               </a>
             </div>
-            <div className="flex gap-6 mt-8 font-mono text-[11px] tracking-[0.14em] text-background/65">
-              <span>{t("prop.hero.stat.revpar")}</span>
-              <span>{t("prop.hero.stat.props")}</span>
-            </div>
-            {/* Citation: turns the stat from marketing claim into a verifiable number */}
-            <p className="font-mono text-[9.5px] tracking-[0.18em] uppercase text-background/45 mt-3 max-w-[44ch] leading-relaxed">
-              {t("prop.hero.citation")}
-            </p>
+            {/* Retirados «+24% RevPAR vs mercado», «14 propiedades en gestión» y la
+                citación «12.480 reservas analizadas»: las tres cifras solo son
+                trazables al prototipo de diseño .tmp/seda4, no a una cartera ni a un
+                compset. Con 2 propietarios en programa no hay base que las sostenga. */}
           </div>
           <SedaOSWindow />
         </div>
@@ -511,26 +463,6 @@ export default function PropietariosPage() {
 
           {/* 12-col bento grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-3.5">
-            {/* Conversión +42% — tall */}
-            <article className="md:row-span-2 bg-background border border-border rounded-2xl p-7 flex flex-col">
-              <p className="font-mono text-[10px] tracking-[0.18em] uppercase text-[hsl(var(--olive))]">{t("prop.marketing.conv_label")}</p>
-              <p className="font-serif font-light text-[clamp(3.5rem,5vw,5rem)] leading-none text-[hsl(var(--olive))] mt-5">
-                +42<span className="text-[hsl(var(--gold))]">%</span>
-              </p>
-              <p className="text-[0.85rem] leading-[1.65] text-muted-foreground mt-3 max-w-[30ch]">
-                {t("prop.marketing.conv_body")}
-              </p>
-              <div className="mt-auto pt-6">
-                <div className="flex items-end gap-1 h-12">
-                  {[20, 28, 24, 32, 38, 35, 42, 48].map((h, i) => (
-                    <div key={i} style={{ height: `${h}%` }}
-                      className={`flex-1 ${i % 2 === 0 ? "bg-[hsl(var(--gold))]" : "bg-[hsl(var(--olive))]"} rounded-sm`} />
-                  ))}
-                </div>
-                <p className="font-mono text-[9px] tracking-[0.14em] uppercase text-muted-foreground mt-2">{t("prop.marketing.conv_range")}</p>
-              </div>
-            </article>
-
             {/* Campañas multilingües */}
             <article className="bg-background border border-border rounded-2xl p-7">
               <div className="flex justify-between items-start">
@@ -576,9 +508,10 @@ export default function PropietariosPage() {
               <p className="text-[0.8rem] text-background/65 mt-2">{t("prop.marketing.pricing_body")}</p>
               <div className="mt-4 p-3 bg-[hsl(var(--gold))]/10 border border-[hsl(var(--gold))]/30 rounded-lg">
                 <p className="font-mono text-[8.5px] tracking-[0.18em] text-[hsl(var(--gold))]">{t("prop.marketing.pricing_suggested")}</p>
+                {/* Retirado «↑ 12% vs baseline»: no hay motor de pricing ni serie
+                    histórica en el repo contra la que medir ese delta. */}
                 <div className="flex justify-between items-baseline mt-1">
                   <span className="font-serif text-2xl">€2.890</span>
-                  <span className="text-[10.5px] text-[#5fbf8e]">{t("prop.marketing.pricing_delta")}</span>
                 </div>
               </div>
             </article>
@@ -599,7 +532,16 @@ export default function PropietariosPage() {
               </p>
             </article>
 
-            {/* SEO alta intención — wide (2 cols) */}
+            {/* Non-Resident — antes de SEO para completar la fila de 3 antes de la tarjeta ancha */}
+            <article className="bg-background border border-border rounded-2xl p-7">
+              <User className="h-5 w-5 text-[hsl(var(--olive))]" strokeWidth={1.5} />
+              <h3 className="font-serif text-[1.35rem] mt-4">{t("prop.marketing.non_resident_h3")}</h3>
+              <p className="text-[0.85rem] leading-[1.65] text-muted-foreground mt-2">
+                {t("prop.marketing.non_resident_body")}
+              </p>
+            </article>
+
+            {/* SEO alta intención — wide (2 cols), última fila */}
             <article className="md:col-span-2 bg-background border border-border rounded-2xl p-7">
               <div className="flex justify-between items-center mb-4">
                 <div className="flex items-center gap-3">
@@ -616,15 +558,6 @@ export default function PropietariosPage() {
                   </div>
                 ))}
               </div>
-            </article>
-
-            {/* Non-Resident */}
-            <article className="bg-background border border-border rounded-2xl p-7">
-              <User className="h-5 w-5 text-[hsl(var(--olive))]" strokeWidth={1.5} />
-              <h3 className="font-serif text-[1.35rem] mt-4">{t("prop.marketing.non_resident_h3")}</h3>
-              <p className="text-[0.85rem] leading-[1.65] text-muted-foreground mt-2">
-                {t("prop.marketing.non_resident_body")}
-              </p>
             </article>
           </div>
         </div>
@@ -824,20 +757,10 @@ export default function PropietariosPage() {
             ))}
           </div>
 
-          {/* stats strip */}
-          <div className="mt-12 p-8 border border-background/10 rounded-2xl grid grid-cols-2 md:grid-cols-4 gap-6">
-            {[
-              [t("prop.arch.stats.uptime"),   t("prop.arch.stats.uptime_v")],
-              [t("prop.arch.stats.rt"),       t("prop.arch.stats.rt_v")],
-              [t("prop.arch.stats.bookings"), t("prop.arch.stats.bookings_v")],
-              [t("prop.arch.stats.langs"),    t("prop.arch.stats.langs_v")],
-            ].map(([k, v]) => (
-              <div key={k}>
-                <p className="font-mono text-[10px] tracking-[0.18em] uppercase text-background/55">{k}</p>
-                <p className="font-serif text-2xl mt-1.5">{v}</p>
-              </div>
-            ))}
-          </div>
+          {/* Strip de stats retirada por completo. Los cuatro valores (99,98% de
+              disponibilidad, «< 2 min» de respuesta, 12.480 reservas procesadas y los
+              idiomas) son el bloque decorativo de .tmp/seda4/page-propietarios.jsx:219.
+              No hay monitorización ni dataset que respalde ninguno. */}
         </div>
       </section>
 
@@ -907,13 +830,12 @@ export default function PropietariosPage() {
             </a>
           </div>
 
-          {/* 4 stats al pie */}
-          <div className="mt-16 pt-8 border-t border-background/18 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-3xl mx-auto">
+          {/* Stats al pie. Retirados «+24% RevPAR» (sin compset) y «100% Cumplimiento
+              legal» (garantía de resultado sobre un gate SES que está en off). */}
+          <div className="mt-16 pt-8 border-t border-background/18 grid grid-cols-2 gap-6 max-w-xl mx-auto">
             {[
               ["48h",  t("prop.final.stats.h_label")],
               ["0€",   t("prop.final.stats.cost_label")],
-              ["+24%", t("prop.final.stats.revpar_label")],
-              ["100%", t("prop.final.stats.compliance_label")],
             ].map(([v, k]) => (
               <div key={k}>
                 <p className="font-serif text-4xl text-[hsl(var(--gold))]">{v}</p>
