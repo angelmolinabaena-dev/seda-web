@@ -19,11 +19,14 @@ export function DashboardMockup() {
     { label: t("home.dashboard.kpi.reservas"), value: "14", sub: t("home.dashboard.kpi.reservas_sub") },
   ]
 
+  // Comisión = 22% sobre ingresos brutos (38.420 × 0,22 = 8.452,40 → 8.452), la tasa
+  // pactada en seda_os/lib/reserva-financials.ts. Antes 6.915, un 18,0% implícito.
+  // Neto = 38.420 − 8.452 − 1.240 = 28.728.
   const liquidacion: ReadonlyArray<readonly [string, string]> = [
     [t("home.dashboard.liquidacion.row1"), "€ 38.420"],
-    [t("home.dashboard.liquidacion.row2"), "− € 6.915"],
+    [t("home.dashboard.liquidacion.row2"), "− € 8.452"],
     [t("home.dashboard.liquidacion.row3"), "− € 1.240"],
-    [t("home.dashboard.liquidacion.row4"), "€ 30.265"],
+    [t("home.dashboard.liquidacion.row4"), "€ 28.728"],
   ] as const
 
   return (

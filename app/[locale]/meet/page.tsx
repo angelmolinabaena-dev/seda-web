@@ -72,7 +72,7 @@ const COPY: Record<
     diffs: [
       {
         title: "Compliance automatizado",
-        body: "RD 933/2021, Modelo 210 trimestral y SES.HOSPEDAJES — gestionados, documentados y listos para tu asesor fiscal.",
+        body: "Registro de viajeros (RD 933/2021) integrado y preparado para SES.HOSPEDAJES. Preparamos y documentamos la información fiscal para que tu asesor la presente.",
       },
       {
         title: "Informe mensual en tu idioma",
@@ -83,7 +83,7 @@ const COPY: Record<
         body: "Contactas directamente conmigo. Tres personas conocerán tu casa personalmente. Nunca habrá una cola de tickets.",
       },
     ],
-    seats: "5 plazas · 3 disponibles · 19% comisión durante 24 meses",
+    seats: "5 plazas · 3 disponibles · 22% de comisión sobre ingresos brutos",
     fallbackTitle: "¿Prefieres escribir primero?",
     fallbackBody: "Escríbeme directamente a:",
     fallbackLink: "angel@sedaprivatehomes.com",
@@ -106,7 +106,7 @@ const COPY: Record<
     diffs: [
       {
         title: "Compliance automation",
-        body: "RD 933/2021 traveler registration, quarterly Modelo 210 documentation and SES.HOSPEDAJES — handled, documented and ready for your accountant.",
+        body: "RD 933/2021 guest registration, integrated and ready for reporting to SES.HOSPEDAJES. We prepare and document the tax information so your accountant can file it.",
       },
       {
         title: "Monthly P&L in your language",
@@ -117,7 +117,7 @@ const COPY: Record<
         body: "You always reach me directly. Three people will know your home personally. There will never be a ticket queue.",
       },
     ],
-    seats: "5 places · 3 remaining · 19% operating fee locked for 24 months",
+    seats: "5 places · 3 remaining · 22% commission on gross revenue",
     fallbackTitle: "Prefer to write first?",
     fallbackBody: "Email me directly at:",
     fallbackLink: "angel@sedaprivatehomes.com",
@@ -140,7 +140,7 @@ const COPY: Record<
     diffs: [
       {
         title: "Conformité automatisée",
-        body: "RD 933/2021, Modèle 210 trimestriel et SES.HOSPEDAJES — gérés, documentés et prêts pour votre conseiller fiscal.",
+        body: "Enregistrement des voyageurs (RD 933/2021) intégré et prêt pour SES.HOSPEDAJES. Nous préparons et documentons les informations fiscales pour que votre conseiller les dépose.",
       },
       {
         title: "Rapport mensuel dans votre langue",
@@ -151,7 +151,7 @@ const COPY: Record<
         body: "Vous me contactez directement. Trois personnes connaîtront votre maison personnellement. Jamais de file d'attente de tickets.",
       },
     ],
-    seats: "5 places · 3 disponibles · 19% de commission pendant 24 mois",
+    seats: "5 places · 3 disponibles · 22% de commission sur les revenus bruts",
     fallbackTitle: "Préférez-vous écrire d'abord ?",
     fallbackBody: "Écrivez-moi directement à :",
     fallbackLink: "angel@sedaprivatehomes.com",
@@ -174,7 +174,7 @@ const COPY: Record<
     diffs: [
       {
         title: "Automatisierte Compliance",
-        body: "RD 933/2021, Modelo 210 quartalsweise und SES.HOSPEDAJES — abgewickelt, dokumentiert und bereit für Ihren Steuerberater.",
+        body: "Gästeregistrierung (RD 933/2021) integriert und vorbereitet für SES.HOSPEDAJES. Wir bereiten die Steuerinformationen auf und dokumentieren sie, damit Ihr Steuerberater sie einreichen kann.",
       },
       {
         title: "Monatlicher Bericht in Ihrer Sprache",
@@ -185,7 +185,7 @@ const COPY: Record<
         body: "Sie erreichen mich direkt. Drei Personen werden Ihr Haus persönlich kennen. Es wird nie eine Ticket-Warteschlange geben.",
       },
     ],
-    seats: "5 Plätze · 3 verfügbar · 19% Provision für 24 Monate",
+    seats: "5 Plätze · 3 verfügbar · 22% Provision auf den Bruttoerlös",
     fallbackTitle: "Möchten Sie lieber zuerst schreiben?",
     fallbackBody: "Schreiben Sie mir direkt an:",
     fallbackLink: "angel@sedaprivatehomes.com",

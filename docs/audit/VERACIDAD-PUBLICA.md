@@ -6,6 +6,13 @@
 **Modelo:** Opus 5 · esfuerzo alto.
 **Auditoría previa:** ninguna. Este es el primer documento de `docs/audit/` en este repo.
 
+> **Estado del registro (actualizado 2026-08-02, rama `claude/seda-commission-guarantees-metrics-740314`):**
+> Ángel ha decidido sobre las entradas `PENDIENTE_ÁNGEL` de §7 y las decisiones están
+> aplicadas. **El cierre ficha por ficha está en §10.** §1–§9 se conservan tal cual
+> quedaron el 2026-08-01: son el estado *previo* a la corrección y sirven de contraste.
+> Ocho de las diez entradas de §7 quedan `RESUELTA`; dos siguen `PENDIENTE_ÁNGEL` con
+> motivo concreto.
+
 > **Criterio aplicado:** una afirmación es `CORRECTO` solo si es reproducible desde
 > el código o desde una fuente primaria citable. «Suena razonable» no es CORRECTO;
 > es `NO_TRAZABLE`. No se ha inventado criterio fiscal en ningún punto: cuando la
@@ -394,6 +401,9 @@ Afirmaciones que prometen un resultado económico o legal concreto sin condicion
 
 ## 7. `PENDIENTE_ÁNGEL`
 
+> **Sección histórica.** Refleja el estado del 2026-08-01. El cierre de cada entrada
+> está en **§10**. Se conserva sin editar para que quede rastro de qué se preguntó.
+
 Ninguna de estas se resuelve sin decisión tuya o sin asesoría contratada.
 
 **Fiscal / normativo — requiere asesoría**
@@ -476,5 +486,132 @@ antes de declarar ausente el `savings-calculator`.
   código ni desde fuente pública, y el propio fichero advierte del riesgo LCD art. 9. Fuera
   del alcance de una auditoría de código.
 - **Credenciales del fundador** (N-12): solo Ángel es fuente.
+
+---
+
+## 10. Cierre del registro — decisiones de Ángel aplicadas
+
+**Fecha:** 2026-08-02 · **Rama:** `claude/seda-commission-guarantees-metrics-740314`
+**Modelo:** Opus 5 · esfuerzo alto.
+
+Cuatro criterios de verdad recibidos por escrito, que gobiernan todo el cierre:
+
+| # | Criterio | Fuente |
+|---|---|---|
+| 1 | La comisión pactada es **22% sobre `importe_bruto`** | `seda_os/lib/reserva-financials.ts`, `seda_os/docs/PRICING.md` |
+| 2 | **SEDA no presta la declaración fiscal.** La lleva una gestoría que factura directamente al propietario | cerrado por escrito el 2026-08-01 |
+| 3 | El **gate SES/RD 933 está en `off`** en producción. Nada se comunica al Ministerio del Interior | estado de producción |
+| 4 | Hay **2 propietarios**. Ninguna métrica de cartera sostiene un porcentaje ni un compset | estado de producción |
+
+Regla aplicada: **lo que no se puede sostener se retira, no se reetiqueta.** Solo se
+reescribe cuando existe una afirmación verdadera y comprobable que ocupe su sitio.
+
+### 10.1 Estado ficha por ficha
+
+| §7 | Ficha | Estado | Decisión aplicada |
+|---|---|---|---|
+| 1 | `Modelo 210 trimestral` (`/meet`) y `reporting fiscal trimestral` (`prop.arch.mod.finanzas.body`) | **`PENDIENTE_ÁNGEL`** | Ver §10.3 |
+| 2 | E-03 · `/founding-owners` cita «Modelo 179» como vigente | **`RESUELTA`** | Alineado con la fórmula cubierta «Modelo 179/238, según normativa vigente» en los 4 idiomas |
+| 3 | E-04 / R-03 · «nuestro equipo fiscal» | **`RESUELTA`** | Retirado en los 4 idiomas. Sustituido por el hecho (criterio 2): SEDA prepara la documentación, la gestoría del propietario presenta |
+| 4 | R-04 · badge «Liquidación IRNR» | **`RESUELTA`** | → «Documentación IRNR». Sin postura sobre retención (gate intacto) |
+| 5 | N-09 · `× 0.75` del simulador (25% implícito) | **`RESUELTA`** | → `× 0.78`. Barrido hecho: no hay ningún otro factor de comisión en constantes |
+| 6 | N-10 · mockup de liquidación al 18% | **`RESUELTA`** | Recalculado al 22%. **Eran dos mockups, no uno** — ver §10.2 |
+| 7 | N-11 · «19% comisión durante 24 meses» | **`RESUELTA`** | → 22% sobre ingresos brutos, 4 idiomas. Ver la advertencia de §10.4 |
+| 8 | §1.2 · base netos vs brutos | **`RESUELTA`** | **Bruto** en todas las superficies, y enunciado explícitamente allí donde se cita el tipo |
+| 9 | E-01 · mapeo `Disponibilidad` → días | **`RESUELTA` por retirada** · abre ficha nueva | Control retirado, no mapeado. El mapeo **no se ha inventado** — sigue siendo decisión tuya (§10.3) |
+| 10 | N-01 a N-08 · métricas de cartera | **`RESUELTA`** | Retiradas. Origen trazado — ver §10.2 |
+
+### 10.2 Las trazas de origen que decidieron «retirar» frente a «reetiquetar»
+
+**Los 12.480 y el 99,98% no son datos de mercado.** Ambos salen del mismo bloque
+decorativo del prototipo de diseño, `.tmp/seda4/page-propietarios.jsx:219-223`
+(commit `aaabde0`), un contador `AnimatedNumber` de cuatro casillas:
+
+```jsx
+["Disponibilidad 2026", <AnimatedNumber to={99.98} decimals={2}/>],
+["Tiempo de respuesta", <>&lt; <AnimatedNumber to={2}/> min</>],
+["Reservas procesadas", <AnimatedNumber to={12480}/>],
+["Idiomas soportados",  "ES · EN · DE · FR"],
+```
+
+No es un dataset de la Costa del Sol analizado por SEDA: es un contador de maqueta al que
+después se le añadió el rótulo «cartera SEDA Q4 2025 vs Costa del Sol compset». Por eso
+**no admite reetiquetado con fuente y fecha** —no hay fuente— y se retira, junto con las
+tres métricas que colgaban de él. El mismo prototipo (`page-home.jsx:92`) es el origen de
+«14 propiedades en gestión», que se retira por idéntico motivo.
+
+El `99,98%` se retira además por su criterio propio: **no hay página de estado, monitor ni
+histórico** en ninguno de los tres repos que lo respalde. Se retiró la strip completa de
+`/propietarios`, no solo el uptime, porque los cuatro valores proceden del mismo bloque de
+maqueta — incluido «Tiempo de respuesta < 2 min».
+
+**Hallazgo nuevo — la auditoría original se dejó un segundo mockup al 18%.** §3/N-10
+localizó `app/[locale]/propietarios/page.tsx` (10.890 / 1.960 → 18,0%), pero
+`components/dashboard-mockup.tsx` —que se renderiza en la **home**, la página de mayor
+tráfico— tenía la misma tasa implícita: 6.915 / 38.420 = 18,0%. Ambos corregidos.
+
+### 10.3 Lo que sigue `PENDIENTE_ÁNGEL`, y por qué
+
+**P-1 · Periodicidad del reporting fiscal (§7.1).** Sigue abierta, sin cambios respecto al
+2026-08-01: exige confirmación contra AEAT/BOE y no hay asesoría contratada. Este PR **sí**
+ha retirado de `/meet` la afirmación de que SEDA gestiona el Modelo 210 (choca con el
+criterio 2), pero `prop.arch.mod.finanzas.body` sigue diciendo «reporting fiscal
+trimestral» en los 4 idiomas. No se toca sin la confirmación normativa: cambiarlo a
+«anual» sería inventar criterio fiscal, que es lo que el encargo prohíbe.
+
+**P-2 · Mapeo temporada → días del simulador (§7.9).** El encargo prohíbe explícitamente
+inventarlo. Se ha tomado la salida 2 (retirar el control) porque el mapeo **no existe en
+ningún punto del repo**: no hay tabla opción→días, ni curva de estacionalidad, ni constante
+de temporada. Honrar la entrada habría exigido inventar cuántos días son «Temporada alta» y
+qué hace «A medida» — decisión de negocio, no aritmética.
+Queda abierta como ficha nueva: si quieres los cuatro controles de vuelta hacen falta
+(a) días/año para `Temporada alta` y `Solo verano`; (b) qué hace `A medida` —lo natural
+sigue siendo deshabilitar la proyección y llevar al formulario—; y (c) si `Ubicación`,
+`Tipología` y `Dormitorios` deben modular ADR u ocupación y con qué coeficientes. Sin
+(a)–(c) documentados, los controles no vuelven.
+
+### 10.4 Dos decisiones que conviene que revises
+
+Ninguna es aritmética; ambas se han resuelto aplicando el criterio recibido, pero cambian
+texto comercial y merecen tu visto bueno explícito.
+
+1. **Se ha eliminado «durante 24 meses» del claim de `/meet`.** El 19% era una condición
+   fundadora promocional sobre el 22%. Al unificar en el 22% pactado, mantener «durante 24
+   meses» habría implicado que la comisión **sube** pasados esos 24 meses — afirmación
+   nueva que nadie ha fijado. El texto queda «22% de comisión sobre ingresos brutos», sin
+   plazo. Si el descuento fundador sigue vivo, debe constar en un documento de pricing
+   citable antes de volver a publicarse.
+
+2. **Redacción nueva en los bloques de cumplimiento** de `/founding-owners` (4 idiomas) y
+   `/meet` (4 idiomas). Describe capacidad, nunca resultado, y respeta el gate SES:
+   «registro de viajeros integrado, **preparado para** la comunicación a SES.Hospedajes»
+   —nunca «comunicamos»— y «preparamos la documentación … **para que tu gestoría la
+   presente**». **Marcada para tu revisión** conforme al encargo.
+
+### 10.5 Afirmaciones adyacentes NO tocadas en este PR
+
+Se dejan constar para que la decisión sea tuya y no por omisión. Ninguna entraba en el
+alcance de este encargo, y todas son del mismo género que lo retirado:
+
+| Afirmación | Fichero | Por qué se señala |
+|---|---|---|
+| «+42%» de conversión en ficha | `propietarios/page.tsx` (hardcoded) | Aparece en el inventario §1.1 sin código `N-`. Sin fuente ni serie histórica |
+| «+12% vs prev.» · «+6 pts vs. mes anterior» | `prop.os.kpi.*`, `home.dashboard.kpi.*` | N-05 y N-06. Van dentro de mockups de dashboard, pero **ninguno está rotulado como ilustrativo** |
+| «Modelo 179/238, según normativa vigente» | 8 apariciones | `CORRECTO` (C-04): formulación cubierta. Se mantiene |
+| Marcado de frescura y fuente (§8) | bloques normativos | Sigue sin aplicarse: P-1 continúa abierta, y sellar como verificado un bloque dudoso es peor que no sellarlo |
+
+### 10.6 Verificación ejecutada
+
+- **Paridad i18n en los 4 idiomas.** `.tmp/check-i18n.mjs` se ha **ampliado en este PR**:
+  antes solo comparaba `es↔en`, de modo que una clave presente en `es` y `en` pero ausente
+  en `fr` o `de` pasaba desapercibida. Ahora toma `es` como referencia, contrasta los otros
+  tres en ambas direcciones y sale con código 1 si hay divergencia. Resultado: **847 claves
+  × 4 idiomas, 0 divergencias** (eran 880: se retiran 34 claves y se añade
+  `prop.sim.net_note`).
+- **Barrido de `%`** sobre las 4 traducciones: no queda ningún tipo de comisión distinto de
+  22. Los únicos `%` restantes son los ticks de ocupación del simulador (20% / 95%).
+- **Render comprobado**, no solo `tsc`: las secciones de las que se retiraron bloques (hero
+  de `/propietarios`, strip de arquitectura, panel del simulador, stats del CTA final, hero
+  de `/guestapp`) se han revisado ya recompuestas.
 </content>
 </invoke>

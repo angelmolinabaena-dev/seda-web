@@ -345,12 +345,7 @@
         "italic": "vollständig unter Kontrolle."
       },
       "body": "SEDA OS ist die eigene Software-Schicht, die Buchungen, Betrieb, Wartung, Marketing und Abrechnungen orchestriert. Kein generisches SaaS. Keine Improvisation.",
-      "image_alt": "Residenz bei Sonnenuntergang mit dem Eigentümerportal",
-      "citation": "Daten · SEDA-Portfolio Q4 2025 vs. Costa del Sol Compset (12.480 analysierte Buchungen)",
-      "stat": {
-        "revpar": "+24% RevPAR ggü. Markt",
-        "props": "14 Immobilien unter Verwaltung"
-      }
+      "image_alt": "Residenz bei Sonnenuntergang mit dem Eigentümerportal"
     },
     "os": {
       "tabs": {
@@ -431,7 +426,6 @@
       "pricing_h3": "Dynamische Preisgestaltung",
       "pricing_body": "Nachfrage, Saisonalität und lokale Ereignisse.",
       "pricing_suggested": "HEUTE EMPFOHLEN",
-      "pricing_delta": "↑ 12% ggü. Referenz",
       "reputation_h3": "Premium-Reputation",
       "reputation_body": "Tadelloses Bewertungsmanagement zur Sicherung des 5★-Status.",
       "seo_h3": "SEO mit hoher Intention",
@@ -464,8 +458,8 @@
           "b": "Vorbereitung der Informationserklärungen zur touristischen Vermietung (Modelo 179/238, gemäß geltender Vorschrift)."
         },
         "irnr": {
-          "t": "IRNR-Abrechnung",
-          "b": "Steuerliche Unterstützung für Nicht-Residenten (Einkommensteuer)."
+          "t": "IRNR-Unterlagen",
+          "b": "Wir bereiten die Unterlagen für Nicht-Residenten für Ihren Steuerberater vor."
         },
         "rgpd": {
           "t": "DSGVO-Konformität",
@@ -524,17 +518,7 @@
           "body": "Ihre Eigentümeransicht: Belegung, Erlöse, Kalender, Dokumente und SEDA-Nachrichten."
         }
       },
-      "module_prefix": "MODUL",
-      "stats": {
-        "uptime": "Verfügbarkeit 2026",
-        "uptime_v": "99,98%",
-        "rt": "Antwortzeit",
-        "rt_v": "< 2 Min.",
-        "bookings": "Verarbeitete Buchungen",
-        "bookings_v": "12.480",
-        "langs": "Unterstützte Sprachen",
-        "langs_v": "ES · EN · DE · FR"
-      }
+      "module_prefix": "MODUL"
     },
     "sim": {
       "eyebrow": "— Erlössimulator",
@@ -544,10 +528,6 @@
       },
       "body": "Passen Sie die Parameter an und entdecken Sie die Auswirkung von SEDA OS auf Ihren jährlichen Ertrag.",
       "configure": "Simulation konfigurieren",
-      "location": "Premium-Lage",
-      "type": "Immobilientyp",
-      "bedrooms": "Schlafzimmer",
-      "availability": "Verfügbarkeit",
       "occupancy": "Erwartete Belegung",
       "occupancy_tick_low": "Konservativ (20%)",
       "occupancy_tick_high": "Optimal (95%)",
@@ -558,24 +538,8 @@
       "projection": "SEDA OS Projektion",
       "gross": "Bruttoerlös Jahr",
       "net": "Netto an Eigentümer",
-      "improvement": "Steigerung ggü. Markt",
-      "disclaimer": "ⓘ Schätzungen auf Basis des historischen Compsets der Costa del Sol 2023–2025 und des SEDA OS-Modells. Vorbehaltlich einer vertraulichen professionellen Bewertung.",
-      "opts": {
-        "loc1": "Marbella Golden Mile",
-        "loc2": "Puerto Banús",
-        "loc3": "Estepona",
-        "loc4": "Casares",
-        "loc5": "Benahavís",
-        "loc6": "Torremolinos",
-        "type1": "Freistehende Villa",
-        "type2": "Penthouse",
-        "type3": "Apartment",
-        "type4": "Cortijo / Finca",
-        "avail1": "Ganzjährig",
-        "avail2": "Hochsaison",
-        "avail3": "Nur Sommer",
-        "avail4": "Nach Maß"
-      }
+      "disclaimer": "ⓘ Schätzung, die ausschließlich auf der von Ihnen eingegebenen Auslastung und ADR beruht: Bruttoerlös = Auslastung × 365 Tage × ADR; netto = brutto − 22% SEDA-Provision. Ohne Steuern, Nebenkosten und Immobilienaufwand. Weder ein Angebot noch eine Ergebnisprognose.",
+      "net_note": "Nach der SEDA-Provision von 22% auf den Bruttoerlös."
     },
     "faq": {
       "eyebrow": "— Häufig gestellte Fragen",
@@ -587,7 +551,7 @@
       "items": {
         "q1": {
           "q": "Welche Provision erhebt SEDA für die Verwaltung meiner Immobilie?",
-          "a": "Wir wenden eine variable Provision auf den Bruttoerlös an, einzeln aufgeführt in jeder monatlichen Abrechnung in SEDA OS. Es gibt keine Festgebühr, keine Onboarding-Kosten und keine Ausstiegsgebühr. Die genaue Provision hängt vom Modell (integrierte Verwaltung, nur Marketing oder Premium-Concierge) ab und wird im Erstvorschlag vereinbart."
+          "a": "Wir erheben eine Provision von 22% auf den Bruttoerlös, einzeln aufgeführt in jeder monatlichen Abrechnung in SEDA OS. Es gibt keine Festgebühr, keine Onboarding-Kosten und keine Ausstiegsgebühr."
         },
         "q2": {
           "q": "Wer betreut die Gäste, und wann?",
@@ -595,11 +559,11 @@
         },
         "q3": {
           "q": "Wie steht es um die steuerlichen Pflichten meiner Immobilie?",
-          "a": "SEDA OS bereitet die Informationserklärungen zur touristischen Vermietung vor (Modelo 179/238, gemäß geltender Vorschrift) und umfasst eine integrierte Gästeregistrierung, vorbereitet für die Meldung an SES.Hospedajes (RD 933/2021). Für Nicht-Residenten (IRNR) bereitet unser Steuerteam die Unterlagen vor und unterstützt Sie bei der Einreichung."
+          "a": "SEDA OS bereitet die Informationserklärungen zur touristischen Vermietung vor (Modelo 179/238, gemäß geltender Vorschrift) und umfasst eine integrierte Gästeregistrierung, vorbereitet für die Meldung an SES.Hospedajes (RD 933/2021). SEDA reicht keine Steuererklärungen im Namen des Eigentümers ein: Wir übergeben die Unterlagen in dem Format, das Ihr Steuerberater benötigt, und Ihr Steuerberater reicht sie ein."
         },
         "q4": {
           "q": "Muss ich für den Beginn in Spanien sein?",
-          "a": "Nein. Der gesamte Prozess (Bewertung, Vertrag, Onboarding, Fotografie, Inseratseinstellung und Betrieb) wird digital unterzeichnet. Mehr als 60% der SEDA-Eigentümer sind Nicht-Residenten. Verträge werden mit qualifizierter digitaler Identifizierung unterzeichnet."
+          "a": "Nein. Der gesamte Prozess (Bewertung, Vertrag, Onboarding, Fotografie, Inseratseinstellung und Betrieb) wird digital unterzeichnet. Verträge werden mit qualifizierter digitaler Identifizierung unterzeichnet."
         },
         "q5": {
           "q": "Kann ich meine Immobilie nutzen, wann ich möchte?",
@@ -626,9 +590,7 @@
       "acceso": "Eigentümer-Login",
       "stats": {
         "h_label": "Bewertung",
-        "cost_label": "Keine Anfangskosten",
-        "revpar_label": "RevPAR ggü. Markt",
-        "compliance_label": "Rechtliche Compliance"
+        "cost_label": "Keine Anfangskosten"
       }
     }
   },
@@ -641,7 +603,6 @@
         "line2": "Aufenthalt in der Hosentasche Ihres Gastes."
       },
       "body": "Von der Ankunft bis zum Check-out lebt jede Anweisung, jeder Code, jede Empfehlung und Anfrage in einer privaten Oberfläche — klar und so gestaltet, dass das Erlebnis nie unterbrochen wird.",
-      "stat": "12.480 über die App koordinierte Aufenthalte im Jahr 2026",
       "cta": {
         "explorar": "Kollektion durchstöbern"
       }
@@ -1219,7 +1180,7 @@
       },
       "q2": {
         "q": "Welche Provisionen gelten?",
-        "a": "Wir arbeiten nach einem integrierten Verwaltungsmodell mit einer Provision auf den Bruttoerlös. Die Struktur passt sich dem Immobilienprofil und dem Ziel des Eigentümers an und ist stets ergebnisorientiert ausgerichtet."
+        "a": "Wir erheben eine Provision von 22% auf den Bruttoerlös jeder Buchung. Keine Festgebühr, keine Onboarding-Kosten, keine Ausstiegsgebühr. Jede monatliche Abrechnung weist die Berechnung aus."
       },
       "q3": {
         "q": "Wie sehe ich meine Erlöse?",

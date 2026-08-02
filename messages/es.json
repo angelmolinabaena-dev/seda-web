@@ -345,12 +345,7 @@
         "italic": "bajo control absoluto."
       },
       "body": "SEDA OS es la capa de software propia que orquesta reservas, operación, mantenimiento, marketing y liquidaciones. Sin SaaS genéricos. Sin improvisación.",
-      "image_alt": "Residencia al atardecer con Portal de Propietarios",
-      "citation": "Datos · cartera SEDA Q4 2025 vs Costa del Sol compset (12.480 reservas analizadas)",
-      "stat": {
-        "revpar": "+24% RevPAR vs mercado",
-        "props": "14 propiedades en gestión"
-      }
+      "image_alt": "Residencia al atardecer con Portal de Propietarios"
     },
     "os": {
       "tabs": {
@@ -431,7 +426,6 @@
       "pricing_h3": "Pricing dinámico",
       "pricing_body": "Demanda, temporalidad y eventos locales.",
       "pricing_suggested": "SUGERIDO HOY",
-      "pricing_delta": "↑ 12% vs baseline",
       "reputation_h3": "Reputación premium",
       "reputation_body": "Gestión impecable de reseñas para mantener el estatus 5★.",
       "seo_h3": "SEO de alta intención",
@@ -464,8 +458,8 @@
           "b": "Preparación de las declaraciones informativas de cesión turística (Modelo 179/238, según normativa vigente)."
         },
         "irnr": {
-          "t": "Liquidación IRNR",
-          "b": "Soporte fiscal para no residentes (Impuesto Renta)."
+          "t": "Documentación IRNR",
+          "b": "Preparamos la documentación de no residentes para su gestoría."
         },
         "rgpd": {
           "t": "Cumplimiento RGPD",
@@ -524,17 +518,7 @@
           "body": "Su vista de propietario: ocupación, ingresos, calendario, documentos y mensajería SEDA."
         }
       },
-      "module_prefix": "MÓDULO",
-      "stats": {
-        "uptime": "Disponibilidad 2026",
-        "uptime_v": "99,98%",
-        "rt": "Tiempo de respuesta",
-        "rt_v": "< 2 min",
-        "bookings": "Reservas procesadas",
-        "bookings_v": "12.480",
-        "langs": "Idiomas soportados",
-        "langs_v": "ES · EN · DE · FR"
-      }
+      "module_prefix": "MÓDULO"
     },
     "sim": {
       "eyebrow": "— Simulador de ingresos",
@@ -544,10 +528,6 @@
       },
       "body": "Ajuste los parámetros y descubra el impacto de SEDA OS en su rentabilidad anual.",
       "configure": "Configurar simulación",
-      "location": "Ubicación premium",
-      "type": "Tipología",
-      "bedrooms": "Dormitorios",
-      "availability": "Disponibilidad",
       "occupancy": "Ocupación esperada",
       "occupancy_tick_low": "Conservador (20%)",
       "occupancy_tick_high": "Óptimo (95%)",
@@ -558,24 +538,8 @@
       "projection": "Proyección SEDA OS",
       "gross": "Ingresos brutos anuales",
       "net": "Neto para el propietario",
-      "improvement": "Mejora vs mercado",
-      "disclaimer": "ⓘ Estimaciones basadas en compset histórico Costa del Sol 2023–2025 y modelo SEDA OS. Sujeto a valoración profesional confidencial.",
-      "opts": {
-        "loc1": "Marbella Golden Mile",
-        "loc2": "Puerto Banús",
-        "loc3": "Estepona",
-        "loc4": "Casares",
-        "loc5": "Benahavís",
-        "loc6": "Torremolinos",
-        "type1": "Villa independiente",
-        "type2": "Ático",
-        "type3": "Apartamento",
-        "type4": "Cortijo / Finca",
-        "avail1": "Todo el año",
-        "avail2": "Temporada alta",
-        "avail3": "Solo verano",
-        "avail4": "A medida"
-      }
+      "disclaimer": "ⓘ Estimación calculada solo con la ocupación y el ADR que usted introduce: ingresos brutos = ocupación × 365 días × ADR; neto = brutos − 22% de comisión SEDA. No incluye impuestos, suministros ni gastos de la propiedad. No es una oferta ni una previsión de resultados.",
+      "net_note": "Tras la comisión SEDA del 22% sobre ingresos brutos."
     },
     "faq": {
       "eyebrow": "— Preguntas frecuentes",
@@ -587,7 +551,7 @@
       "items": {
         "q1": {
           "q": "¿Cuánto cobra SEDA por gestionar mi propiedad?",
-          "a": "Aplicamos una comisión variable sobre los ingresos brutos, que detalla cada liquidación mensual en SEDA OS. No hay cuota fija, ni costes de alta, ni penalizaciones por baja. La comisión exacta depende del régimen (gestión integral, marketing-only, o concierge premium) y se acuerda en la propuesta inicial."
+          "a": "Aplicamos una comisión del 22% sobre los ingresos brutos, detallada en cada liquidación mensual en SEDA OS. No hay cuota fija, ni costes de alta, ni penalizaciones por baja."
         },
         "q2": {
           "q": "¿Quién atiende a los huéspedes y cuándo?",
@@ -595,11 +559,11 @@
         },
         "q3": {
           "q": "¿Qué pasa con la fiscalidad de mi propiedad?",
-          "a": "SEDA OS prepara las declaraciones informativas de cesión turística (Modelo 179/238, según normativa vigente) e incluye registro de viajeros integrado, preparado para la comunicación a SES.Hospedajes (RD 933/2021). Para no residentes (IRNR), nuestro equipo fiscal genera la documentación y le soporta en la presentación."
+          "a": "SEDA OS prepara las declaraciones informativas de cesión turística (Modelo 179/238, según normativa vigente) e incluye registro de viajeros integrado, preparado para la comunicación a SES.Hospedajes (RD 933/2021). SEDA no presenta declaraciones fiscales por cuenta del propietario: entregamos la documentación en el formato que su gestoría necesite, y es su gestoría quien la presenta."
         },
         "q4": {
           "q": "¿Tengo que estar en España para empezar?",
-          "a": "No. Todo el proceso (valoración, contrato, alta, fotografía, listado y operación) se firma digitalmente. Más del 60% de los propietarios SEDA son no residentes. La firma de contratos se realiza con identificación digital y sello cualificado."
+          "a": "No. Todo el proceso (valoración, contrato, alta, fotografía, listado y operación) se firma digitalmente. La firma de contratos se realiza con identificación digital y sello cualificado."
         },
         "q5": {
           "q": "¿Puedo usar mi propiedad cuando quiera?",
@@ -626,9 +590,7 @@
       "acceso": "Acceso propietarios",
       "stats": {
         "h_label": "Valoración",
-        "cost_label": "Sin coste inicial",
-        "revpar_label": "RevPAR vs mercado",
-        "compliance_label": "Cumplimiento legal"
+        "cost_label": "Sin coste inicial"
       }
     }
   },
@@ -641,7 +603,6 @@
         "line2": "en el móvil del huésped."
       },
       "body": "Desde la llegada hasta el check-out, cada instrucción, código, recomendación y solicitud vive dentro de una interfaz privada, clara y diseñada para no interrumpir la experiencia.",
-      "stat": "12.480 estancias coordinadas desde la App en 2026",
       "cta": {
         "explorar": "Explorar Colección"
       }
@@ -1219,7 +1180,7 @@
       },
       "q2": {
         "q": "¿Qué comisiones aplica?",
-        "a": "Trabajamos con un modelo de gestión integral con comisión sobre ingresos brutos. La estructura se adapta al perfil de la propiedad y al objetivo del propietario, y siempre alineada con resultados."
+        "a": "Aplicamos una comisión del 22% sobre los ingresos brutos de cada reserva. Sin cuota fija, sin coste de alta y sin penalización por baja. Cada liquidación mensual detalla el cálculo."
       },
       "q3": {
         "q": "¿Cómo veo mis ingresos?",
