@@ -704,5 +704,79 @@ con razonar el layout desde CSS Grid auto-flow sin levantar el servidor. Ese raz
 orden original dejaba una celda vacía a mitad del bento (fila 2, columna 3). Se detectó al
 levantar `npm run dev` y medir el DOM real, y se corrigió reordenando las tarjetas (arriba).
 Queda como recordatorio de por qué este PR ya no se cierra sin medir en navegador.
+
+### 10.8 Ficha nueva — columna «Cumplimiento» del footer retirada (2026-08-02)
+
+**Retirado:** en `components/footer.tsx`, la columna completa `md:col-span-2
+md:col-start-11` bajo el rótulo `home.footer.cumplimiento` («Cumplimiento» /
+«Compliance» / «Conformité» según idioma), con sus tres `<span>`:
+
+```
+RD 933/2021
+Modelo 179
+VTAR/MA/27.143
+```
+
+**Por qué los tres, y por qué no se reetiqueta (mismo criterio que §10.2/§10.6):**
+
+1. **`VTAR/MA/27.143` es un código inventado**, y además de estar inventado corresponde
+   a la figura equivocada: **VTAR** es la Vivienda Turística en el Ámbito Rústico —suelo
+   rústico—, no la figura que le correspondería a las propiedades que gestiona SEDA. No
+   hay una VTAR real que sustituir: no hay número de registro turístico verificable en
+   ningún fichero del repo ni en `seda_os`.
+2. **`Modelo 179` está derogado** por el RD 117/2024, y **SEDA no lo presenta** —lo
+   presenta la gestoría del propietario, no SEDA (criterio 2 de §10, cerrado por escrito
+   el 2026-08-01). Listarlo bajo «Cumplimiento» sugiere una acreditación de SEDA que no
+   existe en ningún sentido: ni la norma vigente, ni el sujeto que presenta.
+3. **El gate `SEDA_FLAG_SES_RD933` sigue en `off`** en producción — no hay comunicación
+   a SES.Hospedajes / Ministerio del Interior. `RD 933/2021` bajo «Cumplimiento» se lee
+   como «cumplimos esta norma», cuando lo cierto es que el registro de viajeros integrado
+   está construido pero el envío está apagado (mismo gate que gobierna §10.4.2).
+
+Bajo el rótulo «Cumplimiento» los tres se leen como acreditaciones. Ninguna lo es: una es
+inventada y de la figura equivocada, otra cita una norma derogada que además SEDA no
+presenta, y la tercera describe una integración que existe en código pero no está activa
+en producción. **No se sustituyen por nada** — no hay una acreditación real disponible
+que ocupe su sitio; inventar una violaría la misma regla que gobierna el resto de este
+documento.
+
+**Ajuste de rejilla — sin hueco:** la columna de navegación pasa de
+`md:col-span-4 md:col-start-7` a `md:col-span-6 md:col-start-7`, extendiéndose hasta el
+borde derecho del grid de 12 columnas. La columna 6 (entre la marca y la navegación) sigue
+vacía — es el espaciador original entre `col-span-5` y `col-start-7`, no un hueco nuevo.
+
+**i18n:** `home.footer.cumplimiento` retirado en `messages/{es,en,de,fr}.json`.
+Verificado con `grep -rn "footer.cumplimiento"` sobre el repo antes de retirar: el único
+consumidor era `components/footer.tsx` en esta rama. (Hay una copia de `footer.tsx` en
+`.claude/worktrees/seo-geo-mechanical-fixes/`, un *worktree* de git distinto —otra rama,
+otro checkout— que aún referencia la clave; no es parte de esta rama ni de este PR, y no
+se ha tocado.)
+
+**Verificado en navegador — desktop (1280) y móvil (375), midiendo el DOM real:**
+
+Sin pane de navegador visible en esta sesión, `computer.screenshot` y `computer.zoom`
+fallan («the Browser pane is not displayed, so the page is not compositing frames») — no
+hay captura de píxeles posible aquí. En su lugar, verificación por `getBoundingClientRect()`
+sobre el DOM ya renderizado por el dev server (`npm run dev`, puerto 3004), que es
+render real, no razonamiento sobre el código:
+
+- **Ausencia total confirmada:** `document.body.innerText` de la página completa (no solo
+  el footer) escaneado para `Cumplimiento`, `RD 933/2021`, `Modelo 179`, `VTAR` — **0
+  apariciones** de las cuatro cadenas, en desktop y en móvil.
+- **Desktop (1280):** el grid del footer tiene **2 hijos** (antes 3). Columna de marca:
+  `x=80 → 522`. Columna de navegación: `x=648 → 1185`, coincidiendo con el borde derecho
+  del grid (`gridRight=1185`) — **`trailingGapAfterNav = 0px`**. El hueco entre marca y
+  navegación (`127px`, columna 6) es el espaciador preexistente, sin cambios.
+- **Móvil (375):** el grid colapsa a 1 columna (`grid-cols-1`, sin breakpoint `md:`) —
+  marca y navegación apiladas a `w=327px` cada una, sin tercer bloque, sin hueco posible
+  en una sola columna.
+
+**Verificación estática:**
+
+- `npx tsc --noEmit`: limpio.
+- `npx eslint components/footer.tsx`: 0 errores, 0 warnings.
+- `.tmp/check-i18n.mjs`: **837 claves × 4 idiomas, 0 divergencias** (eran 838 tras §10.7;
+  se retira 1: `home.footer.cumplimiento`).
+- `grep` de `VTAR` sobre `app/`, `components/`, `lib/`, `messages/`: 0 apariciones.
 </content>
 </invoke>
