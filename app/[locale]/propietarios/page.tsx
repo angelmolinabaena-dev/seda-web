@@ -532,7 +532,16 @@ export default function PropietariosPage() {
               </p>
             </article>
 
-            {/* SEO alta intención — wide (2 cols) */}
+            {/* Non-Resident — antes de SEO para completar la fila de 3 antes de la tarjeta ancha */}
+            <article className="bg-background border border-border rounded-2xl p-7">
+              <User className="h-5 w-5 text-[hsl(var(--olive))]" strokeWidth={1.5} />
+              <h3 className="font-serif text-[1.35rem] mt-4">{t("prop.marketing.non_resident_h3")}</h3>
+              <p className="text-[0.85rem] leading-[1.65] text-muted-foreground mt-2">
+                {t("prop.marketing.non_resident_body")}
+              </p>
+            </article>
+
+            {/* SEO alta intención — wide (2 cols), última fila */}
             <article className="md:col-span-2 bg-background border border-border rounded-2xl p-7">
               <div className="flex justify-between items-center mb-4">
                 <div className="flex items-center gap-3">
@@ -549,15 +558,6 @@ export default function PropietariosPage() {
                   </div>
                 ))}
               </div>
-            </article>
-
-            {/* Non-Resident */}
-            <article className="bg-background border border-border rounded-2xl p-7">
-              <User className="h-5 w-5 text-[hsl(var(--olive))]" strokeWidth={1.5} />
-              <h3 className="font-serif text-[1.35rem] mt-4">{t("prop.marketing.non_resident_h3")}</h3>
-              <p className="text-[0.85rem] leading-[1.65] text-muted-foreground mt-2">
-                {t("prop.marketing.non_resident_body")}
-              </p>
             </article>
           </div>
         </div>

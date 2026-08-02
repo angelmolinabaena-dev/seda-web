@@ -667,24 +667,42 @@ delta juntos, no solo el delta.
   era exclusiva de los dos KPI retirados.
 - `DashboardMockup`: la fila de KPI pasa de 3 tarjetas (`sm:grid-cols-3`) a 2
   (`sm:grid-cols-2`).
-- Bento de marketing: al retirar la única tarjeta con `md:row-span-2`, el grid de 3
-  columnas queda en flujo automático uniforme (7 tarjetas, ninguna con `row-span`) — sin
-  huecos, sin necesidad de `grid-flow-dense`.
+- Bento de marketing: al retirar la única tarjeta con `md:row-span-2`, quedan 7 tarjetas
+  en un grid de 3 columnas, una de ellas con `md:col-span-2` («SEO alta intención»). El
+  orden original la dejaba en la posición 6, lo que en flujo automático (no `dense`) deja
+  la celda fila-2/col-3 vacía: CSS Grid no rellena hacia atrás sin `grid-flow-dense`. **Se
+  reordenó** — «Non-Resident» pasa delante de «SEO alta intención» — para que la fila 2 se
+  complete con 3 tarjetas normales y la tarjeta ancha quede sola en la última fila (patrón
+  bento habitual), en vez de dejar un hueco a mitad de grid. Verificado con
+  `getBoundingClientRect()` en el navegador, no solo razonado: ver más abajo.
 
-**Verificado, no asumido:**
+**Verificado en navegador, no solo razonado — desktop (1280) y móvil (375):**
 
 - `npx tsc --noEmit`: limpio. (Detectó y forzó corregir una referencia residual a `k.up`
   en `SedaOSWindow` que solo existía para los dos KPI ya retirados.)
-- `npx eslint` sobre los dos ficheros tocados: 0 errores (1 warning preexistente y ajeno,
+- `npx eslint` sobre los ficheros tocados: 0 errores (1 warning preexistente y ajeno,
   `no-img-element`).
+- **Dev server levantado** (`npm run dev`, puerto 3004) y verificado con
+  `getBoundingClientRect()` sobre el DOM real, no solo por lectura de código:
+  - **Home, desktop (1280):** fila de KPI de `DashboardMockup` — 2 tarjetas, mismo ancho
+    (284px c/u), mismo `y`, `grid-template-columns` de 2 pistas. Sin celda vacía.
+  - **`/propietarios`, desktop (1280):** fila de KPI de `SedaOSWindow` — 2 tarjetas
+    (Llegadas hoy / Mantenimiento), mismo ancho (275px c/u), mismo `y`. Bento de
+    marketing tras el reordenamiento — filas 1 y 2 completas con 3 tarjetas cada una
+    (358px c/u, sin huecos intermedios), fila 3 con la tarjeta ancha (732px) sola —
+    hueco solo al final, patrón bento intencional, no a mitad de grid.
+  - **Home y `/propietarios`, móvil (375):** ambos grids colapsan a 1 columna
+    (`grid-cols-1` sin el breakpoint `sm:`/`md:`) — todas las tarjetas apiladas a ancho
+    completo, sin posibilidad de hueco ni desalineación en una sola columna.
 - `grep` de las 9 claves retiradas sobre `app/` y `components/`: 0 referencias residuales.
 - **Paridad i18n**, `.tmp/check-i18n.mjs`: **838 claves × 4 idiomas, 0 divergencias**
   (eran 847 tras §10.6; se retiran 9).
 
-**No verificado en navegador** — sin entorno de preview disponible en esta sesión. La
-composición del grid se razonó desde CSS Grid auto-flow (sin `row-span`/`col-span`
-residual que dependiera de los elementos retirados) y se confirmó por tipos y lint, no por
-captura visual. Si quieres confirmación visual, pide una captura de `/propietarios` y home
-antes de mergear.
+**Nota de sesión anterior, ya superada:** una primera pasada de este apartado se conformó
+con razonar el layout desde CSS Grid auto-flow sin levantar el servidor. Ese razonamiento
+**se equivocó**: asumió que el flujo automático quedaría sin huecos, y no era cierto — el
+orden original dejaba una celda vacía a mitad del bento (fila 2, columna 3). Se detectó al
+levantar `npm run dev` y medir el DOM real, y se corrigió reordenando las tarjetas (arriba).
+Queda como recordatorio de por qué este PR ya no se cierra sin medir en navegador.
 </content>
 </invoke>
