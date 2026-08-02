@@ -745,7 +745,7 @@ export default function PropietariosPage() {
                     ["Expedia",      "Traveler Preferred Award"],
                     ["Orbitz",       "Traveler Preferred Award"],
                   ].map(([org, award]) => (
-                    <div key={award} className="flex items-start gap-3">
+                    <div key={`${org}-${award}`} className="flex items-start gap-3">
                       <Star
                         className="h-3.5 w-3.5 text-[hsl(var(--gold))] mt-0.5 shrink-0"
                         fill="currentColor"
