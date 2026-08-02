@@ -59,7 +59,7 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="md:col-span-4 md:col-start-7">
+        <div className="md:col-span-6 md:col-start-7">
           <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-muted-foreground/60 mb-5">
             {t("home.footer.navegacion")}
           </p>
@@ -73,17 +73,6 @@ export function Footer() {
                 {link.label}
               </Link>
             ))}
-          </div>
-        </div>
-
-        <div className="md:col-span-2 md:col-start-11">
-          <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-muted-foreground/60 mb-5">
-            {t("home.footer.cumplimiento")}
-          </p>
-          <div className="flex flex-col gap-2 font-mono text-[10px] tracking-[0.18em] uppercase text-muted-foreground/65">
-            <span>RD 933/2021</span>
-            <span>Modelo 179</span>
-            <span>VTAR/MA/27.143</span>
           </div>
         </div>
       </div>
