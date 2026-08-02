@@ -5,6 +5,7 @@ import { Menu, X, ArrowUpRight, Lock } from "lucide-react"
 import { useLocale, useTranslations } from "next-intl"
 import { Link, usePathname, useRouter } from "@/i18n/navigation"
 import { LanguageSwitcher } from "@/components/language-switcher"
+import { haySeccionGuias } from "@/lib/guias"
 
 // External app URLs — sourced from seda4/shared.jsx (Claude design reference).
 // Was a real reservation's UUID, exposed in this page's public HTML on every

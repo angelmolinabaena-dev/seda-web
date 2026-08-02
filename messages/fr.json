@@ -12,6 +12,7 @@
     "filosofia": "Philosophie",
     "modelo": "Modèle de gestion",
     "faq": "FAQ",
+    "guias": "Guides",
     "nosotros": "À propos",
     "portal": "Portail",
     "seda_os": "SEDA OS",
@@ -321,6 +322,7 @@
         "propietarios": "Propriétaires",
         "descubre": "Découvrir",
         "faq": "FAQ",
+        "guias": "Guides",
         "contacto": "Contact"
       }
     }
@@ -1257,6 +1259,33 @@
       "contacto": "Contact",
       "help": "Afficher / masquer les raccourcis",
       "esc": "Fermer ce panneau"
+    }
+  },
+  "guias": {
+    "index": {
+      "eyebrow": "— Guides SEDA",
+      "h1": {
+        "line1": "Le cadre légal,",
+        "italic": "expliqué",
+        "line2": "avec clarté."
+      },
+      "intro": "Guides de référence sur le cadre réglementaire de la location touristique sur la Costa del Sol.",
+      "empty_state": "Nous préparons les premiers guides. Revenez bientôt.",
+      "leer_mas": "Lire le guide"
+    },
+    "ficha": {
+      "publicada_el": "Publié le {fecha}",
+      "revisada_el": "Dernière révision : {fecha}",
+      "autor_por": "Par {autor}",
+      "fuentes_titulo": "Sources",
+      "borrador_badge": "Brouillon — non publié",
+      "pendiente": "En attente",
+      "volver": "Retour aux Guides"
+    },
+    "autor": {
+      "eyebrow": "— Auteur",
+      "hechos_titulo": "À propos de {nombre}",
+      "guias_de": "Guides de {nombre}"
     }
   }
 }

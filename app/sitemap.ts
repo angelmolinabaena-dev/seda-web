@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next"
 import { routing } from "@/i18n/routing"
 import { localeUrl, buildAlternates } from "@/lib/seo-urls"
+import { getGuiasPublicadas, haySeccionGuias } from "@/lib/guias"
 
 /*
   Multilingual sitemap with hreflang alternates.
@@ -44,5 +45,31 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // Las 16 entradas `/villa/<slug>` (4 slugs × 4 locales) se retiraron con
   // las cuatro residencias ficticias. Esas URLs ya no se listan aquí y
   // responden 410 desde `proxy.ts` — ver docs/audit/RETIRADA-COLECCION.md §3.
-  return staticRoutes
+
+  // `/guias` — índice y fichas individuales, SOLO si hay al menos una guía
+  // publicada (mismo criterio que el enlace de navegación, `haySeccionGuias`).
+  // Cada guía publicada usa `esPublicable` vía `getGuiasPublicadas` — una
+  // guía en borrador nunca aparece aquí, fail closed.
+  const guiaRoutes: MetadataRoute.Sitemap = haySeccionGuias()
+    ? [
+        ...routing.locales.map((locale) => ({
+          url: localeUrl(locale, "/guias"),
+          lastModified: now,
+          changeFrequency: "weekly" as const,
+          priority: 0.7,
+          alternates: { languages: buildAlternates("/guias") },
+        })),
+        ...getGuiasPublicadas().flatMap((guia) =>
+          routing.locales.map((locale) => ({
+            url: localeUrl(locale, `/guias/${guia.slug}`),
+            lastModified: guia.fechaRevision ?? guia.fechaPublicacion ?? now,
+            changeFrequency: "monthly" as const,
+            priority: 0.6,
+            alternates: { languages: buildAlternates(`/guias/${guia.slug}`) },
+          })),
+        ),
+      ]
+    : []
+
+  return [...staticRoutes, ...guiaRoutes]
 }
