@@ -91,6 +91,8 @@ export function ExperienciasContent() {
                     src={e.image}
                     alt={e.title}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover/card:scale-[1.03]"
+                    loading="lazy"
+                    decoding="async"
                   />
                 </div>
                 <div className="p-7">
@@ -160,6 +162,8 @@ export function ExperienciasContent() {
               src="/villas/journey-despues.jpg"
               alt={t("exp.access.image_alt")}
               className="w-full aspect-[4/5] object-cover"
+              loading="lazy"
+              decoding="async"
             />
           </div>
           <div className="md:col-span-6">

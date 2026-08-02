@@ -153,6 +153,8 @@ function PhoneMockup() {
                   src="/villas/door.jpg"
                   alt=""
                   className="ml-6 w-[calc(100%-1.5rem)] aspect-[16/9] object-cover rounded-lg"
+                  loading="lazy"
+                  decoding="async"
                 />
               </div>
 

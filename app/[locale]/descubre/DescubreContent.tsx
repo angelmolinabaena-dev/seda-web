@@ -51,6 +51,8 @@ export function DescubreContent() {
             src="/villas/about.jpg"
             alt={t("descubre.image_alt")}
             className="w-full aspect-[21/9] object-cover"
+            loading="lazy"
+            decoding="async"
           />
         </div>
       </section>
@@ -168,7 +170,7 @@ export function DescubreContent() {
             {cities.map((c) => (
               <div key={c.name} className="flex flex-col gap-4">
                 <div className="aspect-[3/4] overflow-hidden">
-                  <img src={c.image} alt={c.name} className="w-full h-full object-cover" />
+                  <img src={c.image} alt={c.name} className="w-full h-full object-cover" loading="lazy" decoding="async" />
                 </div>
                 <h3 className="font-serif font-light text-xl md:text-[1.4rem] tracking-tight text-foreground">
                   {c.name}

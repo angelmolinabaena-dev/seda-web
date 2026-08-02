@@ -1,0 +1,22 @@
+# SEDA Private Homes
+
+> Gestión de villas privadas en la Costa del Sol, operada sobre software propio.
+> Hospitalidad mediterránea para huéspedes, transparencia total para propietarios.
+
+SEDA Private Homes opera un ecosistema propio (SEDA OS) para la gestión de
+villas de alquiler vacacional de alta gama en la Costa del Sol (Marbella,
+Estepona, Benahavís, Casares, Málaga). La colección de propiedades abre en
+octubre de 2026.
+
+## Páginas principales
+
+- [Inicio](https://sedaprivatehomes.com/): presentación general y compromisos de servicio.
+- [Colección](https://sedaprivatehomes.com/coleccion): villas gestionadas por SEDA.
+- [Propietarios](https://sedaprivatehomes.com/propietarios): modelo de gestión para propietarios de villas.
+- [Guest App](https://sedaprivatehomes.com/guestapp): app de huésped para la estancia.
+- [Ecosistema SEDA OS](https://sedaprivatehomes.com/ecosistema): software propio de gestión.
+- [Experiencias](https://sedaprivatehomes.com/experiencias): catálogo de experiencias para huéspedes.
+- [FAQ](https://sedaprivatehomes.com/faq): preguntas frecuentes de huéspedes y propietarios.
+- [Contacto](https://sedaprivatehomes.com/contacto): contacto directo con el equipo SEDA.
+
+Disponible en español (por defecto), inglés (`/en`), francés (`/fr`) y alemán (`/de`).
