@@ -30,6 +30,8 @@ export function DualConversion() {
               src="/villas/guest-app-hand.jpg"
               alt={t("home.dual.guest_image_alt")}
               className="w-full h-full object-cover"
+              loading="lazy"
+              decoding="async"
             />
           </div>
           <div className="p-9 md:p-12">
@@ -68,6 +70,8 @@ export function DualConversion() {
               src="/villas/portal-tablet.jpg"
               alt={t("home.dual.owner_image_alt")}
               className="w-full h-full object-cover"
+              loading="lazy"
+              decoding="async"
             />
           </div>
           <div className="p-9 md:p-12">

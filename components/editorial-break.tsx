@@ -35,6 +35,8 @@ export function EditorialBreak() {
             src="/villas/about.jpg"
             alt={t("home.editorial.image_alt")}
             className="w-full aspect-[16/10] object-cover"
+            loading="lazy"
+            decoding="async"
           />
         </div>
         <div
