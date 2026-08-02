@@ -6,8 +6,10 @@ import { useLocale, useTranslations } from "next-intl"
 import { Link, usePathname, useRouter } from "@/i18n/navigation"
 import { LanguageSwitcher } from "@/components/language-switcher"
 
-// External app URLs — sourced from seda4/shared.jsx (Claude design reference)
-const GUEST_APP_URL = "https://guests.sedaprivatehomes.com/villa/apartamento-torremolinos/d1389271-1fbc-4d8a-8bb1-bfc0464d3bfc"
+// External app URLs — sourced from seda4/shared.jsx (Claude design reference).
+// Was a real reservation's UUID, exposed in this page's public HTML on every
+// route. /acceso is the generic sign-in (locator + email), not a specific stay.
+const GUEST_APP_URL = "https://guests.sedaprivatehomes.com/acceso"
 // Owner PORTAL home — was pointing at the internal /admin panel (bounces a
 // prospective owner to an admin login). "/" is the owner-facing portal home.
 const OWNERS_PORTAL_URL = "https://portal.sedaprivatehomes.com/"
