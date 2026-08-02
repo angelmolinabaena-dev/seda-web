@@ -79,3 +79,27 @@ ficheros quedan allí, para poder consolidarlos antes de commitear.
 
 `git branch --show-current` antes de tocar el primer fichero. Crear la rama y olvidarlo
 no deja ninguna senal hasta el push, cuando ya se ha trabajado sobre la rama equivocada.
+
+## Un test en verde no demuestra corrección
+
+Un test escrito por quien escribió el código demuestra consistencia interna,
+no corrección. Si el autor entendió mal la regla, el test ratifica el
+malentendido y pasa en verde para siempre.
+
+Tres casos documentados en este proyecto, todos con la suite en verde:
+
+> - El backlog de `seda_os` leyó código sin ejercitarlo: 25% de fichas
+>   falsas, y 5 de las 8 erróneas ya lo eran el día que se escribieron.
+> - `tests/comparativa-desglose` afirmaba que con `reservas: []` el
+>   comparador debía traer un fee de 275 € sobre 0 € de bruto. No detectaba
+>   el defecto: lo exigía.
+> - `tests/modelo-179-deadline` protegía con 8 tests el cálculo trimestral
+>   de un modelo derogado por el RD 117/2024.
+
+Regla: para afirmar que algo es correcto hay que confrontarlo con una fuente
+externa al código — la norma, el contrato, un número calculado a mano, o una
+consulta a la base de datos. Confrontarlo con otro artefacto escrito en la
+misma sesión no cuenta.
+
+Aplica especialmente a: importes y comisiones, plazos legales, obligaciones
+fiscales, y cualquier cifra que se muestre a un propietario o a un huésped.
