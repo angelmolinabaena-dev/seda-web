@@ -123,3 +123,88 @@ Si `git status --short` no está vacío, **la sesión no ha terminado**. Si `git
 **No afirmes haber hecho commit, push o PR sin haberlo comprobado con estos comandos.** Ocurrió cuatro veces el 2026-08-02: en un caso el trabajo quedó sin commitear en un worktree cuyo nombre no correspondía a la tarea, y solo se descubrió al fallar `gh pr create` con «could not find any commits between origin/main and la rama».
 
 **Sobre los worktrees:** el directorio desde el que arranca la sesión puede no ser el que anuncia, puede desregistrarse a mitad, o ser una copia plana sin `.git` cuyos comandos operan sobre el checkout principal. Comprueba con `git rev-parse --git-dir` antes de tocar nada, y di en el resumen final **desde qué ruta exacta** trabajaste.
+
+## Economía de sesión
+
+El coste dominante de una sesión no son los tokens del prompt: es descubrir a mitad
+del trabajo que la premisa era falsa y tener que relanzar. Relanzar tira todo el
+contexto de código ya leído. Estas reglas están para evitar eso.
+
+### 1 · No crees worktrees
+
+Trabaja en el checkout principal con `git checkout -b`. Nada más.
+
+El 2026-08-04 se eliminaron 53 worktrees entre los tres repos, 27 de ellos huérfanos
+—registrados en disco pero no en git—. Cada uno arrastra su propio `node_modules`
+(~700 MB en guest-app) y, lo que importa más, es un sitio donde una sesión puede
+arrancar creyendo estar aislada mientras sus comandos operan sobre el checkout
+principal. Ya ocurrió: una sesión escribió sobre `main` sin saberlo.
+
+Efecto colateral medido: `npm run lint` en guest-app fallaba con **6.534 errores**
+procedentes de `.claude/worktrees/`, que eslint no ignoraba. El número dependía de
+cuántos worktrees hubiera en local, no del código.
+
+Si crees que necesitas un worktree, no lo crees: dilo en el resumen y explica por qué.
+
+### 2 · Comprueba antes de afirmar una ausencia
+
+Antes de escribir «falta X», «no existe», «queda por hacer», «está vacío» o «hay que
+crear», **compruébalo** con `grep`, un `SELECT`, o `curl` contra producción. Y cita la
+comprobación en la misma frase.
+
+La asimetría que lo explica: «X existe y hace Y en `fichero:línea`» es autoverificante
+—para escribirlo hay que haberlo visto—. «X no existe» no tiene evidencia por
+construcción. Medido en el PR #244 de seda_os: las afirmaciones de tipo «X no existe
+en ninguna parte» salieron **erróneas 7 de 7**.
+
+Si no puedes comprobarlo, escribe «no me consta, habría que verificar con X». Nunca lo
+afirmes.
+
+### 3 · Si el encargo ya está hecho, dilo y para
+
+Un brief puede estar equivocado. Si al empezar descubres que el trabajo ya existe,
+**no lo rehagas y no inventes una tarea sustituta**: verifica que está hecho, pega la
+prueba (commit, PR, `curl` contra producción) y para.
+
+Es la respuesta correcta y ahorra una sesión entera. Ha pasado dos veces y las dos
+veces la sesión acertó al pararse.
+
+### 4 · No hagas trabajo de inventario
+
+Listar ramas, contar ficheros, medir tamaños, comprobar qué existe: eso se resuelve más
+barato fuera de una sesión de código. Si un encargo consiste sobre todo en inventariar,
+dilo en vez de ejecutarlo.
+
+Tu trabajo es escribir código y documentos.
+
+### 5 · Comprobación de arranque
+
+Lo primero de cada sesión, antes de leer nada:
+
+```
+git rev-parse --git-dir
+git rev-parse --show-toplevel
+git branch --show-current
+```
+
+`--git-dir` debe apuntar al repo principal, no a un worktree. Si no coincide con lo que
+el encargo espera, **para y dilo** en vez de trabajar en el sitio equivocado.
+
+### 6 · Cierre
+
+Un encargo termina con el trabajo commiteado, pusheado y con PR abierto. «No mergees»
+no significa «no termines».
+
+Antes de cerrar, ejecuta y pega la salida literal de:
+
+```
+git rev-parse --git-dir
+git rev-parse --show-toplevel
+git branch --show-current
+git status --short
+git log origin/main..HEAD --oneline
+gh pr view --json number,url
+```
+
+Si `git log origin/main..HEAD` sale vacío, no hay commit por mucho que el push diga
+«done».
