@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "node scripts/check-legal-entity.mjs && next build",
+    "check:legal": "node scripts/check-legal-entity.mjs",
     "start": "next start",
     "lint": "eslint .",
     "prepare": "node scripts/setup-hooks.mjs"

@@ -3,6 +3,7 @@
 import { useEffect, useState, type ReactNode } from "react"
 import { ArrowUpRight } from "lucide-react"
 import { useTranslations } from "next-intl"
+import { Link } from "@/i18n/navigation"
 
 type ContactType = "guest" | "owner" | "other"
 
@@ -380,10 +381,30 @@ export function ContactoContent() {
                   </div>
                 )}
 
+                {/*
+                  Aviso de recogida de datos en el punto de recogida. El art.
+                  13 del RGPD exige informar «en el momento en que se obtengan»
+                  los datos: un enlace en el pie no basta si el formulario no
+                  dice nada. No hay casilla de consentimiento a propósito — la
+                  base jurídica es precontractual (art. 6.1.b) e interés
+                  legítimo (art. 6.1.f), no el consentimiento, y una casilla
+                  pediría permiso para algo que no lo necesita. El circuito de
+                  envío no cambia.
+                */}
+                <p className="mt-10 text-[0.8rem] leading-[1.7] text-muted-foreground max-w-[62ch]">
+                  {t("contacto.privacidad.aviso")}{" "}
+                  <Link
+                    href="/privacidad"
+                    className="text-foreground/80 border-b border-border pb-px hover:text-foreground hover:border-foreground/60 transition-colors"
+                  >
+                    {t("contacto.privacidad.enlace")}
+                  </Link>
+                </p>
+
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="group inline-flex items-center gap-3 px-7 py-3.5 mt-10 bg-foreground text-background font-mono text-[11px] tracking-[0.22em] uppercase hover:bg-foreground/90 transition-colors disabled:opacity-60 disabled:cursor-progress"
+                  className="group inline-flex items-center gap-3 px-7 py-3.5 mt-6 bg-foreground text-background font-mono text-[11px] tracking-[0.22em] uppercase hover:bg-foreground/90 transition-colors disabled:opacity-60 disabled:cursor-progress"
                 >
                   {isSubmitting ? (
                     <>

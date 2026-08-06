@@ -1,0 +1,8 @@
+{
+  "_leeme": "Datos que identifican legalmente a quien responde de sedaprivatehomes.com. Están a null porque la S.L.U. no está constituida y estos datos no viven en el repositorio. NO LOS INVENTES: mientras cualquiera de ellos (salvo inscripcionRegistral) siga a null, 'npm run build' falla a propósito y el sitio no se despliega. La explicación completa, campo por campo, está en lib/legal/entity.ts.",
+  "titular": null,
+  "nif": null,
+  "domicilio": null,
+  "proveedorCorreo": null,
+  "inscripcionRegistral": null
+}

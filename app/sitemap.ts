@@ -26,6 +26,11 @@ const STATIC_PATHS = [
   { path: "/nosotros",     priority: 0.75, changeFrequency: "monthly" as const },
   { path: "/descubre",     priority: 0.8,  changeFrequency: "monthly" as const },
   { path: "/faq",          priority: 0.7,  changeFrequency: "monthly" as const },
+  // Páginas legales: indexables (son información pública obligatoria), pero
+  // con la prioridad más baja del sitio — nadie llega a SEDA buscándolas.
+  { path: "/aviso-legal",  priority: 0.2,  changeFrequency: "yearly"  as const },
+  { path: "/privacidad",   priority: 0.2,  changeFrequency: "yearly"  as const },
+  { path: "/cookies",      priority: 0.2,  changeFrequency: "yearly"  as const },
 ]
 
 export default function sitemap(): MetadataRoute.Sitemap {
