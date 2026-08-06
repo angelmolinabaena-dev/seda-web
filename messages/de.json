@@ -850,6 +850,10 @@
         "subject": "Kooperation, Presse, Partner…",
         "message": "Stellen Sie uns Ihren Vorschlag vor."
       }
+    },
+    "privacidad": {
+      "aviso": "Wir verwenden Ihre Angaben ausschließlich, um Ihnen zu antworten. Es gibt keinen Verteiler und keine Weitergabe an Dritte zu kommerziellen Zwecken.",
+      "enlace": "Wie wir Ihre Daten verarbeiten"
     }
   },
   "skip": {
@@ -1286,6 +1290,16 @@
       "eyebrow": "— Autor",
       "hechos_titulo": "Über {nombre}",
       "guias_de": "Leitfäden von {nombre}"
+    }
+  },
+  "legal": {
+    "actualizado": "Zuletzt aktualisiert",
+    "indice": "Auf dieser Seite",
+    "footer_titulo": "Rechtliches",
+    "links": {
+      "aviso": "Impressum",
+      "privacidad": "Datenschutz",
+      "cookies": "Cookies"
     }
   }
 }

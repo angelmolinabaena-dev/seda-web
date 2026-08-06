@@ -33,6 +33,11 @@ export function Footer() {
       : []),
     { label: t("home.footer.links.contacto"),     href: "/contacto" },
   ]
+  const legalLinks = [
+    { label: t("legal.links.aviso"),      href: "/aviso-legal" },
+    { label: t("legal.links.privacidad"), href: "/privacidad" },
+    { label: t("legal.links.cookies"),    href: "/cookies" },
+  ]
   return (
     <footer className="px-6 py-16 md:px-12 lg:px-20 border-t border-border">
       <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8 mb-20">
@@ -84,6 +89,28 @@ export function Footer() {
         <p className="text-[10.5px] leading-relaxed text-muted-foreground/55 max-w-3xl">
           {t("home.footer.disclaimer")}
         </p>
+
+        {/*
+          Enlaces legales — en el pie, presentes en TODAS las rutas porque el
+          Footer se monta en `app/[locale]/layout.tsx`. Es la única forma de
+          cumplir el «acceso permanente, fácil, directo y gratuito» que exige
+          el art. 10.1 de la LSSI: una página legal a la que no se llega desde
+          ninguna parte no cumple nada.
+        */}
+        <nav
+          aria-label={t("legal.footer_titulo")}
+          className="flex flex-wrap items-center gap-x-6 gap-y-2"
+        >
+          {legalLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="font-mono text-[11px] tracking-[0.15em] text-muted-foreground/70 hover:text-foreground transition-colors"
+            >
+              {link.label}
+            </Link>
+          ))}
+        </nav>
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <p className="font-mono text-[11px] tracking-[0.15em] text-muted-foreground/60">
             {t("home.footer.copyright", { year })}
