@@ -62,23 +62,31 @@ en una rama nueva desde `main` y abrir PR.
 ## Worktrees: trabajar en el directorio actual
 
 Claude Code tiende a crear un worktree propio en `.claude/worktrees/`. Eso parte el
-trabajo en dos sitios: el código queda en el worktree y los ficheros sin trackear
-(assets nuevos, SVG, imágenes) siguen en el repo principal, porque **los untracked
-no se propagan a los worktrees**.
+trabajo: el codigo queda en el worktree y los ficheros sin trackear (assets, SVG,
+imagenes) siguen en el repo principal, porque los untracked no se propagan.
 
-Regla: trabajar en el directorio desde el que se lanzó la sesión. Si aun así se crea
-un worktree, **decirlo de forma explícita en el resumen**, indicando ruta y qué
-ficheros quedan allí, para poder consolidarlos antes de commitear.
-
-> Incidente 2026-07-24/25 (`seda-web`, tarea de logo): ocurrió cuatro veces seguidas.
-> Cada vez hubo que copiar a mano `navigation.tsx`, `hero.tsx` y `tailwind.config.ts`
-> desde `.claude/worktrees/seda-web-logo-hero-a494f0` al repo principal antes del
-> commit. Riesgo real: commitear los assets sin el código que los usa, o al revés.
+Regla: trabajar en el directorio desde el que se lanzo la sesion. Si aun asi se crea
+un worktree, decirlo explicitamente en el resumen con la ruta y que ficheros quedan alli.
 
 ## Verificar la rama ANTES de empezar
 
 `git branch --show-current` antes de tocar el primer fichero. Crear la rama y olvidarlo
 no deja ninguna senal hasta el push, cuando ya se ha trabajado sobre la rama equivocada.
+
+## Una sesión por checkout
+
+**Nunca dos sesiones de Claude Code sobre el mismo working copy.** Si hace falta
+paralelismo, cada una en su propio worktree.
+
+Y `git add` siempre con **rutas explícitas**. Nunca `git add .` ni `git add -A`:
+arrastra lo que haya escrito otra sesión, aunque esté a medio hacer.
+
+> Incidente 2026-08-01 (en `guest-app`): dos sesiones compartían
+> `C:\Users\AngelMolina\guest-app`. Una hizo `git add` amplio y se llevó al commit
+> el fichero de test a medio escribir de la otra —`tests/chat-rate-limit.test.ts`,
+> 306 líneas— **sin** el módulo que importaba, que aún no existía. `main` quedó con
+> 15 tests importando un módulo inexistente, y el trabajo acabó en dos PRs
+> duplicados (#124 y #125). No hubo ninguna señal hasta que falló la suite.
 
 ## Un test en verde no demuestra corrección
 
