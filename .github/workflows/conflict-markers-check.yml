@@ -75,3 +75,17 @@ jobs:
             echo "::error::git grep falló con código $STATUS"
             exit "$STATUS"
           fi
+
+  invariants:
+    name: invariantes (reglas compartidas presentes)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Guardarraíl invariantes — presencia de las reglas compartidas
+      # con seda_os y guest-app en este repo. El modo parity (comparación
+      # de contenido entre los tres repos) es local: `npm run invariants:parity`.
+      - name: Invariantes compartidos (presencia)
+        run: node scripts/invariants-check.mjs

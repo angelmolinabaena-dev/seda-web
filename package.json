@@ -8,6 +8,8 @@
     "check:legal": "node scripts/check-legal-entity.mjs",
     "start": "next start",
     "lint": "eslint .",
+    "invariants:check": "node scripts/invariants-check.mjs",
+    "invariants:parity": "node scripts/invariants-check.mjs --parity",
     "prepare": "node scripts/setup-hooks.mjs"
   },
   "dependencies": {
