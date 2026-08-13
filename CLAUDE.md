@@ -73,6 +73,9 @@ un worktree, decirlo explicitamente en el resumen con la ruta y que ficheros que
 `git branch --show-current` antes de tocar el primer fichero. Crear la rama y olvidarlo
 no deja ninguna senal hasta el push, cuando ya se ha trabajado sobre la rama equivocada.
 
+El selector de rama de la app de Claude Code recuerda la última sesión, no `main`.
+Comprobarlo en el desplegable antes de enviar el encargo, no después.
+
 ## Una sesión por checkout
 
 **Nunca dos sesiones de Claude Code sobre el mismo working copy.** Si hace falta
