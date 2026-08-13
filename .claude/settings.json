@@ -8,7 +8,7 @@
     }
   },
   "enabledPlugins": {
-    "seda@seda-private": true
+    "seda@seda-private": false
   },
   "permissions": {
     "deny": [
