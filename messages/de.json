@@ -438,7 +438,7 @@
         },
         "m179": {
           "t": "AEAT-Meldungen",
-          "b": "Vorbereitung der Informationserklärungen zur touristischen Vermietung (Modelo 179/238, gemäß geltender Vorschrift)."
+          "b": "Vorbereitung der von der AEAT geforderten Informationserklärungen zur touristischen Vermietung."
         },
         "irnr": {
           "t": "IRNR-Unterlagen",
@@ -520,9 +520,9 @@
       "cta": "Präzise Bewertung anfragen",
       "projection": "SEDA OS Projektion",
       "gross": "Bruttoerlös Jahr",
-      "net": "Netto an Eigentümer",
-      "disclaimer": "ⓘ Schätzung, die ausschließlich auf der von Ihnen eingegebenen Auslastung und ADR beruht: Bruttoerlös = Auslastung × 365 Tage × ADR; netto = brutto − 22% SEDA-Provision. Ohne Steuern, Nebenkosten und Immobilienaufwand. Weder ein Angebot noch eine Ergebnisprognose.",
-      "net_note": "Nach der SEDA-Provision von 22% auf den Bruttoerlös."
+      "net": "Netto an Eigentümer (OTA – Direkt)",
+      "disclaimer": "ⓘ Schätzung, die ausschließlich auf der von Ihnen eingegebenen Auslastung und ADR beruht: Bruttoerlös = Auslastung × 365 Tage × ADR. Der Nettobetrag wird als Spanne zwischen Direktbuchung (0% Kanalprovision) und OTA wie Airbnb (15%) angezeigt: in beiden Fällen wird die SEDA-Provision von 24% auf den Unterkunftserlös nach Abzug der Kanalprovision berechnet, nie auf den Bruttobetrag. Ohne Steuern, Nebenkosten und Immobilienaufwand. Weder ein Angebot noch eine Ergebnisprognose.",
+      "net_note": "Die 24% gelten nur für den Unterkunftserlös: Wir ziehen zuerst die Provision der Plattform ab. Bezogen auf den vom Gast tatsächlich gezahlten Gesamtbetrag liegt der reale Effekt bei rund 18%. Manche Verwaltungen bewerben einen niedrigeren Prozentsatz auf einer größeren Basis: Fragen Sie immer nach der Berechnungsbasis."
     },
     "faq": {
       "eyebrow": "— Häufig gestellte Fragen",
@@ -534,7 +534,7 @@
       "items": {
         "q1": {
           "q": "Welche Provision erhebt SEDA für die Verwaltung meiner Immobilie?",
-          "a": "Wir erheben eine Provision von 22% auf den Bruttoerlös, einzeln aufgeführt in jeder monatlichen Abrechnung in SEDA OS. Es gibt keine Festgebühr, keine Onboarding-Kosten und keine Ausstiegsgebühr."
+          "a": "Wir erheben eine Provision von 24% auf den Unterkunftserlös, nach Abzug der Plattformprovision (Airbnb, Booking...): nie auf den Bruttobetrag. Bezogen auf den vom Gast tatsächlich gezahlten Gesamtbetrag liegt der reale Effekt bei rund 18%. Einzeln aufgeführt in jeder monatlichen Abrechnung in SEDA OS. Es gibt keine Festgebühr, keine Onboarding-Kosten und keine Ausstiegsgebühr."
         },
         "q2": {
           "q": "Wer betreut die Gäste, und wann?",
@@ -542,7 +542,7 @@
         },
         "q3": {
           "q": "Wie steht es um die steuerlichen Pflichten meiner Immobilie?",
-          "a": "SEDA OS bereitet die Informationserklärungen zur touristischen Vermietung vor (Modelo 179/238, gemäß geltender Vorschrift) und umfasst eine integrierte Gästeregistrierung, vorbereitet für die Meldung an SES.Hospedajes (RD 933/2021). SEDA reicht keine Steuererklärungen im Namen des Eigentümers ein: Wir übergeben die Unterlagen in dem Format, das Ihr Steuerberater benötigt, und Ihr Steuerberater reicht sie ein."
+          "a": "SEDA OS bereitet die von der AEAT geforderten Informationserklärungen zur touristischen Vermietung vor und umfasst eine integrierte Gästeregistrierung, vorbereitet für die Meldung an SES.Hospedajes (RD 933/2021). SEDA reicht keine Steuererklärungen im Namen des Eigentümers ein: Wir übergeben die Unterlagen in dem Format, das Ihr Steuerberater benötigt, und Ihr Steuerberater reicht sie ein."
         },
         "q4": {
           "q": "Muss ich für den Beginn in Spanien sein?",
@@ -1114,7 +1114,7 @@
       },
       "q2": {
         "q": "Welche Provisionen gelten?",
-        "a": "Wir erheben eine Provision von 22% auf den Bruttoerlös jeder Buchung. Keine Festgebühr, keine Onboarding-Kosten, keine Ausstiegsgebühr. Jede monatliche Abrechnung weist die Berechnung aus."
+        "a": "Wir erheben eine Provision von 24% auf den Unterkunftserlös jeder Buchung, nach Abzug der Plattformprovision. Keine Festgebühr, keine Onboarding-Kosten, keine Ausstiegsgebühr. Jede monatliche Abrechnung weist die Berechnung aus."
       },
       "q3": {
         "q": "Wie sehe ich meine Erlöse?",

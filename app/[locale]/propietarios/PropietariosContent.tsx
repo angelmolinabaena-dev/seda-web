@@ -115,15 +115,16 @@ function SedaOSWindow() {
           <div className="bg-white border border-border rounded-xl p-4">
             <p className="font-mono text-[9px] tracking-[0.18em] uppercase text-muted-foreground">{t("prop.os.liq_title")}</p>
             <div className="flex justify-between items-end mt-1.5">
-              <p className="font-serif text-2xl">€ 7.984</p>
+              <p className="font-serif text-2xl">€ 7.766</p>
               <span className="inline-flex items-center gap-1 text-[10px] text-[hsl(var(--olive))]">
                 <Building2 className="h-3 w-3" strokeWidth={1.5} /> {t("prop.os.liq_sepa")}
               </span>
             </div>
             <div className="grid grid-cols-3 gap-2 mt-3">
-              {/* Comisión = 22% sobre ingresos brutos (10.890 × 0,22 = 2.395,80 → 2.396).
-                  Neto = 10.890 − 2.396 − 510 = 7.984. Cuadra con el total mostrado arriba. */}
-              {[[t("prop.os.liq_ingresos"), "€ 10.890"], [t("prop.os.liq_comision"), "− € 2.396"], [t("prop.os.liq_servicios"), "− € 510"]].map(([k, v]) => (
+              {/* Comisión = 24% sobre el alojamiento ya neto de comisión de canal
+                  (reserva-financials.ts). 10.890 × 0,24 = 2.613,60 → 2.614.
+                  Neto = 10.890 − 2.614 − 510 = 7.766. Cuadra con el total mostrado arriba. */}
+              {[[t("prop.os.liq_ingresos"), "€ 10.890"], [t("prop.os.liq_comision"), "− € 2.614"], [t("prop.os.liq_servicios"), "− € 510"]].map(([k, v]) => (
                 <div key={k} className="bg-secondary/60 rounded-md px-2.5 py-2">
                   <p className="text-[9px] text-muted-foreground">{k}</p>
                   <p className="font-mono text-[11px] font-semibold mt-0.5">{v}</p>
@@ -232,10 +233,14 @@ function Projection() {
   const [occ, setOcc] = useState(72)
   const [adr, setAdr] = useState(1450)
 
+  // Fórmula real (seda_os/lib/reserva-financials.ts, docs/PRICING.md v3):
+  // la comisión SEDA (24%) se aplica sobre el alojamiento YA NETO de la
+  // comisión del canal, nunca sobre el bruto. No existe un mix de canal
+  // por defecto en el repo, así que se muestra un rango entre los dos
+  // extremos honestos: reserva directa (0% canal) y OTA tipo Airbnb (15%).
   const annualGross = Math.round((occ / 100) * 365 * adr)
-  // Comisión pactada: 22% sobre ingresos brutos (seda_os/lib/reserva-financials.ts,
-  // docs/PRICING.md). Antes 0.75, que implicaba un 25% no pactado.
-  const annualNet = Math.round(annualGross * 0.78)
+  const netDirect = Math.round(annualGross * (1 - 0.24))
+  const netOTA = Math.round(annualGross * (1 - 0.15) * (1 - 0.24))
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -272,8 +277,10 @@ function Projection() {
 
         <div className="mt-8">
           <p className="font-mono text-[10px] tracking-[0.18em] uppercase text-muted-foreground">{t("prop.sim.net")}</p>
-          <p className="font-serif font-light text-5xl md:text-[3.5rem] leading-none mt-1.5 tabular-nums text-[hsl(var(--olive))]">€{annualNet.toLocaleString("es")}</p>
-          {/* La base se enuncia junto al tipo: 22% NO es lo mismo sobre netos que sobre brutos. */}
+          <p className="font-serif font-light text-4xl md:text-[2.75rem] leading-none mt-1.5 tabular-nums text-[hsl(var(--olive))]">
+            €{netOTA.toLocaleString("es")} – €{netDirect.toLocaleString("es")}
+          </p>
+          {/* La base se enuncia junto al tipo: 24% NO es lo mismo sobre el neto de canal que sobre el bruto. */}
           <p className="text-[0.8rem] leading-relaxed text-muted-foreground mt-2">{t("prop.sim.net_note")}</p>
         </div>
 
