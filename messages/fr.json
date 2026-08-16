@@ -438,7 +438,7 @@
         },
         "m179": {
           "t": "Déclarations AEAT",
-          "b": "Préparation des déclarations informatives de location touristique (Modelo 179/238, selon la réglementation en vigueur)."
+          "b": "Préparation des déclarations informatives de location touristique exigées par l'AEAT."
         },
         "irnr": {
           "t": "Documentation IRNR",
@@ -520,9 +520,9 @@
       "cta": "Demander une évaluation précise",
       "projection": "Projection SEDA OS",
       "gross": "Revenu brut annuel",
-      "net": "Net au propriétaire",
-      "disclaimer": "ⓘ Estimation calculée uniquement à partir du taux d'occupation et de l'ADR que vous saisissez : revenus bruts = occupation × 365 jours × ADR ; net = brut − 22% de commission SEDA. Hors impôts, charges et dépenses de la propriété. Il ne s'agit ni d'une offre ni d'une prévision de résultats.",
-      "net_note": "Après la commission SEDA de 22% sur les revenus bruts."
+      "net": "Net au propriétaire (OTA – direct)",
+      "disclaimer": "ⓘ Estimation calculée uniquement à partir du taux d'occupation et de l'ADR que vous saisissez : revenus bruts = occupation × 365 jours × ADR. Le net est présenté sous forme de fourchette entre une réservation directe (0% de commission de canal) et une OTA type Airbnb (15%) : dans les deux cas, la commission SEDA de 24% s'applique à l'hébergement après déduction de la commission du canal, jamais sur le brut. Hors impôts, charges et dépenses de la propriété. Il ne s'agit ni d'une offre ni d'une prévision de résultats.",
+      "net_note": "Les 24% s'appliquent uniquement à l'hébergement : nous déduisons d'abord la commission de la plateforme. Rapporté au total payé par le voyageur, l'effet réel avoisine 18%. Certaines conciergeries annoncent un pourcentage plus bas appliqué à une base plus large : demandez toujours la base de calcul."
     },
     "faq": {
       "eyebrow": "— Questions fréquentes",
@@ -534,7 +534,7 @@
       "items": {
         "q1": {
           "q": "Quelle commission SEDA applique-t-il pour gérer ma propriété ?",
-          "a": "Nous appliquons une commission de 22% sur les revenus bruts, détaillée dans chaque liquidation mensuelle dans SEDA OS. Pas de frais fixes, pas de coût d'onboarding, pas de pénalité de sortie."
+          "a": "Nous appliquons une commission de 24% sur l'hébergement, après déduction de la commission de la plateforme (Airbnb, Booking...) : jamais sur le brut. Rapporté au total payé par le voyageur, l'effet réel avoisine 18%. Détaillée dans chaque liquidation mensuelle dans SEDA OS. Pas de frais fixes, pas de coût d'onboarding, pas de pénalité de sortie."
         },
         "q2": {
           "q": "Qui s'occupe des voyageurs, et quand ?",
@@ -542,7 +542,7 @@
         },
         "q3": {
           "q": "Qu'en est-il des obligations fiscales sur ma propriété ?",
-          "a": "SEDA OS prépare les déclarations informatives de location touristique (Modelo 179/238, selon la réglementation en vigueur) et inclut un enregistrement des voyageurs intégré, prêt pour la communication à SES.Hospedajes (RD 933/2021). SEDA ne dépose pas de déclarations fiscales pour le compte du propriétaire : nous remettons la documentation dans le format demandé par votre cabinet comptable, qui se charge du dépôt."
+          "a": "SEDA OS prépare les déclarations informatives de location touristique exigées par l'AEAT et inclut un enregistrement des voyageurs intégré, prêt pour la communication à SES.Hospedajes (RD 933/2021). SEDA ne dépose pas de déclarations fiscales pour le compte du propriétaire : nous remettons la documentation dans le format demandé par votre cabinet comptable, qui se charge du dépôt."
         },
         "q4": {
           "q": "Dois-je être en Espagne pour commencer ?",
@@ -1114,7 +1114,7 @@
       },
       "q2": {
         "q": "Quelles commissions s'appliquent ?",
-        "a": "Nous appliquons une commission de 22% sur les revenus bruts de chaque réservation. Pas de frais fixes, pas de coût d'onboarding, pas de pénalité de sortie. Chaque liquidation mensuelle détaille le calcul."
+        "a": "Nous appliquons une commission de 24% sur l'hébergement de chaque réservation, après déduction de la commission de la plateforme. Pas de frais fixes, pas de coût d'onboarding, pas de pénalité de sortie. Chaque liquidation mensuelle détaille le calcul."
       },
       "q3": {
         "q": "Comment consulter mes revenus ?",
