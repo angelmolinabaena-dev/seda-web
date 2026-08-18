@@ -438,7 +438,7 @@
         },
         "m179": {
           "t": "AEAT reporting",
-          "b": "Preparation of the tourist-rental informational declarations (Modelo 179/238, as per current regulation)."
+          "b": "Preparation of the tourist-rental informational declarations required by the AEAT."
         },
         "irnr": {
           "t": "IRNR documentation",
@@ -520,9 +520,9 @@
       "cta": "Request a precise valuation",
       "projection": "SEDA OS projection",
       "gross": "Annual gross revenue",
-      "net": "Net to owner",
-      "disclaimer": "ⓘ Estimate calculated solely from the occupancy and ADR you enter: gross revenue = occupancy × 365 days × ADR; net = gross − SEDA's 22% commission. It excludes taxes, utilities and property expenses. It is not an offer nor a forecast of results.",
-      "net_note": "After SEDA's 22% commission on gross revenue."
+      "net": "Net to owner (OTA – direct)",
+      "disclaimer": "ⓘ Estimate calculated solely from the occupancy and ADR you enter: gross revenue = occupancy × 365 days × ADR. Net is shown as a range between a direct booking (0% channel commission) and an OTA such as Airbnb (15%): in both cases, SEDA's 24% commission applies to the accommodation revenue after the channel's commission, never to the gross. It excludes taxes, utilities and property expenses. It is not an offer nor a forecast of results.",
+      "net_note": "The 24% applies only to the accommodation fee: we deduct the platform's commission first. As a share of what the guest actually pays, the real effect is closer to 18%. Some managers advertise a lower percentage applied to a larger base: always ask for the calculation base."
     },
     "faq": {
       "eyebrow": "— Frequently asked questions",
@@ -534,7 +534,7 @@
       "items": {
         "q1": {
           "q": "How much does SEDA charge to manage my property?",
-          "a": "We apply a 22% commission on gross revenue, itemised in each monthly settlement in SEDA OS. There is no fixed fee, no onboarding cost and no exit penalty."
+          "a": "We apply a 24% commission on the accommodation revenue, after the platform's commission (Airbnb, Booking...): we never charge on the gross. As a share of what the guest actually pays, the real effect is closer to 18%. Itemised in each monthly settlement in SEDA OS. There is no fixed fee, no onboarding cost and no exit penalty."
         },
         "q2": {
           "q": "Who looks after guests, and when?",
@@ -542,7 +542,7 @@
         },
         "q3": {
           "q": "What about the tax obligations on my property?",
-          "a": "SEDA OS prepares the tourist-rental informational declarations (Modelo 179/238, as per current regulation) and includes integrated guest registration, ready for reporting to SES.Hospedajes (RD 933/2021). SEDA does not file tax returns on the owner's behalf: we hand over the documentation in the format your tax adviser requires, and your tax adviser files it."
+          "a": "SEDA OS prepares the tourist-rental informational declarations required by the AEAT and includes integrated guest registration, ready for reporting to SES.Hospedajes (RD 933/2021). SEDA does not file tax returns on the owner's behalf: we hand over the documentation in the format your tax adviser requires, and your tax adviser files it."
         },
         "q4": {
           "q": "Do I need to be in Spain to begin?",
@@ -1114,7 +1114,7 @@
       },
       "q2": {
         "q": "What commissions apply?",
-        "a": "We apply a 22% commission on the gross revenue of each booking. No fixed fee, no onboarding cost and no exit penalty. Every monthly settlement itemises the calculation."
+        "a": "We apply a 24% commission on the accommodation revenue of each booking, after the platform's commission. No fixed fee, no onboarding cost and no exit penalty. Every monthly settlement itemises the calculation."
       },
       "q3": {
         "q": "How do I see my revenue?",
