@@ -29,8 +29,8 @@ const COPY: Record<
   }
 > = {
   es: {
-    badge: "PROPIETARIOS FUNDADORES · PLAZAS LIMITADAS",
-    seatsLeft: "Quedan 3 plazas fundadoras",
+    badge: "PROPIETARIOS FUNDADORES · ALTA GRATUITA LIMITADA",
+    seatsLeft: "Alta gratuita para las 3 primeras firmas directas",
     h1: ["El estándar hotelero", "para tu villa."],
     body: "Somos Ángel Molina (8 años en Iberostar + Les Roches MHM) y equipo. En la Costa del Sol construimos la primera gestión de villas al nivel de un hotel de lujo: transparencia total y tecnología propia.",
     trust: ["8 años Iberostar", "Les Roches MHM", "2 propietarios en programa"],
@@ -42,7 +42,7 @@ const COPY: Record<
       },
       {
         title: "Comisión justa y clara",
-        body: "Una comisión del 22% sobre los ingresos brutos de cada reserva. Sin letra pequeña ni costes ocultos de gestión. Sabes exactamente cuánto cobras cada mes.",
+        body: "Comisión del 24% sobre la base neta del alojamiento: el bruto de la reserva, menos la comisión del canal (Airbnb, Booking...) y la limpieza. Ejemplo: reserva de 1.200 € vía Airbnb, menos 180 € de comisión del canal y 120 € de limpieza → base 900 € → comisión SEDA 216 €. Sin letra pequeña: pide siempre la base de cálculo.",
       },
       {
         title: "Cumplimiento documentado",
@@ -59,8 +59,8 @@ const COPY: Record<
     ctaBtn: "Reservar llamada privada",
   },
   en: {
-    badge: "FOUNDING OWNERS · LIMITED SEATS",
-    seatsLeft: "3 founding seats remaining",
+    badge: "FOUNDING OWNERS · FREE SETUP, LIMITED SLOTS",
+    seatsLeft: "Free setup for the first 3 direct signings",
     h1: ["Hotel standards", "for your villa."],
     body: "We're Ángel Molina (8 years at Iberostar + Les Roches MHM) and team. On the Costa del Sol we're building the first villa management at true luxury-hotel level: full transparency and proprietary technology.",
     trust: ["8 years Iberostar", "Les Roches MHM", "2 owners in programme"],
@@ -72,7 +72,7 @@ const COPY: Record<
       },
       {
         title: "Fair, clear commission",
-        body: "A 22% commission on the gross revenue of each booking. No fine print, no hidden management fees. You always know exactly what you earn each month.",
+        body: "A 24% commission on the net accommodation base: the booking's gross amount, minus the channel commission (Airbnb, Booking...) and the cleaning fee. Example: a €1,200 Airbnb booking, minus €180 channel commission and €120 cleaning → base €900 → SEDA commission €216. No fine print: always ask for the calculation base.",
       },
       {
         title: "Documented compliance",
@@ -89,8 +89,8 @@ const COPY: Record<
     ctaBtn: "Book a private call",
   },
   fr: {
-    badge: "PROPRIÉTAIRES FONDATEURS · PLACES LIMITÉES",
-    seatsLeft: "Il reste 3 places fondatrices",
+    badge: "PROPRIÉTAIRES FONDATEURS · INSCRIPTION OFFERTE LIMITÉE",
+    seatsLeft: "Inscription offerte pour les 3 premières signatures directes",
     h1: ["Les standards hôteliers", "pour votre villa."],
     body: "Nous sommes Ángel Molina (8 ans chez Iberostar + Les Roches MHM) et notre équipe. Sur la Costa del Sol, nous construisons la première gestion de villas au niveau d'un hôtel de luxe : transparence totale et technologie propriétaire.",
     trust: ["8 ans Iberostar", "Les Roches MHM", "2 propriétaires dans le programme"],
@@ -102,7 +102,7 @@ const COPY: Record<
       },
       {
         title: "Commission juste et claire",
-        body: "Une commission de 22% sur les revenus bruts de chaque réservation. Sans clause cachée ni frais dissimulés. Vous savez exactement ce que vous percevez chaque mois.",
+        body: "Commission de 24% sur la base nette de l'hébergement : le montant brut de la réservation, moins la commission du canal (Airbnb, Booking...) et le forfait de ménage. Exemple : une réservation Airbnb de 1 200 €, moins 180 € de commission du canal et 120 € de ménage → base 900 € → commission SEDA 216 €. Sans clause cachée : demandez toujours la base de calcul.",
       },
       {
         title: "Conformité documentée",
@@ -119,8 +119,8 @@ const COPY: Record<
     ctaBtn: "Réserver un appel",
   },
   de: {
-    badge: "GRÜNDUNGS-EIGENTÜMER · BEGRENZTE PLÄTZE",
-    seatsLeft: "Noch 3 Gründerplätze verfügbar",
+    badge: "GRÜNDUNGS-EIGENTÜMER · KOSTENLOSE ANMELDUNG, BEGRENZT",
+    seatsLeft: "Kostenlose Anmeldung für die ersten 3 Direktverträge",
     h1: ["Hotelstandards", "für Ihre Villa."],
     body: "Wir sind Ángel Molina (8 Jahre bei Iberostar + Les Roches MHM) und unser Team. An der Costa del Sol bauen wir das erste Villenmanagement auf echtem Luxushotel-Niveau: vollständige Transparenz und eigene Technologie.",
     trust: ["8 Jahre Iberostar", "Les Roches MHM", "2 Eigentümer im Programm"],
@@ -132,7 +132,7 @@ const COPY: Record<
       },
       {
         title: "Faire, klare Provision",
-        body: "Eine Provision von 22% auf den Bruttoerlös jeder Buchung. Kein Kleingedrucktes, keine versteckten Kosten. Sie wissen genau, was Sie verdienen.",
+        body: "24% Provision auf die Netto-Basis der Unterkunft: der Bruttobetrag der Buchung abzüglich der Kanalprovision (Airbnb, Booking...) und der Reinigungsgebühr. Beispiel: eine Airbnb-Buchung über 1.200 €, abzüglich 180 € Kanalprovision und 120 € Reinigung → Basis 900 € → SEDA-Provision 216 €. Kein Kleingedrucktes: fragen Sie immer nach der Berechnungsgrundlage.",
       },
       {
         title: "Dokumentierte Compliance",
