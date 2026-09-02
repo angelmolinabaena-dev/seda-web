@@ -42,7 +42,7 @@ const COPY: Record<
       },
       {
         title: "Comisión justa y clara",
-        body: "Comisión del 24% sobre la base neta del alojamiento: el bruto de la reserva, menos la comisión del canal (Airbnb, Booking...) y la limpieza. Ejemplo: reserva de 1.200 € vía Airbnb con 120 € de limpieza → base 900 € → comisión SEDA 216 €. Sin letra pequeña: pide siempre la base de cálculo.",
+        body: "Comisión del 24% sobre la base neta del alojamiento: el bruto de la reserva, menos la comisión del canal (Airbnb, Booking...) y la limpieza. Ejemplo: reserva de 1.200 € vía Airbnb, menos 180 € de comisión del canal y 120 € de limpieza → base 900 € → comisión SEDA 216 €. Sin letra pequeña: pide siempre la base de cálculo.",
       },
       {
         title: "Cumplimiento documentado",
@@ -72,7 +72,7 @@ const COPY: Record<
       },
       {
         title: "Fair, clear commission",
-        body: "A 24% commission on the net accommodation base: the booking's gross amount, minus the channel commission (Airbnb, Booking...) and the cleaning fee. Example: a €1,200 Airbnb booking with €120 cleaning → base €900 → SEDA commission €216. No fine print: always ask for the calculation base.",
+        body: "A 24% commission on the net accommodation base: the booking's gross amount, minus the channel commission (Airbnb, Booking...) and the cleaning fee. Example: a €1,200 Airbnb booking, minus €180 channel commission and €120 cleaning → base €900 → SEDA commission €216. No fine print: always ask for the calculation base.",
       },
       {
         title: "Documented compliance",
@@ -102,7 +102,7 @@ const COPY: Record<
       },
       {
         title: "Commission juste et claire",
-        body: "Commission de 24% sur la base nette de l'hébergement : le montant brut de la réservation, moins la commission du canal (Airbnb, Booking...) et le forfait de ménage. Exemple : une réservation Airbnb de 1 200 € avec 120 € de ménage → base 900 € → commission SEDA 216 €. Sans clause cachée : demandez toujours la base de calcul.",
+        body: "Commission de 24% sur la base nette de l'hébergement : le montant brut de la réservation, moins la commission du canal (Airbnb, Booking...) et le forfait de ménage. Exemple : une réservation Airbnb de 1 200 €, moins 180 € de commission du canal et 120 € de ménage → base 900 € → commission SEDA 216 €. Sans clause cachée : demandez toujours la base de calcul.",
       },
       {
         title: "Conformité documentée",
@@ -132,7 +132,7 @@ const COPY: Record<
       },
       {
         title: "Faire, klare Provision",
-        body: "24% Provision auf die Netto-Basis der Unterkunft: der Bruttobetrag der Buchung abzüglich der Kanalprovision (Airbnb, Booking...) und der Reinigungsgebühr. Beispiel: eine Airbnb-Buchung über 1.200 € mit 120 € Reinigung → Basis 900 € → SEDA-Provision 216 €. Kein Kleingedrucktes: fragen Sie immer nach der Berechnungsgrundlage.",
+        body: "24% Provision auf die Netto-Basis der Unterkunft: der Bruttobetrag der Buchung abzüglich der Kanalprovision (Airbnb, Booking...) und der Reinigungsgebühr. Beispiel: eine Airbnb-Buchung über 1.200 €, abzüglich 180 € Kanalprovision und 120 € Reinigung → Basis 900 € → SEDA-Provision 216 €. Kein Kleingedrucktes: fragen Sie immer nach der Berechnungsgrundlage.",
       },
       {
         title: "Dokumentierte Compliance",
