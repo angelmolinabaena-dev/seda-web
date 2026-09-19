@@ -11,6 +11,7 @@
     "keys:check-leak": "node scripts/keys-check-leak.mjs",
     "invariants:check": "node scripts/invariants-check.mjs",
     "invariants:parity": "node scripts/invariants-check.mjs --parity",
+    "invariants:lock": "node scripts/invariants-check.mjs --lock",
     "prepare": "node scripts/setup-hooks.mjs"
   },
   "dependencies": {
