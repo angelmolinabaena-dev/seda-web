@@ -8,6 +8,7 @@
     "check:legal": "node scripts/check-legal-entity.mjs",
     "start": "next start",
     "lint": "eslint .",
+    "test": "vitest run",
     "keys:check-leak": "node scripts/keys-check-leak.mjs",
     "invariants:check": "node scripts/invariants-check.mjs",
     "invariants:parity": "node scripts/invariants-check.mjs --parity",
@@ -75,6 +76,7 @@
     "eslint-config-next": "^16.2.10",
     "postcss": "^8.5",
     "tailwindcss": "^3.4.17",
-    "typescript": "5.7.3"
+    "typescript": "5.7.3",
+    "vitest": "^4.1.11"
   }
 }
