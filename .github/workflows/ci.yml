@@ -1,0 +1,74 @@
+name: CI
+
+# Enchufa al CI lo que el repo ya sabía hacer y nadie llamaba: `check:legal`,
+# `lint`, el typecheck y `next build`. `main` auto-despliega a producción por la
+# integración Vercel <-> GitHub; hasta este workflow, lo único que se
+# interponía era conflict-markers-check.yml (marcadores de merge + presencia de
+# invariantes).
+#
+# ESTE JOB NO BLOQUEA NADA POR SÍ SOLO. Que un PR lo tenga en rojo solo impide
+# el merge si `verify` está en los checks requeridos de la protección de rama /
+# ruleset de `main`, y a fecha de este workflow solo lo está
+# `conflict-markers (marcadores de merge sin resolver)`. Añadirlo es decisión de
+# Ángel en Settings; ver docs/GUARDARRAILES.md.
+#
+# Orden: lo barato y lo que protege un dato serio, primero; el build, el último.
+#
+#   · `check:legal` va antes que el build aunque `npm run build` ya lo incluya
+#     (`node scripts/check-legal-entity.mjs && next build`): así, si falla, se ve
+#     en su propia línea y no enterrado en la salida de `next build`.
+#   · `keys:check-leak` no necesita dependencias, pero va tras `npm ci` para no
+#     desordenar el bloque; cuesta un segundo.
+#   · `tsc --noEmit` se ejecuta porque el repo tiene tsconfig.json y `typescript`
+#     entre las devDependencies. `next build` ya hace su propio typecheck; el
+#     paso propio da el fallo en su línea, igual que check:legal.
+#   · `npm run lint` SIN `--max-warnings 0`: hoy hay 17 warnings en el árbol
+#     versionado (todos `no-img-element` y un `no-unused-vars`). Solo fallan los
+#     errores. Endurecerlo es otro encargo.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: verify (legal + leak-scan + lint + tsc + build)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Identidad legal (check:legal)
+        run: npm run check:legal
+
+      - name: Secret leak heuristic
+        run: npm run keys:check-leak
+
+      - name: Lint (eslint)
+        run: npm run lint
+
+      - name: Typecheck (tsc --noEmit)
+        run: npx tsc --noEmit
+
+      - name: Production build (next build)
+        run: npm run build
