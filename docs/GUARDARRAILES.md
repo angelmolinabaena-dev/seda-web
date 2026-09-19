@@ -11,7 +11,7 @@ puede cerrar; uno que nadie ha escrito, no.
 | Workflow | Job | Qué hace |
 |---|---|---|
 | `conflict-markers-check.yml` | `conflict-markers` | `git grep` de marcadores de merge sin resolver |
-| `conflict-markers-check.yml` | `invariantes` | `invariants-check.mjs`: presencia de las reglas compartidas |
+| `conflict-markers-check.yml` | `invariantes` | `invariants-check.mjs`: presencia de las reglas compartidas **y** huella de su texto (`invariantes.lock.json`) |
 | `ci.yml` | `verify` | `npm ci` → `check:legal` → `keys:check-leak` → `lint` → `tsc --noEmit` → `build` |
 
 ## Tabla comparativa
@@ -22,8 +22,8 @@ puede cerrar; uno que nadie ha escrito, no.
 |---|---|---|---|
 | Marcadores de conflicto | sí | sí | sí |
 | Invariantes: presencia de headings | sí | sí | sí |
-| Invariantes: huella (`checkLock` + `invariantes.lock.json`) | **no** | sí | sí |
-| Invariantes: paridad entre repos (`--parity`) | local | local | local |
+| Invariantes: huella (`checkLock` + `invariantes.lock.json`) | sí | sí | sí |
+| Invariantes: paridad entre repos (`--parity`). `--parity` no lo ejecuta ningún CI y no puede; la paridad real entre repos hoy no la comprueba nadie | local | local | local |
 | Lint en CI | sí (desde `ci.yml`) | sí, con `--max-warnings 0` | sí |
 | `tsc --noEmit` en CI | sí (desde `ci.yml`) | sí | sí |
 | `next build` en CI | sí (desde `ci.yml`) | sí | — (no consta) |
@@ -38,18 +38,21 @@ puede cerrar; uno que nadie ha escrito, no.
 
 ## Lo que este repo NO tiene
 
-1. **Huella de invariantes.** Sin `checkLock` ni `invariantes.lock.json`, el CI
-   solo comprueba que el heading existe, no que su texto siga siendo el acordado.
-   El bug original de guest-app fue exactamente ese: heading presente, contenido
-   mezclado. Encargo aparte.
-2. **`--parity` en CI.** Compara los tres repos y en CI solo hay uno; es local
-   por construcción. Nada avisa si divergen hasta que alguien lo corre a mano.
-3. **Tests.** `git ls-files | grep -cE '\.(test|spec)\.'` → 0. `verify` prueba
+1. **Paridad real entre repos.** La huella (`invariantes.lock.json`) comprueba
+   que el `CLAUDE.md` de este repo sigue diciendo lo acordado, pero **el lock
+   mismo se copia a mano** a los tres repos: quien cambie un texto y regenere el
+   lock en un solo repo se queda verde, y los otros dos también, hasta que alguien
+   copie el fichero. `--parity` es local por construcción (compara directorios
+   hermanos; en CI solo hay un checkout), así que **no lo ejecuta ningún CI y no
+   puede; la paridad real entre repos hoy no la comprueba nadie**. El arreglo de
+   fondo —que cada CI verifique la huella del otro repo por HTTP, patrón
+   puntero→digest— es un encargo aparte.
+2. **Tests.** `git ls-files | grep -cE '\.(test|spec)\.'` → 0. `verify` prueba
    que el sitio compila, pasa lint y conserva la identidad legal; no prueba que
    nada funcione. Este encargo enchufó gates, no escribió cobertura.
-4. **`lint` sin `--max-warnings 0`.** Hoy hay 17 warnings en el árbol versionado
+3. **`lint` sin `--max-warnings 0`.** Hoy hay 17 warnings en el árbol versionado
    (`no-img-element` y un `no-unused-vars`). Solo los errores rompen.
-5. **Escáner de credenciales solo heurístico.** No sustituye a `gitleaks` ni
+4. **Escáner de credenciales solo heurístico.** No sustituye a `gitleaks` ni
    `trufflehog`; no mira el historial de git, solo el árbol.
 
 ## Lo que depende de una decisión de Ángel

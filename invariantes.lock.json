@@ -1,0 +1,25 @@
+{
+  "_comentario": [
+    "Huella de los invariantes compartidos por seda_os, guest-app y seda-web.",
+    "Este fichero debe ser BYTE A BYTE IDENTICO en los tres repos: es el",
+    "unico modo de que cada CI, que solo ve su propio checkout, compruebe que",
+    "su CLAUDE.md sigue diciendo lo acordado.",
+    "",
+    "No se edita a mano. Se regenera con `npm run invariants:lock` y se copia",
+    "igual a los otros dos repos, en el mismo PR o en uno inmediato.",
+    "",
+    "sha256 (16 hex) del texto de cada seccion `## `, tras normalizar",
+    "whitespace con normalize() de scripts/invariants-check.mjs."
+  ],
+  "invariantes": {
+    "## Base de datos — Claude Code NUNCA escribe": "81f36a0fbd3eb386",
+    "## Ramas: siempre desde main actualizado": "0278929e26573781",
+    "## Merge": "edc31c0125e4802d",
+    "## Worktrees: trabajar en el directorio actual": "f8dde7b7e91f4aed",
+    "## Verificar la rama ANTES de empezar": "2ad3b9aaee755d84",
+    "## Una sesión por checkout": "b4c49b7536c53b10",
+    "## Un test en verde no demuestra corrección": "e3e45c3394232bdf",
+    "## «No mergees» no significa «no termines»": "f6c89ffb816c200e",
+    "## Economía de sesión": "2b09916ae21ee7bf"
+  }
+}
