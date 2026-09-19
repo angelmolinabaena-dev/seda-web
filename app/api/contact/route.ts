@@ -51,7 +51,19 @@ const EMAIL_RE =
   /^[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]+)*@[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?)+$/
 
 // Explicit belt-and-braces list of header/recipient separators.
-const FORBIDDEN_IN_EMAIL = /[,;<>\s"'()[\]:\\]/
+//
+// El apóstrofo NO está en esta lista, y no es un olvido. No es separador de
+// cabecera ni de destinatario —esos son la coma, el punto y coma, `<`, `>`,
+// `:` y el espacio, que siguen todos prohibidos— y EMAIL_RE sí lo permite,
+// como manda el RFC 5322. Estuvo aquí hasta el 20-sep-2026 sin que lo pidiera
+// ningún encargo (SEDA-WEB-CONTACT-HARDENING §1 pedía «comas, punto y coma,
+// saltos de línea, espacios»), y su efecto medido era rechazar apellidos
+// reales: o'brien@gmail.com y d'angelo@libero.it rebotaban con 400.
+//
+// Es inocuo en todos los destinos del valor: va como texto entre <td>…</td>,
+// nunca dentro de un atributo, y `reply_to` viaja como campo JSON a Resend.
+// tests/contact-route.test.ts lo fija en las dos direcciones.
+const FORBIDDEN_IN_EMAIL = /[,;<>\s"()[\]:\\]/
 
 function isValidEmail(value: string) {
   if (value.length === 0 || value.length > MAX_EMAIL_LENGTH) return false
