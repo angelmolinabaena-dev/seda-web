@@ -1,0 +1,47 @@
+{
+  "_comentario": [
+    "Lo que seda_os, guest-app y seda-web deben decir IGUAL, con su huella (sha256, 16 hex) y los repos donde vive cada cosa.",
+    "Se regenera con `node scripts/compartidos-check.mjs --lock`; no se edita a mano.",
+    "El check recalcula TODO lo que declara, solo para los elementos cuyo universo incluye el repo; lo que no se pudiera recalcular no entra.",
+    "Este fichero debe ser byte a byte el mismo en los tres repos: el barrido programado lo compara.",
+    "NO entran, a proposito: los guardarrailes que solo tiene un repo (23 solo en seda_os,",
+    "2 solo en guest-app). Son propios, no un olvido."
+  ],
+  "compartidos": {
+    "tabla PATTERNS de keys-check-leak": {
+      "porQue": "Qué secretos caza el escáner de fugas: si un repo aprende una clave que el otro no, uno queda ciego en silencio (guest-app tuvo 9 patrones contra 17 hasta el #373, 19-sep-2026). Medido el 20-sep-2026: los diecisiete pares nombre+regex son idénticos en los tres repos.",
+      "repos": [
+        "seda_os",
+        "guest-app",
+        "seda-web"
+      ],
+      "huella": "6d500467a65a845a"
+    },
+    "scripts/health-check.mjs": {
+      "porQue": "Es el mismo humo contra /api/health en seda_os y guest-app. Se hashea el código sin comentarios (17 líneas: ruta, variable, códigos de salida 1 y 2), no el fichero: la cabecera difiere a propósito —cada repo nombra su dominio, y la de guest-app documenta salud-produccion.yml—. Medido el 20-sep-2026: ficheros de 25 y de 27 líneas, código idéntico. seda-web no lo tiene ni lo necesita: no publica /api/health.",
+      "repos": [
+        "seda_os",
+        "guest-app"
+      ],
+      "huella": "3dfb6fc5c6a5f5e0"
+    },
+    "invariantes.lock.json": {
+      "porQue": "Es la huella de los invariantes de CLAUDE.md y solo sirve si es byte a byte la misma en todos. Medido el 20-sep-2026: idéntica en los tres (guest-app#376 y seda-web#59, del 19-sep-2026, la portaron).",
+      "repos": [
+        "seda_os",
+        "guest-app",
+        "seda-web"
+      ],
+      "huella": "097b752ae90b0def"
+    },
+    ".gitattributes: scripts/*.mjs text eol=lf": {
+      "porQue": "Un shebang con CRLF rompe el import de un script bajo vitest en Windows (costó guest-app#374). Medido el 20-sep-2026: la línea está en los tres; seda-web no la tuvo hasta seda-web#61 (20-sep-2026), con su CI ya importando invariants-check.mjs.",
+      "repos": [
+        "seda_os",
+        "guest-app",
+        "seda-web"
+      ],
+      "huella": "2117c46403807840"
+    }
+  }
+}
