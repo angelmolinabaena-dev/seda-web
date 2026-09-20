@@ -13,6 +13,8 @@
     "invariants:check": "node scripts/invariants-check.mjs",
     "invariants:parity": "node scripts/invariants-check.mjs --parity",
     "invariants:lock": "node scripts/invariants-check.mjs --lock",
+    "compartidos:check": "node scripts/compartidos-check.mjs",
+    "compartidos:lock": "node scripts/compartidos-check.mjs --lock",
     "prepare": "node scripts/setup-hooks.mjs"
   },
   "dependencies": {
