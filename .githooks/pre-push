@@ -2,19 +2,28 @@
 # Pre-push hook: refuse to push directly to `main`.
 #
 # `main` auto-deploys to production via the Vercel <-> GitHub
-# integration. This repo is private on the GitHub Free plan — branch
-# protection (and rulesets, same boundary) is only available on public
-# repos with Free, or on private repos with Pro/Team/Enterprise. There
-# is no server-side gate stopping `git push origin main` today, and
-# there won't be one without paying for it.
+# integration.
 #
-# This hook is the client-side substitute. It costs nothing, but it's
-# also only a local check: it doesn't run for anyone who hasn't had
-# `npm install` wire up core.hooksPath (see scripts/setup-hooks.mjs),
+# This hook is NOT the gate. The gate is server-side: as of 2026-09-20
+# this repo is public and `main` has an active GitHub ruleset named
+# `web` (it requires a PR; read with the GitHub API on 2026-09-19 and
+# 2026-09-20 — not reproducible from a checkout without `gh` auth).
+# Per docs/GUARDARRAILES.md the ruleset has no bypass_actors, but the
+# classic branch protection has enforce_admins=false, so whether an
+# admin's direct push is refused server-side is not promised here.
+#
+# What this hook adds is a local shortcut: it stops the push here,
+# before the round trip to GitHub and before a rejection you then have
+# to read. It is a shortcut, not a substitute for anything.
+#
+# Known gaps that nobody covers today: it doesn't run for anyone who
+# hasn't had `npm install` wire up core.hooksPath (the `prepare` script,
+# scripts/setup-hooks.mjs; a fresh clone before install has nothing),
 # and it never sees a PR merge — `gh pr merge` / the "Merge pull
-# request" button are API calls, no hook involved there. See
-# .github/workflows/main-push-guard.yml for the detective half that
-# covers those two gaps after the fact.
+# request" button are API calls, no hook involved. A detective workflow
+# for those two (main-push-guard.yml) existed and was retired on
+# 2026-08-09 (d4481f4, #43) because the server-side protection does the
+# job; it is not being restored.
 #
 # The real flow is: open a PR, then `gh pr merge --squash`.
 #
@@ -30,9 +39,8 @@ while read -r local_ref local_sha remote_ref remote_sha; do
     echo "✗ pre-push: refusing to push to main" >&2
     echo "" >&2
     echo "  main auto-deploys to production (Vercel <-> GitHub integration)." >&2
-    echo "  This repo has no server-side branch protection — private repo" >&2
-    echo "  on the GitHub Free plan, which requires Pro/Team/Enterprise" >&2
-    echo "  for that on private repos." >&2
+    echo "  The ruleset 'web' on main also requires a PR; this local check" >&2
+    echo "  just saves you the trip to GitHub." >&2
     echo "" >&2
     echo "  Open a PR instead:  gh pr create ...  then  gh pr merge --squash" >&2
     echo "" >&2
