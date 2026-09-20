@@ -83,21 +83,27 @@ describe("/api/contact — validación del email (isValidEmail)", () => {
   })
 
   /*
-    ESTOS DOS SON EL HALLAZGO, no una decisión de diseño. EMAIL_RE permite el
-    apóstrofo (`'` está en su clase de caracteres) y FORBIDDEN_IN_EMAIL lo
-    prohíbe; gana la segunda. El encargo original (SEDA-WEB-CONTACT-HARDENING §1)
-    pedía rechazar «comas, punto y coma, saltos de línea, espacios» — el
-    apóstrofo lo añadió quien implementó. Hoy el veredicto es RECHAZA.
-    Si esto se pone rojo alguien ha tocado FORBIDDEN_IN_EMAIL: bien, decidido
-    conscientemente → cambia el veredicto aquí.
+    LOS DOS APELLIDOS — el hallazgo del 19-sep, ya corregido.
+
+    EMAIL_RE permite el apóstrofo (está en su clase de caracteres, RFC 5322) y
+    FORBIDDEN_IN_EMAIL lo prohibía: ganaba la segunda y estos dos rebotaban con
+    400. Nadie lo había pedido — SEDA-WEB-CONTACT-HARDENING §1 pedía rechazar
+    «comas, punto y coma, saltos de línea, espacios».
+
+    Se retiró de la lista el 20-sep-2026. Medido antes de decidir: al quitarlo,
+    los otros 54 tests siguieron verdes, incluido el de la inyección de
+    destinatario (lead@…,attacker@…), que es lo que el hardening protegía.
+
+    Si esto se pone rojo, alguien ha vuelto a meter el apóstrofo en
+    FORBIDDEN_IN_EMAIL. No lo des por bueno: lee el comentario de route.ts.
   */
   it.each(["o'brien@gmail.com", "d'angelo@libero.it"])(
-    "HOY rechaza %s (apellido con apóstrofo: contradicción EMAIL_RE vs FORBIDDEN_IN_EMAIL)",
+    "acepta %s (apellido con apóstrofo)",
     async (email) => {
       const { POST } = await loadRoute()
       const res = await POST(contactRequest({ email }, { "x-forwarded-for": freshIp() }))
-      expect(res.status).toBe(400)
-      expect(await res.json()).toEqual({ ok: false, error: "invalid_email" })
+      expect(res.status).toBe(200)
+      expect(await res.json()).toEqual({ ok: true, mode: "mock" })
     },
   )
 
