@@ -39,8 +39,8 @@
  * fichero. Lo que se gana: que sincronizar sea «copiar un fichero de 1 KB» y no
  * «reconciliar código en dos sitios», y que quien toque el elemento SIN
  * regenerar —el caso frecuente— se ponga rojo en su propio CI en el acto. Lo
- * único que compara repos de verdad es el barrido programado
- * (`docs/pendiente-instalar/paridad-locks.yml`, pendiente de instalar).
+ * único que compara repos de verdad es el barrido programado de seda_os
+ * (`.github/workflows/salud-sistema.yml`, job `barrido`, cada 6 h).
  *
  * Uso: node scripts/compartidos-check.mjs                    # comprueba
  *      node scripts/compartidos-check.mjs --repo=guest-app   # si el directorio no se llama como el repo

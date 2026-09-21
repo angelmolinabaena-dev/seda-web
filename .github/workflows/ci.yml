@@ -1,16 +1,25 @@
 name: CI
 
 # Enchufa al CI lo que el repo ya sabía hacer y nadie llamaba: `check:legal`,
-# `lint`, el typecheck y `next build`. `main` auto-despliega a producción por la
-# integración Vercel <-> GitHub; hasta este workflow, lo único que se
-# interponía era conflict-markers-check.yml (marcadores de merge + presencia de
-# invariantes).
+# `lint`, el typecheck y `next build`; los tests (`npm test`) entraron en el
+# #62. `main` auto-despliega a producción por la integración Vercel <-> GitHub;
+# hasta este workflow, lo único que se interponía era
+# conflict-markers-check.yml (marcadores de merge + invariantes).
 #
-# ESTE JOB NO BLOQUEA NADA POR SÍ SOLO. Que un PR lo tenga en rojo solo impide
-# el merge si `verify` está en los checks requeridos de la protección de rama /
-# ruleset de `main`, y a fecha de este workflow solo lo está
-# `conflict-markers (marcadores de merge sin resolver)`. Añadirlo es decisión de
-# Ángel en Settings; ver docs/GUARDARRAILES.md.
+# ESTE JOB ES UN CHECK REQUERIDO. Medido el 21-sep-2026 con la API pública de
+# GitHub (el repo es público: `GET /repos/{dueño}/seda-web/rules/branches/main`
+# responde sin token): el ruleset `web` exige PR, la rama al día con `main`
+# (`strict`) y estos tres checks:
+#   verify (legal + leak-scan + lint + tsc + build)       <- este job
+#   conflict-markers (marcadores de merge sin resolver)
+#   invariantes (reglas compartidas presentes)
+# Un `verify` rojo bloquea el merge. Por eso el `name:` de abajo NO se toca:
+# renombrarlo sin actualizar el ruleset a la vez deja `main` esperando un
+# check que ya no existe, y bloqueado para todos los PR. Para cambiarlo:
+# añadir el contexto nuevo al ruleset, renombrar el job, retirar el viejo.
+# Nunca en un solo paso. Hasta el 21-sep-2026 esta cabecera decía que solo se
+# exigía `conflict-markers`; la última modificación del ruleset es del
+# 19-sep-2026, 21:47 UTC.
 #
 # Orden: lo barato y lo que protege un dato serio, primero; el build, el último.
 #
