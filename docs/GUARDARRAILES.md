@@ -83,9 +83,9 @@ falta token):
 Los tres nombres son los `name:` de los jobs: **no se renombra ninguno** sin
 tocar el ruleset a la vez (añadir el contexto nuevo, renombrar, retirar el viejo).
 
-Lo que no se puede medir sin token: los `bypass_actors` del ruleset (la API
-pública devuelve `null`, no la lista). El 19-sep-2026 se leyó con `gh` que no
-tenía ninguno.
+Con token (`gh` de admin, el mismo 21-sep-2026) se leen también los
+`bypass_actors` del ruleset: la lista está **vacía**. La API pública devuelve
+`null` en ese campo, no la lista, así que sin token no se puede afirmar.
 
 ### El `pre-push` describe un mundo que ya no es este
 
