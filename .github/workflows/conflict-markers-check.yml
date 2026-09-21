@@ -25,8 +25,11 @@ name: conflict-markers-check
 # (exactamente 7 caracteres, nada más en la línea salvo la etiqueta de rama)
 # dispara la alarma.
 #
-# Este repo no tiene workflow `ci.yml` propio (es el sitio de marketing, sin
-# suite de tests); este guardarraíl es independiente y no depende de ninguno.
+# Este guardarraíl es independiente de `ci.yml` y no depende de él. Los dos
+# jobs de este fichero son checks requeridos por el ruleset `web` de `main`
+# (medido el 21-sep-2026, ver la cabecera de ci.yml): su `name:` no se toca.
+# Hasta esa fecha este párrafo decía que el repo no tenía `ci.yml` ni tests;
+# tiene los dos desde el 19 y el 20-sep-2026.
 #
 # No añade dependencias: `git grep` está disponible en el runner sin instalar
 # nada.
