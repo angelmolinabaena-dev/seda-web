@@ -88,11 +88,11 @@ Hoy eso es falso en dos puntos, medido con `gh api` el 19-sep-2026:
   El commit d4481f4 (#43, 9-ago-2026) retiró `main-push-guard.yml` precisamente
   «porque la protección de rama lo hace en el servidor».
 
-El hook sigue siendo válido como freno local, pero su comentario está obsoleto, y
-también su mención a `main-push-guard.yml` (ya no existe). Lo que sigue siendo
-cierto del hook: se salta con `git push --no-verify` y no existe en un clon
-nuevo hasta que `npm install` corre el script `prepare`. Actualizar el texto del
-hook queda fuera de este encargo.
+El hook sigue siendo válido como atajo local (te para antes del viaje a GitHub),
+no como sustituto de la protección. Su cabecera se reescribió el 20-sep-2026 con
+esto y sin la mención a `main-push-guard.yml`. Lo que sigue siendo cierto del
+hook: se salta con `git push --no-verify` y no existe en un clon nuevo hasta que
+`npm install` corre el script `prepare`.
 
 ## Cómo se lee `verify` cuando falla
 
