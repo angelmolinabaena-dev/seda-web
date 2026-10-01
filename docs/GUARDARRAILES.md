@@ -34,8 +34,8 @@ Los tres jobs son checks requeridos del ruleset `web` (medido el 21-sep-2026; ve
 | `next build` en CI | sí (desde `ci.yml`) | sí | — (no consta) |
 | Escáner de credenciales (`keys:check-leak`) | sí (desde `ci.yml`) | sí | sí |
 | Identidad legal (`check:legal`) | sí (desde `ci.yml`, y dentro de `build`) | n/a | n/a |
-| Tests de aplicación | 3 ficheros (desde el #61; en `verify` desde el #62) | 227 entradas en `tests/` (19-sep) | 372 entradas en `tests/` (19-sep) |
-| Hook `pre-commit` | **no** | sí | no consta |
+| Tests de aplicación | 4 ficheros (desde el #61; en `verify` desde el #62) | 227 entradas en `tests/` (19-sep) | 372 entradas en `tests/` (19-sep) |
+| Hook `pre-commit` (escáner de credenciales con `--staged`) | sí (desde el 1-oct-2026) | sí | no consta |
 | Hook `pre-push` contra `main` | sí (local) | sí (local) | no consta |
 
 «— (no consta)» = no lo he comprobado en `seda_os`, no que no exista. Las filas de
@@ -52,8 +52,8 @@ Los tres jobs son checks requeridos del ruleset `web` (medido el 21-sep-2026; ve
    cada 6 h y se pone rojo si difieren; lo que sigue sin existir es verlo en el
    PR que causa la divergencia. `--parity` es local por construcción (compara
    directorios hermanos; en CI solo hay un checkout).
-2. **Tests, pocos.** 3 ficheros: la ruta de contacto (`tests/contact-route.test.ts`,
-   desde el #61), los invariantes y los compartidos. Corren en `verify` desde el
+2. **Tests, pocos.** 4 ficheros: la ruta de contacto (`tests/contact-route.test.ts`,
+   desde el #61), los invariantes, los compartidos y el escáner de credenciales. Corren en `verify` desde el
    #62. No prueban el sitio: prueban la única puerta de escritura y los
    guardarraíles.
 3. **`lint` sin `--max-warnings 0`.** Hoy hay 17 warnings en el árbol versionado
@@ -113,18 +113,24 @@ hook: se salta con `git push --no-verify` y no existe en un clon nuevo hasta que
 ## Cómo se lee `verify` cuando falla
 
 - `check:legal`: falta un dato de `lib/legal/identidad.json`. No inventarlo.
-- `keys:check-leak`: el mensaje lleva el fichero y el patrón, y los doce primeros
-  caracteres del valor. **Rotar la credencial**, no solo borrarla del árbol: sigue
-  en el historial.
+- `keys:check-leak`: el mensaje lleva el patrón, el fichero y la línea, **nunca el
+  valor** (ni su principio). **Rotar la credencial**, no solo borrarla del árbol:
+  sigue en el historial.
 - `lint` / `tsc` / `build`: como en local con el mismo comando.
 
-## Escáner de credenciales: criterio de `.env*`
+## Escáner de credenciales: qué revisa
 
 `scripts/keys-check-leak.mjs` se portó desde `guest-app` (17 patrones, lista de
-extensiones ampliada). Se sigue el criterio de `seda_os`, no el de `guest-app`:
-el `.gitignore` de este repo solo ignora `.env*.local` y **versiona
-`.env.example`**, así que ese fichero se lee y solo se saltan los `.env*.local`.
-Razonamiento completo en la cabecera del script.
+extensiones ampliada) y desde el 1-oct-2026 revisa solo lo que git puede subir,
+como guest-app#430:
+
+- **Hook `pre-commit`** (`.githooks/pre-commit`, `--staged`): los ficheros en
+  stage con su contenido de stage. Bloquea además por el nombre un `.env*`
+  (salvo `.env.example`), `*.pem` o `*.key` en stage. Un ignorado forzado con
+  `git add -f` está en stage y se revisa.
+- **CI y `npm run keys:check-leak`**: `git ls-files` + `--others --exclude-standard`.
+- `.env.example` se versiona en este repo y se lee como cualquier otro fichero.
+- Cubierto por `tests/keys-check-leak.test.ts`.
 
 Los dos escáneres previos se mantienen a mano: ver la cabecera para saber qué
 hacer al añadir un patrón.
