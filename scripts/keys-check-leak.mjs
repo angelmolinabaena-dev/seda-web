@@ -10,8 +10,8 @@
  * `trufflehog` (run those in CI for full audits).
  *
  * Procedencia: portado el 19-sep-2026 desde guest-app/scripts/keys-check-leak.mjs
- * (17 patrones, lista ampliada de extensiones); sólo cambia el tratamiento de
- * los `.env*` (ver más abajo) y SKIP_DIRS.
+ * (17 patrones, lista ampliada de extensiones); desde el 1-oct-2026 revisa lo
+ * que git puede subir (ver «Qué se revisa»), como guest-app#430.
  *
  * Procedencia de la lista (leer antes de añadir un patrón):
  *
@@ -28,45 +28,38 @@
  *     y `pre_checkout_reminder_sent_at` (16 ficheros versionados, medido el
  *     19-sep-2026), y ninguno es una llave.
  */
-import { readdir, readFile, stat } from 'node:fs/promises'
-import { join, dirname, extname } from 'node:path'
+import { spawnSync } from 'node:child_process'
+import { readFile } from 'node:fs/promises'
+import { join, dirname, extname, basename } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
+const STAGED = process.argv.includes('--staged')
 
-const SKIP_DIRS = new Set([
-  'node_modules', '.next', '.vercel', '.git', 'coverage', 'dist', 'build',
-  // Visual reference folders — contain Stitch / Claude design exports
-  // that ship with example tokens (Meta WhatsApp marketing snippets,
-  // placeholder Supabase URLs, etc.). They are git-ignored already;
-  // skipping them here prevents the heuristic from flagging legitimate
-  // reference HTML that the developer keeps locally as design-only
-  // material.
-  '.stitch-ref',
-  // Copias de trabajo y sesiones locales de Claude Code: gitignored (`.claude/`,
-  // `.worktrees/`) y duplican el árbol entero, así que no añaden cobertura.
-  '.claude', '.worktrees',
-])
+// ── Qué se revisa: solo lo que git puede subir ─────────────────────────────
+// Hasta el 1-oct-2026 recorría el disco entero con una lista de carpetas y de
+// `.env*.local` saltados a mano. Ahora la lista la da git y respeta
+// `.gitignore`, así que no hace falta saltarse nada por nombre:
+//
+//   · `--staged` (lo pasa `.githooks/pre-commit`): los ficheros en stage, con
+//     el contenido DEL STAGE, no el del disco. Un ignorado forzado con
+//     `git add -f` está en stage y se revisa. Aquí además bloquea el NOMBRE:
+//     `.env`, `.env.*` (salvo `.env.example`), `*.pem` y `*.key` en stage
+//     paran el commit aunque dentro no case ningún patrón.
+//   · sin flag (CI y `npm run keys:check-leak`): trackeados más no ignorados
+//     (`git ls-files --cached --others --exclude-standard`), leídos del disco.
+//
+// `.env.example` SE VERSIONA en este repo: se lee como cualquier otro fichero,
+// que es justo donde una clave real se cuela por descuido.
+const ENV_PERMITIDO = '.env.example'
+const ES_ENV = /^\.env(?:\.|$)/
 
-// ── Los `.env*`: se saltan sólo los que el `.gitignore` ignora ─────────────
-// Criterio elegido: el de seda_os/scripts/keys-check-leak.mjs (leer todo salvo
-// lo ignorado), NO el de guest-app (saltarse todos los `.env*`). Se mira el
-// `.gitignore` de ESTE repo, que dice `.env*.local` y nada más (línea 11), y
-// `.env.example` está versionado (`git ls-files`). O sea:
-//
-//   · `.env.local`, `.env.production.local`, etc. (todo `.env*.local`) no
-//     pueden llegar a un commit sin `git add -f`: se saltan, como allí. Leerlos
-//     rompería el pre-commit en cualquier máquina con claves reales locales y
-//     al fallar imprimiría el arranque de una credencial real.
-//   · `.env.example` SÍ se versiona, así que es justo donde una clave real se
-//     cuela por descuido: se lee. Copiar el criterio de guest-app (`.env*`
-//     entero ignorado) dejaría ese fichero sin mirar.
-//   · `.env` a secas NO está ignorado aquí (`.env*.local` no lo casa), así que
-//     también se lee. Difiere de seda_os, cuyo `.gitignore` sí lo ignora.
-//
-// La regla de abajo reproduce el glob `.env*.local` de aquel `.gitignore`. Si
-// alguien ignora más nombres `.env*`, hay que ampliarla a la vez.
-const ES_ENV_IGNORADO = /^\.env.*\.local$/
+/** ¿Bloquea este nombre por sí solo, sin leer nada? Solo se aplica en stage. */
+function nombreProhibido(ruta) {
+  const nombre = basename(ruta)
+  if (ES_ENV.test(nombre)) return nombre !== ENV_PERMITIDO
+  return /\.(?:pem|key)$/i.test(nombre)
+}
 
 // ── Qué ficheros se leen ────────────────────────────────────────────────────
 // Antes, `ts tsx js jsx mjs cjs json md sql yml yaml html` y nada más: el
@@ -90,7 +83,6 @@ const EXTENSIONES =
 
 /** ¿Se lee este fichero? Decide sólo por el nombre, antes de abrirlo. */
 function seLee(nombre) {
-  if (ES_ENV_IGNORADO.test(nombre)) return false
   return extname(nombre) === '' || EXTENSIONES.test(nombre)
 }
 
@@ -143,33 +135,84 @@ const PATTERNS = [
   { name: 'Private key (PEM)',         re: /-----BEGIN[ A-Z0-9_-]{0,100}PRIVATE KEY-----(?:\\[rn]|\s)+[A-Za-z0-9+/]{40,}/ },
 ]
 
+/** Ejecuta git en la raíz del repo y devuelve stdout en bruto. Si falla, el escáner no da verde. */
+function git(args, input) {
+  const r = spawnSync('git', args, {
+    cwd: root,
+    input,
+    maxBuffer: 1 << 30,
+    env: { ...process.env, GIT_OPTIONAL_LOCKS: '0' },
+  })
+  if (r.status !== 0) {
+    console.error(`✗ keys-check-leak: \`git ${args.join(' ')}\` falló: ${String(r.stderr).trim()}`)
+    process.exit(2)
+  }
+  return r.stdout
+}
+
+const separarNul = (buf) => buf.toString('utf8').split('\0').filter(Boolean)
+
+/**
+ * Los ficheros en stage, con el contenido del stage. `--no-renames` convierte
+ * un renombrado en alta + baja; las bajas no suben nada. Los submódulos (modo
+ * 160000) no tienen blob que leer.
+ */
+function enStage() {
+  const campos = separarNul(git(['diff', '--cached', '--raw', '-z', '--no-abbrev', '--no-renames', '--diff-filter=ACMT']))
+  const entradas = []
+  for (let i = 0; i + 1 < campos.length; i += 2) {
+    const [, modo, , sha] = campos[i].split(' ')
+    if (modo === '160000') continue
+    entradas.push({ ruta: campos[i + 1], sha })
+  }
+  if (entradas.length === 0) return []
+
+  // Un solo `git cat-file --batch`: cabecera `<sha> blob <tamaño>`, contenido y salto de línea.
+  const salida = git(['cat-file', '--batch'], entradas.map((e) => e.sha).join('\n') + '\n')
+  let pos = 0
+  for (const e of entradas) {
+    const fin = salida.indexOf(0x0a, pos)
+    const tamano = Number(salida.subarray(pos, fin).toString('utf8').split(' ')[2])
+    e.leer = async () => salida.subarray(fin + 1, fin + 1 + tamano).toString('utf8')
+    pos = fin + 1 + tamano + 1
+  }
+  return entradas
+}
+
+/** Trackeados + no ignorados, leídos del disco. */
+function subibles() {
+  const rutas = new Set(separarNul(git(['ls-files', '-z', '--cached', '--others', '--exclude-standard'])))
+  return [...rutas].map((ruta) => ({
+    ruta,
+    // Un trackeado borrado del disco sigue en `--cached`: no hay nada que leer.
+    leer: () => readFile(join(root, ruta), 'utf8').catch(() => ''),
+  }))
+}
+
+const lineaDe = (txt, indice) => txt.slice(0, indice).split('\n').length
+
 let hits = 0
 let scanned = 0
 
-async function walk(dir) {
-  const entries = await readdir(dir)
-  for (const name of entries) {
-    if (SKIP_DIRS.has(name)) continue
-    const full = join(dir, name)
-    const st = await stat(full)
-    if (st.isDirectory()) {
-      await walk(full)
-      continue
-    }
-    if (!seLee(name)) continue
-    scanned++
-    const txt = await readFile(full, 'utf8').catch(() => '')
-    for (const p of PATTERNS) {
-      const m = txt.match(p.re)
-      if (m) {
-        hits++
-        console.error(`  ❌ [${p.name}] ${full.slice(root.length + 1)}: ${m[0].slice(0, 12)}…`)
-      }
+for (const f of STAGED ? enStage() : subibles()) {
+  if (STAGED && nombreProhibido(f.ruta)) {
+    hits++
+    console.error(`  ❌ [Fichero de secretos en stage] ${f.ruta}`)
+    continue
+  }
+  if (!seLee(basename(f.ruta))) continue
+  scanned++
+  const txt = await f.leer()
+  for (const p of PATTERNS) {
+    const m = p.re.exec(txt)
+    if (m) {
+      hits++
+      // Patrón, fichero y línea. Nunca el valor, ni siquiera su principio.
+      console.error(`  ❌ [${p.name}] ${f.ruta}:${lineaDe(txt, m.index)}`)
     }
   }
 }
 
-await walk(root)
-
-console.log(`\nScanned ${scanned} files. ${hits === 0 ? '✅ No leaks detected' : `❌ ${hits} suspicious match(es)`}`)
+console.log(`
+Scanned ${scanned} files. ${hits === 0 ? '✅ No leaks detected' : `❌ ${hits} suspicious match(es)`}`)
 process.exit(hits === 0 ? 0 : 1)

@@ -1,0 +1,26 @@
+#!/usr/bin/env sh
+# Pre-commit hook: secret-leak heuristic over the STAGED files, with their
+# staged content (`--staged`). Ignored local files are not read unless someone
+# forces them in with `git add -f`, and then they block. A `.env*` (except
+# `.env.example`), `*.pem` or `*.key` in stage blocks by name.
+#
+# Activated automatically by the `prepare` npm script in package.json,
+# which sets `core.hooksPath = .githooks` after `npm install` (same wiring as
+# .githooks/pre-push). Copied from guest-app/.githooks/pre-commit.
+#
+# Keep this fast (<500ms). CI runs the full pipeline; this hook only stops the
+# most common foot-gun (committing a Supabase service-role JWT or a Stripe
+# live key).
+#
+# Bypass in emergencies with `git commit --no-verify`. Don't make this a
+# habit — the leak scan is heuristic and false positives are rare.
+
+set -e
+
+# Skip if there are no staged files (e.g. amend with no changes).
+if git diff --cached --quiet; then
+  exit 0
+fi
+
+echo "→ pre-commit: scanning staged files for secret leaks…"
+node scripts/keys-check-leak.mjs --staged
