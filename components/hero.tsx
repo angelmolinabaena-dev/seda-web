@@ -100,7 +100,7 @@ export function Hero() {
               loop
               muted
               playsInline
-              preload="auto"
+              preload="metadata"
               aria-label={t("home.hero.hero_video_alt")}
               className={`w-full h-full object-cover transition-transform duration-[2s] ease-out ${
                 visible ? "scale-100" : "scale-110"
