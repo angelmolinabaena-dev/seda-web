@@ -624,7 +624,7 @@ export function PropietariosContent() {
             <div className="relative">
               <div className="relative overflow-hidden rounded-2xl aspect-[3/4]">
                 <Image
-                  src="/angel-molina.jpg"
+                  src="/angel-molina-v2.jpg"
                   alt="Ángel Molina Baena, fundador de Seda Private Homes"
                   fill
                   className="object-cover object-top"

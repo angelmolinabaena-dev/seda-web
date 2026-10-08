@@ -174,7 +174,7 @@ export function NosotrosContent() {
             <div className="reveal relative">
               <div className="relative aspect-[3/4] overflow-hidden max-h-[580px]">
                 <Image
-                  src="/angel-molina.jpg"
+                  src="/angel-molina-v2.jpg"
                   alt="Ángel Molina Baena — Fundador de Seda Private Homes"
                   fill
                   className="object-cover object-top"

@@ -11,7 +11,7 @@ const nextConfig = {
   images: {
     // Sin hosts remotos, a propósito (21-sep-2026). `next/image` solo se usa
     // con ficheros de /public: `git grep "next/image"` da NosotrosContent.tsx y
-    // PropietariosContent.tsx, los dos con /angel-molina.jpg. Los renders de
+    // PropietariosContent.tsx, los dos con /angel-molina-v2.jpg. Los renders de
     // fal.ai ya son ficheros locales (/villas/*.jpg) y los distintivos de
     // hotelesteponaplaza.com se pintan con <img>, que no pasa por el
     // optimizador. Cada host de esta lista abría /_next/image a cualquier
