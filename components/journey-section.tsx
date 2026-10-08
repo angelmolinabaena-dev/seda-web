@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import { useTranslations } from "next-intl"
 import { useScrollReveal } from "@/hooks/use-scroll-reveal"
 import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion"
@@ -26,8 +27,11 @@ function Phase({ phase, index }: { phase: Phase; index: number }) {
       style={reduced ? undefined : { transitionDelay: `${index * 140}ms` }}
     >
       <div className="overflow-hidden mb-2">
-        <img
+        <Image
           src={phase.image}
+          width={1200}
+          height={896}
+          sizes="(min-width: 1024px) 33vw, 100vw"
           alt={phase.alt}
           className="w-full aspect-[4/3] object-cover"
           loading="lazy"

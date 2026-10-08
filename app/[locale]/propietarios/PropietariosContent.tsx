@@ -413,8 +413,11 @@ export function PropietariosContent() {
       {/* HERO con SedaOS dashboard overlay */}
       <header className="relative overflow-hidden text-background min-h-[760px] flex items-center pt-40 pb-24">
         <div className="absolute inset-0 z-0">
-          <img
+          <Image
             src="/villas/portal-tablet.jpg"
+            width={1254}
+            height={1254}
+            sizes="100vw"
             alt={t("prop.hero.image_alt")}
             className="w-full h-full object-cover"
           />

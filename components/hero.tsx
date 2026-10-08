@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import { useEffect, useRef, useState } from "react"
 import { ArrowRight } from "lucide-react"
 import { useTranslations } from "next-intl"
@@ -86,8 +87,12 @@ export function Hero() {
       <div className="absolute inset-0 z-0">
         <div ref={parallaxRef} className="absolute inset-0 will-change-transform bg-foreground">
           {reduced ? (
-            <img
+            <Image
               src="/villas/hero-poster.jpg"
+              width={1376}
+              height={768}
+              sizes="100vw"
+              priority
               alt={t("home.hero.hero_poster_alt")}
               className="w-full h-full object-cover scale-100"
             />
@@ -100,7 +105,7 @@ export function Hero() {
               loop
               muted
               playsInline
-              preload="auto"
+              preload="metadata"
               aria-label={t("home.hero.hero_video_alt")}
               className={`w-full h-full object-cover transition-transform duration-[2s] ease-out ${
                 visible ? "scale-100" : "scale-110"
