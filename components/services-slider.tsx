@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import { useTranslations } from "next-intl"
 import { useScrollReveal } from "@/hooks/use-scroll-reveal"
 import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion"
@@ -32,8 +33,11 @@ function Card({ s, altSuffix }: { s: Service; altSuffix: string }) {
         group/card
       "
     >
-      <img
+      <Image
         src={s.image}
+        width={1448}
+        height={847}
+        sizes="(min-width: 1280px) 352px, (min-width: 1024px) 24vw, (min-width: 768px) 34vw, (min-width: 640px) 58vw, 78vw"
         alt={`${s.title} ${s.italic} — ${altSuffix}`}
         loading="lazy"
         className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover/card:scale-[1.03]"

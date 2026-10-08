@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import { ArrowUpRight } from "lucide-react"
 import { Link } from "@/i18n/navigation"
 import { useTranslations } from "next-intl"
@@ -26,8 +27,11 @@ export function DualConversion() {
         >
           <div className="aspect-square overflow-hidden">
             {/* IA photo — woman with iPhone showing the SEDA Guest App welcome */}
-            <img
+            <Image
               src="/villas/guest-app-hand.jpg"
+              width={1122}
+              height={1402}
+              sizes="(min-width: 1024px) 50vw, 100vw"
               alt={t("home.dual.guest_image_alt")}
               className="w-full h-full object-cover"
               loading="lazy"
@@ -66,8 +70,11 @@ export function DualConversion() {
         >
           <div className="aspect-square overflow-hidden">
             {/* IA photo — man with iPad showing the SEDA Portal de Propietarios */}
-            <img
+            <Image
               src="/villas/portal-tablet.jpg"
+              width={1254}
+              height={1254}
+              sizes="(min-width: 1024px) 50vw, 100vw"
               alt={t("home.dual.owner_image_alt")}
               className="w-full h-full object-cover"
               loading="lazy"

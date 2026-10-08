@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import { Link } from "@/i18n/navigation"
 import { ArrowUpRight } from "lucide-react"
 import { useTranslations } from "next-intl"
@@ -47,8 +48,11 @@ export function DescubreContent() {
       {/* Wide editorial image */}
       <section className="px-6 md:px-12 lg:px-20">
         <div className="max-w-7xl mx-auto">
-          <img
+          <Image
             src="/villas/about.jpg"
+            width={1254}
+            height={1254}
+            sizes="(min-width: 1280px) 1280px, 100vw"
             alt={t("descubre.image_alt")}
             className="w-full aspect-[21/9] object-cover"
             loading="lazy"
@@ -170,7 +174,7 @@ export function DescubreContent() {
             {cities.map((c) => (
               <div key={c.name} className="flex flex-col gap-4">
                 <div className="aspect-[3/4] overflow-hidden">
-                  <img src={c.image} alt={c.name} className="w-full h-full object-cover" loading="lazy" decoding="async" />
+                  <Image src={c.image} alt={c.name} width={1376} height={768} sizes="(min-width: 1024px) 20vw, (min-width: 640px) 33vw, 50vw" className="w-full h-full object-cover" loading="lazy" decoding="async" />
                 </div>
                 <h3 className="font-serif font-light text-xl md:text-[1.4rem] tracking-tight text-foreground">
                   {c.name}

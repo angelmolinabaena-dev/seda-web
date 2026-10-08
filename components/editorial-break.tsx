@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import { useEffect, useState } from "react"
 import { useTranslations } from "next-intl"
 import { useScrollReveal } from "@/hooks/use-scroll-reveal"
@@ -31,8 +32,11 @@ export function EditorialBreak() {
           } ${imgShown ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
         >
           {/* Imagen generada con fal.ai Nano Banana Pro (May 2026) — placeholder */}
-          <img
+          <Image
             src="/villas/about.jpg"
+            width={1254}
+            height={1254}
+            sizes="(min-width: 1024px) 50vw, 100vw"
             alt={t("home.editorial.image_alt")}
             className="w-full aspect-[16/10] object-cover"
             loading="lazy"

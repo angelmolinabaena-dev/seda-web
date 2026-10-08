@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import { ArrowUpRight } from "lucide-react"
 import { useTranslations } from "next-intl"
 
@@ -56,8 +57,11 @@ export function ExperienciasContent() {
           chosen explicitly over fallback assets. */}
       <section className="px-6 md:px-12 lg:px-20">
         <div className="max-w-7xl mx-auto">
-          <img
+          <Image
             src="/villas/experiencias-hero.jpg"
+            width={1447}
+            height={1087}
+            sizes="(min-width: 1280px) 1280px, 100vw"
             alt={t("exp.image_alt")}
             className="w-full aspect-[21/9] object-cover"
             // Hint the browser to prioritise this image — it's above
@@ -87,8 +91,11 @@ export function ExperienciasContent() {
                 className="bg-background border border-border overflow-hidden group/card transition-transform hover:-translate-y-1 duration-500"
               >
                 <div className="aspect-[5/4] overflow-hidden">
-                  <img
+                  <Image
                     src={e.image}
+                    width={1448}
+                    height={847}
+                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                     alt={e.title}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover/card:scale-[1.03]"
                     loading="lazy"
@@ -158,8 +165,11 @@ export function ExperienciasContent() {
       <section className="px-6 md:px-12 lg:px-20 py-24 md:py-32">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-12 items-center">
           <div className="md:col-span-6 overflow-hidden">
-            <img
+            <Image
               src="/villas/journey-despues.jpg"
+              width={1200}
+              height={896}
+              sizes="(min-width: 768px) 50vw, 100vw"
               alt={t("exp.access.image_alt")}
               className="w-full aspect-[4/5] object-cover"
               loading="lazy"
