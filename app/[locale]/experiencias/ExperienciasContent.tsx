@@ -58,7 +58,7 @@ export function ExperienciasContent() {
       <section className="px-6 md:px-12 lg:px-20">
         <div className="max-w-7xl mx-auto">
           <Image
-            src="/villas/experiencias-hero.jpg"
+            src="/villas/experiencias-hero-v2.jpg"
             width={1447}
             height={1087}
             sizes="(min-width: 1280px) 1280px, 100vw"
