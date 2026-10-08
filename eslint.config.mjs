@@ -24,6 +24,9 @@ const eslintConfig = defineConfig([
     'next-env.d.ts',
     // Herramientas y copias del repo, no codigo fuente
     '.claude/**',
+    // /brand/ esta en .gitignore (copia local del kit de marca): el CI no la ve,
+    // asi que lint local y CI daban resultados distintos.
+    'brand/**',
     '.worktrees/**',
     '.impeccable/**',
     '.tmp/**',
