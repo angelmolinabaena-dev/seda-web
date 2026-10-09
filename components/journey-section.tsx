@@ -4,6 +4,7 @@ import Image from "next/image"
 import { useTranslations } from "next-intl"
 import { useScrollReveal } from "@/hooks/use-scroll-reveal"
 import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion"
+import { IllustrativeTag } from "@/components/illustrative-tag"
 
 type Phase = {
   num: string
@@ -26,7 +27,8 @@ function Phase({ phase, index }: { phase: Phase; index: number }) {
       } ${shown ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
       style={reduced ? undefined : { transitionDelay: `${index * 140}ms` }}
     >
-      <div className="overflow-hidden mb-2">
+      <div className="relative overflow-hidden mb-2">
+        <IllustrativeTag />
         <Image
           src={phase.image}
           width={1200}

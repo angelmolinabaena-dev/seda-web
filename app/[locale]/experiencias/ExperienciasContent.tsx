@@ -1,6 +1,7 @@
 "use client"
 
 import Image from "next/image"
+import { IllustrativeTag } from "@/components/illustrative-tag"
 import { ArrowUpRight } from "lucide-react"
 import { useTranslations } from "next-intl"
 
@@ -56,7 +57,8 @@ export function ExperienciasContent() {
           Mediterranean view. Sourced from ChatGPT 2026-05-06 generation,
           chosen explicitly over fallback assets. */}
       <section className="px-6 md:px-12 lg:px-20">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-7xl mx-auto relative">
+          <IllustrativeTag className="bottom-4 right-4" />
           <Image
             src="/villas/experiencias-hero-v2.jpg"
             width={1447}
@@ -90,7 +92,8 @@ export function ExperienciasContent() {
                 key={e.id}
                 className="bg-background border border-border overflow-hidden group/card transition-transform hover:-translate-y-1 duration-500"
               >
-                <div className="aspect-[5/4] overflow-hidden">
+                <div className="relative aspect-[5/4] overflow-hidden">
+                  <IllustrativeTag />
                   <Image
                     src={e.image}
                     width={1448}
@@ -164,7 +167,8 @@ export function ExperienciasContent() {
       {/* Acceso real — editorial pair */}
       <section className="px-6 md:px-12 lg:px-20 py-24 md:py-32">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-12 items-center">
-          <div className="md:col-span-6 overflow-hidden">
+          <div className="relative md:col-span-6 overflow-hidden">
+            <IllustrativeTag />
             <Image
               src="/villas/journey-despues.jpg"
               width={1200}

@@ -54,7 +54,7 @@
       "eyebrow": "— 02 · Qui nous sommes",
       "h2": "Gestion de villas privées sur la Costa del Sol, pilotée par notre propre logiciel.",
       "body1": "Seda OS est le système d'exploitation sur lequel nous avons bâti tout le reste. Il relie chaque villa à ceux qui la gèrent et à ceux qui l'habitent.",
-      "body2": "Les propriétaires disposent d'un portail avec compte de résultat, liquidations, tarification et conformité fiscale en temps réel. Les voyageurs reçoivent une Guest App avec un concierge IA en cinq langues — et tout ce dont ils ont besoin se trouve à un message près.",
+      "body2": "Les propriétaires disposent d'un portail avec compte de résultat, relevés de gérance, tarification et conformité fiscale en temps réel. Les voyageurs reçoivent une Guest App avec un concierge IA en cinq langues — et tout ce dont ils ont besoin se trouve à un message près.",
       "tagline": "L'hospitalité d'un hôtel, dans l'intimité d'une maison."
     },
     "journey": {
@@ -88,7 +88,7 @@
       "owner_image_alt": "Propriétaire consultant le portail SEDA Propriétaires sur une terrasse avec vue mer",
       "owner_eyebrow": "— Pour les propriétaires",
       "owner_h3": "Votre résidence, gérée avec précision. Sans avoir à y veiller.",
-      "owner_body": "Suivez l'occupation, les revenus, la maintenance, les avis et les liquidations depuis le Portail Propriétaires.",
+      "owner_body": "Suivez l'occupation, les revenus, la maintenance, les avis et les relevés de gérance depuis le Portail Propriétaires.",
       "owner_cta": "Voir le modèle de gestion"
     },
     "guestapp_section": {
@@ -185,7 +185,7 @@
         "mantenimiento": "Maintenance",
         "guestapp": "Guest App",
         "reporting": "Reporting propriétaires",
-        "liquidaciones": "Liquidations"
+        "liquidaciones": "Relevés de gérance"
       }
     },
     "dashboard": {
@@ -205,11 +205,12 @@
         "legend_maint": "Maintenance"
       },
       "liquidacion": {
-        "title": "Liquidation · Juin 2026",
+        "title": "Relevé de gérance d'exemple · réservation directe",
         "row1": "Revenu brut",
-        "row2": "Commission SEDA",
-        "row3": "Services",
-        "row4": "Net au propriétaire"
+        "row2": "Base de calcul (hors ménage)",
+        "row3": "Commission SEDA · 24% de la base",
+        "row4": "Net au propriétaire",
+        "note": "Réservation directe. Pour une réservation via un canal, la commission de la plateforme est déduite en premier. Le ménage revient au propriétaire et n'entre pas dans la base."
       },
       "status": {
         "title": "État opérationnel",
@@ -287,7 +288,7 @@
         },
         "q6": {
           "q": "Comment consulter mes revenus ?",
-          "a": "Depuis le Portail Propriétaires, en temps réel : revenus prévisionnels, occupation, liquidations mensuelles et détail par réservation. Un reporting financier exportable et auditable."
+          "a": "Depuis le Portail Propriétaires, en temps réel : revenus prévisionnels, occupation, relevés de gérance mensuels et détail par réservation. Un reporting financier exportable et auditable."
         },
         "q7": {
           "q": "Comment ma propriété est-elle protégée ?",
@@ -334,7 +335,7 @@
         "line1": "Votre propriété,",
         "italic": "pleinement sous contrôle."
       },
-      "body": "SEDA OS est la couche logicielle propriétaire qui orchestre réservations, opérations, maintenance, marketing et liquidations. Pas de SaaS générique. Pas d'improvisation.",
+      "body": "SEDA OS est la couche logicielle propriétaire qui orchestre réservations, opérations, maintenance, marketing et relevés de gérance. Pas de SaaS générique. Pas d'improvisation.",
       "image_alt": "Résidence au coucher du soleil avec le Portail Propriétaires"
     },
     "os": {
@@ -354,11 +355,12 @@
         "mant": "Maintenance",
         "mant_d": "Climatisation"
       },
-      "liq_title": "Prochaine liquidation",
-      "liq_sepa": "SEPA · 01 Nov",
-      "liq_ingresos": "Revenus",
-      "liq_comision": "Commission",
-      "liq_servicios": "Services",
+      "liq_title": "Relevé de gérance d'exemple · réservation directe",
+      "liq_sepa": "Versement SEPA · 01 Nov",
+      "liq_ingresos": "Revenu brut",
+      "liq_comision": "Commission 24%",
+      "liq_base": "Base (hors ménage)",
+      "liq_nota": "Réservation directe. Pour une réservation via un canal, la commission de la plateforme est déduite en premier. Le ménage revient au propriétaire et n'entre pas dans la base.",
       "ga_title": "État Guest App",
       "ga_app": "Guest App",
       "ga_app_state": "Active",
@@ -492,8 +494,8 @@
         },
         "finanzas": {
           "name": "Finances",
-          "label": "Liquidations",
-          "body": "Liquidations automatisées, rapprochement bancaire, IRNR et reporting fiscal."
+          "label": "Relevés de gérance",
+          "body": "Relevés de gérance automatisés, rapprochement bancaire, IRNR et reporting fiscal."
         },
         "propietario": {
           "name": "Propriétaire",
@@ -534,7 +536,7 @@
       "items": {
         "q1": {
           "q": "Quelle commission SEDA applique-t-il pour gérer ma propriété ?",
-          "a": "Nous appliquons une commission de 24% sur l'hébergement, après déduction de la commission de la plateforme (Airbnb, Booking...) et du forfait de ménage, qui vous revient intégralement : jamais sur le brut. Rapporté au total payé par le voyageur, l'effet réel avoisine 18%. Détaillée dans chaque liquidation mensuelle dans SEDA OS. Pas de frais fixes ni de pénalité de sortie. Les trois premières signatures directes ne paient pas de frais d'inscription ; les quatrième et cinquième paient 490 €, puis les frais s'élèvent à 1 290 € (hors TVA)."
+          "a": "Nous appliquons une commission de 24% sur l'hébergement, après déduction de la commission de la plateforme (Airbnb, Booking...) et du forfait de ménage, qui vous revient intégralement : jamais sur le brut. Rapporté au total payé par le voyageur, l'effet réel avoisine 18%. Détaillée dans chaque relevé de gérance mensuel dans SEDA OS. Pas de frais fixes ni de pénalité de sortie. Les trois premières signatures directes ne paient pas de frais d'inscription ; les quatrième et cinquième paient 490 €, puis les frais s'élèvent à 1 290 € (hors TVA)."
         },
         "q2": {
           "q": "Qui s'occupe des voyageurs, et quand ?",
@@ -939,7 +941,7 @@
       "n2": {
         "tag": "B · Propriétaires",
         "title": "De la rentabilité, en toute discrétion.",
-        "body": "Liquidation mensuelle claire, taux d'occupation supérieur au marché et rapports en temps réel."
+        "body": "Relevé de gérance mensuel clair, taux d'occupation supérieur au marché et rapports en temps réel."
       },
       "n3": {
         "tag": "C · Exploitation",
@@ -1223,11 +1225,11 @@
       },
       "q2": {
         "q": "Quelles commissions s'appliquent ?",
-        "a": "Nous appliquons une commission de 24% sur l'hébergement de chaque réservation, après déduction de la commission de la plateforme et du forfait de ménage. Pas de frais fixes ni de pénalité de sortie. Les trois premières signatures directes ne paient pas de frais d'inscription ; les quatrième et cinquième paient 490 €, puis les frais s'élèvent à 1 290 € (hors TVA). Chaque liquidation mensuelle détaille le calcul."
+        "a": "Nous appliquons une commission de 24% sur l'hébergement de chaque réservation, après déduction de la commission de la plateforme et du forfait de ménage. Pas de frais fixes ni de pénalité de sortie. Les trois premières signatures directes ne paient pas de frais d'inscription ; les quatrième et cinquième paient 490 €, puis les frais s'élèvent à 1 290 € (hors TVA). Chaque relevé de gérance mensuel détaille le calcul."
       },
       "q3": {
         "q": "Comment consulter mes revenus ?",
-        "a": "Depuis le Portail Propriétaires, en temps réel : revenus prévisionnels, occupation, liquidations mensuelles et détail par réservation. Un reporting financier exportable et auditable."
+        "a": "Depuis le Portail Propriétaires, en temps réel : revenus prévisionnels, occupation, relevés de gérance mensuels et détail par réservation. Un reporting financier exportable et auditable."
       },
       "q4": {
         "q": "Qui s'occupe de la maintenance ?",
@@ -1290,7 +1292,7 @@
           "b": "KPI opérationnels et financiers, multi-propriétés."
         },
         "m6": {
-          "t": "Liquidations",
+          "t": "Relevés de gérance",
           "b": "Clôture mensuelle, exportable et auditable."
         },
         "m7": {

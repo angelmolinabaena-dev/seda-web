@@ -116,22 +116,22 @@ function SedaOSWindow() {
           <div className="bg-white border border-border rounded-xl p-4">
             <p className="font-mono text-[9px] tracking-[0.18em] uppercase text-muted-foreground">{t("prop.os.liq_title")}</p>
             <div className="flex justify-between items-end mt-1.5">
-              <p className="font-serif text-2xl">€ 7.766</p>
+              <p className="font-serif text-2xl">€ 784</p>
               <span className="inline-flex items-center gap-1 text-[10px] text-[hsl(var(--olive))]">
                 <Building2 className="h-3 w-3" strokeWidth={1.5} /> {t("prop.os.liq_sepa")}
               </span>
             </div>
             <div className="grid grid-cols-3 gap-2 mt-3">
-              {/* Comisión = 24% sobre el alojamiento ya neto de comisión de canal
-                  (reserva-financials.ts). 10.890 × 0,24 = 2.613,60 → 2.614.
-                  Neto = 10.890 − 2.614 − 510 = 7.766. Cuadra con el total mostrado arriba. */}
-              {[[t("prop.os.liq_ingresos"), "€ 10.890"], [t("prop.os.liq_comision"), "− € 2.614"], [t("prop.os.liq_servicios"), "− € 510"]].map(([k, v]) => (
+              {/* Ejemplo de seda_os/docs/PRICING.md §1.1 (reserva directa): bruto 1.000
+                  − limpieza 100 = base 900; 24% × 900 = 216; neto = 1.000 − 216 = 784. */}
+              {[[t("prop.os.liq_ingresos"), "€ 1.000"], [t("prop.os.liq_base"), "€ 900"], [t("prop.os.liq_comision"), "− € 216"]].map(([k, v]) => (
                 <div key={k} className="bg-secondary/60 rounded-md px-2.5 py-2">
                   <p className="text-[9px] text-muted-foreground">{k}</p>
                   <p className="font-mono text-[11px] font-semibold mt-0.5">{v}</p>
                 </div>
               ))}
             </div>
+            <p className="text-[9px] leading-snug text-muted-foreground mt-2.5">{t("prop.os.liq_nota")}</p>
           </div>
           <div className="bg-[hsl(var(--olive))] text-background rounded-xl p-4 flex flex-col justify-between">
             <div>

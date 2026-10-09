@@ -18,14 +18,14 @@ export function DashboardMockup() {
     { label: t("home.dashboard.kpi.reservas"), value: "14", sub: t("home.dashboard.kpi.reservas_sub") },
   ]
 
-  // Comisión = 22% sobre ingresos brutos (38.420 × 0,22 = 8.452,40 → 8.452), la tasa
-  // pactada en seda_os/lib/reserva-financials.ts. Antes 6.915, un 18,0% implícito.
-  // Neto = 38.420 − 8.452 − 1.240 = 28.728.
+  // Ejemplo de seda_os/docs/PRICING.md §1.1 (reserva directa, 0% de canal):
+  // bruto 1.000 − limpieza 100 = base 900; comisión 24% × 900 = 216;
+  // neto propietario = 1.000 − 216 = 784 (la limpieza queda dentro del neto).
   const liquidacion: ReadonlyArray<readonly [string, string]> = [
-    [t("home.dashboard.liquidacion.row1"), "€ 38.420"],
-    [t("home.dashboard.liquidacion.row2"), "− € 8.452"],
-    [t("home.dashboard.liquidacion.row3"), "− € 1.240"],
-    [t("home.dashboard.liquidacion.row4"), "€ 28.728"],
+    [t("home.dashboard.liquidacion.row1"), "€ 1.000"],
+    [t("home.dashboard.liquidacion.row2"), "€ 900"],
+    [t("home.dashboard.liquidacion.row3"), "− € 216"],
+    [t("home.dashboard.liquidacion.row4"), "€ 784"],
   ] as const
 
   return (
@@ -127,6 +127,9 @@ export function DashboardMockup() {
               </div>
             ))}
           </div>
+          <p className="font-mono text-[9px] leading-snug text-muted-foreground/80 mt-2">
+            {t("home.dashboard.liquidacion.note")}
+          </p>
         </div>
 
         <div className="bg-[hsl(var(--olive))] text-background p-4 rounded-sm flex flex-col justify-between min-h-[140px]">

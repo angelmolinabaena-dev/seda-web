@@ -205,11 +205,12 @@
         "legend_maint": "Maintenance"
       },
       "liquidacion": {
-        "title": "Settlement · June 2026",
+        "title": "Sample settlement · direct booking",
         "row1": "Gross revenue",
-        "row2": "SEDA commission",
-        "row3": "Services",
-        "row4": "Net to owner"
+        "row2": "Calculation base (excl. cleaning)",
+        "row3": "SEDA commission · 24% of base",
+        "row4": "Net to owner",
+        "note": "Direct booking. On a channel booking, the platform's commission is deducted first. Cleaning belongs to the owner and is not part of the base."
       },
       "status": {
         "title": "Operational status",
@@ -354,11 +355,12 @@
         "mant": "Maintenance",
         "mant_d": "HVAC"
       },
-      "liq_title": "Next settlement",
+      "liq_title": "Sample settlement · direct booking",
       "liq_sepa": "SEPA · 01 Nov",
-      "liq_ingresos": "Revenue",
-      "liq_comision": "Commission",
-      "liq_servicios": "Services",
+      "liq_ingresos": "Gross revenue",
+      "liq_comision": "Commission 24%",
+      "liq_base": "Base (excl. cleaning)",
+      "liq_nota": "Direct booking. On a channel booking, the platform's commission is deducted first. Cleaning belongs to the owner and is not part of the base.",
       "ga_title": "Guest App Status",
       "ga_app": "Guest App",
       "ga_app_state": "Active",
