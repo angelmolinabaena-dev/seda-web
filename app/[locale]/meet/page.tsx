@@ -22,7 +22,7 @@ import { Calendar, Shield, Mail, ArrowRight } from "lucide-react"
     - Link to /founding-owners for those who want more context before booking
 */
 
-const CALENDLY_URL = "https://calendly.com/sedaprivatehomes"
+const CALENDLY_URL = "https://calendly.com/sedaprivatehomes-info"
 
 // Calendly embed URL — hides cookie banner + branding for cleaner UX
 const CALENDLY_EMBED =

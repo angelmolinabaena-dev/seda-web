@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 }
 
-const CALENDLY_URL = "https://calendly.com/sedaprivatehomes"
+const CALENDLY_URL = "https://calendly.com/sedaprivatehomes-info"
 
 type Locale = "es" | "en" | "fr" | "de"
 
