@@ -856,6 +856,112 @@
       "enlace": "How we handle your data"
     }
   },
+  "founder": {
+    "image_alt": "Ángel Molina Baena, founder of Seda Private Homes",
+    "owner_label": "Owner",
+    "role": "Founder",
+    "bio": "Hotelier by training (Les Roches School of Hotel Management) and by trade for more than a decade at Iberostar. I founded Hotel Estepona Plaza as an owner-operator and learned that the difference between a property that performs and one that disappoints is not the location: it is the management. Seda is that management, brought to the luxury villas of the Costa del Sol.",
+    "cred1": "Les Roches · Hotel management",
+    "cred2": "Iberostar · 8+ years",
+    "cred3": "Hotel Estepona Plaza · Founder",
+    "cred4": "Hotel Estepona Patio · Opening soon",
+    "awards": "Awards & Recognition"
+  },
+  "nosotros": {
+    "meta_description": "Hotelier. Behind Hotel Estepona Plaza, recognised year after year by Booking, TripAdvisor, Expedia and Core Hospitality. Founder of Seda Private Homes — the same hotel discipline applied to private residences on the Costa del Sol.",
+    "hero": {
+      "eyebrow": "Founder · Seda Private Homes",
+      "lead": "Hotelier. Behind <b>Hotel Estepona Plaza</b>, recognised year after year by Booking, TripAdvisor, Expedia and Core Hospitality. Founder of <b>Seda Private Homes</b> — the same hotel discipline applied to private residences on the Costa del Sol.",
+      "base": "Base",
+      "base_value": "Estepona, Málaga",
+      "languages": "Languages",
+      "portrait_alt": "Ángel Molina Baena — Founder of Seda Private Homes",
+      "portrait_caption": "Portrait · Estepona, 2025"
+    },
+    "question": {
+      "eyebrow": "The question that changed everything",
+      "quote": "Why aren't the luxury villas of the Costa del Sol managed to the same standards as a five-star hotel?",
+      "caption": "— The question that founded Seda",
+      "p1": "After years managing hotels with Iberostar and founding Hotel Estepona Plaza, I kept seeing the same pattern: exceptional properties, mediocre management. Owners who didn't know what they earned or what they spent. Guests paying luxury rates for a holiday-apartment experience.",
+      "p2": "Owners deserved hotel operations. Guests deserved hotel service. Seda was the answer."
+    },
+    "path": {
+      "eyebrow": "Career",
+      "h2": "The road <i>to here</i>",
+      "languages": "Languages"
+    },
+    "timeline": {
+      "t1": {
+        "period": "Training",
+        "location": "Bluche · Switzerland",
+        "body": "One of the most recognised hospitality schools in the world. Training in international hotel management, revenue management, F&B and leadership of multicultural teams."
+      },
+      "t2": {
+        "period": "8+ years",
+        "location": "Spain · International",
+        "body": "Operational management in properties of a multinational chain. Direct work with teams in several countries and cultures, exposed to the most demanding hospitality standards of the mass and premium market."
+      },
+      "t3": {
+        "period": "Founder",
+        "location": "Estepona · Málaga",
+        "body": "Owner-operator of a 36-room boutique hotel on the seafront. Hotel of the Year Spain (Core Hospitality), TripAdvisor Travellers' Choice, Booking.com Traveller Review Award, Expedia and Orbitz — five consecutive awards built from scratch."
+      },
+      "t4": {
+        "period": "Opening soon",
+        "location": "Estepona · Málaga",
+        "body": "Second property under development. The continuation of the model of intimate, high-quality hospitality in the historic heart of Estepona."
+      },
+      "t5": {
+        "period": "Founder",
+        "location": "Costa del Sol",
+        "body": "Bringing the hotel model to the management of luxury private residences. The same discipline, the same standards, the same transparency — applied to the most exceptional villas of the Costa del Sol."
+      }
+    },
+    "hotel": {
+      "eyebrow": "01 · The hotel",
+      "h2": "Hotel Estepona Plaza, built on <i>reviews</i>.",
+      "body": "Boutique hotel of 36 rooms facing La Rada beach, Estepona. Recognised consecutively by the platforms that measure the only thing that matters: what the guest says on returning home.",
+      "k1": "Rooms\n4 categories",
+      "k2": "Average rating\nBooking · TripAdvisor",
+      "k3": "Consecutive awards\nBooking · TripAdvisor · Expedia · Orbitz · Core",
+      "k4_value": "No. 1",
+      "k4": "Hotel of the Year\nSpain · Core Hospitality"
+    },
+    "platform": {
+      "eyebrow": "02 · The platform",
+      "h2": "One platform. <i>Three sides.</i>",
+      "body": "Seda brings together what the industry keeps apart: the guest app, the owner dashboard and daily operations — one team, one story.",
+      "n1": {
+        "tag": "A · Guests",
+        "title": "One app, one concierge.",
+        "body": "Arrival, climate control, bookings and experiences — all in a single thread. No calls, no paper."
+      },
+      "n2": {
+        "tag": "B · Owners",
+        "title": "Returns, quietly.",
+        "body": "Clear monthly settlement, occupancy above the market and real-time reports."
+      },
+      "n3": {
+        "tag": "C · Operations",
+        "title": "One team, not three.",
+        "body": "Reception, maintenance, cleaning and revenue management under one command."
+      }
+    },
+    "awards": {
+      "eyebrow": "03 · Recognition",
+      "h2": "The measure of <i>a job well done</i>.",
+      "body": "Five consecutive awards — not for marketing, but for the only thing the platforms measure: what guests say on returning home.",
+      "more": "More at"
+    },
+    "cta": {
+      "eyebrow": "04 · Let's talk",
+      "h2": "A quiet conversation, <i>in private?</i>",
+      "body": "Tell me which property you have in mind or what stay you are looking for. I will reply in a single thread — and introduce you to the team if you decide to continue.",
+      "owner": "Value my property",
+      "stay": "Find a stay",
+      "place": "Estepona · Costa del Sol"
+    }
+  },
   "img": {
     "illustrative": "Illustrative image"
   },

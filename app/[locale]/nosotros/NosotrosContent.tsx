@@ -3,7 +3,8 @@
 import Image from "next/image"
 import { Link } from "@/i18n/navigation"
 import { ArrowRight, ArrowUpRight } from "lucide-react"
-import { useEffect } from "react"
+import { useEffect, type ReactNode } from "react"
+import { useTranslations } from "next-intl"
 
 /* ── Scroll-reveal hook ─────────────────────────────────────── */
 function useReveal() {
@@ -26,36 +27,11 @@ function useReveal() {
 
 /* ── Data ───────────────────────────────────────────────────── */
 const TIMELINE = [
-  {
-    period: "Formación",
-    title: "Les Roches School of Hotel Management",
-    location: "Bluche · Suiza",
-    body: "Una de las escuelas de hotelería más reconocidas del mundo. Formación en gestión hotelera internacional, revenue management, F&B y liderazgo de equipos multiculturales.",
-  },
-  {
-    period: "8+ años",
-    title: "Iberostar Hotels & Resorts",
-    location: "España · Internacional",
-    body: "Gestión operativa en propiedades de cadena multinacional. Trabajo directo con equipos en múltiples países y culturas, con exposición a los estándares de hospitalidad más exigentes del mercado masivo y premium.",
-  },
-  {
-    period: "Fundador",
-    title: "Hotel Estepona Plaza ★★★",
-    location: "Estepona · Málaga",
-    body: "Propietario-operador de hotel boutique de 36 habitaciones en primera línea. Premio Hotel del Año España (Core Hospitality), Travellers' Choice TripAdvisor, Traveller Review Award Booking.com, Expedia y Orbitz — cinco premios consecutivos construidos desde cero.",
-  },
-  {
-    period: "Próxima apertura",
-    title: "Hotel Estepona Patio",
-    location: "Estepona · Málaga",
-    body: "Segunda propiedad en desarrollo. La continuación del modelo de hotelería íntima y de calidad en el corazón histórico de Estepona.",
-  },
-  {
-    period: "Fundador",
-    title: "Seda Private Homes",
-    location: "Costa del Sol",
-    body: "Traslado del modelo hotelero a la gestión de residencias privadas de lujo. La misma disciplina, los mismos estándares, la misma transparencia — aplicados a las villas más excepcionales de la Costa del Sol.",
-  },
+  { id: "t1", title: "Les Roches School of Hotel Management" },
+  { id: "t2", title: "Iberostar Hotels & Resorts" },
+  { id: "t3", title: "Hotel Estepona Plaza ★★★" },
+  { id: "t4", title: "Hotel Estepona Patio" },
+  { id: "t5", title: "Seda Private Homes" },
 ]
 
 const AWARDS = [
@@ -97,29 +73,18 @@ const AWARDS = [
 ]
 
 const PLATFORM_NODES = [
-  {
-    tag: "A · Huéspedes",
-    title: "Una app, un concierge.",
-    body: "Llegada, climatización, reservas y experiencias — todo en un solo hilo. Sin llamadas, sin papel.",
-    pill: "Guest App",
-  },
-  {
-    tag: "B · Propietarios",
-    title: "Rentabilidad, en silencio.",
-    body: "Liquidación mensual clara, ocupación por encima del mercado y reportes en tiempo real.",
-    pill: "SEDA OS",
-  },
-  {
-    tag: "C · Operaciones",
-    title: "Un equipo, no tres.",
-    body: "Recepción, mantenimiento, limpieza y revenue management bajo un mismo mando.",
-    pill: "Booking Platform",
-  },
+  { id: "n1", pill: "Guest App" },
+  { id: "n2", pill: "SEDA OS" },
+  { id: "n3", pill: "Booking Platform" },
 ]
 
 /* ── Page ───────────────────────────────────────────────────── */
 export function NosotrosContent() {
   useReveal()
+  const t = useTranslations("nosotros")
+  const bold = (chunks: ReactNode) => <span className="text-background/90 font-medium">{chunks}</span>
+  const italicOlive = (chunks: ReactNode) => <span className="italic text-[hsl(var(--olive))]">{chunks}</span>
+  const italicGold = (chunks: ReactNode) => <span className="italic text-[hsl(var(--gold))]">{chunks}</span>
 
   return (
     <main id="main-content">
@@ -135,33 +100,28 @@ export function NosotrosContent() {
             {/* Left: text */}
             <div>
               <p className="reveal font-mono text-[11px] tracking-[0.3em] uppercase text-[hsl(var(--gold))] mb-10">
-                Fundador · Seda Private Homes
+                {t("hero.eyebrow")}
               </p>
               <h1 className="reveal font-serif font-light text-[clamp(52px,6.5vw,80px)] leading-[1.02] tracking-[-0.022em] text-balance">
                 Ángel <span className="italic text-[hsl(var(--gold))]">Molina</span>.
               </h1>
               <p className="reveal text-[17px] leading-[1.75] text-background/65 max-w-[44ch] mt-7">
-                Hostelero. Detrás de{" "}
-                <span className="text-background/90 font-medium">Hotel Estepona Plaza</span>,
-                premiado año tras año por Booking, TripAdvisor, Expedia y Core Hospitality.
-                Fundador de{" "}
-                <span className="text-background/90 font-medium">Seda Private Homes</span>{" "}
-                — la misma disciplina hotelera aplicada a residencias privadas en la Costa del Sol.
+                {t.rich("hero.lead", { b: bold })}
               </p>
 
               {/* Meta strip */}
               <dl className="reveal mt-12 pt-8 border-t border-background/12 grid grid-cols-2 gap-x-12 gap-y-6 max-w-[480px]">
                 <div>
                   <dt className="font-mono text-[10px] tracking-[0.24em] uppercase text-background/45 mb-2">
-                    Base
+                    {t("hero.base")}
                   </dt>
                   <dd className="font-serif italic text-[18px] text-background/90 tracking-[-0.01em]">
-                    Estepona, Málaga
+                    {t("hero.base_value")}
                   </dd>
                 </div>
                 <div>
                   <dt className="font-mono text-[10px] tracking-[0.24em] uppercase text-background/45 mb-2">
-                    Idiomas
+                    {t("hero.languages")}
                   </dt>
                   <dd className="font-mono text-[13px] text-background/80 tracking-[0.06em]">
                     ES · EN · FR · PT · DE
@@ -175,7 +135,7 @@ export function NosotrosContent() {
               <div className="relative aspect-[3/4] overflow-hidden max-h-[580px]">
                 <Image
                   src="/angel-molina-v2.jpg"
-                  alt="Ángel Molina Baena — Fundador de Seda Private Homes"
+                  alt={t("hero.portrait_alt")}
                   fill
                   className="object-cover object-top"
                   sizes="(max-width: 1024px) 100vw, 44vw"
@@ -183,7 +143,7 @@ export function NosotrosContent() {
                 />
               </div>
               <p className="absolute bottom-[-28px] left-0 font-mono text-[10px] tracking-[0.26em] uppercase text-background/35">
-                Retrato · Estepona, 2025
+                {t("hero.portrait_caption")}
               </p>
             </div>
 
@@ -195,27 +155,22 @@ export function NosotrosContent() {
       <section className="px-6 md:px-12 lg:px-20 py-28 md:py-36 bg-background text-center">
         <div className="max-w-7xl mx-auto">
           <p className="reveal font-mono text-[11px] tracking-[0.3em] uppercase text-muted-foreground mb-10">
-            La pregunta que lo cambió todo
+            {t("question.eyebrow")}
           </p>
           <blockquote className="reveal font-serif italic font-light text-[clamp(28px,4vw,48px)] leading-[1.2] tracking-[-0.02em] text-[hsl(var(--olive))] max-w-[760px] mx-auto text-balance relative">
             <span className="absolute top-[-0.3em] left-[-0.3em] font-serif text-[hsl(var(--gold))] opacity-40 text-[1.4em] not-italic">&ldquo;</span>
-            ¿Por qué las villas de lujo de la Costa del Sol no se gestionan con los mismos
-            estándares que un hotel de cinco estrellas?
+            {t("question.quote")}
             <span className="absolute bottom-[-0.5em] right-[-0.2em] font-serif text-[hsl(var(--gold))] opacity-40 text-[1.4em] not-italic">&rdquo;</span>
           </blockquote>
           <p className="reveal font-mono text-[10.5px] tracking-[0.28em] uppercase text-muted-foreground mt-10">
-            — La pregunta que fundó Seda
+            {t("question.caption")}
           </p>
           <div className="reveal mt-14 max-w-[640px] mx-auto text-left space-y-5">
             <p className="text-[18px] leading-[1.7] text-muted-foreground font-light">
-              Después de años gestionando hoteles con Iberostar y fundando el Hotel Estepona Plaza,
-              veía el mismo patrón: propiedades excepcionales, gestión mediocre. Propietarios
-              que no sabían lo que ganaban ni lo que gastaban. Huéspedes que pagaban tarifas
-              de lujo por una experiencia de apartamento vacacional.
+              {t("question.p1")}
             </p>
             <p className="text-[18px] leading-[1.7] text-muted-foreground font-light">
-              Los propietarios merecían operaciones de hotel. Los huéspedes merecían servicio
-              de hotel. Seda fue la respuesta.
+              {t("question.p2")}
             </p>
           </div>
         </div>
@@ -227,10 +182,10 @@ export function NosotrosContent() {
 
           <div className="mb-16">
             <p className="reveal font-mono text-[11px] tracking-[0.3em] uppercase text-[hsl(var(--gold))] mb-5">
-              Trayectoria
+              {t("path.eyebrow")}
             </p>
             <h2 className="reveal font-serif font-light text-[clamp(36px,4.5vw,56px)] leading-[1.06] tracking-[-0.02em]">
-              El camino <span className="italic text-[hsl(var(--olive))]">hasta aquí</span>
+              {t.rich("path.h2", { i: italicOlive })}
             </h2>
           </div>
 
@@ -242,18 +197,18 @@ export function NosotrosContent() {
                 className="reveal grid grid-cols-1 md:grid-cols-[160px_1fr_auto] gap-4 md:gap-12 py-8 border-b border-border items-baseline"
               >
                 <p className="font-serif font-light text-[clamp(26px,3vw,36px)] leading-none text-[hsl(var(--olive))] tracking-[-0.02em]">
-                  {item.period}
+                  {t(`timeline.${item.id}.period`)}
                 </p>
                 <div>
                   <h3 className="font-serif font-medium text-[22px] leading-[1.3] tracking-[-0.01em] text-foreground mb-2">
                     {item.title}
                   </h3>
                   <p className="text-[15px] leading-[1.65] text-muted-foreground max-w-[52ch]">
-                    {item.body}
+                    {t(`timeline.${item.id}.body`)}
                   </p>
                 </div>
                 <p className="font-mono text-[10px] tracking-[0.22em] uppercase text-muted-foreground md:text-right whitespace-nowrap">
-                  {item.location}
+                  {t(`timeline.${item.id}.location`)}
                 </p>
               </div>
             ))}
@@ -262,7 +217,7 @@ export function NosotrosContent() {
           {/* Languages strip */}
           <div className="reveal mt-14 flex flex-wrap gap-3">
             <p className="font-mono text-[10px] tracking-[0.26em] uppercase text-muted-foreground self-center mr-4">
-              Idiomas
+              {t("path.languages")}
             </p>
             {[
               ["ES", "Español"],
@@ -295,27 +250,24 @@ export function NosotrosContent() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-end mb-16">
             <div>
               <p className="reveal font-mono text-[11px] tracking-[0.3em] uppercase text-muted-foreground mb-5">
-                01 · El hotel
+                {t("hotel.eyebrow")}
               </p>
               <h2 className="reveal font-serif font-light text-[clamp(34px,4vw,52px)] leading-[1.06] tracking-[-0.02em] text-balance">
-                Hotel Estepona Plaza, construido a base de{" "}
-                <span className="italic text-[hsl(var(--olive))]">reseñas</span>.
+                {t.rich("hotel.h2", { i: italicOlive })}
               </h2>
             </div>
             <p className="reveal text-[16px] leading-[1.65] text-muted-foreground max-w-[44ch]">
-              Hotel boutique de 36 habitaciones frente a la playa de La Rada, Estepona.
-              Premiado consecutivamente por las plataformas que miden lo único que importa:
-              lo que el huésped dice al volver a casa.
+              {t("hotel.body")}
             </p>
           </div>
 
           {/* KPI grid */}
           <div className="grid grid-cols-2 lg:grid-cols-4 border-t border-border">
             {[
-              { value: "36",   sup: null,  em: false, label: "Habitaciones\n4 categorías" },
-              { value: "9.6",  sup: "★",   em: false, label: "Nota media\nBooking · TripAdvisor" },
-              { value: "5",    sup: null,  em: false, label: "Premios consecutivos\nBooking · TripAdvisor · Expedia · Orbitz · Core" },
-              { value: "Nº 1", sup: null,  em: true,  label: "Hotel del Año\nEspaña · Core Hospitality" },
+              { value: "36",   sup: null,  em: false, label: t("hotel.k1") },
+              { value: "9.6",  sup: "★",   em: false, label: t("hotel.k2") },
+              { value: "5",    sup: null,  em: false, label: t("hotel.k3") },
+              { value: t("hotel.k4_value"), sup: null, em: true, label: t("hotel.k4") },
             ].map(({ value, sup, em, label }) => (
               <div
                 key={label}
@@ -362,15 +314,13 @@ export function NosotrosContent() {
 
           <div className="text-center max-w-[680px] mx-auto mb-16">
             <p className="reveal font-mono text-[11px] tracking-[0.3em] uppercase text-muted-foreground mb-5">
-              02 · La plataforma
+              {t("platform.eyebrow")}
             </p>
             <h2 className="reveal font-serif font-light text-[clamp(36px,4.5vw,56px)] leading-[1.06] tracking-[-0.02em] text-balance">
-              Una sola plataforma.{" "}
-              <span className="italic text-[hsl(var(--olive))]">Tres lados.</span>
+              {t.rich("platform.h2", { i: italicOlive })}
             </h2>
             <p className="reveal mt-5 text-[17px] leading-[1.65] text-muted-foreground max-w-[54ch] mx-auto">
-              Seda une lo que la industria mantiene separado: la app del huésped, el dashboard
-              del propietario y la operación diaria — un equipo, una historia.
+              {t("platform.body")}
             </p>
           </div>
 
@@ -382,13 +332,13 @@ export function NosotrosContent() {
                 className="reveal bg-background border border-border rounded-2xl p-8 flex flex-col gap-5"
               >
                 <p className="font-mono text-[10px] tracking-[0.26em] uppercase text-[hsl(var(--gold))]">
-                  {node.tag}
+                  {t(`platform.${node.id}.tag`)}
                 </p>
                 <h3 className="font-serif font-medium text-[24px] leading-[1.25] tracking-[-0.01em] text-foreground">
-                  {node.title}
+                  {t(`platform.${node.id}.title`)}
                 </h3>
                 <p className="text-[15px] leading-[1.65] text-muted-foreground flex-1">
-                  {node.body}
+                  {t(`platform.${node.id}.body`)}
                 </p>
                 <span className="self-start inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-border bg-secondary/60 font-mono text-[10px] tracking-[0.18em] uppercase text-[hsl(var(--olive))] font-medium">
                   <span className="w-1.5 h-1.5 rounded-full bg-[hsl(var(--gold))]" />
@@ -416,15 +366,13 @@ export function NosotrosContent() {
 
           <div className="text-center mb-16">
             <p className="reveal font-mono text-[11px] tracking-[0.3em] uppercase text-muted-foreground mb-5">
-              03 · Reconocimientos
+              {t("awards.eyebrow")}
             </p>
             <h2 className="reveal font-serif font-light text-[clamp(36px,4.5vw,56px)] leading-[1.06] tracking-[-0.02em]">
-              La medida de un{" "}
-              <span className="italic text-[hsl(var(--olive))]">oficio bien hecho</span>.
+              {t.rich("awards.h2", { i: italicOlive })}
             </h2>
             <p className="reveal mt-5 text-[15px] text-muted-foreground max-w-[52ch] mx-auto">
-              Cinco premios consecutivos — no por marketing, sino por lo único que las
-              plataformas miden: lo que los huéspedes dicen al volver a casa.
+              {t("awards.body")}
             </p>
           </div>
 
@@ -458,7 +406,7 @@ export function NosotrosContent() {
           </div>
 
           <p className="reveal text-center mt-10 font-mono text-[11px] tracking-[0.22em] uppercase text-muted-foreground">
-            Más en{" "}
+            {t("awards.more")}{" "}
             <a
               href="https://hotelesteponaplaza.com"
               target="_blank"
@@ -476,15 +424,13 @@ export function NosotrosContent() {
       <section className="px-6 md:px-12 lg:px-20 py-28 md:py-36 bg-[hsl(var(--olive))] text-background text-center">
         <div className="max-w-4xl mx-auto">
           <p className="reveal font-mono text-[11px] tracking-[0.3em] uppercase text-[hsl(var(--gold))] mb-8">
-            04 · Hablemos
+            {t("cta.eyebrow")}
           </p>
           <h2 className="reveal font-serif font-light text-[clamp(40px,5.2vw,64px)] leading-[1.04] tracking-[-0.022em] max-w-[18ch] mx-auto text-balance">
-            ¿Una conversación tranquila,{" "}
-            <span className="italic text-[hsl(var(--gold))]">en privado?</span>
+            {t.rich("cta.h2", { i: italicGold })}
           </h2>
           <p className="reveal mt-6 text-[18px] leading-[1.6] text-background/70 max-w-[48ch] mx-auto">
-            Cuénteme qué propiedad tiene en mente o qué estancia busca. Le respondo en un
-            solo hilo — y le presento al equipo si decide seguir.
+            {t("cta.body")}
           </p>
 
           <div className="reveal flex flex-wrap gap-4 justify-center mt-12">
@@ -492,14 +438,14 @@ export function NosotrosContent() {
               href="/contacto?type=owner"
               className="group inline-flex items-center gap-3 px-7 py-4 bg-[hsl(var(--gold))] text-foreground font-mono text-[11px] tracking-[0.22em] uppercase hover:bg-background transition-colors"
             >
-              Valorar mi propiedad
+              {t("cta.owner")}
               <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" strokeWidth={1.75} />
             </Link>
             <Link
               href="/coleccion"
               className="group inline-flex items-center gap-3 px-7 py-4 border border-background/40 text-background font-mono text-[11px] tracking-[0.22em] uppercase hover:bg-background/10 transition-colors"
             >
-              Buscar estancia
+              {t("cta.stay")}
               <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" strokeWidth={1.75} />
             </Link>
           </div>
@@ -523,7 +469,7 @@ export function NosotrosContent() {
               Hotel Estepona Plaza
               <ArrowUpRight className="h-3 w-3" strokeWidth={1.5} />
             </a>
-            <span>Estepona · Costa del Sol</span>
+            <span>{t("cta.place")}</span>
           </div>
         </div>
       </section>

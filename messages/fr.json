@@ -856,6 +856,112 @@
       "enlace": "Comment nous traitons vos données"
     }
   },
+  "founder": {
+    "image_alt": "Ángel Molina Baena, fondateur de Seda Private Homes",
+    "owner_label": "Propriétaire",
+    "role": "Fondateur",
+    "bio": "Hôtelier de formation (Les Roches School of Hotel Management) et de métier pendant plus d'une décennie chez Iberostar. J'ai fondé l'Hotel Estepona Plaza en tant que propriétaire-exploitant et j'ai appris que la différence entre une propriété qui performe et une qui déçoit n'est pas l'emplacement : c'est la gestion. Seda est cette gestion, transposée aux villas de luxe de la Costa del Sol.",
+    "cred1": "Les Roches · Hôtellerie",
+    "cred2": "Iberostar · 8+ ans",
+    "cred3": "Hotel Estepona Plaza · Fondateur",
+    "cred4": "Hotel Estepona Patio · Prochaine ouverture",
+    "awards": "Prix et distinctions"
+  },
+  "nosotros": {
+    "meta_description": "Hôtelier. Derrière l'Hotel Estepona Plaza, récompensé année après année par Booking, TripAdvisor, Expedia et Core Hospitality. Fondateur de Seda Private Homes — la même discipline hôtelière appliquée aux résidences privées de la Costa del Sol.",
+    "hero": {
+      "eyebrow": "Fondateur · Seda Private Homes",
+      "lead": "Hôtelier. Derrière l'<b>Hotel Estepona Plaza</b>, récompensé année après année par Booking, TripAdvisor, Expedia et Core Hospitality. Fondateur de <b>Seda Private Homes</b> — la même discipline hôtelière appliquée aux résidences privées de la Costa del Sol.",
+      "base": "Base",
+      "base_value": "Estepona, Málaga",
+      "languages": "Langues",
+      "portrait_alt": "Ángel Molina Baena — Fondateur de Seda Private Homes",
+      "portrait_caption": "Portrait · Estepona, 2025"
+    },
+    "question": {
+      "eyebrow": "La question qui a tout changé",
+      "quote": "Pourquoi les villas de luxe de la Costa del Sol ne sont-elles pas gérées selon les mêmes standards qu'un hôtel cinq étoiles ?",
+      "caption": "— La question qui a fondé Seda",
+      "p1": "Après des années à gérer des hôtels chez Iberostar et à fonder l'Hotel Estepona Plaza, je voyais toujours le même schéma : des propriétés exceptionnelles, une gestion médiocre. Des propriétaires qui ne savaient ni ce qu'ils gagnaient ni ce qu'ils dépensaient. Des voyageurs qui payaient des tarifs de luxe pour une expérience d'appartement de vacances.",
+      "p2": "Les propriétaires méritaient une exploitation d'hôtel. Les voyageurs méritaient un service d'hôtel. Seda a été la réponse."
+    },
+    "path": {
+      "eyebrow": "Parcours",
+      "h2": "Le chemin <i>jusqu'ici</i>",
+      "languages": "Langues"
+    },
+    "timeline": {
+      "t1": {
+        "period": "Formation",
+        "location": "Bluche · Suisse",
+        "body": "L'une des écoles d'hôtellerie les plus reconnues au monde. Formation en gestion hôtelière internationale, revenue management, restauration et leadership d'équipes multiculturelles."
+      },
+      "t2": {
+        "period": "8+ ans",
+        "location": "Espagne · International",
+        "body": "Gestion opérationnelle dans des établissements d'une chaîne multinationale. Travail direct avec des équipes de plusieurs pays et cultures, au contact des standards d'hospitalité les plus exigeants du marché de masse et premium."
+      },
+      "t3": {
+        "period": "Fondateur",
+        "location": "Estepona · Málaga",
+        "body": "Propriétaire-exploitant d'un hôtel boutique de 36 chambres en bord de mer. Hôtel de l'année en Espagne (Core Hospitality), Travellers' Choice TripAdvisor, Traveller Review Award Booking.com, Expedia et Orbitz — cinq distinctions consécutives construites à partir de rien."
+      },
+      "t4": {
+        "period": "Prochaine ouverture",
+        "location": "Estepona · Málaga",
+        "body": "Deuxième établissement en développement. La continuité du modèle d'hôtellerie intime et de qualité au cœur historique d'Estepona."
+      },
+      "t5": {
+        "period": "Fondateur",
+        "location": "Costa del Sol",
+        "body": "Transposition du modèle hôtelier à la gestion de résidences privées de luxe. La même discipline, les mêmes standards, la même transparence — appliqués aux villas les plus exceptionnelles de la Costa del Sol."
+      }
+    },
+    "hotel": {
+      "eyebrow": "01 · L'hôtel",
+      "h2": "Hotel Estepona Plaza, bâti sur les <i>avis</i>.",
+      "body": "Hôtel boutique de 36 chambres face à la plage de La Rada, à Estepona. Récompensé de manière consécutive par les plateformes qui mesurent la seule chose qui compte : ce que le voyageur dit en rentrant chez lui.",
+      "k1": "Chambres\n4 catégories",
+      "k2": "Note moyenne\nBooking · TripAdvisor",
+      "k3": "Distinctions consécutives\nBooking · TripAdvisor · Expedia · Orbitz · Core",
+      "k4_value": "N° 1",
+      "k4": "Hôtel de l'année\nEspagne · Core Hospitality"
+    },
+    "platform": {
+      "eyebrow": "02 · La plateforme",
+      "h2": "Une seule plateforme. <i>Trois facettes.</i>",
+      "body": "Seda réunit ce que le secteur garde séparé : l'application du voyageur, le tableau de bord du propriétaire et l'exploitation au quotidien — une équipe, une histoire.",
+      "n1": {
+        "tag": "A · Voyageurs",
+        "title": "Une application, un concierge.",
+        "body": "Arrivée, climatisation, réservations et expériences — tout dans un seul fil. Sans appels, sans papier."
+      },
+      "n2": {
+        "tag": "B · Propriétaires",
+        "title": "De la rentabilité, en toute discrétion.",
+        "body": "Liquidation mensuelle claire, taux d'occupation supérieur au marché et rapports en temps réel."
+      },
+      "n3": {
+        "tag": "C · Exploitation",
+        "title": "Une équipe, pas trois.",
+        "body": "Accueil, maintenance, ménage et revenue management sous une même direction."
+      }
+    },
+    "awards": {
+      "eyebrow": "03 · Distinctions",
+      "h2": "La mesure d'<i>un métier bien fait</i>.",
+      "body": "Cinq distinctions consécutives — non pour le marketing, mais pour la seule chose que mesurent les plateformes : ce que les voyageurs disent en rentrant chez eux.",
+      "more": "Plus sur"
+    },
+    "cta": {
+      "eyebrow": "04 · Parlons-en",
+      "h2": "Une conversation tranquille, <i>en privé ?</i>",
+      "body": "Dites-moi quelle propriété vous avez en tête ou quel séjour vous cherchez. Je vous réponds dans un seul fil — et je vous présente l'équipe si vous décidez de poursuivre.",
+      "owner": "Estimer ma propriété",
+      "stay": "Trouver un séjour",
+      "place": "Estepona · Costa del Sol"
+    }
+  },
   "img": {
     "illustrative": "Image illustrative"
   },
