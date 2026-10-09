@@ -205,11 +205,12 @@
         "legend_maint": "Wartung"
       },
       "liquidacion": {
-        "title": "Abrechnung · Juni 2026",
+        "title": "Beispielabrechnung · Direktbuchung",
         "row1": "Bruttoerlöse",
-        "row2": "SEDA-Provision",
-        "row3": "Services",
-        "row4": "Netto an Eigentümer"
+        "row2": "Berechnungsbasis (ohne Reinigung)",
+        "row3": "SEDA-Provision · 24% der Basis",
+        "row4": "Netto an Eigentümer",
+        "note": "Direktbuchung. Bei einer Kanalbuchung wird zuerst die Plattformprovision abgezogen. Die Reinigung gehört dem Eigentümer und fließt nicht in die Basis ein."
       },
       "status": {
         "title": "Betriebsstatus",
@@ -354,11 +355,12 @@
         "mant": "Wartung",
         "mant_d": "Klimaanlage"
       },
-      "liq_title": "Nächste Abrechnung",
+      "liq_title": "Beispielabrechnung · Direktbuchung",
       "liq_sepa": "SEPA · 01. Nov.",
-      "liq_ingresos": "Erlöse",
-      "liq_comision": "Provision",
-      "liq_servicios": "Services",
+      "liq_ingresos": "Bruttoerlöse",
+      "liq_comision": "Provision 24%",
+      "liq_base": "Basis (ohne Reinigung)",
+      "liq_nota": "Direktbuchung. Bei einer Kanalbuchung wird zuerst die Plattformprovision abgezogen. Die Reinigung gehört dem Eigentümer und fließt nicht in die Basis ein.",
       "ga_title": "Guest App Status",
       "ga_app": "Guest App",
       "ga_app_state": "Aktiv",

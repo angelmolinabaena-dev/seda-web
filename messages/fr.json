@@ -205,11 +205,12 @@
         "legend_maint": "Maintenance"
       },
       "liquidacion": {
-        "title": "Relevé de gérance · Juin 2026",
+        "title": "Relevé de gérance d'exemple · réservation directe",
         "row1": "Revenu brut",
-        "row2": "Commission SEDA",
-        "row3": "Services",
-        "row4": "Net au propriétaire"
+        "row2": "Base de calcul (hors ménage)",
+        "row3": "Commission SEDA · 24% de la base",
+        "row4": "Net au propriétaire",
+        "note": "Réservation directe. Pour une réservation via un canal, la commission de la plateforme est déduite en premier. Le ménage revient au propriétaire et n'entre pas dans la base."
       },
       "status": {
         "title": "État opérationnel",
@@ -354,11 +355,12 @@
         "mant": "Maintenance",
         "mant_d": "Climatisation"
       },
-      "liq_title": "Prochain relevé de gérance",
+      "liq_title": "Relevé de gérance d'exemple · réservation directe",
       "liq_sepa": "Versement SEPA · 01 Nov",
-      "liq_ingresos": "Revenus",
-      "liq_comision": "Commission",
-      "liq_servicios": "Services",
+      "liq_ingresos": "Revenu brut",
+      "liq_comision": "Commission 24%",
+      "liq_base": "Base (hors ménage)",
+      "liq_nota": "Réservation directe. Pour une réservation via un canal, la commission de la plateforme est déduite en premier. Le ménage revient au propriétaire et n'entre pas dans la base.",
       "ga_title": "État Guest App",
       "ga_app": "Guest App",
       "ga_app_state": "Active",
