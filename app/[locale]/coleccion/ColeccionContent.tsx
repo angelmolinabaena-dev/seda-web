@@ -14,7 +14,7 @@ import { useTranslations } from "next-intl"
   plantillas de ficha vacías:
 
     1. Encabezado existente, sin cambio (`coleccion.eyebrow` + `coleccion.h1`).
-    2. Un bloque de texto (`coleccion.body`) — apertura en octubre de 2026.
+    2. Un bloque de texto (`coleccion.body`) — próxima apertura, sin fecha.
     3. Contacto, distinguiendo huésped de propietario, reutilizando los
        destinos y etiquetas que ya existen (`cta.solicitar_estancia` →
        /contacto?type=guest, `cta.valorar_propiedad` → /contacto?type=owner),
