@@ -4,6 +4,7 @@ import Image from "next/image"
 import { useTranslations } from "next-intl"
 import { useScrollReveal } from "@/hooks/use-scroll-reveal"
 import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion"
+import { IllustrativeTag } from "@/components/illustrative-tag"
 
 /*
   Continuous marquee slider for "Servicios que puedes activar".
@@ -33,6 +34,7 @@ function Card({ s, altSuffix }: { s: Service; altSuffix: string }) {
         group/card
       "
     >
+      <IllustrativeTag className="top-3 left-3" />
       <Image
         src={s.image}
         width={1448}

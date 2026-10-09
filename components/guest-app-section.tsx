@@ -1,6 +1,7 @@
 "use client"
 
 import Image from "next/image"
+import { IllustrativeTag } from "@/components/illustrative-tag"
 import {
   ArrowRight,
   Bed,
@@ -150,16 +151,19 @@ function PhoneMockup() {
                   for the main gate is{" "}
                   <span className="font-semibold text-foreground">1234</span>.
                 </p>
+                <div className="relative ml-6 w-[calc(100%-1.5rem)]">
+                <IllustrativeTag compact className="bottom-1 left-1" />
                 <Image
                   src="/villas/door.jpg"
                   width={1376}
                   height={768}
                   sizes="(min-width: 1024px) 320px, 80vw"
                   alt=""
-                  className="ml-6 w-[calc(100%-1.5rem)] aspect-[16/9] object-cover rounded-lg"
+                  className="w-full aspect-[16/9] object-cover rounded-lg"
                   loading="lazy"
                   decoding="async"
                 />
+                </div>
               </div>
 
               {/* Step 02 */}
