@@ -4,6 +4,7 @@ import Image from "next/image"
 import { ArrowUpRight } from "lucide-react"
 import { Link } from "@/i18n/navigation"
 import { useTranslations } from "next-intl"
+import { IllustrativeTag } from "@/components/illustrative-tag"
 import { useScrollReveal } from "@/hooks/use-scroll-reveal"
 import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion"
 
@@ -25,7 +26,8 @@ export function DualConversion() {
             reduced ? "" : "transition-all duration-1000"
           } ${leftShown ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
         >
-          <div className="aspect-square overflow-hidden">
+          <div className="relative aspect-square overflow-hidden">
+            <IllustrativeTag />
             {/* IA photo — woman with iPhone showing the SEDA Guest App welcome */}
             <Image
               src="/villas/guest-app-hand.jpg"
@@ -68,7 +70,8 @@ export function DualConversion() {
             reduced ? "" : "transition-all duration-1000 delay-150"
           } ${rightShown ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
         >
-          <div className="aspect-square overflow-hidden">
+          <div className="relative aspect-square overflow-hidden">
+            <IllustrativeTag />
             {/* IA photo — man with iPad showing the SEDA Portal de Propietarios */}
             <Image
               src="/villas/portal-tablet.jpg"

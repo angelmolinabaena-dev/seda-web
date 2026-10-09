@@ -4,6 +4,7 @@ import Image from "next/image"
 import { useEffect, useRef, useState } from "react"
 import { ArrowRight } from "lucide-react"
 import { useTranslations } from "next-intl"
+import { IllustrativeTag } from "@/components/illustrative-tag"
 import { Link } from "@/i18n/navigation"
 
 export function Hero() {
@@ -85,6 +86,7 @@ export function Hero() {
     <section id="hero" ref={ref} className="relative min-h-[100dvh] flex flex-col overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 z-0">
+        <IllustrativeTag className="bottom-4 right-6" />
         <div ref={parallaxRef} className="absolute inset-0 will-change-transform bg-foreground">
           {reduced ? (
             <Image

@@ -137,12 +137,12 @@
       "chef": {
         "title": "Private",
         "italic": "chef",
-        "line": "Market-driven dining and Mediterranean tables."
+        "line": "Market-fresh menus and Mediterranean-style dinners."
       },
       "transfer": {
         "title": "Airport",
         "italic": "transfer",
-        "line": "Discreet arrival to Málaga or Gibraltar, no waiting."
+        "line": "Discreet arrival at Málaga or Gibraltar, with no waiting."
       },
       "experiencias": {
         "title": "Special",
@@ -167,7 +167,7 @@
       "limpieza": {
         "title": "Daily",
         "italic": "housekeeping",
-        "line": "Digital inventory, considered care protocols."
+        "line": "Digital inventory and care protocols."
       }
     },
     "os": {
@@ -275,7 +275,7 @@
         },
         "q3": {
           "q": "Can I request a chef, transfer or reservations?",
-          "a": "Yes. Before arrival we activate your preferences and, during your stay, everything is requested from the Guest App. We coordinate private chef, massages, transfers, reservations and curated local experiences."
+          "a": "Yes. Before your arrival we activate your preferences and, during your stay, everything is requested through the Guest App. We coordinate a private chef, massages, transfers, reservations and curated local experiences."
         },
         "q4": {
           "q": "What happens if something needs attention?",
@@ -283,7 +283,7 @@
         },
         "q5": {
           "q": "How does SEDA evaluate a property?",
-          "a": "We carry out an architectural, operational and revenue-potential review. A technical visit, zone market analysis and proposal for positioning within the SEDA collection."
+          "a": "We carry out an architectural, operational and revenue-potential review: a technical visit, a market analysis by area and a proposal for positioning within the SEDA collection."
         },
         "q6": {
           "q": "How do I see my revenue?",
@@ -426,7 +426,7 @@
         "italic": "Trust centre",
         "after": "& Compliance"
       },
-      "body": "Complete peace of mind. We automate the management of the legal and tax framework applicable to your property, always operating within regulation.",
+      "body": "Complete peace of mind. We automate the management of the legal and tax framework applicable to your property, always operating in compliance with the regulations.",
       "items": {
         "rd": {
           "t": "RD 933/2021",
@@ -450,11 +450,11 @@
         },
         "access": {
           "t": "Access control",
-          "b": "Digital registration and remote revocation of access."
+          "b": "Digital access logging and remote revocation."
         },
         "trace": {
           "t": "Full traceability",
-          "b": "Immutable log of every action and request."
+          "b": "Immutable log of every action and incident."
         },
         "docs": {
           "t": "Guest documents",
@@ -483,7 +483,7 @@
         "operacion": {
           "name": "Operations",
           "label": "Operational console",
-          "body": "Housekeeping, maintenance, gardening and local-team routing in a single console."
+          "body": "Assignment of housekeeping, maintenance and gardening, plus local-team routing, in a single console."
         },
         "marketing": {
           "name": "Marketing",
@@ -521,8 +521,8 @@
       "projection": "SEDA OS projection",
       "gross": "Annual gross revenue",
       "net": "Net to owner (OTA – direct)",
-      "disclaimer": "ⓘ Estimate calculated solely from the occupancy and ADR you enter: gross revenue = occupancy × 365 days × ADR. Net is shown as a range between a direct booking (0% channel commission) and an OTA such as Airbnb (15%): in both cases, SEDA's 24% commission applies to the accommodation revenue after the channel's commission, never to the gross. It excludes taxes, utilities and property expenses. It is not an offer nor a forecast of results.",
-      "net_note": "The 24% applies only to the accommodation fee: we deduct the platform's commission first. As a share of what the guest actually pays, the real effect is closer to 18%. Some managers advertise a lower percentage applied to a larger base: always ask for the calculation base."
+      "disclaimer": "ⓘ Estimate calculated solely from the occupancy and ADR you enter: gross revenue = occupancy × 365 days × ADR. Net is shown as a range between a direct booking (0% channel commission) and an OTA such as Airbnb (15%): in both cases, SEDA's 24% commission applies to the accommodation revenue after deducting the channel's commission and the cleaning fee, never to the gross. ADR is understood as the accommodation rate, excluding cleaning. It excludes taxes, utilities and property expenses. It is neither an offer nor a forecast of results.",
+      "net_note": "The 24% applies only to the accommodation fee: we first deduct the platform's commission and the cleaning fee, which is entirely yours. As a share of what the guest actually pays, the real effect is closer to 18%. Some managers advertise a lower percentage applied to a larger base: always ask for the calculation base."
     },
     "faq": {
       "eyebrow": "— Frequently asked questions",
@@ -534,7 +534,7 @@
       "items": {
         "q1": {
           "q": "How much does SEDA charge to manage my property?",
-          "a": "We apply a 24% commission on the accommodation revenue, after the platform's commission (Airbnb, Booking...): we never charge on the gross. As a share of what the guest actually pays, the real effect is closer to 18%. Itemised in each monthly settlement in SEDA OS. There is no fixed fee, no onboarding cost and no exit penalty."
+          "a": "We apply a 24% commission on the accommodation revenue, after deducting the platform's commission (Airbnb, Booking...) and the cleaning fee, which is entirely yours: we never charge on the gross. As a share of what the guest actually pays, the real effect is closer to 18%. Itemised in each monthly settlement in SEDA OS. There is no fixed fee and no exit penalty. The first three direct signings pay no onboarding fee; the fourth and fifth pay €490 and after that the fee is €1,290 (excl. VAT)."
         },
         "q2": {
           "q": "Who looks after guests, and when?",
@@ -546,7 +546,7 @@
         },
         "q4": {
           "q": "Do I need to be in Spain to begin?",
-          "a": "No. The entire process (valuation, contract, onboarding, photography, listing and operation) is signed digitally. Contracts are signed with qualified digital identification."
+          "a": "No. The entire process (valuation, contract, onboarding, photography, listing and operation) is signed digitally. Contracts are signed using digital identification and a qualified seal."
         },
         "q5": {
           "q": "Can I use my property whenever I want?",
@@ -558,7 +558,7 @@
         },
         "q7": {
           "q": "What if I want to end the agreement?",
-          "a": "Sixty days' notice, no penalties. Confirmed bookings are honoured to their departure date. Operational data, professional photography and reviews belong to the owner and are exportable at any time."
+          "a": "Sixty days' notice, no penalties. Confirmed bookings are honoured up to their departure date. Operational data, professional photography and reviews belong to the owner and are exportable at any time."
         }
       }
     },
@@ -568,12 +568,12 @@
         "line1": "Let's talk about your",
         "italic": "property."
       },
-      "body": "A confidential potential analysis within 48 hours. No commitment. No cost.",
+      "body": "A confidential analysis of your property's potential within 48 hours. No commitment. No cost.",
       "valorar": "Value my property",
       "acceso": "Owner sign in",
       "stats": {
         "h_label": "Valuation",
-        "cost_label": "No initial cost"
+        "cost_label": "Cost of the valuation"
       }
     }
   },
@@ -600,7 +600,7 @@
       "today_body": "What matters today. Bookings, schedules, access.",
       "arrival_body": "Arrival guide with code and directions.",
       "ask_body": "AI and human concierge, 24/7. The heart of the product.",
-      "stay_body": "Wi-Fi, climate, house rules, villa manual.",
+      "stay_body": "Wi-Fi, climate control, house rules, villa manual.",
       "discover_body": "Costa del Sol curated by SEDA: eat, do, see."
     },
     "journey": {
@@ -634,7 +634,7 @@
         "s5": {
           "tag": "05 · AFTER",
           "t": "Checkout",
-          "b": "Considered departure, requests resolved centrally, frictionless communication."
+          "b": "An orderly departure, centralised issue reporting and frictionless communication."
         }
       }
     },
@@ -642,7 +642,7 @@
       "today_tag": "TODAY · TUESDAY",
       "today_greeting_line1": "Good afternoon,",
       "today_event_tag": "TODAY · 20:30",
-      "today_event_title": "Dinner with chef Alejandro",
+      "today_event_title": "Dinner with Chef Alejandro",
       "today_event_sub": "Terrace · 4 guests · confirmed",
       "today_quick_open": "Open",
       "today_quick_ask": "Ask SEDA",
@@ -698,7 +698,7 @@
       "discover_place3_t": "Mercado del Pasaje",
       "discover_place3_s": "Local · 12 min",
       "checkout_tag": "CHECKOUT",
-      "checkout_title_line1": "A considered",
+      "checkout_title_line1": "An orderly",
       "checkout_title_italic": "departure.",
       "checkout_event_tag": "TODAY · 11:00",
       "checkout_event_title": "Check-out time",
@@ -721,15 +721,15 @@
         "lock_t": "Keyless entry",
         "lock_b": "Nuki Smart Lock integrated. Temporary codes per stay.",
         "wifi_t": "1 Gbps fibre Wi-Fi",
-        "wifi_b": "Router details and connection QR in a single tap.",
+        "wifi_b": "Router details and connection QR code in a single tap.",
         "concierge_t": "24/7 concierge",
         "concierge_b": "Local SEDA team + Ask SEDA AI. Response under 2 min.",
         "lang_t": "Multilingual",
         "lang_b": "ES · EN · DE · FR natively, no machine translation.",
         "exp_t": "Experiences",
-        "exp_b": "Chef, massage, charter and golf, pre-bookable.",
+        "exp_b": "Chef, massage, boat trips and golf, all bookable in advance.",
         "manual_t": "Villa manual",
-        "manual_b": "Climate, kitchen, pool, sauna — all documented.",
+        "manual_b": "Climate control, kitchen, pool, sauna — all documented.",
         "privacy_t": "Privacy",
         "privacy_b": "Encrypted data. No third-party tracking.",
         "compliance_t": "Compliance",
@@ -742,7 +742,7 @@
       "i3": "Discover Costa del Sol",
       "i4": "Integrated bookings",
       "i5": "Multilingual ES·EN·DE·FR",
-      "i6": "Smart climate",
+      "i6": "Smart climate control",
       "i7": "24/7 assistance",
       "i8": "Native villa manual"
     },
@@ -846,7 +846,7 @@
         "status": "Private use / rental / empty",
         "goal": "Yield / control / full management",
         "notes_owner": "Additional information about your property or expectations.",
-        "organization": "Company, media, brand…",
+        "organization": "Company, media outlet, brand…",
         "subject": "Collaboration, press, partner…",
         "message": "Tell us your proposal."
       }
@@ -855,6 +855,115 @@
       "aviso": "We use what you write here only to reply to you. There is no mailing list and no transfer to third parties for commercial purposes.",
       "enlace": "How we handle your data"
     }
+  },
+  "founder": {
+    "image_alt": "Ángel Molina Baena, founder of Seda Private Homes",
+    "owner_label": "Owner",
+    "role": "Founder",
+    "bio": "Hotelier by training (Les Roches School of Hotel Management) and by trade for more than a decade at Iberostar. I founded Hotel Estepona Plaza as an owner-operator and learned that the difference between a property that performs and one that disappoints is not the location: it is the management. Seda is that management, brought to the luxury villas of the Costa del Sol.",
+    "cred1": "Les Roches · Hotel management",
+    "cred2": "Iberostar · 8+ years",
+    "cred3": "Hotel Estepona Plaza · Founder",
+    "cred4": "Hotel Estepona Patio · Opening soon",
+    "awards": "Awards & Recognition"
+  },
+  "nosotros": {
+    "meta_description": "Hotelier. Behind Hotel Estepona Plaza, recognised year after year by Booking, TripAdvisor, Expedia and Core Hospitality. Founder of Seda Private Homes — the same hotel discipline applied to private residences on the Costa del Sol.",
+    "hero": {
+      "eyebrow": "Founder · Seda Private Homes",
+      "lead": "Hotelier. Behind <b>Hotel Estepona Plaza</b>, recognised year after year by Booking, TripAdvisor, Expedia and Core Hospitality. Founder of <b>Seda Private Homes</b> — the same hotel discipline applied to private residences on the Costa del Sol.",
+      "base": "Base",
+      "base_value": "Estepona, Málaga",
+      "languages": "Languages",
+      "portrait_alt": "Ángel Molina Baena — Founder of Seda Private Homes",
+      "portrait_caption": "Portrait · Estepona, 2025"
+    },
+    "question": {
+      "eyebrow": "The question that changed everything",
+      "quote": "Why aren't the luxury villas of the Costa del Sol managed to the same standards as a five-star hotel?",
+      "caption": "— The question that gave rise to Seda",
+      "p1": "After years managing hotels with Iberostar and founding Hotel Estepona Plaza, I kept seeing the same pattern: exceptional properties, mediocre management. Owners who didn't know what they earned or what they spent. Guests paying luxury rates for a holiday-apartment experience.",
+      "p2": "Owners deserved hotel operations. Guests deserved hotel service. Seda was the answer."
+    },
+    "path": {
+      "eyebrow": "Career",
+      "h2": "The road <i>so far</i>",
+      "languages": "Languages"
+    },
+    "timeline": {
+      "t1": {
+        "period": "Training",
+        "location": "Bluche · Switzerland",
+        "body": "One of the most recognised hospitality schools in the world. Training in international hotel management, revenue management, F&B and leadership of multicultural teams."
+      },
+      "t2": {
+        "period": "8+ years",
+        "location": "Spain · International",
+        "body": "Operational management in properties of a multinational chain. Direct work with teams in several countries and cultures, exposed to the most demanding hospitality standards of the mass and premium market."
+      },
+      "t3": {
+        "period": "Founder",
+        "location": "Estepona · Málaga",
+        "body": "Owner-operator of a 36-room boutique hotel on the seafront. Hotel of the Year Spain (Core Hospitality), TripAdvisor Travellers' Choice, Booking.com Traveller Review Award, Expedia and Orbitz — five consecutive awards built from scratch."
+      },
+      "t4": {
+        "period": "Opening soon",
+        "location": "Estepona · Málaga",
+        "body": "Second property under development. The continuation of the model of intimate, high-quality hospitality in the historic heart of Estepona."
+      },
+      "t5": {
+        "period": "Founder",
+        "location": "Costa del Sol",
+        "body": "Bringing the hotel model to the management of luxury private residences. The same discipline, the same standards, the same transparency — applied to the most exceptional villas of the Costa del Sol."
+      }
+    },
+    "hotel": {
+      "eyebrow": "01 · The hotel",
+      "h2": "Hotel Estepona Plaza, built on <i>reviews</i>.",
+      "body": "A 36-room boutique hotel facing La Rada beach in Estepona. Recognised year after year by the platforms that measure the only thing that matters: what guests say when they get home.",
+      "k1": "Rooms\n4 categories",
+      "k2": "Average rating\nBooking · TripAdvisor",
+      "k3": "Consecutive awards\nBooking · TripAdvisor · Expedia · Orbitz · Core",
+      "k4_value": "No. 1",
+      "k4": "Hotel of the Year\nSpain · Core Hospitality"
+    },
+    "platform": {
+      "eyebrow": "02 · The platform",
+      "h2": "One platform. <i>Three sides.</i>",
+      "body": "Seda brings together what the industry keeps apart: the guest app, the owner dashboard and daily operations — one team, one story.",
+      "n1": {
+        "tag": "A · Guests",
+        "title": "One app, one concierge.",
+        "body": "Arrival, climate control, bookings and experiences — all in a single thread. No calls, no paper."
+      },
+      "n2": {
+        "tag": "B · Owners",
+        "title": "Returns, quietly.",
+        "body": "Clear monthly settlement, occupancy above the market and real-time reports."
+      },
+      "n3": {
+        "tag": "C · Operations",
+        "title": "One team, not three.",
+        "body": "Reception, maintenance, cleaning and revenue management under one command."
+      }
+    },
+    "awards": {
+      "eyebrow": "03 · Recognition",
+      "h2": "The measure of <i>a job well done</i>.",
+      "body": "Five consecutive awards — not for marketing, but for the only thing the platforms measure: what guests say when they get home.",
+      "more": "More at"
+    },
+    "cta": {
+      "eyebrow": "04 · Let's talk",
+      "h2": "A quiet conversation, <i>in private?</i>",
+      "body": "Tell me which property you have in mind or what stay you are looking for. I will reply in a single thread — and introduce you to the team if you decide to continue.",
+      "owner": "Value my property",
+      "stay": "Find a stay",
+      "place": "Estepona · Costa del Sol"
+    }
+  },
+  "img": {
+    "illustrative": "Illustrative image"
   },
   "skip": {
     "to_content": "Skip to content"
@@ -870,7 +979,7 @@
       "italic": "private collection",
       "line2": "on the Costa del Sol."
     },
-    "body": "The collection opens in October 2026. Until then we publish no residences; if you would like to book a stay or place your property with us, write to us."
+    "body": "Opening soon. In the meantime we publish no residences; if you would like to book a stay or place your property with us, write to us."
   },
   "exp": {
     "eyebrow": "— SEDA Experiences",
@@ -890,11 +999,11 @@
       "items": {
         "chef": {
           "title": "Private dining",
-          "line": "Private chef, market-driven menus and Mediterranean tables."
+          "line": "Private chef, market-fresh menus and Mediterranean-style dinners."
         },
         "beach": {
           "title": "Beach clubs",
-          "line": "Curated tables along the coast between Marbella and Sotogrande."
+          "line": "Curated bookings along the coast between Marbella and Sotogrande."
         },
         "wellness": {
           "title": "Wellness & massage",
@@ -906,7 +1015,7 @@
         },
         "golf": {
           "title": "Golf",
-          "line": "Tee times on Costa del Sol and Sotogrande courses."
+          "line": "Tee times at courses on the Costa del Sol and in Sotogrande."
         },
         "yates": {
           "title": "Yachts",
@@ -954,13 +1063,13 @@
       "cta": "Design my stay"
     },
     "access": {
-      "image_alt": "Private table at a SEDA residence, intimate atmosphere after dark",
+      "image_alt": "Private table at a SEDA residence, intimate atmosphere at dusk",
       "eyebrow": "— Real access",
       "h2": {
         "line1": "Bookings, boxes and tables that rarely appear",
         "italic": "online."
       },
-      "body": "We work with a closed circle of chefs, beach clubs, venues and events on the Costa del Sol. When a SEDA guest asks, we find the way."
+      "body": "We work with a closed circle of chefs, beach clubs, venues and events on the Costa del Sol. When a SEDA guest asks, we find a way."
     }
   },
   "descubre": {
@@ -1057,7 +1166,7 @@
           "line1": "Talk to",
           "italic": "SEDA"
         },
-        "body": "Personalised valuation of your residence within 48 hours.",
+        "body": "Personalised assessment of your residence within 48 hours.",
         "button": "Talk to SEDA"
       }
     }
@@ -1069,7 +1178,7 @@
       "italic": "before",
       "line2": "a decision."
     },
-    "intro": "Resolving objections is part of the SEDA standard. If a question isn't here, speak to a specialist — no forms, no waits.",
+    "intro": "Resolving objections is part of the SEDA standard. If a question isn't here, speak to a specialist — no forms, no waiting.",
     "cta": {
       "contact": "Contact SEDA",
       "bottom": {
@@ -1092,7 +1201,7 @@
       },
       "q2": {
         "q": "Can I request a chef, transfer or reservations?",
-        "a": "Yes. Before arrival we activate your preferences and, during your stay, everything is requested from the Guest App. We coordinate private chef, massages, transfers, reservations and curated local experiences."
+        "a": "Yes. Before your arrival we activate your preferences and, during your stay, everything is requested through the Guest App. We coordinate a private chef, massages, transfers, reservations and curated local experiences."
       },
       "q3": {
         "q": "How do I access the residence?",
@@ -1100,7 +1209,7 @@
       },
       "q4": {
         "q": "What does the Guest App include?",
-        "a": "Access, property guide, instant concierge, real-time request log, local recommendations and direct communication with SEDA. Available in Spanish, English, German, French and Italian."
+        "a": "Access, property guide, instant concierge, real-time issue reporting, local recommendations and direct communication with SEDA. Available in Spanish, English, German, French and Italian."
       },
       "q5": {
         "q": "What happens if something needs attention?",
@@ -1110,11 +1219,11 @@
     "owners_items": {
       "q1": {
         "q": "How does SEDA evaluate a property?",
-        "a": "We carry out an architectural, operational and revenue-potential review. A technical visit, zone market analysis and proposal for positioning within the SEDA collection."
+        "a": "We carry out an architectural, operational and revenue-potential review: a technical visit, a market analysis by area and a proposal for positioning within the SEDA collection."
       },
       "q2": {
         "q": "What commissions apply?",
-        "a": "We apply a 24% commission on the accommodation revenue of each booking, after the platform's commission. No fixed fee, no onboarding cost and no exit penalty. Every monthly settlement itemises the calculation."
+        "a": "We apply a 24% commission on the accommodation revenue of each booking, after the platform's commission and the cleaning fee. No fixed fee and no exit penalty. The first three direct signings pay no onboarding fee; the fourth and fifth pay €490 and after that the fee is €1,290 (excl. VAT). Every monthly settlement itemises the calculation."
       },
       "q3": {
         "q": "How do I see my revenue?",
@@ -1169,12 +1278,12 @@
           "b": "Smart access, welcome, instructions."
         },
         "m3": {
-          "t": "Requests",
+          "t": "Incidents",
           "b": "Logging, assignment, response times."
         },
         "m4": {
           "t": "Maintenance",
-          "b": "Preventive scheduled, reactive recorded."
+          "b": "Preventive work scheduled, reactive work logged."
         },
         "m5": {
           "t": "Reporting",
@@ -1236,7 +1345,7 @@
     "eyebrow": "— 404 · Page not found",
     "h1_line1": "This page has taken",
     "h1_italic": "a moment.",
-    "body": "The link may have changed or the address may no longer exist. Return to the homepage or go straight to the collection.",
+    "body": "The link may have changed or the address may not exist. Return to the homepage or explore the collection directly.",
     "back_home": "Return home",
     "see_collection": "See the collection"
   },

@@ -21,6 +21,7 @@ import {
   Bell,
 } from "lucide-react"
 import { useTranslations } from "next-intl"
+import { IllustrativeTag } from "@/components/illustrative-tag"
 import Image from "next/image"
 
 // Owner PORTAL home — was pointing at the internal /admin panel (bounces a
@@ -413,6 +414,7 @@ export function PropietariosContent() {
       {/* HERO con SedaOS dashboard overlay */}
       <header className="relative overflow-hidden text-background min-h-[760px] flex items-center pt-40 pb-24">
         <div className="absolute inset-0 z-0">
+          <IllustrativeTag className="bottom-4 right-6" />
           <Image
             src="/villas/portal-tablet.jpg"
             width={1254}
@@ -625,14 +627,14 @@ export function PropietariosContent() {
               <div className="relative overflow-hidden rounded-2xl aspect-[3/4]">
                 <Image
                   src="/angel-molina-v2.jpg"
-                  alt="Ángel Molina Baena, fundador de Seda Private Homes"
+                  alt={t("founder.image_alt")}
                   fill
                   className="object-cover object-top"
                   sizes="(max-width: 1024px) 100vw, 42vw"
                 />
               </div>
               <div className="absolute bottom-5 left-5 right-5 bg-foreground/92 px-4 py-3.5 rounded-xl">
-                <p className="font-mono text-[9px] tracking-[0.22em] uppercase text-[hsl(var(--gold))]">Propietario</p>
+                <p className="font-mono text-[9px] tracking-[0.22em] uppercase text-[hsl(var(--gold))]">{t("founder.owner_label")}</p>
                 <p className="font-serif text-[1.05rem] text-background mt-0.5 leading-tight">Hotel Estepona Plaza ★★★</p>
                 <a
                   href="https://hotelesteponaplaza.com/"
@@ -648,25 +650,22 @@ export function PropietariosContent() {
             {/* Bio */}
             <div className="flex flex-col justify-start lg:pt-3">
               <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-[hsl(var(--gold))] mb-5">
-                Fundador
+                {t("founder.role")}
               </p>
               <h2 className="font-serif font-light text-4xl md:text-5xl leading-[1.05] tracking-[-0.02em]">
                 Ángel Molina <span className="italic">Baena</span>
               </h2>
               <p className="text-base leading-[1.7] text-muted-foreground mt-6 max-w-[52ch]">
-                Hotelero de formación (Les Roches School of Hotel Management) y de oficio durante más de una
-                década en Iberostar. Fundé el Hotel Estepona Plaza como propietario-operador y aprendí que
-                la diferencia entre una propiedad que rinde y una que decepciona no es la ubicación: es la
-                gestión. Seda es esa gestión, trasladada a las villas de lujo de la Costa del Sol.
+                {t("founder.bio")}
               </p>
 
               {/* Credentials */}
               <div className="mt-7 flex flex-wrap gap-2">
                 {[
-                  "Les Roches · Hotellerie",
-                  "Iberostar · 8+ años",
-                  "Hotel Estepona Plaza · Fundador",
-                  "Hotel Estepona Patio · Próxima apertura",
+                  t("founder.cred1"),
+                  t("founder.cred2"),
+                  t("founder.cred3"),
+                  t("founder.cred4"),
                 ].map((c) => (
                   <span
                     key={c}
@@ -680,7 +679,7 @@ export function PropietariosContent() {
               {/* Awards */}
               <div className="mt-10 pt-8 border-t border-border">
                 <p className="font-mono text-[10px] tracking-[0.25em] uppercase text-muted-foreground mb-5">
-                  Premios & Reconocimientos
+                  {t("founder.awards")}
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-8">
                   {[
