@@ -4,6 +4,7 @@ import Image from "next/image"
 import { Link } from "@/i18n/navigation"
 import { ArrowUpRight } from "lucide-react"
 import { useTranslations } from "next-intl"
+import { IllustrativeTag } from "@/components/illustrative-tag"
 
 const cities: { name: string; image: string }[] = [
   { name: "Marbella",  image: "/villas/villa-liria.jpg" },
@@ -47,7 +48,8 @@ export function DescubreContent() {
 
       {/* Wide editorial image */}
       <section className="px-6 md:px-12 lg:px-20">
-        <div className="max-w-7xl mx-auto">
+        <div className="relative max-w-7xl mx-auto">
+          <IllustrativeTag />
           <Image
             src="/villas/about.jpg"
             width={1254}
@@ -173,7 +175,8 @@ export function DescubreContent() {
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-5">
             {cities.map((c) => (
               <div key={c.name} className="flex flex-col gap-4">
-                <div className="aspect-[3/4] overflow-hidden">
+                <div className="relative aspect-[3/4] overflow-hidden">
+                  <IllustrativeTag />
                   <Image src={c.image} alt={c.name} width={1376} height={768} sizes="(min-width: 1024px) 20vw, (min-width: 640px) 33vw, 50vw" className="w-full h-full object-cover" loading="lazy" decoding="async" />
                 </div>
                 <h3 className="font-serif font-light text-xl md:text-[1.4rem] tracking-tight text-foreground">

@@ -21,6 +21,7 @@ import {
   Bell,
 } from "lucide-react"
 import { useTranslations } from "next-intl"
+import { IllustrativeTag } from "@/components/illustrative-tag"
 import Image from "next/image"
 
 // Owner PORTAL home — was pointing at the internal /admin panel (bounces a
@@ -413,6 +414,7 @@ export function PropietariosContent() {
       {/* HERO con SedaOS dashboard overlay */}
       <header className="relative overflow-hidden text-background min-h-[760px] flex items-center pt-40 pb-24">
         <div className="absolute inset-0 z-0">
+          <IllustrativeTag className="bottom-4 right-6" />
           <Image
             src="/villas/portal-tablet.jpg"
             width={1254}

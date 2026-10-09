@@ -4,6 +4,7 @@ import Image from "next/image"
 import { useEffect, useState } from "react"
 import { useTranslations } from "next-intl"
 import { useScrollReveal } from "@/hooks/use-scroll-reveal"
+import { IllustrativeTag } from "@/components/illustrative-tag"
 
 export function EditorialBreak() {
   const t = useTranslations()
@@ -27,10 +28,11 @@ export function EditorialBreak() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
         <div
           ref={imgRef}
-          className={`overflow-hidden ${
+          className={`relative overflow-hidden ${
             reduced ? "" : "transition-all duration-1000"
           } ${imgShown ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
         >
+          <IllustrativeTag />
           {/* Imagen generada con fal.ai Nano Banana Pro (May 2026) — placeholder */}
           <Image
             src="/villas/about.jpg"

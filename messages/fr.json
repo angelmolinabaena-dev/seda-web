@@ -856,6 +856,9 @@
       "enlace": "Comment nous traitons vos données"
     }
   },
+  "img": {
+    "illustrative": "Image illustrative"
+  },
   "skip": {
     "to_content": "Aller au contenu"
   },
