@@ -65,7 +65,7 @@
       },
       "phase1": {
         "title": "Vor der Ankunft",
-        "body": "Zugang, Präferenzen, Transfer, Vorratsausstattung und Vorbereitung der Villa. Wir kümmern uns darum.",
+        "body": "Zugang, Präferenzen, Transfer, Vorratsausstattung und Vorbereitung der Villa. Wir organisieren alles für Sie.",
         "alt": "Schlüssel, frischer Jasmin, Früchte und Willkommensnotiz auf Travertin — Vorbereitung der Villa vor der Ankunft der Gäste"
       },
       "phase2": {
@@ -87,17 +87,17 @@
       "guest_cta": "Das Gästeerlebnis entdecken",
       "owner_image_alt": "Eigentümer prüft das SEDA Eigentümerportal auf einer Terrasse mit Meerblick",
       "owner_eyebrow": "— Für Eigentümer",
-      "owner_h3": "Ihre Residenz, mit Präzision verwaltet. Ohne sich darum kümmern zu müssen.",
+      "owner_h3": "Ihre Residenz, mit Präzision verwaltet. Ohne dass Sie sich darum kümmern müssen.",
       "owner_body": "Verfolgen Sie Belegung, Erlöse, Wartung, Bewertungen und Abrechnungen über das Eigentümerportal.",
       "owner_cta": "Verwaltungsmodell ansehen"
     },
     "guestapp_section": {
       "eyebrow": "— 04 · Guest App",
       "h2": {
-        "line1": "Ihr Aufenthalt, in der",
-        "italic": "Handfläche."
+        "line1": "Ihr Aufenthalt, ganz in",
+        "italic": "Ihrer Hand."
       },
-      "body": "Eine einzige Oberfläche für alles, was vor, während und nach der Ankunft geschieht. Türzugang, sofortiger Concierge, Villenführer und direkte Kommunikation mit Ihrem SEDA-Gastgeber.",
+      "body": "Eine einzige Oberfläche für alles, was vor, während und nach Ihrer Ankunft geschieht. Türzugang, Sofort-Concierge, Villenführer und direkte Kommunikation mit Ihrem SEDA-Gastgeber.",
       "cta": "Guest App ansehen",
       "feat": {
         "acceso": {
@@ -132,16 +132,16 @@
         "line1": "Ein Anruf,",
         "italic": "alles in Bewegung."
       },
-      "body": "Jeder Service wird über die Guest App angefragt und von unserem lokalen Team innerhalb von Stunden aktiviert, nicht Tagen.",
+      "body": "Jeder Service wird über die Guest App angefragt und von unserem lokalen Team innerhalb von Stunden aktiviert, nicht erst nach Tagen.",
       "alt_suffix": "Service von Seda Private Homes",
       "chef": {
         "title": "Privater",
         "italic": "Koch",
         "line": "Marktfrische Küche und mediterrane Tafeln."
       },
-      "transfer": {
+      "Transfer": {
         "title": "Flughafen-",
-        "italic": "transfer",
+        "italic": "Transfer",
         "line": "Diskrete Ankunft in Málaga oder Gibraltar, ohne Wartezeit."
       },
       "experiencias": {
@@ -155,8 +155,8 @@
         "line": "Yachten, private Buchten, ein voller Tag in der Bucht."
       },
       "beach_clubs": {
-        "title": "Beach Club-",
-        "italic": "reservierungen",
+        "title": "Beachclub-",
+        "italic": "Reservierungen",
         "line": "Tische zum Sonnenuntergang zwischen Marbella und Sotogrande."
       },
       "wellness": {
@@ -167,7 +167,7 @@
       "limpieza": {
         "title": "Tägliche",
         "italic": "Reinigung",
-        "line": "Digitales Inventar, durchdachte Pflegeprotokolle."
+        "line": "Digitales Inventar, Pflegeprotokolle."
       }
     },
     "os": {
@@ -214,7 +214,7 @@
       "status": {
         "title": "Betriebsstatus",
         "ok": "Alles in Ordnung",
-        "details": "0 offene Vorgänge\n3 präventive Kontrollen"
+        "details": "0 offene Vorgänge\n3 vorbeugende Wartungen"
       }
     },
     "commitments": {
@@ -223,7 +223,7 @@
         "line1": "Fünf Verpflichtungen. Ein",
         "italic": "Standard."
       },
-      "body": "Wir versprechen keinen Luxus. Wir definieren ihn standardmäßig, in jedem Detail jedes Aufenthalts.",
+      "body": "Wir versprechen keinen Luxus. Bei uns ist er Standard – in jedem Detail jedes Aufenthalts.",
       "items": {
         "privacy": {
           "title": "Privatsphäre",
@@ -243,7 +243,7 @@
         },
         "calm": {
           "title": "Ruhe",
-          "body": "Reibungslose Aufenthalte. Sofortige Unterstützung. Das Gefühl, dass alles bereits vorbereitet ist."
+          "body": "Reibungslose Aufenthalte. Sofortige Unterstützung. Das Gefühl, dass an alles gedacht ist."
         }
       }
     },
@@ -267,7 +267,7 @@
       "items": {
         "q1": {
           "q": "Wie frage ich einen Aufenthalt an?",
-          "a": "Über das Immobilien- oder Kontaktformular, mit Ihren Daten, Anzahl der Gäste und gewünschten Services. Ein SEDA-Spezialist bestätigt die Verfügbarkeit und schlägt innerhalb von 24 Stunden ein maßgeschneidertes Programm vor."
+          "a": "Über das Immobilien- oder Kontaktformular, unter Angabe von Reisedaten, Gästezahl und gewünschten Services. Ein SEDA-Spezialist bestätigt die Verfügbarkeit und schlägt innerhalb von 24 Stunden ein maßgeschneidertes Programm vor."
         },
         "q2": {
           "q": "Wie erhalte ich Zugang zur Residenz?",
@@ -275,10 +275,10 @@
         },
         "q3": {
           "q": "Kann ich einen Koch, Transfer oder Reservierungen anfragen?",
-          "a": "Ja. Vor der Ankunft aktivieren wir Ihre Präferenzen, und während Ihres Aufenthalts wird alles über die Guest App angefragt. Wir koordinieren Privatköche, Massagen, Transfers, Reservierungen und kuratierte lokale Erlebnisse."
+          "a": "Ja. Vor Ihrer Ankunft aktivieren wir Ihre Präferenzen, und während Ihres Aufenthalts wird alles über die Guest App angefragt. Wir koordinieren Privatköche, Massagen, Transfers, Reservierungen und kuratierte lokale Erlebnisse."
         },
         "q4": {
-          "q": "Was geschieht, wenn etwas Aufmerksamkeit erfordert?",
+          "q": "Was passiert, wenn es ein Problem gibt?",
           "a": "Ein einziger Kanal: die Guest App. Das Betriebsteam erhält die Anfrage in SEDA OS und koordiniert die Reaktion sofort. Unterstützung 24/7 in Ihrer Sprache."
         },
         "q5": {
@@ -291,7 +291,7 @@
         },
         "q7": {
           "q": "Wie ist meine Immobilie geschützt?",
-          "a": "Gästeverifizierung, spezifische Versicherung, digitales Inventar, Inspektionen zwischen Aufenthalten und Pflegeprotokolle. Ihre Residenz wird behandelt, als wäre sie unsere eigene."
+          "a": "Gästeverifizierung, spezielle Versicherungen, digitales Inventar, Inspektionen zwischen den Aufenthalten und Pflegeprotokolle. Ihre Residenz wird behandelt, als wäre sie unsere eigene."
         }
       }
     },
@@ -329,12 +329,12 @@
   },
   "prop": {
     "hero": {
-      "eyebrow": "— SEDA Eigentümer",
+      "eyebrow": "— SEDA-Eigentümer",
       "h1": {
         "line1": "Ihre Immobilie,",
         "italic": "vollständig unter Kontrolle."
       },
-      "body": "SEDA OS ist die eigene Software-Schicht, die Buchungen, Betrieb, Wartung, Marketing und Abrechnungen orchestriert. Kein generisches SaaS. Keine Improvisation.",
+      "body": "SEDA OS ist unsere hauseigene Softwareschicht, die Buchungen, Betrieb, Wartung, Marketing und Abrechnungen orchestriert. Kein generisches SaaS. Keine Improvisation.",
       "image_alt": "Residenz bei Sonnenuntergang mit dem Eigentümerportal"
     },
     "os": {
@@ -352,7 +352,7 @@
         "llegadas": "Ankünfte heute",
         "llegadas_d": "2 bestätigt",
         "mant": "Wartung",
-        "mant_d": "HLK"
+        "mant_d": "Klimaanlage"
       },
       "liq_title": "Nächste Abrechnung",
       "liq_sepa": "SEPA · 01. Nov.",
@@ -364,7 +364,7 @@
       "ga_app_state": "Aktiv",
       "ga_lock": "Nuki Smart Lock",
       "ga_lock_state": "Online",
-      "ga_clima": "HLK",
+      "ga_clima": "Klimaanlage",
       "ga_clima_state": "Auto · 22°",
       "session": "Aktuelle Sitzung",
       "session_detail": "Herr Andersen · 4 Gäste · Check-in 16:00",
@@ -402,7 +402,7 @@
       "campaign_h3": "Mehrsprachige Kampagnen",
       "campaign_body": "Strategien, abgestimmt auf die Schlüsselmärkte der Costa del Sol.",
       "desc_h3": "Premium-Beschreibungen",
-      "desc_body": "Editorial verfasste Texte, die das Besondere Ihrer Immobilie hervorheben.",
+      "desc_body": "Redaktionelle Texte, die das Besondere Ihrer Immobilie hervorheben.",
       "desc_quote": "„Ein Rückzugsort, an dem Kalkstein auf das Alborán-Meer trifft…“",
       "compset_h3": "Wettbewerbsanalyse",
       "compset_body": "Beobachtung des Compsets an der Costa del Sol.",
@@ -411,7 +411,7 @@
       "pricing_suggested": "HEUTE EMPFOHLEN",
       "reputation_h3": "Premium-Reputation",
       "reputation_body": "Tadelloses Bewertungsmanagement zur Sicherung des 5★-Status.",
-      "seo_h3": "SEO mit hoher Intention",
+      "seo_h3": "SEO mit hoher Suchintention",
       "seo_meta": "Durchschnittliche Position",
       "seo_kw1": "Luxusvilla Marbella",
       "seo_kw2": "Costa del Sol Vermietung",
@@ -426,7 +426,7 @@
         "italic": "Trust Center",
         "after": "& Compliance"
       },
-      "body": "Vollständige Ruhe. Wir automatisieren die Verwaltung des rechtlichen und steuerlichen Rahmens, der auf Ihre Immobilie anwendbar ist — stets innerhalb der Regulierung.",
+      "body": "Rundum sorgenfrei. Wir automatisieren die Verwaltung des für Ihre Immobilie maßgeblichen rechtlichen und steuerlichen Rahmens – stets im Einklang mit den geltenden Vorschriften.",
       "items": {
         "rd": {
           "t": "RD 933/2021",
@@ -450,11 +450,11 @@
         },
         "access": {
           "t": "Zugangskontrolle",
-          "b": "Digitale Registrierung und Fernwiderruf von Zugängen."
+          "b": "Digitale Zugangsprotokollierung und Fernwiderruf von Zugangsberechtigungen."
         },
         "trace": {
           "t": "Vollständige Nachvollziehbarkeit",
-          "b": "Unveränderliches Protokoll jeder Aktion und Anfrage."
+          "b": "Unveränderliches Protokoll aller Aktionen und Vorfälle."
         },
         "docs": {
           "t": "Gästedokumente",
@@ -483,7 +483,7 @@
         "operacion": {
           "name": "Betrieb",
           "label": "Betriebskonsole",
-          "body": "Reinigung, Wartung, Gartenpflege und Zuweisung lokaler Teams in einer einzigen Konsole."
+          "body": "Einsatzplanung für Reinigung, Wartung und Gartenpflege sowie Routen des lokalen Teams in einer einzigen Konsole."
         },
         "marketing": {
           "name": "Marketing",
@@ -519,7 +519,7 @@
       "adr_tick_high": "5.000 €+",
       "cta": "Präzise Bewertung anfragen",
       "projection": "SEDA OS Projektion",
-      "gross": "Bruttoerlös Jahr",
+      "gross": "Jährlicher Bruttoerlös",
       "net": "Netto an Eigentümer (OTA – Direkt)",
       "disclaimer": "ⓘ Schätzung, die ausschließlich auf der von Ihnen eingegebenen Auslastung und ADR beruht: Bruttoerlös = Auslastung × 365 Tage × ADR. Der Nettobetrag wird als Spanne zwischen Direktbuchung (0% Kanalprovision) und OTA wie Airbnb (15%) angezeigt: in beiden Fällen wird die SEDA-Provision von 24% auf den Unterkunftserlös nach Abzug der Kanalprovision und der Reinigungsgebühr berechnet, nie auf den Bruttobetrag. Die ADR versteht sich als Unterkunftspreis ohne Reinigung. Ohne Steuern, Nebenkosten und Immobilienaufwand. Weder ein Angebot noch eine Ergebnisprognose.",
       "net_note": "Die 24% gelten nur für den Unterkunftserlös: Wir ziehen zuerst die Provision der Plattform und die Reinigungsgebühr ab, die Ihnen vollständig zusteht. Bezogen auf den vom Gast tatsächlich gezahlten Gesamtbetrag liegt der reale Effekt bei rund 18%. Manche Verwaltungen bewerben einen niedrigeren Prozentsatz auf einer größeren Basis: Fragen Sie immer nach der Berechnungsbasis."
@@ -538,7 +538,7 @@
         },
         "q2": {
           "q": "Wer betreut die Gäste, und wann?",
-          "a": "Ein SEDA-Team, lokal an der Costa del Sol angestellt, 24/7 über die Guest App erreichbar. Routineanfragen werden von Ask SEDA (KI-Concierge) vorgefiltert und je nach Kontext an einen menschlichen Concierge eskaliert. Durchschnittliche Antwortzeit: unter 2 Minuten."
+          "a": "Ein fest angestelltes SEDA-Team vor Ort an der Costa del Sol, rund um die Uhr über die Guest App erreichbar. Routineanfragen werden von Ask SEDA (KI-Concierge) vorgefiltert und je nach Kontext an einen menschlichen Concierge weitergeleitet. Durchschnittliche Antwortzeit: unter 2 Minuten."
         },
         "q3": {
           "q": "Wie steht es um die steuerlichen Pflichten meiner Immobilie?",
@@ -546,11 +546,11 @@
         },
         "q4": {
           "q": "Muss ich für den Beginn in Spanien sein?",
-          "a": "Nein. Der gesamte Prozess (Bewertung, Vertrag, Onboarding, Fotografie, Inseratseinstellung und Betrieb) wird digital unterzeichnet. Verträge werden mit qualifizierter digitaler Identifizierung unterzeichnet."
+          "a": "Nein. Der gesamte Prozess (Bewertung, Vertrag, Onboarding, Fotografie, Inserat und Betrieb) wird digital unterzeichnet. Verträge werden mit digitaler Identifizierung und qualifiziertem Siegel unterzeichnet."
         },
         "q5": {
           "q": "Kann ich meine Immobilie nutzen, wann ich möchte?",
-          "a": "Ja. Blockieren Sie die Daten in SEDA OS oder im Eigentümerportal. Das Team bereitet das Zuhause für Ihre Ankunft wie für jeden anderen Aufenthalt vor, ohne zusätzliche Kosten (lediglich Reinigung und Nachfüllung zu internen Sätzen)."
+          "a": "Ja. Blockieren Sie die gewünschten Termine in SEDA OS oder im Eigentümerportal. Das Team bereitet das Haus für Ihre Ankunft wie für jeden anderen Aufenthalt vor, ohne zusätzliche Kosten (lediglich Reinigung und Auffüllen der Verbrauchsartikel zum internen Tarif)."
         },
         "q6": {
           "q": "Wie wählt SEDA aus, welche Immobilien akzeptiert werden?",
@@ -594,14 +594,14 @@
       "eyebrow": "— Architektur",
       "h2": {
         "line1": "Fünf Tabs.",
-        "italic": "Ein Aufenthalt."
+        "italic": "Ein einziger Aufenthalt."
       },
       "body": "Das gesamte Erlebnis ist in fünf Pfade gegliedert: Alltag, Ankunft, Concierge, während des Aufenthalts und Entdeckung der Destination.",
       "today_body": "Was heute zählt. Buchungen, Zeitpläne, Zugänge.",
       "arrival_body": "Anreiseleitfaden mit Code und Wegbeschreibung.",
       "ask_body": "KI- und menschlicher Concierge, 24/7. Das Herz des Produkts.",
-      "stay_body": "WLAN, Klima, Hausordnung, Villenhandbuch.",
-      "discover_body": "Die Costa del Sol kuratiert von SEDA: essen, erleben, sehen."
+      "stay_body": "WLAN, Klimaanlage, Hausordnung, Villenhandbuch.",
+      "discover_body": "Die Costa del Sol, kuratiert von SEDA: essen, erleben, sehen."
     },
     "journey": {
       "eyebrow": "— Die Gastreise",
@@ -634,7 +634,7 @@
         "s5": {
           "tag": "05 · DANACH",
           "t": "Checkout",
-          "b": "Bedachte Abreise, zentral gelöste Anfragen, reibungslose Kommunikation."
+          "b": "Geordnete Abreise, zentral gebündelte Meldungen und reibungslose Kommunikation."
         }
       }
     },
@@ -698,7 +698,7 @@
       "discover_place3_t": "Mercado del Pasaje",
       "discover_place3_s": "Lokal · 12 Min.",
       "checkout_tag": "CHECKOUT",
-      "checkout_title_line1": "Eine bedachte",
+      "checkout_title_line1": "Eine geordnete",
       "checkout_title_italic": "Abreise.",
       "checkout_event_tag": "HEUTE · 11:00",
       "checkout_event_title": "Check-out-Zeit",
@@ -727,9 +727,9 @@
         "lang_t": "Mehrsprachig",
         "lang_b": "ES · EN · DE · FR nativ, ohne maschinelle Übersetzung.",
         "exp_t": "Erlebnisse",
-        "exp_b": "Koch, Massage, Charter und Golf, vorab buchbar.",
+        "exp_b": "Koch, Massage, Bootsausflug und Golf – vorab buchbar.",
         "manual_t": "Villenhandbuch",
-        "manual_b": "Klima, Küche, Pool, Sauna — alles dokumentiert.",
+        "manual_b": "Klimaanlage, Küche, Pool, Sauna – alles dokumentiert.",
         "privacy_t": "Privatsphäre",
         "privacy_b": "Verschlüsselte Daten. Kein Tracking durch Dritte.",
         "compliance_t": "Compliance",
@@ -764,7 +764,7 @@
         "italic": "Gespräch."
       }
     },
-    "selector": "— Wer schreibt?",
+    "selector": "— Wer schreibt uns?",
     "type": {
       "guest": {
         "title": "Ich möchte einen Aufenthalt buchen",
@@ -772,7 +772,7 @@
       },
       "owner": {
         "title": "Ich bin Eigentümer",
-        "desc": "Für Premium-Eigentümer an der Costa del Sol."
+        "desc": "Für Eigentümer von Premium-Immobilien an der Costa del Sol."
       },
       "other": {
         "title": "Kooperation / Sonstiges",
@@ -881,8 +881,8 @@
     "question": {
       "eyebrow": "Die Frage, die alles veränderte",
       "quote": "Warum werden die Luxusvillen der Costa del Sol nicht nach denselben Standards geführt wie ein Fünf-Sterne-Hotel?",
-      "caption": "— Die Frage, die Seda gegründet hat",
-      "p1": "Nach Jahren in der Hotelleitung bei Iberostar und der Gründung des Hotel Estepona Plaza sah ich immer dasselbe Muster: außergewöhnliche Immobilien, mittelmäßige Verwaltung. Eigentümer, die nicht wussten, was sie verdienten und was sie ausgaben. Gäste, die Luxuspreise für ein Erlebnis wie in einer Ferienwohnung zahlten.",
+      "caption": "— Die Frage, aus der Seda entstand",
+      "p1": "Nach Jahren in der Hotelleitung bei Iberostar und der Gründung des Hotels Estepona Plaza sah ich immer dasselbe Muster: außergewöhnliche Immobilien, mittelmäßige Verwaltung. Eigentümer, die weder wussten, was sie verdienten, noch, was sie ausgaben. Gäste, die Luxuspreise für ein Erlebnis wie in einer Ferienwohnung zahlten.",
       "p2": "Die Eigentümer verdienten Hotelbetrieb. Die Gäste verdienten Hotelservice. Seda war die Antwort."
     },
     "path": {
@@ -934,7 +934,7 @@
       "n1": {
         "tag": "A · Gäste",
         "title": "Eine App, ein Concierge.",
-        "body": "Anreise, Klimatisierung, Buchungen und Erlebnisse — alles in einem Faden. Ohne Anrufe, ohne Papier."
+        "body": "Anreise, Klimatisierung, Buchungen und Erlebnisse — alles in einem einzigen Chatverlauf. Ohne Anrufe, ohne Papier."
       },
       "n2": {
         "tag": "B · Eigentümer",
@@ -949,14 +949,14 @@
     },
     "awards": {
       "eyebrow": "03 · Auszeichnungen",
-      "h2": "Das Maß für <i>ein gut gemachtes Handwerk</i>.",
-      "body": "Fünf aufeinanderfolgende Auszeichnungen — nicht für das Marketing, sondern für das Einzige, was die Plattformen messen: was Gäste sagen, wenn sie nach Hause zurückkehren.",
+      "h2": "Woran sich <i>gutes Handwerk</i> messen lässt.",
+      "body": "Fünf Auszeichnungen in Folge — nicht dank Marketing, sondern dank dem Einzigen, was die Plattformen messen: was Gäste sagen, wenn sie nach Hause zurückkehren.",
       "more": "Mehr auf"
     },
     "cta": {
       "eyebrow": "04 · Sprechen wir",
       "h2": "Ein ruhiges Gespräch, <i>unter vier Augen?</i>",
-      "body": "Sagen Sie mir, welche Immobilie Sie im Sinn haben oder welchen Aufenthalt Sie suchen. Ich antworte Ihnen in einem einzigen Faden — und stelle Ihnen das Team vor, wenn Sie sich zum Weitermachen entscheiden.",
+      "body": "Erzählen Sie mir, welche Immobilie Sie im Sinn haben oder welchen Aufenthalt Sie suchen. Ich antworte Ihnen in einem einzigen Gesprächsverlauf — und stelle Ihnen das Team vor, wenn Sie den nächsten Schritt gehen möchten.",
       "owner": "Meine Immobilie bewerten",
       "stay": "Aufenthalt suchen",
       "place": "Estepona · Costa del Sol"
@@ -1009,7 +1009,7 @@
           "title": "Wellness & Massage",
           "line": "Behandlungen in der Residenz, Sonnenaufgangs-Yoga, privates Spa."
         },
-        "transfer": {
+        "Transfer": {
           "title": "Premium-Transfers",
           "line": "Diskrete Fahrzeuge, Flughafenankünfte ohne Wartezeit."
         },
@@ -1197,11 +1197,11 @@
     "guests_items": {
       "q1": {
         "q": "Wie frage ich einen Aufenthalt an?",
-        "a": "Über das Immobilien- oder Kontaktformular, mit Ihren Daten, Anzahl der Gäste und gewünschten Services. Ein SEDA-Spezialist bestätigt die Verfügbarkeit und schlägt innerhalb von 24 Stunden ein maßgeschneidertes Programm vor."
+        "a": "Über das Immobilien- oder Kontaktformular, unter Angabe von Reisedaten, Gästezahl und gewünschten Services. Ein SEDA-Spezialist bestätigt die Verfügbarkeit und schlägt innerhalb von 24 Stunden ein maßgeschneidertes Programm vor."
       },
       "q2": {
         "q": "Kann ich einen Koch, Transfer oder Reservierungen anfragen?",
-        "a": "Ja. Vor der Ankunft aktivieren wir Ihre Präferenzen, und während Ihres Aufenthalts wird alles über die Guest App angefragt. Wir koordinieren Privatköche, Massagen, Transfers, Reservierungen und kuratierte lokale Erlebnisse."
+        "a": "Ja. Vor Ihrer Ankunft aktivieren wir Ihre Präferenzen, und während Ihres Aufenthalts wird alles über die Guest App angefragt. Wir koordinieren Privatköche, Massagen, Transfers, Reservierungen und kuratierte lokale Erlebnisse."
       },
       "q3": {
         "q": "Wie erhalte ich Zugang zur Residenz?",
@@ -1212,7 +1212,7 @@
         "a": "Zugang, Objektleitfaden, Sofort-Concierge, Anfrageprotokoll in Echtzeit, lokale Empfehlungen und direkte Kommunikation mit SEDA. Verfügbar in Spanisch, Englisch, Deutsch, Französisch und Italienisch."
       },
       "q5": {
-        "q": "Was geschieht, wenn etwas Aufmerksamkeit erfordert?",
+        "q": "Was passiert, wenn es ein Problem gibt?",
         "a": "Ein einziger Kanal: die Guest App. Das Betriebsteam erhält die Anfrage in SEDA OS und koordiniert die Reaktion sofort. Unterstützung 24/7 in der Landessprache."
       }
     },
@@ -1235,7 +1235,7 @@
       },
       "q5": {
         "q": "Wie ist meine Immobilie geschützt?",
-        "a": "Gästeverifizierung, spezifische Versicherung, digitales Inventar, Inspektionen zwischen Aufenthalten und Pflegeprotokolle. Ihre Residenz wird behandelt, als wäre sie unsere eigene."
+        "a": "Gästeverifizierung, spezielle Versicherungen, digitales Inventar, Inspektionen zwischen den Aufenthalten und Pflegeprotokolle. Ihre Residenz wird behandelt, als wäre sie unsere eigene."
       },
       "q6": {
         "q": "Steuerliche Compliance? AEAT-Meldungen, RD 933, IRNR.",
