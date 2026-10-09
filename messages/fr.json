@@ -534,7 +534,7 @@
       "items": {
         "q1": {
           "q": "Quelle commission SEDA applique-t-il pour gérer ma propriété ?",
-          "a": "Nous appliquons une commission de 24% sur l'hébergement, après déduction de la commission de la plateforme (Airbnb, Booking...) et du forfait de ménage, qui vous revient intégralement : jamais sur le brut. Rapporté au total payé par le voyageur, l'effet réel avoisine 18%. Détaillée dans chaque liquidation mensuelle dans SEDA OS. Pas de frais fixes, pas de coût d'onboarding, pas de pénalité de sortie."
+          "a": "Nous appliquons une commission de 24% sur l'hébergement, après déduction de la commission de la plateforme (Airbnb, Booking...) et du forfait de ménage, qui vous revient intégralement : jamais sur le brut. Rapporté au total payé par le voyageur, l'effet réel avoisine 18%. Détaillée dans chaque liquidation mensuelle dans SEDA OS. Pas de frais fixes ni de pénalité de sortie. Les trois premières signatures directes ne paient pas de frais d'inscription ; les quatrième et cinquième paient 490 €, puis les frais s'élèvent à 1 290 € (hors TVA)."
         },
         "q2": {
           "q": "Qui s'occupe des voyageurs, et quand ?",
@@ -573,7 +573,7 @@
       "acceso": "Espace propriétaires",
       "stats": {
         "h_label": "Évaluation",
-        "cost_label": "Aucun coût initial"
+        "cost_label": "Coût de l'évaluation"
       }
     }
   },
@@ -1114,7 +1114,7 @@
       },
       "q2": {
         "q": "Quelles commissions s'appliquent ?",
-        "a": "Nous appliquons une commission de 24% sur l'hébergement de chaque réservation, après déduction de la commission de la plateforme et du forfait de ménage. Pas de frais fixes, pas de coût d'onboarding, pas de pénalité de sortie. Chaque liquidation mensuelle détaille le calcul."
+        "a": "Nous appliquons une commission de 24% sur l'hébergement de chaque réservation, après déduction de la commission de la plateforme et du forfait de ménage. Pas de frais fixes ni de pénalité de sortie. Les trois premières signatures directes ne paient pas de frais d'inscription ; les quatrième et cinquième paient 490 €, puis les frais s'élèvent à 1 290 € (hors TVA). Chaque liquidation mensuelle détaille le calcul."
       },
       "q3": {
         "q": "Comment consulter mes revenus ?",

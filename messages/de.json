@@ -534,7 +534,7 @@
       "items": {
         "q1": {
           "q": "Welche Provision erhebt SEDA für die Verwaltung meiner Immobilie?",
-          "a": "Wir erheben eine Provision von 24% auf den Unterkunftserlös, nach Abzug der Plattformprovision (Airbnb, Booking...) und der Reinigungsgebühr, die Ihnen vollständig zusteht: nie auf den Bruttobetrag. Bezogen auf den vom Gast tatsächlich gezahlten Gesamtbetrag liegt der reale Effekt bei rund 18%. Einzeln aufgeführt in jeder monatlichen Abrechnung in SEDA OS. Es gibt keine Festgebühr, keine Onboarding-Kosten und keine Ausstiegsgebühr."
+          "a": "Wir erheben eine Provision von 24% auf den Unterkunftserlös, nach Abzug der Plattformprovision (Airbnb, Booking...) und der Reinigungsgebühr, die Ihnen vollständig zusteht: nie auf den Bruttobetrag. Bezogen auf den vom Gast tatsächlich gezahlten Gesamtbetrag liegt der reale Effekt bei rund 18%. Einzeln aufgeführt in jeder monatlichen Abrechnung in SEDA OS. Es gibt keine Festgebühr und keine Ausstiegsgebühr. Die ersten drei Direktverträge zahlen keine Anmeldegebühr; der vierte und der fünfte zahlen 490 €, danach beträgt die Anmeldegebühr 1.290 € (zzgl. MwSt.)."
         },
         "q2": {
           "q": "Wer betreut die Gäste, und wann?",
@@ -573,7 +573,7 @@
       "acceso": "Eigentümer-Login",
       "stats": {
         "h_label": "Bewertung",
-        "cost_label": "Keine Anfangskosten"
+        "cost_label": "Kosten der Bewertung"
       }
     }
   },
@@ -1114,7 +1114,7 @@
       },
       "q2": {
         "q": "Welche Provisionen gelten?",
-        "a": "Wir erheben eine Provision von 24% auf den Unterkunftserlös jeder Buchung, nach Abzug der Plattformprovision und der Reinigungsgebühr. Keine Festgebühr, keine Onboarding-Kosten, keine Ausstiegsgebühr. Jede monatliche Abrechnung weist die Berechnung aus."
+        "a": "Wir erheben eine Provision von 24% auf den Unterkunftserlös jeder Buchung, nach Abzug der Plattformprovision und der Reinigungsgebühr. Keine Festgebühr, keine Ausstiegsgebühr. Die ersten drei Direktverträge zahlen keine Anmeldegebühr; der vierte und der fünfte zahlen 490 €, danach beträgt die Anmeldegebühr 1.290 € (zzgl. MwSt.). Jede monatliche Abrechnung weist die Berechnung aus."
       },
       "q3": {
         "q": "Wie sehe ich meine Erlöse?",

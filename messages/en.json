@@ -534,7 +534,7 @@
       "items": {
         "q1": {
           "q": "How much does SEDA charge to manage my property?",
-          "a": "We apply a 24% commission on the accommodation revenue, after the platform's commission (Airbnb, Booking...) and the cleaning fee, which is entirely yours: we never charge on the gross. As a share of what the guest actually pays, the real effect is closer to 18%. Itemised in each monthly settlement in SEDA OS. There is no fixed fee, no onboarding cost and no exit penalty."
+          "a": "We apply a 24% commission on the accommodation revenue, after the platform's commission (Airbnb, Booking...) and the cleaning fee, which is entirely yours: we never charge on the gross. As a share of what the guest actually pays, the real effect is closer to 18%. Itemised in each monthly settlement in SEDA OS. There is no fixed fee and no exit penalty. The first three direct signings pay no onboarding fee; the fourth and fifth pay €490 and after that the fee is €1,290 (excl. VAT)."
         },
         "q2": {
           "q": "Who looks after guests, and when?",
@@ -573,7 +573,7 @@
       "acceso": "Owner sign in",
       "stats": {
         "h_label": "Valuation",
-        "cost_label": "No initial cost"
+        "cost_label": "Cost of the valuation"
       }
     }
   },
@@ -1114,7 +1114,7 @@
       },
       "q2": {
         "q": "What commissions apply?",
-        "a": "We apply a 24% commission on the accommodation revenue of each booking, after the platform's commission and the cleaning fee. No fixed fee, no onboarding cost and no exit penalty. Every monthly settlement itemises the calculation."
+        "a": "We apply a 24% commission on the accommodation revenue of each booking, after the platform's commission and the cleaning fee. No fixed fee and no exit penalty. The first three direct signings pay no onboarding fee; the fourth and fifth pay €490 and after that the fee is €1,290 (excl. VAT). Every monthly settlement itemises the calculation."
       },
       "q3": {
         "q": "How do I see my revenue?",

@@ -534,7 +534,7 @@
       "items": {
         "q1": {
           "q": "¿Cuánto cobra SEDA por gestionar mi propiedad?",
-          "a": "Aplicamos una comisión del 24% sobre el alojamiento, una vez descontadas la comisión de la plataforma (Airbnb, Booking...) y la tarifa de limpieza, que es íntegramente suya: nunca cobramos sobre el bruto. El efecto real sobre el total que paga el huésped ronda el 18%. Detallado en cada liquidación mensual en SEDA OS. No hay cuota fija, ni costes de alta, ni penalizaciones por baja."
+          "a": "Aplicamos una comisión del 24% sobre el alojamiento, una vez descontadas la comisión de la plataforma (Airbnb, Booking...) y la tarifa de limpieza, que es íntegramente suya: nunca cobramos sobre el bruto. El efecto real sobre el total que paga el huésped ronda el 18%. Detallado en cada liquidación mensual en SEDA OS. No hay cuota fija ni penalizaciones por baja. Las tres primeras firmas directas no pagan el alta; la cuarta y la quinta pagan 490 € y, después, el alta es de 1.290 € (sin IVA)."
         },
         "q2": {
           "q": "¿Quién atiende a los huéspedes y cuándo?",
@@ -573,7 +573,7 @@
       "acceso": "Acceso propietarios",
       "stats": {
         "h_label": "Valoración",
-        "cost_label": "Sin coste inicial"
+        "cost_label": "Coste de la valoración"
       }
     }
   },
@@ -1114,7 +1114,7 @@
       },
       "q2": {
         "q": "¿Qué comisiones aplica?",
-        "a": "Aplicamos una comisión del 24% sobre el alojamiento, tras descontar la comisión de la plataforma y la tarifa de limpieza de cada reserva. Sin cuota fija, sin coste de alta y sin penalización por baja. Cada liquidación mensual detalla el cálculo."
+        "a": "Aplicamos una comisión del 24% sobre el alojamiento, tras descontar la comisión de la plataforma y la tarifa de limpieza de cada reserva. Sin cuota fija ni penalización por baja. Las tres primeras firmas directas no pagan el alta; la cuarta y la quinta pagan 490 € y, después, el alta es de 1.290 € (sin IVA). Cada liquidación mensual detalla el cálculo."
       },
       "q3": {
         "q": "¿Cómo veo mis ingresos?",
