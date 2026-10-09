@@ -521,8 +521,8 @@
       "projection": "SEDA OS Projektion",
       "gross": "Bruttoerlös Jahr",
       "net": "Netto an Eigentümer (OTA – Direkt)",
-      "disclaimer": "ⓘ Schätzung, die ausschließlich auf der von Ihnen eingegebenen Auslastung und ADR beruht: Bruttoerlös = Auslastung × 365 Tage × ADR. Der Nettobetrag wird als Spanne zwischen Direktbuchung (0% Kanalprovision) und OTA wie Airbnb (15%) angezeigt: in beiden Fällen wird die SEDA-Provision von 24% auf den Unterkunftserlös nach Abzug der Kanalprovision berechnet, nie auf den Bruttobetrag. Ohne Steuern, Nebenkosten und Immobilienaufwand. Weder ein Angebot noch eine Ergebnisprognose.",
-      "net_note": "Die 24% gelten nur für den Unterkunftserlös: Wir ziehen zuerst die Provision der Plattform ab. Bezogen auf den vom Gast tatsächlich gezahlten Gesamtbetrag liegt der reale Effekt bei rund 18%. Manche Verwaltungen bewerben einen niedrigeren Prozentsatz auf einer größeren Basis: Fragen Sie immer nach der Berechnungsbasis."
+      "disclaimer": "ⓘ Schätzung, die ausschließlich auf der von Ihnen eingegebenen Auslastung und ADR beruht: Bruttoerlös = Auslastung × 365 Tage × ADR. Der Nettobetrag wird als Spanne zwischen Direktbuchung (0% Kanalprovision) und OTA wie Airbnb (15%) angezeigt: in beiden Fällen wird die SEDA-Provision von 24% auf den Unterkunftserlös nach Abzug der Kanalprovision und der Reinigungsgebühr berechnet, nie auf den Bruttobetrag. Die ADR versteht sich als Unterkunftspreis ohne Reinigung. Ohne Steuern, Nebenkosten und Immobilienaufwand. Weder ein Angebot noch eine Ergebnisprognose.",
+      "net_note": "Die 24% gelten nur für den Unterkunftserlös: Wir ziehen zuerst die Provision der Plattform und die Reinigungsgebühr ab, die Ihnen vollständig zusteht. Bezogen auf den vom Gast tatsächlich gezahlten Gesamtbetrag liegt der reale Effekt bei rund 18%. Manche Verwaltungen bewerben einen niedrigeren Prozentsatz auf einer größeren Basis: Fragen Sie immer nach der Berechnungsbasis."
     },
     "faq": {
       "eyebrow": "— Häufig gestellte Fragen",
@@ -534,7 +534,7 @@
       "items": {
         "q1": {
           "q": "Welche Provision erhebt SEDA für die Verwaltung meiner Immobilie?",
-          "a": "Wir erheben eine Provision von 24% auf den Unterkunftserlös, nach Abzug der Plattformprovision (Airbnb, Booking...): nie auf den Bruttobetrag. Bezogen auf den vom Gast tatsächlich gezahlten Gesamtbetrag liegt der reale Effekt bei rund 18%. Einzeln aufgeführt in jeder monatlichen Abrechnung in SEDA OS. Es gibt keine Festgebühr, keine Onboarding-Kosten und keine Ausstiegsgebühr."
+          "a": "Wir erheben eine Provision von 24% auf den Unterkunftserlös, nach Abzug der Plattformprovision (Airbnb, Booking...) und der Reinigungsgebühr, die Ihnen vollständig zusteht: nie auf den Bruttobetrag. Bezogen auf den vom Gast tatsächlich gezahlten Gesamtbetrag liegt der reale Effekt bei rund 18%. Einzeln aufgeführt in jeder monatlichen Abrechnung in SEDA OS. Es gibt keine Festgebühr, keine Onboarding-Kosten und keine Ausstiegsgebühr."
         },
         "q2": {
           "q": "Wer betreut die Gäste, und wann?",
@@ -1114,7 +1114,7 @@
       },
       "q2": {
         "q": "Welche Provisionen gelten?",
-        "a": "Wir erheben eine Provision von 24% auf den Unterkunftserlös jeder Buchung, nach Abzug der Plattformprovision. Keine Festgebühr, keine Onboarding-Kosten, keine Ausstiegsgebühr. Jede monatliche Abrechnung weist die Berechnung aus."
+        "a": "Wir erheben eine Provision von 24% auf den Unterkunftserlös jeder Buchung, nach Abzug der Plattformprovision und der Reinigungsgebühr. Keine Festgebühr, keine Onboarding-Kosten, keine Ausstiegsgebühr. Jede monatliche Abrechnung weist die Berechnung aus."
       },
       "q3": {
         "q": "Wie sehe ich meine Erlöse?",

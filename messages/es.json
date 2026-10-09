@@ -521,8 +521,8 @@
       "projection": "Proyección SEDA OS",
       "gross": "Ingresos brutos anuales",
       "net": "Neto para el propietario (OTA – directa)",
-      "disclaimer": "ⓘ Estimación calculada solo con la ocupación y el ADR que usted introduce: ingresos brutos = ocupación × 365 días × ADR. El neto se muestra como horquilla entre reserva directa (0% de comisión de canal) y OTA tipo Airbnb (15%): en ambos casos, la comisión SEDA del 24% se aplica sobre el alojamiento ya descontada la comisión del canal, nunca sobre el bruto. No incluye impuestos, suministros ni gastos de la propiedad. No es una oferta ni una previsión de resultados.",
-      "net_note": "El 24% se aplica solo al alojamiento: descontamos primero la comisión de la plataforma. Sobre el total que paga el huésped, el efecto real ronda el 18%. Hay gestoras que anuncian un porcentaje más bajo aplicado a una base más grande: pida siempre la base de cálculo."
+      "disclaimer": "ⓘ Estimación calculada solo con la ocupación y el ADR que usted introduce: ingresos brutos = ocupación × 365 días × ADR. El neto se muestra como horquilla entre reserva directa (0% de comisión de canal) y OTA tipo Airbnb (15%): en ambos casos, la comisión SEDA del 24% se aplica sobre el alojamiento, una vez descontadas la comisión del canal y la tarifa de limpieza, nunca sobre el bruto. El ADR se entiende como tarifa de alojamiento, sin limpieza. No incluye impuestos, suministros ni gastos de la propiedad. No es una oferta ni una previsión de resultados.",
+      "net_note": "El 24% se aplica solo al alojamiento: descontamos primero la comisión de la plataforma y la tarifa de limpieza, que es íntegramente suya. Sobre el total que paga el huésped, el efecto real ronda el 18%. Hay gestoras que anuncian un porcentaje más bajo aplicado a una base más grande: pida siempre la base de cálculo."
     },
     "faq": {
       "eyebrow": "— Preguntas frecuentes",
@@ -534,7 +534,7 @@
       "items": {
         "q1": {
           "q": "¿Cuánto cobra SEDA por gestionar mi propiedad?",
-          "a": "Aplicamos una comisión del 24% sobre el alojamiento, ya descontada la comisión de la plataforma (Airbnb, Booking...): nunca cobramos sobre el bruto. El efecto real sobre el total que paga el huésped ronda el 18%. Detallado en cada liquidación mensual en SEDA OS. No hay cuota fija, ni costes de alta, ni penalizaciones por baja."
+          "a": "Aplicamos una comisión del 24% sobre el alojamiento, una vez descontadas la comisión de la plataforma (Airbnb, Booking...) y la tarifa de limpieza, que es íntegramente suya: nunca cobramos sobre el bruto. El efecto real sobre el total que paga el huésped ronda el 18%. Detallado en cada liquidación mensual en SEDA OS. No hay cuota fija, ni costes de alta, ni penalizaciones por baja."
         },
         "q2": {
           "q": "¿Quién atiende a los huéspedes y cuándo?",
@@ -1114,7 +1114,7 @@
       },
       "q2": {
         "q": "¿Qué comisiones aplica?",
-        "a": "Aplicamos una comisión del 24% sobre el alojamiento, tras descontar la comisión de la plataforma de cada reserva. Sin cuota fija, sin coste de alta y sin penalización por baja. Cada liquidación mensual detalla el cálculo."
+        "a": "Aplicamos una comisión del 24% sobre el alojamiento, tras descontar la comisión de la plataforma y la tarifa de limpieza de cada reserva. Sin cuota fija, sin coste de alta y sin penalización por baja. Cada liquidación mensual detalla el cálculo."
       },
       "q3": {
         "q": "¿Cómo veo mis ingresos?",
