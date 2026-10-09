@@ -65,17 +65,17 @@
       },
       "phase1": {
         "title": "Antes de llegar",
-        "body": "Acceso, preferencias, transporte, compra inicial y preparación de la villa. Nosotros lo organizamos por ti.",
+        "body": "Acceso, preferencias, transporte, compra inicial y preparación de la villa. Nosotros lo organizamos por usted.",
         "alt": "Llaves, jazmín fresco, frutas y nota de bienvenida sobre travertino — preparación de la villa antes de la llegada del huésped"
       },
       "phase2": {
         "title": "Durante la estancia",
-        "body": "Concierge 24/7, servicios, experiencias y asistencia inmediata desde la Guest App. Tú solo disfrutas.",
+        "body": "Concierge 24/7, servicios, experiencias y asistencia inmediata desde la Guest App. Usted solo disfruta.",
         "alt": "Copa de vino blanco, olivas y libro abierto en terraza mediterránea con piscina infinita al atardecer"
       },
       "phase3": {
         "title": "Después de salir",
-        "body": "Checkout sencillo, feedback, seguimiento personalizado y preparación de tu próxima estancia.",
+        "body": "Checkout sencillo, feedback, seguimiento personalizado y preparación de su próxima estancia.",
         "alt": "Tarjeta de agradecimiento, taza de café y rama de olivo sobre mesa de piedra al amanecer junto a la piscina"
       }
     },
@@ -127,7 +127,7 @@
       }
     },
     "services": {
-      "eyebrow": "— Servicios que puedes activar",
+      "eyebrow": "— Servicios que puede activar",
       "h2": {
         "line1": "Una llamada,",
         "italic": "todo activado."
@@ -550,7 +550,7 @@
         },
         "q5": {
           "q": "¿Puedo usar mi propiedad cuando quiera?",
-          "a": "Sí. Bloquea las fechas en SEDA OS o en el portal de propietarios. El equipo prepara la casa para su llegada como una estancia más, sin coste adicional (sólo limpieza y reposición a tarifa interna)."
+          "a": "Sí. Bloquee las fechas en SEDA OS o en el portal de propietarios. El equipo prepara la casa para su llegada como una estancia más, sin coste adicional (sólo limpieza y reposición a tarifa interna)."
         },
         "q6": {
           "q": "¿Cómo elige SEDA qué propiedades acepta?",
@@ -652,7 +652,7 @@
       "today_discover_title": "Bibo Andaluz Brasserie",
       "today_discover_sub": "Restaurante · 8 min",
       "arrival_tag": "ARRIVAL GUIDE",
-      "arrival_title_line1": "Tu llegada,",
+      "arrival_title_line1": "Su llegada,",
       "arrival_title_italic": "paso a paso.",
       "arrival_address_label": "DIRECCIÓN",
       "arrival_address": "Calle Casablanca 14, Torremolinos",
@@ -706,10 +706,10 @@
       "checkout_item1_t": "Reportar incidencia",
       "checkout_item1_s": "0 abiertas",
       "checkout_item2_t": "Dejar reseña",
-      "checkout_item2_s": "Comparte tu experiencia",
+      "checkout_item2_s": "Comparta su experiencia",
       "checkout_item3_t": "Recibo de estancia",
       "checkout_item3_s": "PDF · €4.380",
-      "checkout_thanks": "Gracias por tu estancia."
+      "checkout_thanks": "Gracias por su estancia."
     },
     "features": {
       "eyebrow": "— Características",
@@ -852,8 +852,8 @@
       }
     },
     "privacidad": {
-      "aviso": "Usamos lo que escribas aquí sólo para responderte. No hay lista de correo, ni cesión a terceros con fines comerciales.",
-      "enlace": "Cómo tratamos tus datos"
+      "aviso": "Usamos lo que escriba aquí solo para responderle. No hay lista de correo, ni cesión a terceros con fines comerciales.",
+      "enlace": "Cómo tratamos sus datos"
     }
   },
   "skip": {
