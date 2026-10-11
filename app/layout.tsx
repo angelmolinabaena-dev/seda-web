@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next"
+import { SITE_DESCRIPTION, SITE_NAME, SITE_TITLE } from "@/lib/site-pages"
 
 /*
   Root layout — a pass-through. `<html lang>`, `<body>`, the fonts and
@@ -17,11 +18,10 @@ import type { Metadata, Viewport } from "next"
 export const metadata: Metadata = {
   metadataBase: new URL("https://sedaprivatehomes.com"),
   title: {
-    default: "SEDA Private Homes — Villas privadas en la Costa del Sol",
-    template: "%s · SEDA Private Homes",
+    default: SITE_TITLE,
+    template: `%s · ${SITE_NAME}`,
   },
-  description:
-    "Gestión de villas privadas en la Costa del Sol, operada sobre software propio. Hospitalidad mediterránea para huéspedes, transparencia total para propietarios.",
+  description: SITE_DESCRIPTION,
   // No root-level `alternates` here on purpose: this metadata is the
   // fallback for EVERY route, and a single hardcoded canonical/hreflang
   // pointing at the homepage was being inherited by all 13 non-home routes

@@ -4,6 +4,7 @@ import Image from "next/image"
 import { IllustrativeTag } from "@/components/illustrative-tag"
 import { ArrowUpRight } from "lucide-react"
 import { useTranslations } from "next-intl"
+import { EXPERIENCIAS } from "@/lib/experiencias"
 
 const accessCol1 = ["Marbella Club", "Sotogrande", "Finca Cortesín"]
 const accessCol2 = ["Skina · Larumbe", "Trocadero", "El Lago"]
@@ -11,17 +12,13 @@ const accessCol2 = ["Skina · Larumbe", "Trocadero", "El Lago"]
 export function ExperienciasContent() {
   const t = useTranslations()
 
-  const experiences = [
-    { id: "chef",     title: t("exp.catalog.items.chef.title"),     line: t("exp.catalog.items.chef.line"),     image: "/villas/services/chef.jpg" },
-    { id: "beach",    title: t("exp.catalog.items.beach.title"),    line: t("exp.catalog.items.beach.line"),    image: "/villas/services/beach-clubs.jpg" },
-    { id: "wellness", title: t("exp.catalog.items.wellness.title"), line: t("exp.catalog.items.wellness.line"), image: "/villas/services/wellness.jpg" },
-    { id: "transfer", title: t("exp.catalog.items.transfer.title"), line: t("exp.catalog.items.transfer.line"), image: "/villas/services/transfer.jpg" },
-    { id: "golf",     title: t("exp.catalog.items.golf.title"),     line: t("exp.catalog.items.golf.line"),     image: "/villas/services/limpieza.jpg" },
-    { id: "yates",    title: t("exp.catalog.items.yates.title"),    line: t("exp.catalog.items.yates.line"),    image: "/villas/services/actividades.jpg" },
-    { id: "familias", title: t("exp.catalog.items.familias.title"), line: t("exp.catalog.items.familias.line"), image: "/villas/journey-antes.jpg" },
-    { id: "cultura",  title: t("exp.catalog.items.cultura.title"),  line: t("exp.catalog.items.cultura.line"),  image: "/villas/journey-durante.jpg" },
-    { id: "reservas", title: t("exp.catalog.items.reservas.title"), line: t("exp.catalog.items.reservas.line"), image: "/villas/services/experiencias.jpg" },
-  ]
+  // El catálogo vive en lib/experiencias.ts: lo comparte /llms.txt.
+  const experiences = EXPERIENCIAS.map(({ id, image }) => ({
+    id,
+    title: t(`exp.catalog.items.${id}.title`),
+    line: t(`exp.catalog.items.${id}.line`),
+    image,
+  }))
 
   const steps = [
     { num: "01", t: t("exp.how.steps.s1.t"), b: t("exp.how.steps.s1.b") },

@@ -1,22 +1,15 @@
 import type { Metadata } from "next"
 import { getTranslations, setRequestLocale } from "next-intl/server"
 import { LegalDocument } from "@/components/legal-document"
+import { PageJsonLd } from "@/components/page-json-ld"
 import type { Locale, LocaleParams } from "@/i18n/routing"
 import { AVISO_LEGAL } from "@/lib/legal/aviso-legal"
 import { exigirIdentidad } from "@/lib/legal/entity"
-import { buildAlternates, localeUrl } from "@/lib/seo-urls"
+import { pageMetadata } from "@/lib/site-pages"
 
 export async function generateMetadata({ params }: LocaleParams): Promise<Metadata> {
-  const locale = (await params).locale as Locale
-  const doc = AVISO_LEGAL.traducciones[locale]
-  return {
-    title: doc.titulo,
-    description: doc.entradilla,
-    alternates: {
-      canonical: localeUrl(locale, AVISO_LEGAL.ruta),
-      languages: buildAlternates(AVISO_LEGAL.ruta),
-    },
-  }
+  const { locale } = await params
+  return pageMetadata(locale, AVISO_LEGAL.ruta, await getTranslations({ locale }))
 }
 
 export default async function AvisoLegalPage({ params }: LocaleParams) {
@@ -28,12 +21,15 @@ export default async function AvisoLegalPage({ params }: LocaleParams) {
   const pendientes = exigirIdentidad("aviso-legal")
 
   return (
-    <LegalDocument
-      documento={AVISO_LEGAL}
-      locale={locale}
-      pendientes={pendientes}
-      etiquetaActualizado={t("actualizado")}
-      etiquetaIndice={t("indice")}
-    />
+    <>
+      <PageJsonLd locale={locale} path={AVISO_LEGAL.ruta} />
+      <LegalDocument
+        documento={AVISO_LEGAL}
+        locale={locale}
+        pendientes={pendientes}
+        etiquetaActualizado={t("actualizado")}
+        etiquetaIndice={t("indice")}
+      />
+    </>
   )
 }

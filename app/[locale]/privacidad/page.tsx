@@ -1,22 +1,15 @@
 import type { Metadata } from "next"
 import { getTranslations, setRequestLocale } from "next-intl/server"
 import { LegalDocument } from "@/components/legal-document"
+import { PageJsonLd } from "@/components/page-json-ld"
 import type { Locale, LocaleParams } from "@/i18n/routing"
 import { exigirIdentidad } from "@/lib/legal/entity"
 import { PRIVACIDAD } from "@/lib/legal/privacidad"
-import { buildAlternates, localeUrl } from "@/lib/seo-urls"
+import { pageMetadata } from "@/lib/site-pages"
 
 export async function generateMetadata({ params }: LocaleParams): Promise<Metadata> {
-  const locale = (await params).locale as Locale
-  const doc = PRIVACIDAD.traducciones[locale]
-  return {
-    title: doc.titulo,
-    description: doc.entradilla,
-    alternates: {
-      canonical: localeUrl(locale, PRIVACIDAD.ruta),
-      languages: buildAlternates(PRIVACIDAD.ruta),
-    },
-  }
+  const { locale } = await params
+  return pageMetadata(locale, PRIVACIDAD.ruta, await getTranslations({ locale }))
 }
 
 export default async function PrivacidadPage({ params }: LocaleParams) {
@@ -29,12 +22,15 @@ export default async function PrivacidadPage({ params }: LocaleParams) {
   const pendientes = exigirIdentidad("privacidad")
 
   return (
-    <LegalDocument
-      documento={PRIVACIDAD}
-      locale={locale}
-      pendientes={pendientes}
-      etiquetaActualizado={t("actualizado")}
-      etiquetaIndice={t("indice")}
-    />
+    <>
+      <PageJsonLd locale={locale} path={PRIVACIDAD.ruta} />
+      <LegalDocument
+        documento={PRIVACIDAD}
+        locale={locale}
+        pendientes={pendientes}
+        etiquetaActualizado={t("actualizado")}
+        etiquetaIndice={t("indice")}
+      />
+    </>
   )
 }

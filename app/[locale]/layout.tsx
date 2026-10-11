@@ -5,57 +5,24 @@ import { SkipLink } from "@/components/skip-link"
 import { Navigation } from "@/components/navigation"
 import { Footer } from "@/components/footer"
 import { KeyboardShortcuts } from "@/components/keyboard-shortcuts"
+import { JsonLdScript } from "@/components/page-json-ld"
 import { routing } from "@/i18n/routing"
-import { SITE_URL } from "@/lib/seo-urls"
-import { generalContact } from "@/lib/site-contact"
+import { businessJsonLd } from "@/lib/jsonld"
 import { fontVariables } from "@/lib/fonts"
 
 import "../globals.css"
 
 // Site-wide Organization + LodgingBusiness JSON-LD — rendered on every
-// route via this shared locale layout. Uses ONLY data already present in
-// `components/footer.tsx` (contact) — no new claims.
-// Deliberately has no `priceRange`: SEDA operates per-property pricing, not
-// a single business-wide range. (The old note here pointed at the
-// `VILLA_PRICING` placeholders of `/villa/[slug]`; esa ruta se retiró con
-// las cuatro residencias ficticias — ver docs/audit/RETIRADA-COLECCION.md.)
-// Deliberately has no `identifier` (tourism license): the code retired here
-// was invented, and of the wrong regulatory figure besides. No real
-// registration number exists to put in its place — omit the field, don't
-// ship a placeholder or an empty string. See docs/audit/VERACIDAD-PUBLICA.md
-// §10.8/§10.9 for the retirement record.
-const businessJsonLd = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "Organization",
-      "@id": `${SITE_URL}/#organization`,
-      name: "SEDA Private Homes",
-      url: SITE_URL,
-      email: generalContact.email,
-      telephone: generalContact.phone.replace(/\s/g, ""),
-    },
-    {
-      "@type": "LodgingBusiness",
-      "@id": `${SITE_URL}/#lodgingbusiness`,
-      name: "SEDA Private Homes",
-      url: SITE_URL,
-      email: generalContact.email,
-      telephone: generalContact.phone.replace(/\s/g, ""),
-      areaServed: "Costa del Sol",
-      address: {
-        "@type": "PostalAddress",
-        addressRegion: "Costa del Sol",
-        addressCountry: "ES",
-      },
-    },
-  ],
-}
+// route via this shared locale layout. Built in lib/jsonld.ts from data the
+// site already shows (contact, zones); the notes on what it deliberately
+// leaves out (priceRange, identifier) live there.
+const businessLd = businessJsonLd()
 
 /*
   Per-locale layout. Validates the URL locale, opts the page into static
   rendering for the locale, and provides the message context to client
-  descendants. Root `<html>` + fonts live in the parent layout.
+  descendants. It also renders `<html>`, `<body>` and the fonts: the root
+  layout is a pass-through (see app/layout.tsx).
 
   ⚠️ Navigation + Footer MUST live here (not in each page.tsx). Mounting
   them at the layout level ensures the component instance PERSISTS across
@@ -97,10 +64,7 @@ export default async function LocaleLayout({
     <html lang={locale} className={fontVariables} suppressHydrationWarning>
       <body className="font-sans antialiased">
         <NextIntlClientProvider>
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(businessJsonLd) }}
-          />
+          <JsonLdScript data={businessLd} />
           <SkipLink />
           <Navigation />
           {children}

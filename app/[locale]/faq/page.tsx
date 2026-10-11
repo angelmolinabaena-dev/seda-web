@@ -1,57 +1,29 @@
 import type { Metadata } from "next"
 import { getTranslations, setRequestLocale } from "next-intl/server"
 import type { LocaleParams } from "@/i18n/routing"
-import { localeUrl, buildAlternates } from "@/lib/seo-urls"
+import { JsonLdScript, PageJsonLd } from "@/components/page-json-ld"
+import { faqHuespedes, faqPropietarios } from "@/lib/faq"
+import { faqPageJsonLd } from "@/lib/jsonld"
+import { pageMetadata } from "@/lib/site-pages"
 import { FaqContent } from "./FaqContent"
 
 export async function generateMetadata({ params }: LocaleParams): Promise<Metadata> {
   const { locale } = await params
-  const t = await getTranslations({ locale, namespace: "faq" })
-  return {
-    title: `${t("h1.line1")} ${t("h1.italic")} ${t("h1.line2")}`,
-    description: t("intro"),
-    alternates: {
-      canonical: localeUrl(locale, "/faq"),
-      languages: buildAlternates("/faq"),
-    },
-  }
+  return pageMetadata(locale, "/faq", await getTranslations({ locale }))
 }
 
 export default async function FaqPage({ params }: LocaleParams) {
   const { locale } = await params
   setRequestLocale(locale)
-  const t = await getTranslations("faq")
+  const t = await getTranslations()
 
-  // FAQPage JSON-LD — mirrors exactly what `FaqContent` renders (both the
-  // guest and owner lists, same `faq.guests_items`/`faq.owners_items` keys),
-  // now that both are always in the DOM (see FaqContent.tsx). No new copy:
-  // every question/answer here is the same translated string shown on page.
-  const guestKeys = ["q1", "q2", "q3", "q4", "q5"] as const
-  const ownerKeys = ["q1", "q2", "q3", "q4", "q5", "q6"] as const
-  const mainEntity = [
-    ...guestKeys.map((k) => ({
-      "@type": "Question",
-      name: t(`guests_items.${k}.q`),
-      acceptedAnswer: { "@type": "Answer", text: t(`guests_items.${k}.a`) },
-    })),
-    ...ownerKeys.map((k) => ({
-      "@type": "Question",
-      name: t(`owners_items.${k}.q`),
-      acceptedAnswer: { "@type": "Answer", text: t(`owners_items.${k}.a`) },
-    })),
-  ]
-  const faqJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity,
-  }
-
+  // FAQPage JSON-LD — exactly what `FaqContent` renders (both the guest and
+  // owner lists, both always in the DOM), from the same lib/faq.ts lists.
+  // No new copy: every question/answer is the translated string on the page.
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-      />
+      <PageJsonLd locale={locale} path="/faq" />
+      <JsonLdScript data={faqPageJsonLd([...faqHuespedes(t), ...faqPropietarios(t)])} />
       <FaqContent />
     </>
   )

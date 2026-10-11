@@ -1,22 +1,22 @@
 import type { Metadata } from "next"
-import { getTranslations } from "next-intl/server"
+import { getTranslations, setRequestLocale } from "next-intl/server"
 import type { LocaleParams } from "@/i18n/routing"
-import { localeUrl, buildAlternates } from "@/lib/seo-urls"
+import { PageJsonLd } from "@/components/page-json-ld"
+import { pageMetadata } from "@/lib/site-pages"
 import { NosotrosContent } from "./NosotrosContent"
 
 export async function generateMetadata({ params }: LocaleParams): Promise<Metadata> {
   const { locale } = await params
-  const t = await getTranslations({ locale, namespace: "nosotros" })
-  return {
-    title: "Ángel Molina",
-    description: t("meta_description"),
-    alternates: {
-      canonical: localeUrl(locale, "/nosotros"),
-      languages: buildAlternates("/nosotros"),
-    },
-  }
+  return pageMetadata(locale, "/nosotros", await getTranslations({ locale }))
 }
 
-export default function NosotrosPage() {
-  return <NosotrosContent />
+export default async function NosotrosPage({ params }: LocaleParams) {
+  const { locale } = await params
+  setRequestLocale(locale)
+  return (
+    <>
+      <PageJsonLd locale={locale} path="/nosotros" />
+      <NosotrosContent />
+    </>
+  )
 }
