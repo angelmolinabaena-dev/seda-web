@@ -85,6 +85,29 @@
   @media (prefers-reduced-motion: reduce) {
     .reveal { opacity: 1; transform: none; transition: none; }
   }
+
+  /* Hero entrance (components/hero.tsx). Pure CSS so it starts at first
+     paint instead of waiting for React to hydrate: the old version kept the
+     H1 and CTAs at opacity 0 until hydration + a 200 ms timer, tying what the
+     visitor sees to the JS bundle's download time.
+     Same choreography as before: 200 ms + the old 300/700/1000 ms delays,
+     1 s fades, 2 s zoom-out on the video and its poster. */
+  @keyframes hero-rise {
+    from { opacity: 0; transform: translate3d(0, var(--hero-rise-from, 2rem), 0); }
+    to   { opacity: 1; transform: none; }
+  }
+  @keyframes hero-zoom {
+    from { transform: scale(1.1); }
+    to   { transform: scale(1); }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-rise {
+      animation: hero-rise 1s cubic-bezier(0.4, 0, 0.2, 1) both;
+    }
+    .hero-zoom {
+      animation: hero-zoom 2s ease-out both;
+    }
+  }
 }
 
 @layer base {
