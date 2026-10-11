@@ -57,9 +57,9 @@ function SedaOSWindow() {
         <div className="flex-1 flex items-center justify-center gap-2">
           <span className="w-4 h-4 rounded-md bg-[hsl(var(--olive))] text-[hsl(var(--gold))] grid place-items-center font-serif italic text-[10px]">S</span>
           <span className="font-mono text-[10px] tracking-[0.14em] uppercase">{t("prop.os.live")}</span>
-          <span className="text-[10px] opacity-55">· app.sedaprivatehomes.com/os</span>
+          <span className="text-[10px] opacity-60">· app.sedaprivatehomes.com/os</span>
         </div>
-        <span className="font-mono text-[10px] opacity-55">v4.2.1</span>
+        <span className="font-mono text-[10px] opacity-60">v4.2.1</span>
       </div>
 
       {/* Tabs */}
@@ -77,7 +77,7 @@ function SedaOSWindow() {
             {label}
           </span>
         ))}
-        <span className="ml-auto inline-flex items-center gap-1.5 text-[10px] text-[#3a9a64] font-semibold whitespace-nowrap pr-3">
+        <span className="ml-auto inline-flex items-center gap-1.5 text-[10px] text-[#2f7f52] font-semibold whitespace-nowrap pr-3">
           <span className="w-1.5 h-1.5 bg-[#3a9a64] rounded-full" />
           {t("prop.os.operative")}
         </span>
@@ -139,7 +139,7 @@ function SedaOSWindow() {
               <div className="mt-2 space-y-1.5">
                 {[[t("prop.os.ga_app"), t("prop.os.ga_app_state"), "good"], [t("prop.os.ga_lock"), t("prop.os.ga_lock_state"), "good"], [t("prop.os.ga_clima"), t("prop.os.ga_clima_state"), "warn"]].map(([k, v, kind]) => (
                   <div key={k} className="flex justify-between items-center text-[11px]">
-                    <span className="text-background/75">{k}</span>
+                    <span className="text-background/80">{k}</span>
                     <span className="inline-flex items-center gap-1.5 font-semibold">
                       <span className={`w-1.5 h-1.5 rounded-full ${kind === "warn" ? "bg-[hsl(var(--gold))]" : "bg-[#5fbf8e]"}`} />
                       {v}
@@ -149,7 +149,7 @@ function SedaOSWindow() {
               </div>
             </div>
             <div className="mt-3">
-              <p className="font-mono text-[8.5px] tracking-[0.18em] uppercase text-background/60">{t("prop.os.session")}</p>
+              <p className="font-mono text-[8.5px] tracking-[0.18em] uppercase text-background/80">{t("prop.os.session")}</p>
               <p className="text-[10.5px] text-background/85 mt-0.5">{t("prop.os.session_detail")}</p>
             </div>
           </div>
@@ -392,7 +392,7 @@ function ProductTabSwitcher({
                   {t.label}
                 </p>
                 <p className={`font-serif text-base md:text-[1.05rem] leading-tight tracking-tight mt-1.5 ${
-                  active ? "text-foreground" : "text-muted-foreground/85"
+                  active ? "text-foreground" : "text-muted-foreground"
                 }`}>
                   {t.sub}
                 </p>
@@ -669,7 +669,7 @@ export function PropietariosContent() {
                 ].map((c) => (
                   <span
                     key={c}
-                    className="font-mono text-[10px] tracking-[0.1em] uppercase px-3 py-1.5 border border-border rounded-full text-foreground/60"
+                    className="font-mono text-[10px] tracking-[0.1em] uppercase px-3 py-1.5 border border-border rounded-full text-foreground/65"
                   >
                     {c}
                   </span>
@@ -696,7 +696,7 @@ export function PropietariosContent() {
                         strokeWidth={0}
                       />
                       <div>
-                        <p className="font-mono text-[9.5px] tracking-[0.14em] uppercase text-foreground/45 leading-none mb-0.5">
+                        <p className="font-mono text-[9.5px] tracking-[0.14em] uppercase text-foreground/65 leading-none mb-0.5">
                           {org}
                         </p>
                         <p className="text-[0.875rem] text-foreground/85 leading-snug">{award}</p>
@@ -850,7 +850,7 @@ export function PropietariosContent() {
             ].map(([v, k]) => (
               <div key={k}>
                 <p className="font-serif text-4xl text-[hsl(var(--gold))]">{v}</p>
-                <p className="font-mono text-[10px] tracking-[0.18em] uppercase text-background/70 mt-1.5">{k}</p>
+                <p className="font-mono text-[10px] tracking-[0.18em] uppercase text-background/80 mt-1.5">{k}</p>
               </div>
             ))}
           </div>
