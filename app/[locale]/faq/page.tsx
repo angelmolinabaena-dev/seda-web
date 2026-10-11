@@ -1,11 +1,12 @@
 import type { Metadata } from "next"
-import { getTranslations, getLocale } from "next-intl/server"
+import { getTranslations, setRequestLocale } from "next-intl/server"
+import type { LocaleParams } from "@/i18n/routing"
 import { localeUrl, buildAlternates } from "@/lib/seo-urls"
 import { FaqContent } from "./FaqContent"
 
-export async function generateMetadata(): Promise<Metadata> {
-  const locale = await getLocale()
-  const t = await getTranslations("faq")
+export async function generateMetadata({ params }: LocaleParams): Promise<Metadata> {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: "faq" })
   return {
     title: `${t("h1.line1")} ${t("h1.italic")} ${t("h1.line2")}`,
     description: t("intro"),
@@ -16,7 +17,9 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
-export default async function FaqPage() {
+export default async function FaqPage({ params }: LocaleParams) {
+  const { locale } = await params
+  setRequestLocale(locale)
   const t = await getTranslations("faq")
 
   // FAQPage JSON-LD — mirrors exactly what `FaqContent` renders (both the

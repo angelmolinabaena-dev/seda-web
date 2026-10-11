@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
-import { getTranslations, getLocale } from "next-intl/server"
+import { getTranslations, setRequestLocale } from "next-intl/server"
+import type { LocaleParams } from "@/i18n/routing"
 import { Link } from "@/i18n/navigation"
 import { localeUrl, buildAlternates } from "@/lib/seo-urls"
 import { getGuiasPublicadas } from "@/lib/guias"
@@ -16,9 +17,9 @@ import type { Locale } from "@/i18n/routing"
   components/navigation.tsx y components/footer.tsx).
 */
 
-export async function generateMetadata(): Promise<Metadata> {
-  const locale = await getLocale()
-  const t = await getTranslations("guias.index")
+export async function generateMetadata({ params }: LocaleParams): Promise<Metadata> {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: "guias.index" })
   return {
     title: `${t("h1.line1")} ${t("h1.italic")} ${t("h1.line2")}`,
     description: t("intro"),
@@ -36,6 +37,7 @@ export default async function GuiasIndexPage({
 }) {
   const { locale } = await params
   const loc = locale as Locale
+  setRequestLocale(locale)
   const t = await getTranslations("guias.index")
   const publicadas = getGuiasPublicadas()
 

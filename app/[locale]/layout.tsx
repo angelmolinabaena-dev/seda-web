@@ -8,6 +8,9 @@ import { KeyboardShortcuts } from "@/components/keyboard-shortcuts"
 import { routing } from "@/i18n/routing"
 import { SITE_URL } from "@/lib/seo-urls"
 import { generalContact } from "@/lib/site-contact"
+import { fontVariables } from "@/lib/fonts"
+
+import "../globals.css"
 
 // Site-wide Organization + LodgingBusiness JSON-LD — rendered on every
 // route via this shared locale layout. Uses ONLY data already present in
@@ -88,20 +91,26 @@ export default async function LocaleLayout({
   // Enables static rendering of all messages on this locale segment.
   setRequestLocale(locale)
 
+  // `<html lang>` matches the rendered language: drives screen-reader
+  // language switching and gives Google a strong locale signal at first paint.
   return (
-    <NextIntlClientProvider>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(businessJsonLd) }}
-      />
-      <SkipLink />
-      <Navigation />
-      {children}
-      <Footer />
-      {/* Global power-user shortcuts (g+c, g+p, ?, Esc). Mounted once
-          per locale so it's available on every page without bloating
-          individual route bundles. */}
-      <KeyboardShortcuts />
-    </NextIntlClientProvider>
+    <html lang={locale} className={fontVariables} suppressHydrationWarning>
+      <body className="font-sans antialiased">
+        <NextIntlClientProvider>
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(businessJsonLd) }}
+          />
+          <SkipLink />
+          <Navigation />
+          {children}
+          <Footer />
+          {/* Global power-user shortcuts (g+c, g+p, ?, Esc). Mounted once
+              per locale so it's available on every page without bloating
+              individual route bundles. */}
+          <KeyboardShortcuts />
+        </NextIntlClientProvider>
+      </body>
+    </html>
   )
 }

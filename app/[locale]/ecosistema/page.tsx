@@ -1,11 +1,12 @@
 import type { Metadata } from "next"
-import { getTranslations, getLocale } from "next-intl/server"
+import { getTranslations } from "next-intl/server"
+import type { LocaleParams } from "@/i18n/routing"
 import { localeUrl, buildAlternates } from "@/lib/seo-urls"
 import { EcosistemaContent } from "./EcosistemaContent"
 
-export async function generateMetadata(): Promise<Metadata> {
-  const locale = await getLocale()
-  const t = await getTranslations("eco")
+export async function generateMetadata({ params }: LocaleParams): Promise<Metadata> {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: "eco" })
   return {
     title: `${t("h1.line1")} ${t("h1.italic")}`,
     description: t("body"),

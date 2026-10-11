@@ -1,41 +1,18 @@
-import React from "react"
 import type { Metadata, Viewport } from "next"
-import { Cormorant_Garamond, Manrope, JetBrains_Mono } from "next/font/google"
-import { getLocale } from "next-intl/server"
-
-import "./globals.css"
 
 /*
-  Root layout — locale-agnostic. The `<html lang>` attribute, NextIntlClientProvider
-  and SkipLink live in `app/[locale]/layout.tsx`, where the locale is resolved
-  from the URL.
+  Root layout — a pass-through. `<html lang>`, `<body>`, the fonts and
+  globals.css live in `app/[locale]/layout.tsx`, where the locale comes from
+  the URL segment.
+
+  It used to render `<html lang={await getLocale()}>` here. Outside the
+  `[locale]` segment `getLocale()` can only learn the locale from the
+  request headers, and reading headers made EVERY route a per-request
+  render: no static HTML, no CDN cache, ~0.3–0.5 s of TTFB from the iad1
+  function on each visit. Without it, every page prerenders at build time.
+
+  The metadata and viewport below still apply to every route.
 */
-
-const cormorant = Cormorant_Garamond({
-  subsets: ["latin"],
-  // 700 (bold) is used by the mobile mega-menu where labels need
-  // editorial presence; 600 reserved for future H2 emphasis.
-  weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-serif",
-  display: "swap",
-})
-
-const manrope = Manrope({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
-  variable: "--font-sans",
-  display: "swap",
-})
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  // 600 (semibold) used by mobile mega-menu CTAs where the buttons
-  // need extra presence — `font-semibold` would synthesise a fake bold
-  // without this weight, which renders weak on small mono text.
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-mono",
-  display: "swap",
-})
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://sedaprivatehomes.com"),
@@ -94,22 +71,6 @@ export const viewport: Viewport = {
   themeColor: "#1c1d1b",
 }
 
-export default async function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
-  // Resolve the locale from the URL via next-intl's server helper so that
-  // `<html lang>` matches the rendered language. This also drives screen-reader
-  // language switching and gives Google a strong locale signal at first paint.
-  const locale = await getLocale()
-  return (
-    <html
-      lang={locale}
-      className={`${cormorant.variable} ${manrope.variable} ${jetbrainsMono.variable}`}
-      suppressHydrationWarning
-    >
-      <body className="font-sans antialiased">{children}</body>
-    </html>
-  )
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return children
 }

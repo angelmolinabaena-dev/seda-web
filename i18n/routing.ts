@@ -14,3 +14,11 @@ export const routing = defineRouting({
 })
 
 export type Locale = (typeof routing.locales)[number]
+
+/*
+  Props of every `[locale]` page and its `generateMetadata`. The locale comes
+  from the URL segment, never from `getLocale()`: without `setRequestLocale`
+  that helper falls back to the request headers, and reading headers turns
+  the whole route into a per-request (dynamic) render — no CDN cache.
+*/
+export type LocaleParams = { params: Promise<{ locale: string }> }

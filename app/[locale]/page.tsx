@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
-import { getLocale, getTranslations } from "next-intl/server"
+import { getTranslations, setRequestLocale } from "next-intl/server"
+import type { LocaleParams } from "@/i18n/routing"
 import { Hero } from "@/components/hero"
 import { ValueProp } from "@/components/value-prop"
 import { EditorialBreak } from "@/components/editorial-break"
@@ -20,8 +21,8 @@ import { localeUrl, buildAlternates } from "@/lib/seo-urls"
 // canonical (see app/layout.tsx comment), so without this every locale of
 // "/" would render with NO canonical at all — this restores a correct,
 // per-locale one (es → bare domain, en/fr/de → /en, /fr, /de).
-export async function generateMetadata(): Promise<Metadata> {
-  const locale = await getLocale()
+export async function generateMetadata({ params }: LocaleParams): Promise<Metadata> {
+  const { locale } = await params
   return {
     alternates: {
       canonical: localeUrl(locale, ""),
@@ -30,7 +31,10 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
-export default async function Page() {
+export default async function Page({ params }: LocaleParams) {
+  const { locale } = await params
+  setRequestLocale(locale)
+
   // FAQPage JSON-LD — reuses the exact `home.faq.items.q1..q7` keys that
   // `FaqSection` already renders as real DOM `<details>` elements (no new
   // copy). Optional per the SEO/GEO audit; added since FaqSection already

@@ -1,13 +1,13 @@
 import type { Metadata } from "next"
-import { getLocale, getTranslations } from "next-intl/server"
+import { getTranslations, setRequestLocale } from "next-intl/server"
 import { LegalDocument } from "@/components/legal-document"
-import type { Locale } from "@/i18n/routing"
+import type { Locale, LocaleParams } from "@/i18n/routing"
 import { exigirIdentidad } from "@/lib/legal/entity"
 import { PRIVACIDAD } from "@/lib/legal/privacidad"
 import { buildAlternates, localeUrl } from "@/lib/seo-urls"
 
-export async function generateMetadata(): Promise<Metadata> {
-  const locale = (await getLocale()) as Locale
+export async function generateMetadata({ params }: LocaleParams): Promise<Metadata> {
+  const locale = (await params).locale as Locale
   const doc = PRIVACIDAD.traducciones[locale]
   return {
     title: doc.titulo,
@@ -19,8 +19,9 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
-export default async function PrivacidadPage() {
-  const locale = (await getLocale()) as Locale
+export default async function PrivacidadPage({ params }: LocaleParams) {
+  const locale = (await params).locale as Locale
+  setRequestLocale(locale)
   const t = await getTranslations("legal")
   // Sin el nombre del responsable (art. 13.1.a RGPD) ni el proveedor del
   // buzón que aparece en la tabla de destinatarios, esta página no puede
