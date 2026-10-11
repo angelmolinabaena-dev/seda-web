@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next"
 import { routing } from "@/i18n/routing"
 import { localeUrl, buildAlternates } from "@/lib/seo-urls"
 import { getGuiasPublicadas, haySeccionGuias } from "@/lib/guias"
+import { SITE_PAGES } from "@/lib/site-pages"
 
 /*
   Multilingual sitemap with hreflang alternates.
@@ -12,32 +13,16 @@ import { getGuiasPublicadas, haySeccionGuias } from "@/lib/guias"
 
   `localeUrl`/`buildAlternates` live in `@/lib/seo-urls` so every page's
   `generateMetadata` can build the exact same canonical/hreflang URLs as
-  this sitemap — one source of truth, no drift.
+  this sitemap — one source of truth, no drift. The page list, with its
+  priority and change frequency, is `SITE_PAGES` (`@/lib/site-pages`), the
+  same catalogue that feeds /llms.txt.
 */
-
-const STATIC_PATHS = [
-  { path: "",              priority: 1.0,  changeFrequency: "weekly"  as const },
-  { path: "/coleccion",    priority: 0.95, changeFrequency: "weekly"  as const },
-  { path: "/propietarios", priority: 0.9,  changeFrequency: "monthly" as const },
-  { path: "/guestapp",     priority: 0.9,  changeFrequency: "monthly" as const },
-  { path: "/experiencias", priority: 0.85, changeFrequency: "monthly" as const },
-  { path: "/ecosistema",   priority: 0.85, changeFrequency: "monthly" as const },
-  { path: "/contacto",     priority: 0.85, changeFrequency: "monthly" as const },
-  { path: "/nosotros",     priority: 0.75, changeFrequency: "monthly" as const },
-  { path: "/descubre",     priority: 0.8,  changeFrequency: "monthly" as const },
-  { path: "/faq",          priority: 0.7,  changeFrequency: "monthly" as const },
-  // Páginas legales: indexables (son información pública obligatoria), pero
-  // con la prioridad más baja del sitio — nadie llega a SEDA buscándolas.
-  { path: "/aviso-legal",  priority: 0.2,  changeFrequency: "yearly"  as const },
-  { path: "/privacidad",   priority: 0.2,  changeFrequency: "yearly"  as const },
-  { path: "/cookies",      priority: 0.2,  changeFrequency: "yearly"  as const },
-]
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date()
 
   // Static routes — emit one entry per (path × locale), with hreflang links.
-  const staticRoutes: MetadataRoute.Sitemap = STATIC_PATHS.flatMap((entry) =>
+  const staticRoutes: MetadataRoute.Sitemap = SITE_PAGES.flatMap((entry) =>
     routing.locales.map((locale) => ({
       url: localeUrl(locale, entry.path),
       lastModified: now,

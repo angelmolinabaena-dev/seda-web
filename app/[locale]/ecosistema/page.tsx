@@ -1,21 +1,22 @@
 import type { Metadata } from "next"
-import { getTranslations, getLocale } from "next-intl/server"
-import { localeUrl, buildAlternates } from "@/lib/seo-urls"
+import { getTranslations, setRequestLocale } from "next-intl/server"
+import type { LocaleParams } from "@/i18n/routing"
+import { PageJsonLd } from "@/components/page-json-ld"
+import { pageMetadata } from "@/lib/site-pages"
 import { EcosistemaContent } from "./EcosistemaContent"
 
-export async function generateMetadata(): Promise<Metadata> {
-  const locale = await getLocale()
-  const t = await getTranslations("eco")
-  return {
-    title: `${t("h1.line1")} ${t("h1.italic")}`,
-    description: t("body"),
-    alternates: {
-      canonical: localeUrl(locale, "/ecosistema"),
-      languages: buildAlternates("/ecosistema"),
-    },
-  }
+export async function generateMetadata({ params }: LocaleParams): Promise<Metadata> {
+  const { locale } = await params
+  return pageMetadata(locale, "/ecosistema", await getTranslations({ locale }))
 }
 
-export default function EcosistemaPage() {
-  return <EcosistemaContent />
+export default async function EcosistemaPage({ params }: LocaleParams) {
+  const { locale } = await params
+  setRequestLocale(locale)
+  return (
+    <>
+      <PageJsonLd locale={locale} path="/ecosistema" />
+      <EcosistemaContent />
+    </>
+  )
 }

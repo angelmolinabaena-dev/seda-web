@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
-import { getTranslations, getLocale } from "next-intl/server"
+import { getTranslations, setRequestLocale } from "next-intl/server"
 import { Link } from "@/i18n/navigation"
 import { localeUrl, buildAlternates, SITE_URL } from "@/lib/seo-urls"
 import { esPublicable, getGuiaBySlug, guias } from "@/lib/guias"
@@ -67,6 +67,7 @@ export default async function GuiaPage({
   const guia = getGuiaBySlug(slug)
   if (!guia) notFound()
 
+  setRequestLocale(locale)
   const trad = guia.traducciones[loc]
   const t = await getTranslations("guias.ficha")
   const publicable = esPublicable(guia)

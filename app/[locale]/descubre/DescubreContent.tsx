@@ -5,14 +5,10 @@ import { Link } from "@/i18n/navigation"
 import { ArrowUpRight } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { IllustrativeTag } from "@/components/illustrative-tag"
+import { ZONAS } from "@/lib/zonas"
 
-const cities: { name: string; image: string }[] = [
-  { name: "Marbella",  image: "/villas/villa-liria.jpg" },
-  { name: "Estepona",  image: "/villas/casa-almena.jpg" },
-  { name: "Benahavís", image: "/villas/casa-almazara.jpg" },
-  { name: "Casares",   image: "/villas/villa-sosiego.jpg" },
-  { name: "Málaga",    image: "/villas/door.jpg" },
-]
+// La lista vive en lib/zonas.ts: la comparten el JSON-LD y /llms.txt.
+const cities = ZONAS
 
 export function DescubreContent() {
   const t = useTranslations()

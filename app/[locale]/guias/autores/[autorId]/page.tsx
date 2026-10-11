@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
-import { getTranslations } from "next-intl/server"
+import { getTranslations, setRequestLocale } from "next-intl/server"
 import { Link } from "@/i18n/navigation"
 import { localeUrl, buildAlternates } from "@/lib/seo-urls"
 import { autores, getAutor } from "@/lib/autores"
@@ -25,7 +25,7 @@ export async function generateMetadata({
   const { locale, autorId } = await params
   const autor = getAutor(autorId)
   if (!autor) return {}
-  const t = await getTranslations("guias.autor")
+  const t = await getTranslations({ locale, namespace: "guias.autor" })
   return {
     title: t("hechos_titulo", { nombre: autor.nombre }),
     alternates: {
@@ -45,6 +45,7 @@ export default async function AutorPage({
   const autor = getAutor(autorId)
   if (!autor) notFound()
 
+  setRequestLocale(locale)
   const t = await getTranslations("guias.autor")
   const guiasDelAutor = getGuiasPublicadas().filter((g) => g.autorId === autorId)
 

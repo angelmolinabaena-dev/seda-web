@@ -64,9 +64,9 @@ function GuestForm() {
         <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-muted-foreground mb-3">
           {t("contacto.form.guest.eyebrow")}
         </p>
-        <h3 className="font-serif font-light text-2xl md:text-[1.65rem] leading-tight tracking-tight text-foreground">
+        <h2 className="font-serif font-light text-2xl md:text-[1.65rem] leading-tight tracking-tight text-foreground">
           {t("contacto.form.guest.h3_line1")} <span className="italic">{t("contacto.form.guest.h3_italic")}</span>
-        </h3>
+        </h2>
       </div>
 
       <FormRow>
@@ -109,9 +109,9 @@ function OwnerForm() {
         <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-muted-foreground mb-3">
           {t("contacto.form.owner.eyebrow")}
         </p>
-        <h3 className="font-serif font-light text-2xl md:text-[1.65rem] leading-tight tracking-tight text-foreground">
+        <h2 className="font-serif font-light text-2xl md:text-[1.65rem] leading-tight tracking-tight text-foreground">
           {t("contacto.form.owner.h3_line1")} <span className="italic">{t("contacto.form.owner.h3_italic")}</span>
-        </h3>
+        </h2>
       </div>
       <FormRow>
         <Field name="property_location" label={t("contacto.form.labels.location")} placeholder={t("contacto.form.placeholders.location")} required />
@@ -150,9 +150,9 @@ function OtherForm() {
         <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-muted-foreground mb-3">
           {t("contacto.form.other.eyebrow")}
         </p>
-        <h3 className="font-serif font-light text-2xl md:text-[1.65rem] leading-tight tracking-tight text-foreground">
+        <h2 className="font-serif font-light text-2xl md:text-[1.65rem] leading-tight tracking-tight text-foreground">
           {t("contacto.form.other.h3_line1")} <span className="italic">{t("contacto.form.other.h3_italic")}</span>
-        </h3>
+        </h2>
       </div>
       <FormRow>
         <Field name="name"         label={t("contacto.form.labels.name")}       placeholder={t("contacto.form.placeholders.name")} required autoComplete="name" />
@@ -315,10 +315,10 @@ export function ContactoContent() {
                 <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-[hsl(var(--gold))] mb-6">
                   {t("contacto.received.eyebrow")}
                 </p>
-                <h3 className="font-serif font-light text-3xl md:text-4xl lg:text-[2.75rem] leading-[1.05] tracking-[-0.015em] text-balance">
+                <h2 className="font-serif font-light text-3xl md:text-4xl lg:text-[2.75rem] leading-[1.05] tracking-[-0.015em] text-balance">
                   {t("contacto.received.h3.line1")}{" "}
                   <span className="italic text-[hsl(var(--gold))]">{t("contacto.received.h3.italic")}</span>
-                </h3>
+                </h2>
                 <p className="text-[0.95rem] leading-[1.7] text-background/75 max-w-[44ch] mx-auto mt-6">
                   {t("contacto.received.body")}
                 </p>

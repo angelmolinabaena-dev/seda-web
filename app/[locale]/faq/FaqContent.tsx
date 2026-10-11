@@ -4,8 +4,7 @@ import { useState } from "react"
 import { Link } from "@/i18n/navigation"
 import { ArrowUpRight, Plus, Minus } from "lucide-react"
 import { useTranslations } from "next-intl"
-
-type FaqEntry = { q: string; a: string }
+import { faqHuespedes, faqPropietarios, type FaqEntry } from "@/lib/faq"
 
 function AccordionItem({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false)
@@ -44,21 +43,9 @@ export function FaqContent() {
   const t = useTranslations()
   const [tab, setTab] = useState<"guests" | "owners">("guests")
 
-  const FAQ_GUESTS: FaqEntry[] = [
-    { q: t("faq.guests_items.q1.q"), a: t("faq.guests_items.q1.a") },
-    { q: t("faq.guests_items.q2.q"), a: t("faq.guests_items.q2.a") },
-    { q: t("faq.guests_items.q3.q"), a: t("faq.guests_items.q3.a") },
-    { q: t("faq.guests_items.q4.q"), a: t("faq.guests_items.q4.a") },
-    { q: t("faq.guests_items.q5.q"), a: t("faq.guests_items.q5.a") },
-  ]
-  const FAQ_OWNERS: FaqEntry[] = [
-    { q: t("faq.owners_items.q1.q"), a: t("faq.owners_items.q1.a") },
-    { q: t("faq.owners_items.q2.q"), a: t("faq.owners_items.q2.a") },
-    { q: t("faq.owners_items.q3.q"), a: t("faq.owners_items.q3.a") },
-    { q: t("faq.owners_items.q4.q"), a: t("faq.owners_items.q4.a") },
-    { q: t("faq.owners_items.q5.q"), a: t("faq.owners_items.q5.a") },
-    { q: t("faq.owners_items.q6.q"), a: t("faq.owners_items.q6.a") },
-  ]
+  // Same lists as the FAQPage JSON-LD and /llms.txt (lib/faq.ts).
+  const FAQ_GUESTS: FaqEntry[] = faqHuespedes(t)
+  const FAQ_OWNERS: FaqEntry[] = faqPropietarios(t)
 
   return (
     <main id="main-content">

@@ -1,21 +1,22 @@
 import type { Metadata } from "next"
-import { getTranslations, getLocale } from "next-intl/server"
-import { localeUrl, buildAlternates } from "@/lib/seo-urls"
+import { getTranslations, setRequestLocale } from "next-intl/server"
+import type { LocaleParams } from "@/i18n/routing"
+import { PageJsonLd } from "@/components/page-json-ld"
+import { pageMetadata } from "@/lib/site-pages"
 import { GuestappContent } from "./GuestappContent"
 
-export async function generateMetadata(): Promise<Metadata> {
-  const locale = await getLocale()
-  const t = await getTranslations("guestapp")
-  return {
-    title: `${t("hero.h1.line1")} ${t("hero.h1.italic")} ${t("hero.h1.line2")}`,
-    description: t("hero.body"),
-    alternates: {
-      canonical: localeUrl(locale, "/guestapp"),
-      languages: buildAlternates("/guestapp"),
-    },
-  }
+export async function generateMetadata({ params }: LocaleParams): Promise<Metadata> {
+  const { locale } = await params
+  return pageMetadata(locale, "/guestapp", await getTranslations({ locale }))
 }
 
-export default function GuestAppPage() {
-  return <GuestappContent />
+export default async function GuestAppPage({ params }: LocaleParams) {
+  const { locale } = await params
+  setRequestLocale(locale)
+  return (
+    <>
+      <PageJsonLd locale={locale} path="/guestapp" />
+      <GuestappContent />
+    </>
+  )
 }

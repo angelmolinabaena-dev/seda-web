@@ -1,6 +1,7 @@
 "use client"
 
 import { useTranslations } from "next-intl"
+import { faqPortada } from "@/lib/faq"
 import { useScrollReveal } from "@/hooks/use-scroll-reveal"
 import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion"
 
@@ -58,15 +59,13 @@ export function FaqSection() {
 
   const guests = t("home.faq.guests")
   const owners = t("home.faq.owners")
-  const faqs: Faq[] = [
-    { audience: guests, question: t("home.faq.items.q1.q"), answer: t("home.faq.items.q1.a") },
-    { audience: guests, question: t("home.faq.items.q2.q"), answer: t("home.faq.items.q2.a") },
-    { audience: guests, question: t("home.faq.items.q3.q"), answer: t("home.faq.items.q3.a") },
-    { audience: guests, question: t("home.faq.items.q4.q"), answer: t("home.faq.items.q4.a") },
-    { audience: owners, question: t("home.faq.items.q5.q"), answer: t("home.faq.items.q5.a") },
-    { audience: owners, question: t("home.faq.items.q6.q"), answer: t("home.faq.items.q6.a") },
-    { audience: owners, question: t("home.faq.items.q7.q"), answer: t("home.faq.items.q7.a") },
-  ]
+  // Same list as the home FAQPage JSON-LD (lib/faq.ts): q1–q4 are for
+  // guests, q5–q7 for owners.
+  const faqs: Faq[] = faqPortada(t).map(({ q, a }, i) => ({
+    audience: i < 4 ? guests : owners,
+    question: q,
+    answer: a,
+  }))
 
   return (
     <section id="faq" className="px-6 py-28 md:px-12 lg:px-20 md:py-36">

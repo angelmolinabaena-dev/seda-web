@@ -1,21 +1,22 @@
 import type { Metadata } from "next"
-import { getTranslations, getLocale } from "next-intl/server"
-import { localeUrl, buildAlternates } from "@/lib/seo-urls"
+import { getTranslations, setRequestLocale } from "next-intl/server"
+import type { LocaleParams } from "@/i18n/routing"
+import { PageJsonLd } from "@/components/page-json-ld"
+import { pageMetadata } from "@/lib/site-pages"
 import { ExperienciasContent } from "./ExperienciasContent"
 
-export async function generateMetadata(): Promise<Metadata> {
-  const locale = await getLocale()
-  const t = await getTranslations("exp")
-  return {
-    title: `${t("h1.line1")} ${t("h1.italic")}`,
-    description: t("body"),
-    alternates: {
-      canonical: localeUrl(locale, "/experiencias"),
-      languages: buildAlternates("/experiencias"),
-    },
-  }
+export async function generateMetadata({ params }: LocaleParams): Promise<Metadata> {
+  const { locale } = await params
+  return pageMetadata(locale, "/experiencias", await getTranslations({ locale }))
 }
 
-export default function ExperienciasPage() {
-  return <ExperienciasContent />
+export default async function ExperienciasPage({ params }: LocaleParams) {
+  const { locale } = await params
+  setRequestLocale(locale)
+  return (
+    <>
+      <PageJsonLd locale={locale} path="/experiencias" />
+      <ExperienciasContent />
+    </>
+  )
 }

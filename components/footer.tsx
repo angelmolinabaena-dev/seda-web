@@ -68,7 +68,7 @@ export function Footer() {
         </div>
 
         <div className="md:col-span-6 md:col-start-7">
-          <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-muted-foreground/60 mb-5">
+          <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-muted-foreground mb-5">
             {t("home.footer.navegacion")}
           </p>
           <div className="grid grid-cols-2 gap-3">
@@ -85,8 +85,11 @@ export function Footer() {
         </div>
       </div>
 
+      {/* Small print at full `text-muted-foreground` (≈5.5:1 on the cream
+          background). The /55–/70 tints it had fell to 2.2–2.9:1, under the
+          4.5:1 WCAG AA asks of text this size. */}
       <div className="pt-8 border-t border-border space-y-4">
-        <p className="text-[10.5px] leading-relaxed text-muted-foreground/55 max-w-3xl">
+        <p className="text-[10.5px] leading-relaxed text-muted-foreground max-w-3xl">
           {t("home.footer.disclaimer")}
         </p>
 
@@ -105,17 +108,17 @@ export function Footer() {
             <Link
               key={link.href}
               href={link.href}
-              className="font-mono text-[11px] tracking-[0.15em] text-muted-foreground/70 hover:text-foreground transition-colors"
+              className="font-mono text-[11px] tracking-[0.15em] text-muted-foreground hover:text-foreground transition-colors"
             >
               {link.label}
             </Link>
           ))}
         </nav>
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-          <p className="font-mono text-[11px] tracking-[0.15em] text-muted-foreground/60">
+          <p className="font-mono text-[11px] tracking-[0.15em] text-muted-foreground">
             {t("home.footer.copyright", { year })}
           </p>
-          <p className="font-mono text-[11px] tracking-[0.15em] text-muted-foreground/60">
+          <p className="font-mono text-[11px] tracking-[0.15em] text-muted-foreground">
             {t("home.footer.region")}
           </p>
         </div>

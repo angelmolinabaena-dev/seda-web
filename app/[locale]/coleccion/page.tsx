@@ -1,29 +1,30 @@
 import type { Metadata } from "next"
-import { getTranslations, getLocale } from "next-intl/server"
-import { localeUrl, buildAlternates } from "@/lib/seo-urls"
+import { getTranslations, setRequestLocale } from "next-intl/server"
+import type { LocaleParams } from "@/i18n/routing"
+import { PageJsonLd } from "@/components/page-json-ld"
+import { pageMetadata } from "@/lib/site-pages"
 import { ColeccionContent } from "./ColeccionContent"
 
 /*
-  Server component wrapper — mirrors the pattern used by `app/[locale]/page.tsx`
-  (home) and `app/[locale]/villa/[slug]/page.tsx`. The actual UI is a client
-  component (`ColeccionContent`) because it needs interactivity; only a
-  server component can export `generateMetadata`, so the page is split in two.
+  Server component wrapper. The actual UI is a client component
+  (`ColeccionContent`) because it needs interactivity; only a server
+  component can export `generateMetadata`, so the page is split in two.
   Title/description reuse the EXISTING translated `coleccion.h1`/`coleccion.body`
-  keys (no new copy) — same text already rendered in the page's own hero.
+  keys (no new copy) — see lib/site-pages.ts.
 */
-export async function generateMetadata(): Promise<Metadata> {
-  const locale = await getLocale()
-  const t = await getTranslations("coleccion")
-  return {
-    title: `${t("h1.line1")} ${t("h1.italic")} ${t("h1.line2")}`,
-    description: t("body"),
-    alternates: {
-      canonical: localeUrl(locale, "/coleccion"),
-      languages: buildAlternates("/coleccion"),
-    },
-  }
+
+export async function generateMetadata({ params }: LocaleParams): Promise<Metadata> {
+  const { locale } = await params
+  return pageMetadata(locale, "/coleccion", await getTranslations({ locale }))
 }
 
-export default function ColeccionPage() {
-  return <ColeccionContent />
+export default async function ColeccionPage({ params }: LocaleParams) {
+  const { locale } = await params
+  setRequestLocale(locale)
+  return (
+    <>
+      <PageJsonLd locale={locale} path="/coleccion" />
+      <ColeccionContent />
+    </>
+  )
 }
