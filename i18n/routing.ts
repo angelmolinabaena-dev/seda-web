@@ -11,6 +11,14 @@ export const routing = defineRouting({
   locales: ["es", "en", "fr", "de"],
   defaultLocale: "es",
   localePrefix: "as-needed",
+  // No `Link: …; rel="alternate"; hreflang=…` response header. The hreflang
+  // set lives in each page's `<head>` (`alternates.languages`, built by
+  // `@/lib/seo-urls`) and in the sitemap. The middleware's header was a second,
+  // independent copy built from the REQUEST host: on any host other than
+  // sedaprivatehomes.com (a preview, localhost) it contradicted the `<head>`,
+  // and Lighthouse failed `canonical` with «points to another hreflang
+  // location». One source, not two.
+  alternateLinks: false,
 })
 
 export type Locale = (typeof routing.locales)[number]
