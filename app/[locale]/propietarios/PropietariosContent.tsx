@@ -461,7 +461,7 @@ export function PropietariosContent() {
       <ProductTabSwitcher value={productTab} onChange={setProductTab} />
 
       {/* MARKETING INTELLIGENCE BENTO */}
-      <section className={`px-6 md:px-12 lg:px-20 pb-24 md:pb-32 bg-background ${productTab === "marketing" ? "" : "hidden"}`}>
+      <section id="panel-marketing" role="tabpanel" aria-labelledby="tab-marketing" className={`px-6 md:px-12 lg:px-20 pb-24 md:pb-32 bg-background ${productTab === "marketing" ? "" : "hidden"}`}>
         <div className="max-w-7xl mx-auto">
           <div className="max-w-2xl mx-auto text-center mb-14">
             <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-muted-foreground mb-4">
@@ -734,7 +734,7 @@ export function PropietariosContent() {
       </section>
 
       {/* SEDA OS — 6 módulos dark */}
-      <section className={`px-6 md:px-12 lg:px-20 pb-24 md:pb-32 pt-12 md:pt-16 bg-foreground text-background ${productTab === "arquitectura" ? "" : "hidden"}`}>
+      <section id="panel-arquitectura" role="tabpanel" aria-labelledby="tab-arquitectura" className={`px-6 md:px-12 lg:px-20 pb-24 md:pb-32 pt-12 md:pt-16 bg-foreground text-background ${productTab === "arquitectura" ? "" : "hidden"}`}>
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-6 mb-12">
             <div>
@@ -776,7 +776,7 @@ export function PropietariosContent() {
       </section>
 
       {/* SIMULADOR DE INGRESOS */}
-      <section className={`px-6 md:px-12 lg:px-20 pb-24 md:pb-32 bg-background ${productTab === "simulador" ? "" : "hidden"}`}>
+      <section id="panel-simulador" role="tabpanel" aria-labelledby="tab-simulador" className={`px-6 md:px-12 lg:px-20 pb-24 md:pb-32 bg-background ${productTab === "simulador" ? "" : "hidden"}`}>
         <div className="max-w-7xl mx-auto">
           <div className="max-w-2xl mb-12">
             <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-muted-foreground mb-4">

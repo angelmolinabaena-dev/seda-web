@@ -129,10 +129,10 @@ function PhoneMockup() {
                   />
                 </div>
                 <div className="absolute bottom-1.5 right-1.5">
-                  <button className="flex items-center gap-1 bg-background/95 text-foreground px-2 py-0.5 rounded-full font-sans text-[7px]">
+                  <span className="flex items-center gap-1 bg-background/95 text-foreground px-2 py-0.5 rounded-full font-sans text-[7px]">
                     <Compass className="h-2 w-2" strokeWidth={1.75} />
                     Get Directions
-                  </button>
+                  </span>
                 </div>
               </div>
 
@@ -212,45 +212,47 @@ function PhoneMockup() {
             <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-accent to-transparent pointer-events-none" />
           </div>
 
-          {/* Bottom tab navigation */}
+          {/* Bottom tab navigation. Picture of a UI, not a UI: <span>, not
+              <button> — they did nothing, yet took keyboard focus and were
+              announced as nameless buttons. */}
           <div className="bg-background/95 backdrop-blur border-t border-foreground/10 px-3 pt-2 pb-1 shrink-0">
             <div className="flex items-end justify-between">
-              <button className="flex flex-col items-center gap-0.5 text-muted-foreground/70 flex-1">
+              <span className="flex flex-col items-center gap-0.5 text-muted-foreground/70 flex-1">
                 <Calendar className="h-3.5 w-3.5" strokeWidth={1.5} />
                 <span className="font-sans text-[7px] tracking-wide uppercase">
                   Today
                 </span>
-              </button>
-              <button className="flex flex-col items-center gap-0.5 text-foreground flex-1">
+              </span>
+              <span className="flex flex-col items-center gap-0.5 text-foreground flex-1">
                 <Briefcase className="h-3.5 w-3.5" strokeWidth={2} />
                 <span className="font-sans text-[7px] tracking-wide uppercase font-medium">
                   Arrival
                 </span>
-              </button>
+              </span>
               {/* ASK SEDA — prominent center button */}
               <div className="flex flex-col items-center gap-0.5 flex-1 -mt-3">
-                <button className="h-9 w-9 rounded-full bg-foreground flex items-center justify-center shadow-md">
+                <span className="h-9 w-9 rounded-full bg-foreground flex items-center justify-center shadow-md">
                   <MessageCircle
                     className="h-3.5 w-3.5 text-background"
                     strokeWidth={2}
                   />
-                </button>
+                </span>
                 <span className="font-sans text-[7px] tracking-wide uppercase text-foreground font-medium">
                   Ask SEDA
                 </span>
               </div>
-              <button className="flex flex-col items-center gap-0.5 text-muted-foreground/70 flex-1">
+              <span className="flex flex-col items-center gap-0.5 text-muted-foreground/70 flex-1">
                 <Bed className="h-3.5 w-3.5" strokeWidth={1.5} />
                 <span className="font-sans text-[7px] tracking-wide uppercase">
                   Stay
                 </span>
-              </button>
-              <button className="flex flex-col items-center gap-0.5 text-muted-foreground/70 flex-1">
+              </span>
+              <span className="flex flex-col items-center gap-0.5 text-muted-foreground/70 flex-1">
                 <Compass className="h-3.5 w-3.5" strokeWidth={1.5} />
                 <span className="font-sans text-[7px] tracking-wide uppercase">
                   Discover
                 </span>
-              </button>
+              </span>
             </div>
             {/* Home indicator */}
             <div className="pt-1.5 pb-1 flex justify-center">

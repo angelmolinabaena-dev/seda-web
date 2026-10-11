@@ -597,8 +597,10 @@ export function Navigation() {
             : "opacity-0 pointer-events-none transition-opacity duration-150 ease-in"
         }`}
         aria-hidden={!isOpen}
-        // `inert` would be ideal here but support is uneven on older Safari;
-        // pointer-events + aria-hidden cover the same intent.
+        // `inert` while closed: the links inside must not take keyboard focus
+        // either. aria-hidden alone hid them from screen readers but left them
+        // in the tab order (Lighthouse `aria-hidden-focus`). Safari ≥ 15.5.
+        inert={!isOpen}
         // Transition shortened from 400ms → 200ms so taps feel snappy:
         // user perceives "closed" within a single frame after their tap.
       >
