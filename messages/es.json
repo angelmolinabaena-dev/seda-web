@@ -35,6 +35,12 @@
     "seda": "SEDA"
   },
   "home": {
+    "meta": {
+      "title": "SEDA Private Homes — Villas privadas en la Costa del Sol",
+      "description": "Gestión de villas privadas en la Costa del Sol, operada sobre software propio. Hospitalidad mediterránea para huéspedes, transparencia total para propietarios.",
+      "og_description": "Gestión de villas privadas en la Costa del Sol, operada sobre software propio.",
+      "twitter_description": "Villas privadas en la Costa del Sol. Hospitalidad mediterránea, operada sobre software propio."
+    },
     "hero": {
       "h1": {
         "line1": "Hospitalidad inteligente.",

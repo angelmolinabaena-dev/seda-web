@@ -16,22 +16,13 @@ import { ContactSection } from "@/components/contact-section"
 import { JsonLdScript } from "@/components/page-json-ld"
 import { faqPortada } from "@/lib/faq"
 import { faqPageJsonLd } from "@/lib/jsonld"
-import { localeUrl, buildAlternates } from "@/lib/seo-urls"
+import { pageMetadata } from "@/lib/site-pages"
 
-// Only `alternates` is set here — title/description/openGraph/twitter are
-// inherited from the root `app/layout.tsx` metadata (Next.js merges parent
-// + child metadata per top-level key). Root layout no longer ships a
-// canonical (see app/layout.tsx comment), so without this every locale of
-// "/" would render with NO canonical at all — this restores a correct,
-// per-locale one (es → bare domain, en/fr/de → /en, /fr, /de).
+// Título, descripción, Open Graph y Twitter salen de `home.meta.*` de cada
+// idioma (ver `pageMetadata` en lib/site-pages.ts), igual que el resto de páginas.
 export async function generateMetadata({ params }: LocaleParams): Promise<Metadata> {
   const { locale } = await params
-  return {
-    alternates: {
-      canonical: localeUrl(locale, ""),
-      languages: buildAlternates(""),
-    },
-  }
+  return pageMetadata(locale, "", await getTranslations({ locale }))
 }
 
 export default async function Page({ params }: LocaleParams) {

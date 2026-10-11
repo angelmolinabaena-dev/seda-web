@@ -25,7 +25,18 @@ export const SITE_TITLE = "SEDA Private Homes — Villas privadas en la Costa de
 export const SITE_DESCRIPTION =
   "Gestión de villas privadas en la Costa del Sol, operada sobre software propio. Hospitalidad mediterránea para huéspedes, transparencia total para propietarios."
 
-export type PageCopy = { title: string; description: string }
+export type PageCopy = {
+  title: string
+  description: string
+  /** Solo la portada: Open Graph y Twitter llevan un texto más corto que el `<meta description>`. */
+  ogDescription?: string
+  twitterDescription?: string
+}
+
+/** `og:locale` por idioma (es → es_ES, en → en_GB…). */
+const OG_LOCALE: Record<Locale, string> = { es: "es_ES", en: "en_GB", fr: "fr_FR", de: "de_DE" }
+
+const OG_IMAGE = { url: "/brand/og/og-stone.jpg", width: 1200, height: 630, alt: SITE_NAME }
 
 export type SitePage = {
   /** "" para la portada; si no, empieza por "/". */
@@ -47,9 +58,12 @@ export const SITE_PAGES: SitePage[] = [
     path: "",
     priority: 1.0,
     changeFrequency: "weekly",
-    // La portada hereda title/description del layout raíz (en español en los
-    // cuatro idiomas, como hasta ahora).
-    copy: () => ({ title: SITE_TITLE, description: SITE_DESCRIPTION }),
+    copy: (t) => ({
+      title: t("home.meta.title"),
+      description: t("home.meta.description"),
+      ogDescription: t("home.meta.og_description"),
+      twitterDescription: t("home.meta.twitter_description"),
+    }),
   },
   {
     path: "/coleccion",
@@ -149,15 +163,37 @@ export function asLocale(locale: string): Locale {
   return (routing.locales as readonly string[]).includes(locale) ? (locale as Locale) : routing.defaultLocale
 }
 
-/** `generateMetadata` de una página del catálogo: title, description, canonical y hreflang. */
+/**
+ * `generateMetadata` de una página del catálogo: title, description, Open Graph,
+ * Twitter, canonical y hreflang. Next reemplaza `openGraph` y `twitter` enteros
+ * al heredar del layout raíz, así que aquí van completos (imagen incluida).
+ */
 export function pageMetadata(locale: string, path: string, t: Translate): Metadata {
-  const { title, description } = getSitePage(path).copy(t, asLocale(locale))
+  const loc = asLocale(locale)
+  const { title, description, ogDescription, twitterDescription } = getSitePage(path).copy(t, loc)
   return {
-    title,
+    // La portada lleva el título entero; el resto, con la plantilla «· SEDA Private Homes».
+    title: path === "" ? { absolute: title } : title,
     description,
     alternates: {
       canonical: localeUrl(locale, path),
       languages: buildAlternates(path),
+    },
+    openGraph: {
+      type: "website",
+      siteName: SITE_NAME,
+      locale: OG_LOCALE[loc],
+      alternateLocale: routing.locales.filter((l) => l !== loc).map((l) => OG_LOCALE[l]),
+      url: localeUrl(locale, path),
+      title,
+      description: ogDescription ?? description,
+      images: [OG_IMAGE],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: path === "" ? SITE_NAME : title,
+      description: twitterDescription ?? description,
+      images: [OG_IMAGE.url],
     },
   }
 }
