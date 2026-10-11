@@ -164,7 +164,8 @@
 
     /* ───────── Punctuation: GOLD (decorative only) ────────────────────── */
     --gold:              38 50% 50%;         /* honey deep (was 99%-saturated yellow) */
-    --gold-dark:         38 60% 35%;         /* gold for use ON dark surfaces */
+    --gold-dark:         38 60% 35%;         /* gold TEXT on cream/white (4.8:1 / 5.1:1) */
+    --gold-light:        38 60% 80%;         /* gold TEXT on olive (4.65:1); --gold fails there (2.35:1) */
 
     /* ───────── Dark surface (owner sections + footer + philosophy) ────── */
     --deep:              90 8% 12%;          /* warm cypress-charcoal */

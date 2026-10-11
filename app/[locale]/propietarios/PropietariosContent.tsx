@@ -55,7 +55,7 @@ function SedaOSWindow() {
           <span className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
         </div>
         <div className="flex-1 flex items-center justify-center gap-2">
-          <span className="w-4 h-4 rounded-md bg-[hsl(var(--olive))] text-[hsl(var(--gold))] grid place-items-center font-serif italic text-[10px]">S</span>
+          <span className="w-4 h-4 rounded-md bg-[hsl(var(--olive))] text-[hsl(var(--gold-light))] grid place-items-center font-serif italic text-[10px]">S</span>
           <span className="font-mono text-[10px] tracking-[0.14em] uppercase">{t("prop.os.live")}</span>
           <span className="text-[10px] opacity-60">· app.sedaprivatehomes.com/os</span>
         </div>
@@ -104,7 +104,7 @@ function SedaOSWindow() {
                   </div>
                 )}
               </div>
-              <p className={`text-[10px] mt-1.5 ${k.warn ? "text-[hsl(var(--gold))]" : "text-muted-foreground"}`}>
+              <p className={`text-[10px] mt-1.5 ${k.warn ? "text-[hsl(var(--gold-dark))]" : "text-muted-foreground"}`}>
                 {k.d}
               </p>
             </div>
@@ -135,7 +135,7 @@ function SedaOSWindow() {
           </div>
           <div className="bg-[hsl(var(--olive))] text-background rounded-xl p-4 flex flex-col justify-between">
             <div>
-              <p className="font-mono text-[9px] tracking-[0.18em] uppercase text-[hsl(var(--gold))]">{t("prop.os.ga_title")}</p>
+              <p className="font-mono text-[9px] tracking-[0.18em] uppercase text-[hsl(var(--gold-light))]">{t("prop.os.ga_title")}</p>
               <div className="mt-2 space-y-1.5">
                 {[[t("prop.os.ga_app"), t("prop.os.ga_app_state"), "good"], [t("prop.os.ga_lock"), t("prop.os.ga_lock_state"), "good"], [t("prop.os.ga_clima"), t("prop.os.ga_clima_state"), "warn"]].map(([k, v, kind]) => (
                   <div key={k} className="flex justify-between items-center text-[11px]">
@@ -264,7 +264,7 @@ function Projection() {
       <div className="bg-secondary/40 border border-border rounded-2xl p-8 md:p-10">
         <div className="flex justify-between items-center">
           <div className="inline-flex items-center gap-2.5">
-            <span className="w-8 h-8 rounded-md bg-[hsl(var(--olive))] text-[hsl(var(--gold))] grid place-items-center">
+            <span className="w-8 h-8 rounded-md bg-[hsl(var(--olive))] text-[hsl(var(--gold-light))] grid place-items-center">
               <TrendingUp className="h-4 w-4" strokeWidth={1.5} />
             </span>
             <span className="font-serif text-xl">{t("prop.sim.projection")}</span>
@@ -649,7 +649,7 @@ export function PropietariosContent() {
 
             {/* Bio */}
             <div className="flex flex-col justify-start lg:pt-3">
-              <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-[hsl(var(--gold))] mb-5">
+              <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-[hsl(var(--gold-dark))] mb-5">
                 {t("founder.role")}
               </p>
               <h2 className="font-serif font-light text-4xl md:text-5xl leading-[1.05] tracking-[-0.02em]">
@@ -821,11 +821,11 @@ export function PropietariosContent() {
       {/* FINAL CTA — olive band */}
       <section className="px-6 md:px-12 lg:px-20 py-28 md:py-32 bg-[hsl(var(--olive))] text-background">
         <div className="max-w-4xl mx-auto text-center">
-          <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-[hsl(var(--gold))] mb-5">
+          <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-[hsl(var(--gold-light))] mb-5">
             {t("prop.final.eyebrow")}
           </p>
           <h2 className="font-serif font-light text-[clamp(2.5rem,5vw,4.5rem)] leading-[1.02] tracking-[-0.02em] max-w-[16ch] mx-auto">
-            {t("prop.final.h2.line1")} <span className="italic text-[hsl(var(--gold))]">{t("prop.final.h2.italic")}</span>
+            {t("prop.final.h2.line1")} <span className="italic text-[hsl(var(--gold-light))]">{t("prop.final.h2.italic")}</span>
           </h2>
           <p className="text-base md:text-lg leading-[1.6] text-background/78 max-w-xl mx-auto mt-6">
             {t("prop.final.body")}
@@ -849,7 +849,7 @@ export function PropietariosContent() {
               ["0€",   t("prop.final.stats.cost_label")],
             ].map(([v, k]) => (
               <div key={k}>
-                <p className="font-serif text-4xl text-[hsl(var(--gold))]">{v}</p>
+                <p className="font-serif text-4xl text-[hsl(var(--gold-light))]">{v}</p>
                 <p className="font-mono text-[10px] tracking-[0.18em] uppercase text-background/80 mt-1.5">{k}</p>
               </div>
             ))}

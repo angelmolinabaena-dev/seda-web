@@ -139,7 +139,7 @@
         "italic": "Koch",
         "line": "Marktfrische Küche und mediterrane Tafeln."
       },
-      "Transfer": {
+      "transfer": {
         "title": "Flughafen-",
         "italic": "Transfer",
         "line": "Diskrete Ankunft in Málaga oder Gibraltar, ohne Wartezeit."
@@ -1011,7 +1011,7 @@
           "title": "Wellness & Massage",
           "line": "Behandlungen in der Residenz, Sonnenaufgangs-Yoga, privates Spa."
         },
-        "Transfer": {
+        "transfer": {
           "title": "Premium-Transfers",
           "line": "Diskrete Fahrzeuge, Flughafenankünfte ohne Wartezeit."
         },
