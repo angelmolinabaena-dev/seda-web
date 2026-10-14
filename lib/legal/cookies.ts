@@ -22,11 +22,10 @@ import type { DocumentoLegalMultilingue } from "./types"
     · Cero uso de `localStorage` / `sessionStorage`: sin coincidencias.
       (`components/theme-provider.tsx` envuelve next-themes, que sí usaría
       localStorage, pero NO está montado en ningún layout ni página.)
-    · Único subrecurso de tercero: los cinco distintivos de premios de
-      `/nosotros`, cargados con `<img>` desde hotelesteponaplaza.com
-      (`NosotrosContent.tsx`, constante `AWARDS`). Comprobación con
-      `curl -I` el 2026-08-06: HTTP 200, servidor nginx, SIN cabecera
-      `Set-Cookie`.
+    · Los cinco distintivos de premios de `/nosotros` ya no vienen de un
+      tercero: viven en `public/images/nosotros/` (`NosotrosContent.tsx`,
+      constante `AWARDS`) y la CSP (`vercel.json`) no admite orígenes
+      externos en `img-src`.
     · Las tipografías se sirven desde el propio dominio: `app/layout.tsx`
       usa `next/font/google`, que las descarga en tiempo de build y las
       auto-aloja — el navegador no contacta con Google Fonts.
@@ -116,7 +115,7 @@ export const COOKIES: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "La página «Nosotros» muestra cinco distintivos de premios cuyas imágenes se cargan desde hotelesteponaplaza.com. Al abrir esa página, tu navegador se conecta a ese servidor, que recibe tu dirección IP y los datos técnicos de la petición. Comprobado el 6 de agosto de 2026: esas respuestas no instalan ninguna cookie.",
+                "Las imágenes de los cinco distintivos de premios de la página «Nosotros» se sirven desde nuestro propio dominio: al abrirla, tu navegador no se conecta a ningún servidor de terceros para cargarlas.",
             },
             {
               tipo: "parrafo",
@@ -226,7 +225,7 @@ export const COOKIES: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "The “About us” page shows five award badges whose images load from hotelesteponaplaza.com. When you open that page, your browser connects to that server, which receives your IP address and the technical data of the request. Checked on 6 August 2026: those responses set no cookie.",
+                "The images of the five award badges on the “About us” page are served from our own domain: when you open it, your browser does not connect to any third-party server to load them.",
             },
             {
               tipo: "parrafo",
@@ -336,7 +335,7 @@ export const COOKIES: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "La page « Nous » affiche cinq distinctions dont les images sont chargées depuis hotelesteponaplaza.com. En ouvrant cette page, votre navigateur se connecte à ce serveur, qui reçoit votre adresse IP et les données techniques de la requête. Vérifié le 6 août 2026 : ces réponses ne déposent aucun cookie.",
+                "Les images des cinq distinctions de la page « Nous » sont servies depuis notre propre domaine : en l'ouvrant, votre navigateur ne se connecte à aucun serveur tiers pour les charger.",
             },
             {
               tipo: "parrafo",
@@ -446,7 +445,7 @@ export const COOKIES: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Die Seite „Über uns“ zeigt fünf Auszeichnungen, deren Bilder von hotelesteponaplaza.com geladen werden. Beim Öffnen dieser Seite verbindet sich Ihr Browser mit jenem Server, der Ihre IP-Adresse und die technischen Daten der Anfrage erhält. Geprüft am 6. August 2026: Diese Antworten setzen kein Cookie.",
+                "Die Bilder der fünf Auszeichnungen auf der Seite „Über uns“ werden von unserer eigenen Domain ausgeliefert: Beim Öffnen verbindet sich Ihr Browser dafür mit keinem Drittserver.",
             },
             {
               tipo: "parrafo",

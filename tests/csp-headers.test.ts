@@ -73,6 +73,12 @@ describe('Content-Security-Policy en vercel.json', () => {
     }
   })
 
+  it("img-src solo admite el propio dominio (ni orígenes externos, ni data: ni blob:)", () => {
+    // Las fotos de /nosotros viven en public/images/nosotros. Si vuelve un
+    // origen externo, alguna imagen se carga de fuera: se arregla la imagen, no la CSP.
+    expect(d.get('img-src')).toEqual(["'self'"])
+  })
+
   it('no usa comodines ni esquemas enteros como origen', () => {
     for (const [nombre, valores] of d) {
       for (const v of valores) {
