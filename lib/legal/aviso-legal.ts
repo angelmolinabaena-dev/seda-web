@@ -10,9 +10,10 @@ import type { DocumentoLegalMultilingue } from "./types"
     · No hay contratación en línea: la única entrada de datos del sitio es
       `app/api/contact/route.ts`, que compone un correo y lo envía. No hay
       pasarela de pago, ni motor de reservas, ni base de datos.
-    · Los cinco distintivos de premios de `/nosotros` se cargan desde
-      hotelesteponaplaza.com (`NosotrosContent.tsx`, constante `AWARDS`) y
-      pertenecen al Hotel Estepona Plaza, no a SEDA Private Homes.
+    · Los cinco distintivos de premios de `/nosotros` se sirven desde
+      `public/images/nosotros/` (`NosotrosContent.tsx`, constante `AWARDS`)
+      y pertenecen a las plataformas que los otorgan, referidos al Hotel
+      Estepona Plaza, no a SEDA Private Homes.
     · No se cita ninguna licencia turística: la que había era inventada y se
       retiró (`app/[locale]/layout.tsx`, comentario de `businessJsonLd`).
 */
@@ -98,7 +99,7 @@ export const AVISO_LEGAL: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Los distintivos de premios que aparecen en la página «Nosotros» pertenecen a las plataformas que los otorgan —Tripadvisor, Booking.com, Expedia, Orbitz y Core Hospitality— y se muestran a título informativo, referidos al Hotel Estepona Plaza. Sus imágenes se sirven desde hotelesteponaplaza.com.",
+                "Los distintivos de premios que aparecen en la página «Nosotros» pertenecen a las plataformas que los otorgan —Tripadvisor, Booking.com, Expedia, Orbitz y Core Hospitality— y se muestran a título informativo, referidos al Hotel Estepona Plaza. Las imágenes se sirven desde este mismo sitio.",
             },
           ],
         },
@@ -250,7 +251,7 @@ export const AVISO_LEGAL: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "The award badges shown on the “About us” page belong to the platforms that grant them — Tripadvisor, Booking.com, Expedia, Orbitz and Core Hospitality — and are shown for information, referring to Hotel Estepona Plaza. Their images are served from hotelesteponaplaza.com.",
+                "The award badges shown on the “About us” page belong to the platforms that grant them — Tripadvisor, Booking.com, Expedia, Orbitz and Core Hospitality — and are shown for information, referring to Hotel Estepona Plaza. The images are served from this same site.",
             },
           ],
         },
@@ -401,7 +402,7 @@ export const AVISO_LEGAL: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Les distinctions affichées sur la page « Nous » appartiennent aux plateformes qui les décernent — Tripadvisor, Booking.com, Expedia, Orbitz et Core Hospitality — et sont présentées à titre informatif, en référence à l'Hotel Estepona Plaza. Leurs images sont servies depuis hotelesteponaplaza.com.",
+                "Les distinctions affichées sur la page « Nous » appartiennent aux plateformes qui les décernent — Tripadvisor, Booking.com, Expedia, Orbitz et Core Hospitality — et sont présentées à titre informatif, en référence à l'Hotel Estepona Plaza. Les images sont servies depuis ce même site.",
             },
           ],
         },
@@ -552,7 +553,7 @@ export const AVISO_LEGAL: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Die auf der Seite „Über uns“ gezeigten Auszeichnungen gehören den verleihenden Plattformen — Tripadvisor, Booking.com, Expedia, Orbitz und Core Hospitality — und werden informativ mit Bezug auf das Hotel Estepona Plaza gezeigt. Ihre Bilddateien werden von hotelesteponaplaza.com ausgeliefert.",
+                "Die auf der Seite „Über uns“ gezeigten Auszeichnungen gehören den verleihenden Plattformen — Tripadvisor, Booking.com, Expedia, Orbitz und Core Hospitality — und werden informativ mit Bezug auf das Hotel Estepona Plaza gezeigt. Die Bilddateien werden von dieser Website selbst ausgeliefert.",
             },
           ],
         },

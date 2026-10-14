@@ -38,35 +38,35 @@ const AWARDS = [
   {
     platform: "TripAdvisor",
     title: "Travellers' Choice 2024",
-    img: "https://hotelesteponaplaza.com/wp-content/uploads/2024/02/TC_white_winner-gif_L_2024-3.gif",
+    img: "/images/nosotros/tripadvisor-travellers-choice-2024.webp",
     alt: "TripAdvisor Travellers' Choice 2024",
     href: "https://www.tripadvisor.es/Hotel_Review-g187437-d23907969-Reviews-Hotel_Estepona_Plaza-Estepona_Costa_del_Sol_Province_of_Malaga_Andalucia.html",
   },
   {
     platform: "Booking.com",
     title: "Traveller Review Award 2026",
-    img: "https://hotelesteponaplaza.com/wp-content/uploads/2024/02/booking-award-2026-1-1024x1024.jpg",
+    img: "/images/nosotros/booking-traveller-review-award-2026.webp",
     alt: "Booking.com Traveller Review Award 2026",
     href: "https://hotelesteponaplaza.com",
   },
   {
     platform: "Core Hospitality",
     title: "Hotel of the Year · España",
-    img: "https://hotelesteponaplaza.com/wp-content/uploads/2024/02/HOTY_Core-Logos_Positive-Masters_OL_Spain-Spanish-1024x881.webp",
+    img: "/images/nosotros/core-hotel-of-the-year-espana.webp",
     alt: "Core Masters — Hotel of the Year España",
     href: "https://hotelesteponaplaza.com",
   },
   {
     platform: "Expedia",
     title: "Traveler Preferred Award",
-    img: "https://hotelesteponaplaza.com/wp-content/uploads/2024/02/expedia-aw-1024x1024.webp",
+    img: "/images/nosotros/expedia-traveler-preferred-award.webp",
     alt: "Expedia Traveler Preferred Award",
     href: "https://hotelesteponaplaza.com",
   },
   {
     platform: "Orbitz",
     title: "Traveler Preferred Award",
-    img: "https://hotelesteponaplaza.com/wp-content/uploads/2024/02/orbitz-aw-1024x1024.webp",
+    img: "/images/nosotros/orbitz-traveler-preferred-award.webp",
     alt: "Orbitz Traveler Preferred Award",
     href: "https://hotelesteponaplaza.com",
   },
@@ -386,14 +386,20 @@ export function NosotrosContent() {
                 rel="noopener noreferrer"
                 className="reveal group flex flex-col items-center text-center p-6 bg-secondary/40 hover:bg-background border border-transparent hover:border-border transition-all duration-300 hover:-translate-y-1"
               >
-                <div className="w-full aspect-square flex items-center justify-center p-3 mb-5">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={award.img}
-                    alt={award.alt}
-                    className="max-w-full max-h-full w-auto h-auto object-contain"
-                    loading="lazy"
-                  />
+                <div className="w-full aspect-square p-3 mb-5">
+                  <div className="relative h-full w-full">
+                    {/* Ficheros ya reducidos (320–400 px) en public/images/nosotros;
+                        el del Travellers' Choice es un WebP animado, que el
+                        optimizador de imágenes aplanaría: van todos tal cual. */}
+                    <Image
+                      src={award.img}
+                      alt={award.alt}
+                      fill
+                      unoptimized
+                      sizes="(min-width: 1024px) 160px, (min-width: 768px) 200px, 45vw"
+                      className="object-contain"
+                    />
+                  </div>
                 </div>
                 <p className="font-serif font-medium text-[15px] text-foreground tracking-[-0.005em] mb-1">
                   {award.platform}

@@ -14,11 +14,9 @@ const nextConfig = {
   // unaffected.
   images: {
     // Sin hosts remotos, a propósito (21-sep-2026). `next/image` solo se usa
-    // con ficheros de /public: `git grep "next/image"` da NosotrosContent.tsx y
-    // PropietariosContent.tsx, los dos con /angel-molina-v2.jpg. Los renders de
-    // fal.ai ya son ficheros locales (/villas/*.jpg) y los distintivos de
-    // hotelesteponaplaza.com se pintan con <img>, que no pasa por el
-    // optimizador. Cada host de esta lista abría /_next/image a cualquier
+    // con ficheros de /public: los renders de fal.ai son ficheros locales
+    // (/villas/*.jpg) y los distintivos de premios de /nosotros viven en
+    // /images/nosotros. Cada host de esta lista abría /_next/image a cualquier
     // imagen de ese dominio, a cuenta de nuestro cupo de Vercel.
     // Cuando llegue la fotografía real (Supabase Storage u otro), se añade aquí
     // su host exacto, con `pathname` si se puede.
