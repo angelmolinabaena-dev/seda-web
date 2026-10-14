@@ -4,6 +4,10 @@ const withNextIntl = createNextIntlPlugin("./i18n/request.ts")
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Sin `X-Powered-By: Next.js`: no aporta nada al visitante y dice qué
+  // framework (y casi qué versión) corre detrás. Las cabeceras de seguridad,
+  // CSP incluida, viven en vercel.json.
+  poweredByHeader: false,
   // Image optimization is on by default on Vercel — leaving this on
   // gives us automatic WebP/AVIF, responsive sizes, and edge caching
   // for any future `next/image` adoption. Plain <img> tags are
