@@ -4,8 +4,7 @@ import { useEffect, useState, type ReactNode } from "react"
 import { ArrowUpRight } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { Link } from "@/i18n/navigation"
-
-type ContactType = "guest" | "owner" | "other"
+import { FIELD_SPEC, HONEYPOT_FIELD, type ContactField, type ContactType } from "@/lib/contact-fields"
 
 function Field({
   label,
@@ -20,7 +19,7 @@ function Field({
   label: string
   placeholder: string
   type?: string
-  name: string
+  name: ContactField
   required?: boolean
   pattern?: string
   defaultValue?: string
@@ -40,6 +39,7 @@ function Field({
         pattern={pattern}
         defaultValue={defaultValue}
         autoComplete={autoComplete}
+        maxLength={FIELD_SPEC[name].max}
         className="
           bg-transparent border-b border-border py-2 text-base text-foreground
           placeholder:text-muted-foreground/60 focus:outline-none
@@ -87,6 +87,7 @@ function GuestForm() {
         </span>
         <textarea
           name="notes"
+          maxLength={FIELD_SPEC.notes.max}
           placeholder={t("contacto.form.placeholders.notes_guest")}
           rows={4}
           className="bg-transparent border border-border focus:border-foreground transition-colors p-3 text-base text-foreground placeholder:text-muted-foreground/60 focus:outline-none resize-none"
@@ -128,6 +129,7 @@ function OwnerForm() {
         </span>
         <textarea
           name="notes"
+          maxLength={FIELD_SPEC.notes.max}
           placeholder={t("contacto.form.placeholders.notes_owner")}
           rows={4}
           className="bg-transparent border border-border focus:border-foreground transition-colors p-3 text-base text-foreground placeholder:text-muted-foreground/60 focus:outline-none resize-none"
@@ -170,7 +172,8 @@ function OtherForm() {
         <textarea
           name="message"
           required
-          minLength={20}
+          minLength={FIELD_SPEC.message.min}
+          maxLength={FIELD_SPEC.message.max}
           placeholder={t("contacto.form.placeholders.message")}
           rows={6}
           className="bg-transparent border border-border focus:border-foreground transition-colors p-3 text-base text-foreground placeholder:text-muted-foreground/60 focus:outline-none resize-none [&:user-invalid]:border-[#b85432]"
@@ -333,6 +336,10 @@ export function ContactoContent() {
             ) : (
               <form
                 className="bg-background border border-border p-8 md:p-12"
+                // Sin JavaScript el formulario no debe caer en un GET a la
+                // propia página: los datos acabarían en la URL y en los logs.
+                method="post"
+                action="/api/contact"
                 onSubmit={async (e) => {
                   e.preventDefault()
                   if (isSubmitting) return
@@ -371,6 +378,19 @@ export function ContactoContent() {
                 {type === "guest" && <GuestForm />}
                 {type === "owner" && <OwnerForm />}
                 {type === "other" && <OtherForm />}
+
+                {/*
+                  Trampa para bots (honeypot). Fuera de pantalla y fuera del
+                  orden de tabulación: una persona no lo ve ni lo rellena; un
+                  bot que rellena todo, sí. El servidor lo descarta en
+                  silencio. No es display:none, que muchos bots detectan.
+                */}
+                <div aria-hidden="true" className="absolute -left-[10000px] top-auto w-px h-px overflow-hidden">
+                  <label>
+                    Website
+                    <input type="text" name={HONEYPOT_FIELD} tabIndex={-1} autoComplete="off" defaultValue="" />
+                  </label>
+                </div>
 
                 {submitError && (
                   <div

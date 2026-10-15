@@ -1,4 +1,13 @@
 import { NextResponse } from "next/server"
+import {
+  CONTACT_TYPES,
+  FIELD_SPEC,
+  FIELDS_BY_TYPE,
+  HONEYPOT_FIELD,
+  HONEYPOT_MAX,
+  type ContactField,
+  type ContactType,
+} from "@/lib/contact-fields"
 
 /*
   Contact form backend — the only data-entry point of the public site.
@@ -22,19 +31,13 @@ const FROM = "SEDA Private Homes <info@sedaprivatehomes.com>"
 
 // Everything below ends up in an inbox a human opens. Keep it small.
 const MAX_BODY_BYTES = 16 * 1024
+// Las longitudes por campo viven en lib/contact-fields.ts (FIELD_SPEC).
 const MAX_FIELDS = 20
-const MAX_KEY_LENGTH = 64
-const MAX_VALUE_LENGTH = 4000
 const MAX_EMAIL_LENGTH = 254
 
 // Best-effort, per-instance rate limit. See the note above rateLimit().
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000
 const RATE_LIMIT_MAX = 5
-const RATE_LIMIT_MAX_KEYS = 5000
-
-type ContactType = "guest" | "owner" | "other"
-
-const CONTACT_TYPES: ContactType[] = ["guest", "owner", "other"]
 
 const SUBJECT_BY_TYPE: Record<ContactType, string> = {
   guest: "Solicitud de estancia — sedaprivatehomes.com",
@@ -73,11 +76,29 @@ function isValidEmail(value: string) {
   return local.length <= 64
 }
 
-function escape(value: string) {
-  return value.replace(/[<>&]/g, (c) =>
-    c === "<" ? "&lt;" : c === ">" ? "&gt;" : "&amp;",
-  )
+const HTML_ENTITIES: Record<string, string> = {
+  "<": "&lt;",
+  ">": "&gt;",
+  "&": "&amp;",
+  '"': "&quot;",
+  "'": "&#39;",
 }
+
+// Los valores van como texto entre <td>…</td>, nunca en un atributo; las
+// comillas se escapan igual, por si algún día cambia la plantilla.
+function escape(value: string) {
+  return value.replace(/[<>&"']/g, (c) => HTML_ENTITIES[c])
+}
+
+/*
+  Caracteres de control. En un campo de una línea no cabe ninguno —ni salto
+  de línea—: un nombre "Ana\nEMAIL: otro@x.com" fabricaría en la parte de
+  texto del correo una línea que parece un campo más. En los de varias
+  líneas se admiten \n y \t; \r\n y \r se normalizan a \n antes de mirar.
+  U+2028/U+2029 son saltos de línea para muchos clientes de correo.
+*/
+const CONTROL_SINGLE_LINE = /[\x00-\x1f\x7f\u2028\u2029]/
+const CONTROL_MULTILINE = /[\x00-\x08\x0b-\x1f\x7f\u2028\u2029]/
 
 function renderHtml(type: ContactType, fields: Record<string, string>) {
   const rows = Object.entries(fields)
@@ -123,10 +144,13 @@ function rateLimit(key: string) {
   const now = Date.now()
   const since = now - RATE_LIMIT_WINDOW_MS
 
-  if (hits.size > RATE_LIMIT_MAX_KEYS) {
-    for (const [k, stamps] of hits) {
-      if (stamps.every((t) => t <= since)) hits.delete(k)
-    }
+  // Purga en cada llamada, no sólo al pasar de RATE_LIMIT_MAX_KEYS: la
+  // política de privacidad dice que la IP no pasa más de diez minutos en
+  // memoria, y hasta ahora una IP caducada seguía en el Map hasta que hubiera
+  // 5000 claves. El Map sólo contiene IPs de los últimos diez minutos, así
+  // que recorrerlo en cada envío no se nota.
+  for (const [k, stamps] of hits) {
+    if (stamps.every((t) => t <= since)) hits.delete(k)
   }
 
   const recent = (hits.get(key) ?? []).filter((t) => t > since)
@@ -210,20 +234,42 @@ export async function POST(req: Request) {
     Over-long values are rejected rather than truncated: an email that arrives
     cut in half is worse than one that never arrives, because you answer half a
     request without knowing it. The sender sees the error and can shorten it.
+
+    Sólo se aceptan los campos que la variante del formulario pide
+    (lib/contact-fields.ts), cada uno con su longitud máxima, más la trampa
+    para bots.
   */
+  const allowed = FIELDS_BY_TYPE[type]
   const fields: Record<string, string> = {}
+  let honeypot = false
   for (const [key, value] of entries) {
-    if (key.length === 0 || key.length > MAX_KEY_LENGTH) {
-      return NextResponse.json({ ok: false, error: "invalid_field_name" }, { status: 400 })
-    }
     if (typeof value !== "string") {
       return NextResponse.json({ ok: false, error: "invalid_field_value" }, { status: 400 })
     }
-    if (value.length > MAX_VALUE_LENGTH) {
+    if (key === HONEYPOT_FIELD) {
+      if (value.length > HONEYPOT_MAX) {
+        return NextResponse.json({ ok: false, error: "field_too_long" }, { status: 400 })
+      }
+      if (value.trim().length > 0) honeypot = true
+      continue
+    }
+    if (!Object.hasOwn(allowed, key)) {
+      return NextResponse.json({ ok: false, error: "unknown_field" }, { status: 400 })
+    }
+    const name = key as ContactField
+    const spec: { max: number; multiline?: boolean; min?: number } = FIELD_SPEC[name]
+    const normalized = spec.multiline ? value.replace(/\r\n?/g, "\n") : value
+    const trimmed = normalized.trim()
+    if (trimmed.length > spec.max) {
       return NextResponse.json({ ok: false, error: "field_too_long" }, { status: 400 })
     }
-    const trimmed = value.trim()
-    if (trimmed.length > 0) fields[key] = trimmed
+    if ((spec.multiline ? CONTROL_MULTILINE : CONTROL_SINGLE_LINE).test(trimmed)) {
+      return NextResponse.json({ ok: false, error: "invalid_characters" }, { status: 400 })
+    }
+    if (trimmed.length > 0 && spec.min && trimmed.length < spec.min) {
+      return NextResponse.json({ ok: false, error: "field_too_short" }, { status: 400 })
+    }
+    if (trimmed.length > 0) fields[name] = trimmed
   }
 
   const email = fields.email
@@ -231,10 +277,28 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: "invalid_email" }, { status: 400 })
   }
 
+  for (const [name, required] of Object.entries(allowed)) {
+    if (required && !fields[name]) {
+      return NextResponse.json({ ok: false, error: "missing_field" }, { status: 400 })
+    }
+  }
+
+  // Un bot rellenó la trampa: misma respuesta que un envío bueno, sin enviar.
+  // Va después de validar para que no se distinga de un envío real.
+  if (honeypot) {
+    console.warn("[/api/contact] honeypot filled — dropped without sending")
+    return NextResponse.json({
+      ok: true,
+      mode: process.env.RESEND_API_KEY ? "resend" : "mock",
+    })
+  }
+
   const subject = SUBJECT_BY_TYPE[type]
   const html = renderHtml(type, fields)
+  // Las líneas de continuación van sangradas: un comentario de varias líneas
+  // no puede fabricar en la parte de texto una línea "EMAIL: …" de campo.
   const text = Object.entries(fields)
-    .map(([k, v]) => `${k.toUpperCase()}: ${v}`)
+    .map(([k, v]) => `${k.toUpperCase()}: ${v.replace(/\n/g, "\n  ")}`)
     .join("\n")
 
   const apiKey = process.env.RESEND_API_KEY
