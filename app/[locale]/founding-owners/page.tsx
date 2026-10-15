@@ -128,7 +128,7 @@ const COPY: Record<
     ctaBtn: "Réserver un appel",
   },
   de: {
-    badge: "GRÜNDUNGS-EIGENTÜMER · KOSTENLOSE ANMELDUNG, BEGRENZT",
+    badge: "GRÜNDUNGSEIGENTÜMER · KOSTENLOSE ANMELDUNG, BEGRENZT",
     seatsLeft: "Kostenlose Anmeldung für die ersten 3 Direktverträge",
     h1: ["Hotelstandards", "für Ihre Villa."],
     body: "Wir sind Ángel Molina (8 Jahre bei Iberostar + Les Roches MHM) und unser Team. An der Costa del Sol bauen wir das erste Villenmanagement auf echtem Luxushotel-Niveau: vollständige Transparenz und eigene Technologie.",
@@ -151,7 +151,7 @@ const COPY: Record<
     founderTitle: "Wer wir sind",
     founderBio:
       "Ángel Molina verbindet 8 Jahre Hotelbetrieb bei Iberostar mit Luxushotelmanagement-Ausbildung (Les Roches MHM). Seda Private Homes ist die Verwaltungsgesellschaft, die ich immer aufbauen wollte: Hotelqualität auf private Villen an der Costa del Sol angewendet.",
-    ctaEyebrow: "GRÜNDUNGS-EIGENTÜMER-PROGRAMM",
+    ctaEyebrow: "GRÜNDUNGSEIGENTÜMER-PROGRAMM",
     ctaH2: ["15 Minuten reichen", "um zu wissen ob es passt."],
     ctaBody:
       "Erzählen Sie uns von Ihrer Immobilie. Wenn es passt, erhalten Sie innerhalb von 24 Stunden ein vollständiges Angebot.",
