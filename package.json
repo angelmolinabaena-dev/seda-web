@@ -9,6 +9,7 @@
     "start": "next start",
     "lint": "eslint .",
     "test": "vitest run",
+    "test:integracion": "vitest run --config vitest.integracion.config.mts",
     "keys:check-leak": "node scripts/keys-check-leak.mjs",
     "invariants:check": "node scripts/invariants-check.mjs",
     "invariants:parity": "node scripts/invariants-check.mjs --parity",
