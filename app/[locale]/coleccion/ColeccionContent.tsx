@@ -1,8 +1,11 @@
 "use client"
 
+import Image from "next/image"
 import { Link } from "@/i18n/navigation"
 import { ArrowUpRight } from "lucide-react"
 import { useTranslations } from "next-intl"
+import { IllustrativeTag } from "@/components/illustrative-tag"
+import type { FichaVilla, Foto } from "@/lib/escaparate"
 
 /*
   Estado honesto de `/coleccion` tras retirar las cuatro residencias
@@ -19,8 +22,15 @@ import { useTranslations } from "next-intl"
        destinos y etiquetas que ya existen (`cta.solicitar_estancia` →
        /contacto?type=guest, `cta.valorar_propiedad` → /contacto?type=owner),
        los mismos que usa `components/navigation.tsx`.
+
+  Escaparate (lib/escaparate.ts): con SEDA_FLAG_ESCAPARATE_VILLAS encendido,
+  `villas` trae las fichas publicadas; el texto pasa a `coleccion.body_abierta`
+  y debajo va una tarjeta por casa. Con el flag apagado `villas` llega vacío y
+  la página es exactamente la de antes: ningún enlace a /villa/*.
 */
-export function ColeccionContent() {
+export type VillaTarjeta = Pick<FichaVilla, "slug" | "nombre" | "tipo" | "municipio"> & { foto?: Foto }
+
+export function ColeccionContent({ villas = [] }: { villas?: VillaTarjeta[] }) {
   const t = useTranslations()
   return (
     <main id="main-content">
@@ -38,7 +48,7 @@ export function ColeccionContent() {
           </div>
           <div className="md:col-span-5">
             <p className="text-base md:text-lg leading-[1.7] text-muted-foreground">
-              {t("coleccion.body")}
+              {villas.length > 0 ? t("coleccion.body_abierta") : t("coleccion.body")}
             </p>
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mt-10">
               <Link
@@ -59,6 +69,42 @@ export function ColeccionContent() {
           </div>
         </div>
       </section>
+
+      {villas.length > 0 && (
+        <section className="px-6 md:px-12 lg:px-20 pb-28 md:pb-40">
+          <ul className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-12">
+            {villas.map((v) => (
+              <li key={v.slug}>
+                <Link href={`/villa/${v.slug}`} className="group block">
+                  {v.foto && (
+                    <div
+                      className="relative aspect-[4/3] overflow-hidden bg-secondary/40"
+                      data-provisional={v.foto.provisional || undefined}
+                    >
+                      {v.foto.provisional && <IllustrativeTag />}
+                      <Image
+                        src={v.foto.src}
+                        alt={t(v.foto.altKey)}
+                        fill
+                        sizes="(min-width: 1280px) 620px, (min-width: 768px) 50vw, 100vw"
+                        className="object-cover transition-transform duration-700 group-hover:scale-[1.02]"
+                      />
+                    </div>
+                  )}
+                  <h2 className="font-serif font-light text-3xl text-foreground mt-6">{v.nombre}</h2>
+                  <p className="font-mono text-[11px] tracking-[0.18em] uppercase text-muted-foreground mt-2">
+                    {t(`escaparate.tipo.${v.tipo}`)} · {v.municipio}
+                  </p>
+                  <span className="inline-flex items-center gap-2 mt-5 font-mono text-[11px] tracking-[0.22em] uppercase text-foreground border-b border-foreground/30 pb-1 group-hover:border-foreground transition-colors">
+                    {t("coleccion.ver_casa")}
+                    <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={1.75} aria-hidden />
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
     </main>
   )
 }

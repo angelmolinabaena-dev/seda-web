@@ -83,6 +83,33 @@ describe('rutas que no existen → 404, no 500', () => {
   })
 })
 
+/*
+  Escaparate de villas (lib/escaparate.ts). Este build se hace SIN
+  SEDA_FLAG_ESCAPARATE_VILLAS (así corre en CI y así está producción): la
+  ficha no existe, no sale en el sitemap y /coleccion no enlaza a ninguna.
+  Las cuatro villas ficticias retiradas en agosto siguen en 410.
+*/
+describe('escaparate con el flag apagado', () => {
+  it.each(['/villa/bay-side', '/en/villa/bay-side', '/de/villa/bay-side'])('%s → 404', async (ruta) => {
+    expect(await estado(ruta)).toBe(404)
+  })
+
+  it('el sitemap no lista ninguna /villa/', async () => {
+    const xml = await (await fetch(`${base}/sitemap.xml`)).text()
+    expect(xml).toContain('<urlset')
+    expect(xml).not.toContain('/villa/')
+  })
+
+  it('/coleccion no enlaza a ninguna /villa/', async () => {
+    const html = await (await fetch(`${base}/coleccion`)).text()
+    expect(html).not.toMatch(/href="[^"]*\/villa\//)
+  })
+
+  it('las villas ficticias retiradas siguen en 410', async () => {
+    expect(await estado('/villa/villa-alboran')).toBe(410)
+  })
+})
+
 describe('ficheros reales de public/ y páginas → 200', () => {
   it.each([
     '/',

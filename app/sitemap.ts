@@ -3,6 +3,7 @@ import { routing } from "@/i18n/routing"
 import { localeUrl, buildAlternates } from "@/lib/seo-urls"
 import { getGuiasPublicadas, haySeccionGuias } from "@/lib/guias"
 import { SITE_PAGES } from "@/lib/site-pages"
+import { villasIndexables } from "@/lib/escaparate"
 
 /*
   Multilingual sitemap with hreflang alternates.
@@ -36,6 +37,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // las cuatro residencias ficticias. Esas URLs ya no se listan aquí y
   // responden 410 desde `proxy.ts` — ver docs/audit/RETIRADA-COLECCION.md §3.
 
+  // Las fichas del escaparate (lib/escaparate.ts) entran SOLO si son
+  // indexables: flag SEDA_FLAG_ESCAPARATE_VILLAS encendido Y número de
+  // registro turístico. Flag apagado, o sin VFT → ninguna. Fail closed.
+  const villaRoutes: MetadataRoute.Sitemap = villasIndexables().flatMap((villa) =>
+    routing.locales.map((locale) => ({
+      url: localeUrl(locale, `/villa/${villa.slug}`),
+      lastModified: now,
+      changeFrequency: "weekly" as const,
+      priority: 0.8,
+      alternates: { languages: buildAlternates(`/villa/${villa.slug}`) },
+    })),
+  )
+
   // `/guias` — índice y fichas individuales, SOLO si hay al menos una guía
   // publicada (mismo criterio que el enlace de navegación, `haySeccionGuias`).
   // Cada guía publicada usa `esPublicable` vía `getGuiasPublicadas` — una
@@ -61,5 +75,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
       ]
     : []
 
-  return [...staticRoutes, ...guiaRoutes]
+  return [...staticRoutes, ...villaRoutes, ...guiaRoutes]
 }

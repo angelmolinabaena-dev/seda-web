@@ -1,3 +1,4 @@
+import type { FichaVilla } from "@/lib/escaparate"
 import type { FaqEntry } from "@/lib/faq"
 import { localeUrl, SITE_URL } from "@/lib/seo-urls"
 import { SITE_NAME } from "@/lib/site-pages"
@@ -9,11 +10,9 @@ import { REGION, ZONAS } from "@/lib/zonas"
   no tiene fuente, no se emite (ni vacío ni con un valor de relleno).
   `tests/jsonld.test.ts` lo comprueba para los cuatro idiomas.
 
-  No hay constructor de `LodgingBusiness`/`Accommodation` por propiedad: hoy
-  no existe ninguna propiedad publicada ni una fuente de datos de propiedades
-  (las cuatro fichas /villa/* se retiraron, ver
-  docs/audit/RETIRADA-COLECCION.md). Cuando exista esa fuente, su ficha
-  tendrá aquí su constructor y su test.
+  `accommodationJsonLd` es la ficha de una casa del escaparate
+  (lib/escaparate.ts). Solo se emite si la ficha es indexable (flag encendido
+  y número de registro turístico), y solo con los campos que tienen dato.
 */
 
 export type JsonLd = Record<string, unknown>
@@ -79,6 +78,35 @@ export function breadcrumbJsonLd(locale: string, trail: Crumb[]): JsonLd {
       name: c.name,
       item: localeUrl(locale, c.path),
     })),
+  }
+}
+
+/**
+ * Accommodation de una ficha del escaparate. Sin `image` (las fotos aún son
+ * renders provisionales), sin `offers`/`priceRange` (el precio lo da Beds24)
+ * y sin dirección exacta: municipio y región.
+ */
+export function accommodationJsonLd(locale: string, villa: FichaVilla, tipo: string): JsonLd {
+  const e = villa.esencial
+  return {
+    "@context": "https://schema.org",
+    "@type": villa.tipo === "apartamento" ? "Apartment" : "House",
+    "@id": `${localeUrl(locale, `/villa/${villa.slug}`)}#accommodation`,
+    name: villa.nombre,
+    description: `${villa.nombre} · ${tipo} · ${villa.municipio}`,
+    url: localeUrl(locale, `/villa/${villa.slug}`),
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: villa.municipio,
+      addressRegion: REGION,
+      addressCountry: "ES",
+    },
+    ...(villa.registroTuristico ? { identifier: villa.registroTuristico } : {}),
+    ...(e.huespedes ? { occupancy: { "@type": "QuantitativeValue", maxValue: e.huespedes } } : {}),
+    ...(e.dormitorios ? { numberOfBedrooms: e.dormitorios } : {}),
+    ...(e.banos ? { numberOfBathroomsTotal: e.banos } : {}),
+    ...(e.metros ? { floorSize: { "@type": "QuantitativeValue", value: e.metros, unitCode: "MTK" } } : {}),
+    containedInPlace: { "@id": `${SITE_URL}/#lodgingbusiness` },
   }
 }
 
