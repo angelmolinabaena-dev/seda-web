@@ -1474,5 +1474,17 @@
       "bienvenida": "Imagen ilustrativa: consola de bienvenida con flores, llaves y una tarjeta",
       "despedida": "Imagen ilustrativa: mesa de terraza con un café y una nota de despedida, al amanecer"
     }
+  },
+  "meet": {
+    "meta": {
+      "title": "Reserva una llamada",
+      "description": "Treinta minutos. Sin propuesta al final salvo que ambos queramos una."
+    }
+  },
+  "founding": {
+    "meta": {
+      "title": "Propietarios fundadores",
+      "description": "El estándar hotelero para tu villa."
+    }
   }
 }

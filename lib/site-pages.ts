@@ -172,8 +172,23 @@ export function asLocale(locale: string): Locale {
  * al heredar del layout raíz, así que aquí van completos (imagen incluida).
  */
 export function pageMetadata(locale: string, path: string, t: Translate): Metadata {
+  return localizedMetadata(locale, path, getSitePage(path).copy(t, asLocale(locale)))
+}
+
+/**
+ * Lo mismo que `pageMetadata` para una ruta que no está en el catálogo (/meet,
+ * /guias, las fichas…): el título y la descripción los pone la página, en el
+ * idioma de la URL. Sin `openGraph`/`twitter` propios, una página hereda los
+ * del layout raíz, que están en español y con og:locale es_ES en los cuatro
+ * idiomas (tests/integracion/titulos-por-idioma.test.ts).
+ */
+export function localizedMetadata(
+  locale: string,
+  path: string,
+  { title, description, ogDescription, twitterDescription }: PageCopy,
+  ogType: "website" | "article" = "website",
+): Metadata {
   const loc = asLocale(locale)
-  const { title, description, ogDescription, twitterDescription } = getSitePage(path).copy(t, loc)
   return {
     // La portada lleva el título entero; el resto, con la plantilla «· SEDA Private Homes».
     title: path === "" ? { absolute: title } : title,
@@ -183,7 +198,7 @@ export function pageMetadata(locale: string, path: string, t: Translate): Metada
       languages: buildAlternates(path),
     },
     openGraph: {
-      type: "website",
+      type: ogType,
       siteName: SITE_NAME,
       locale: OG_LOCALE[loc],
       alternateLocale: routing.locales.filter((l) => l !== loc).map((l) => OG_LOCALE[l]),

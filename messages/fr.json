@@ -1474,5 +1474,17 @@
       "bienvenida": "Image illustrative : console d'accueil avec des fleurs, des clés et une carte",
       "despedida": "Image illustrative : table de terrasse avec un café et un mot d'au revoir, à l'aube"
     }
+  },
+  "meet": {
+    "meta": {
+      "title": "Réserver un appel",
+      "description": "Trente minutes. Aucune proposition à la fin sauf si nous le souhaitons tous les deux."
+    }
+  },
+  "founding": {
+    "meta": {
+      "title": "Propriétaires fondateurs",
+      "description": "Les standards hôteliers pour votre villa."
+    }
   }
 }

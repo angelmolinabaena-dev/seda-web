@@ -1474,5 +1474,17 @@
       "bienvenida": "Illustratives Bild: Willkommenskonsole mit Blumen, Schlüsseln und einer Karte",
       "despedida": "Illustratives Bild: Terrassentisch mit Kaffee und einer Abschiedskarte im Morgengrauen"
     }
+  },
+  "meet": {
+    "meta": {
+      "title": "Gespräch vereinbaren",
+      "description": "Dreißig Minuten. Kein Angebot am Ende, es sei denn, wir beide wollen es."
+    }
+  },
+  "founding": {
+    "meta": {
+      "title": "Gründungs-Eigentümer",
+      "description": "Hotelstandards für Ihre Villa."
+    }
   }
 }

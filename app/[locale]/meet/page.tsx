@@ -1,6 +1,8 @@
 import type { Metadata } from "next"
 import { Link } from "@/i18n/navigation"
-import { setRequestLocale } from "next-intl/server"
+import { getTranslations, setRequestLocale } from "next-intl/server"
+import type { LocaleParams } from "@/i18n/routing"
+import { localizedMetadata } from "@/lib/site-pages"
 import { Calendar, Shield, Mail, ArrowRight } from "lucide-react"
 import { CalendlyFachada, type CalendlyFachadaCopy } from "./CalendlyFachada"
 
@@ -32,11 +34,16 @@ const CALENDLY_EMBED =
 
 type Locale = "es" | "en" | "fr" | "de"
 
-export const metadata: Metadata = {
-  title: "Reserva una llamada | Seda Private Homes",
-  description: "Treinta minutos. Sin propuesta al final salvo que ambos queramos una.",
-  // noindex — landing for cold-outreach conversion, not for organic
-  robots: { index: false, follow: false },
+// Title and description in the URL's language (messages/<locale>.json,
+// `meet.meta`). The root layout appends « · SEDA Private Homes».
+export async function generateMetadata({ params }: LocaleParams): Promise<Metadata> {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: "meet.meta" })
+  return {
+    ...localizedMetadata(locale, "/meet", { title: t("title"), description: t("description") }),
+    // noindex — landing for cold-outreach conversion, not for organic
+    robots: { index: false, follow: false },
+  }
 }
 
 const COPY: Record<

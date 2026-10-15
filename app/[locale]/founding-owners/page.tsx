@@ -1,9 +1,18 @@
 import { ArrowRight, Activity, Euro, Shield } from "lucide-react"
 import type { Metadata } from "next"
+import { getTranslations } from "next-intl/server"
+import type { LocaleParams } from "@/i18n/routing"
+import { localizedMetadata } from "@/lib/site-pages"
 
-export const metadata: Metadata = {
-  title: "Propietarios Fundadores | Seda Private Homes",
-  robots: { index: false, follow: false },
+// Title and description in the URL's language (messages/<locale>.json,
+// `founding.meta`). The root layout appends « · SEDA Private Homes».
+export async function generateMetadata({ params }: LocaleParams): Promise<Metadata> {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: "founding.meta" })
+  return {
+    ...localizedMetadata(locale, "/founding-owners", { title: t("title"), description: t("description") }),
+    robots: { index: false, follow: false },
+  }
 }
 
 const CALENDLY_URL = "https://calendly.com/sedaprivatehomes-info"

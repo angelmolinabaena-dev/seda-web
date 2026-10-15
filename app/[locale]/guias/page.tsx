@@ -2,7 +2,8 @@ import type { Metadata } from "next"
 import { getTranslations, setRequestLocale } from "next-intl/server"
 import type { LocaleParams } from "@/i18n/routing"
 import { Link } from "@/i18n/navigation"
-import { localeUrl, buildAlternates } from "@/lib/seo-urls"
+import { localeUrl } from "@/lib/seo-urls"
+import { localizedMetadata } from "@/lib/site-pages"
 import { getGuiasPublicadas } from "@/lib/guias"
 import type { Locale } from "@/i18n/routing"
 
@@ -20,14 +21,10 @@ import type { Locale } from "@/i18n/routing"
 export async function generateMetadata({ params }: LocaleParams): Promise<Metadata> {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: "guias.index" })
-  return {
+  return localizedMetadata(locale, "/guias", {
     title: `${t("h1.line1")} ${t("h1.italic")} ${t("h1.line2")}`,
     description: t("intro"),
-    alternates: {
-      canonical: localeUrl(locale, "/guias"),
-      languages: buildAlternates("/guias"),
-    },
-  }
+  })
 }
 
 export default async function GuiasIndexPage({
