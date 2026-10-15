@@ -3,6 +3,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server"
 import type { LocaleParams } from "@/i18n/routing"
 import { PageJsonLd } from "@/components/page-json-ld"
 import { pageMetadata } from "@/lib/site-pages"
+import { villasVisibles } from "@/lib/escaparate"
 import { ColeccionContent } from "./ColeccionContent"
 
 /*
@@ -24,7 +25,15 @@ export default async function ColeccionPage({ params }: LocaleParams) {
   return (
     <>
       <PageJsonLd locale={locale} path="/coleccion" />
-      <ColeccionContent />
+      <ColeccionContent
+        villas={villasVisibles().map((v) => ({
+          slug: v.slug,
+          nombre: v.nombre,
+          tipo: v.tipo,
+          municipio: v.municipio,
+          foto: v.fotos[0],
+        }))}
+      />
     </>
   )
 }

@@ -987,7 +987,9 @@
       "italic": "private collection",
       "line2": "on the Costa del Sol."
     },
-    "body": "Opening soon. In the meantime we publish no residences; if you would like to book a stay or place your property with us, write to us."
+    "body": "Opening soon. In the meantime we publish no residences; if you would like to book a stay or place your property with us, write to us.",
+    "body_abierta": "These are the homes you can already book. If you are looking for something else, or would like to bring your property to SEDA, write to us.",
+    "ver_casa": "View the home"
   },
   "exp": {
     "eyebrow": "— SEDA Experiences",
@@ -1417,6 +1419,60 @@
       "aviso": "Legal notice",
       "privacidad": "Privacy",
       "cookies": "Cookies"
+    }
+  },
+  "escaparate": {
+    "tipo": {
+      "apartamento": "Apartment",
+      "villa": "Villa"
+    },
+    "registro": "Tourist registration: {numero}",
+    "galeria": "Gallery",
+    "esencial": {
+      "huespedes": "{n} guests",
+      "dormitorios": "{n} bedrooms",
+      "banos": "{n} bathrooms",
+      "metros": "{n} m²",
+      "piscina": "Pool",
+      "terraza": "Terrace",
+      "playa": "Beach {n} min on foot"
+    },
+    "incluye": {
+      "titulo": "What SEDA includes",
+      "llegada": "Keyless arrival: smart access and self check-in, with the instructions in the Guest App.",
+      "concierge": "Sofía, SEDA's virtual concierge, in the Guest App throughout your stay.",
+      "limpieza": "Professional cleaning before you arrive."
+    },
+    "horario": {
+      "titulo": "Check-in and check-out",
+      "entrada": "Check-in from {desde} to {hasta}",
+      "salida": "Check-out by {hasta}"
+    },
+    "normas": {
+      "titulo": "House rules"
+    },
+    "zona": {
+      "titulo": "Area and surroundings",
+      "body": "{municipio}, on the Costa del Sol.",
+      "link": "Discover the Costa del Sol"
+    },
+    "reserva": {
+      "titulo": "Your stay",
+      "precio": "See availability and price",
+      "llegada": "Arrival",
+      "salida": "Departure",
+      "personas": "Guests",
+      "fechas_error": "Departure must be after arrival.",
+      "cta": "Book",
+      "nota": "Availability, the final price and payment are handled in Beds24, SEDA's booking system."
+    },
+    "meta": {
+      "description": "{nombre}: {tipo} in {municipio}, Costa del Sol. Book direct with SEDA Private Homes."
+    },
+    "fotos": {
+      "terraza": "Illustrative image: a glass of white wine on a sea-view terrace at sunset",
+      "bienvenida": "Illustrative image: welcome console with flowers, keys and a card",
+      "despedida": "Illustrative image: terrace table with a coffee and a farewell note at dawn"
     }
   }
 }

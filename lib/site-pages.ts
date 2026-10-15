@@ -6,6 +6,7 @@ import { PRIVACIDAD } from "@/lib/legal/privacidad"
 import type { DocumentoLegalMultilingue } from "@/lib/legal/types"
 import type { Translate } from "@/lib/faq"
 import { buildAlternates, localeUrl } from "@/lib/seo-urls"
+import { villasVisibles } from "@/lib/escaparate"
 
 /*
   Catálogo de las páginas públicas. Una sola fuente para:
@@ -34,9 +35,9 @@ export type PageCopy = {
 }
 
 /** `og:locale` por idioma (es → es_ES, en → en_GB…). */
-const OG_LOCALE: Record<Locale, string> = { es: "es_ES", en: "en_GB", fr: "fr_FR", de: "de_DE" }
+export const OG_LOCALE: Record<Locale, string> = { es: "es_ES", en: "en_GB", fr: "fr_FR", de: "de_DE" }
 
-const OG_IMAGE = { url: "/brand/og/og-stone.jpg", width: 1200, height: 630, alt: SITE_NAME }
+export const OG_IMAGE ={ url: "/brand/og/og-stone.jpg", width: 1200, height: 630, alt: SITE_NAME }
 
 export type SitePage = {
   /** "" para la portada; si no, empieza por "/". */
@@ -71,7 +72,9 @@ export const SITE_PAGES: SitePage[] = [
     changeFrequency: "weekly",
     copy: (t) => ({
       title: `${t("coleccion.h1.line1")} ${t("coleccion.h1.italic")} ${t("coleccion.h1.line2")}`,
-      description: t("coleccion.body"),
+      // Mismo texto que pinta la página: con el escaparate encendido y alguna
+      // ficha publicada, el de «ya puede reservar» (lib/escaparate.ts).
+      description: villasVisibles().length > 0 ? t("coleccion.body_abierta") : t("coleccion.body"),
     }),
   },
   {
