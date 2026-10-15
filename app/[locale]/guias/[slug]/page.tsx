@@ -2,7 +2,8 @@ import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { getTranslations, setRequestLocale } from "next-intl/server"
 import { Link } from "@/i18n/navigation"
-import { localeUrl, buildAlternates, SITE_URL } from "@/lib/seo-urls"
+import { localeUrl, SITE_URL } from "@/lib/seo-urls"
+import { localizedMetadata } from "@/lib/site-pages"
 import { esPublicable, getGuiaBySlug, guias } from "@/lib/guias"
 import { getAutor } from "@/lib/autores"
 import type { Locale } from "@/i18n/routing"
@@ -36,24 +37,13 @@ export async function generateMetadata({
   const publicable = esPublicable(guia)
 
   return {
-    title: trad.titulo,
-    description: trad.entradilla,
-    alternates: {
-      canonical: localeUrl(locale, `/guias/${slug}`),
-      languages: buildAlternates(`/guias/${slug}`),
-    },
+    // og:locale «de_DE», no «de»; y twitter:* propio, no el del layout raíz.
+    ...localizedMetadata(locale, `/guias/${slug}`, { title: trad.titulo, description: trad.entradilla }, "article"),
     // Fail closed: cualquier cosa que no sea explícitamente publicable
     // lleva noindex,nofollow. No hay rama intermedia.
     robots: publicable
       ? { index: true, follow: true }
       : { index: false, follow: false },
-    openGraph: {
-      title: trad.titulo,
-      description: trad.entradilla,
-      type: "article",
-      locale,
-      url: localeUrl(locale, `/guias/${slug}`),
-    },
   }
 }
 

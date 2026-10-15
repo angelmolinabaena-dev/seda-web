@@ -2,7 +2,8 @@ import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { getTranslations, setRequestLocale } from "next-intl/server"
 import { Link } from "@/i18n/navigation"
-import { localeUrl, buildAlternates } from "@/lib/seo-urls"
+import { localeUrl } from "@/lib/seo-urls"
+import { asLocale, localizedMetadata } from "@/lib/site-pages"
 import { autores, getAutor } from "@/lib/autores"
 import { getGuiasPublicadas } from "@/lib/guias"
 import type { Locale } from "@/i18n/routing"
@@ -26,13 +27,11 @@ export async function generateMetadata({
   const autor = getAutor(autorId)
   if (!autor) return {}
   const t = await getTranslations({ locale, namespace: "guias.autor" })
-  return {
+  // La descripción, los mismos hechos que pinta la página: ningún texto nuevo.
+  return localizedMetadata(locale, `/guias/autores/${autorId}`, {
     title: t("hechos_titulo", { nombre: autor.nombre }),
-    alternates: {
-      canonical: localeUrl(locale, `/guias/autores/${autorId}`),
-      languages: buildAlternates(`/guias/autores/${autorId}`),
-    },
-  }
+    description: autor.hechos[asLocale(locale)].join(" "),
+  })
 }
 
 export default async function AutorPage({

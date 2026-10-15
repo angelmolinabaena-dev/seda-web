@@ -1,9 +1,18 @@
 import { ArrowRight, Activity, Euro, Shield } from "lucide-react"
 import type { Metadata } from "next"
+import { getTranslations } from "next-intl/server"
+import type { LocaleParams } from "@/i18n/routing"
+import { localizedMetadata } from "@/lib/site-pages"
 
-export const metadata: Metadata = {
-  title: "Propietarios Fundadores | Seda Private Homes",
-  robots: { index: false, follow: false },
+// Title and description in the URL's language (messages/<locale>.json,
+// `founding.meta`). The root layout appends « · SEDA Private Homes».
+export async function generateMetadata({ params }: LocaleParams): Promise<Metadata> {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: "founding.meta" })
+  return {
+    ...localizedMetadata(locale, "/founding-owners", { title: t("title"), description: t("description") }),
+    robots: { index: false, follow: false },
+  }
 }
 
 const CALENDLY_URL = "https://calendly.com/sedaprivatehomes-info"
@@ -119,7 +128,7 @@ const COPY: Record<
     ctaBtn: "Réserver un appel",
   },
   de: {
-    badge: "GRÜNDUNGS-EIGENTÜMER · KOSTENLOSE ANMELDUNG, BEGRENZT",
+    badge: "GRÜNDUNGSEIGENTÜMER · KOSTENLOSE ANMELDUNG, BEGRENZT",
     seatsLeft: "Kostenlose Anmeldung für die ersten 3 Direktverträge",
     h1: ["Hotelstandards", "für Ihre Villa."],
     body: "Wir sind Ángel Molina (8 Jahre bei Iberostar + Les Roches MHM) und unser Team. An der Costa del Sol bauen wir das erste Villenmanagement auf echtem Luxushotel-Niveau: vollständige Transparenz und eigene Technologie.",
@@ -142,7 +151,7 @@ const COPY: Record<
     founderTitle: "Wer wir sind",
     founderBio:
       "Ángel Molina verbindet 8 Jahre Hotelbetrieb bei Iberostar mit Luxushotelmanagement-Ausbildung (Les Roches MHM). Seda Private Homes ist die Verwaltungsgesellschaft, die ich immer aufbauen wollte: Hotelqualität auf private Villen an der Costa del Sol angewendet.",
-    ctaEyebrow: "GRÜNDUNGS-EIGENTÜMER-PROGRAMM",
+    ctaEyebrow: "GRÜNDUNGSEIGENTÜMER-PROGRAMM",
     ctaH2: ["15 Minuten reichen", "um zu wissen ob es passt."],
     ctaBody:
       "Erzählen Sie uns von Ihrer Immobilie. Wenn es passt, erhalten Sie innerhalb von 24 Stunden ein vollständiges Angebot.",
