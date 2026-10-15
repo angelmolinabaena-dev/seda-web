@@ -1,4 +1,4 @@
-import { defineConfig } from "vitest/config"
+import { configDefaults, defineConfig } from "vitest/config"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
 
@@ -12,5 +12,8 @@ export default defineConfig({
   test: {
     environment: "node",
     include: ["tests/**/*.test.{ts,tsx}"],
+    // Necesitan el build y un `next start`: van en `npm run test:integracion`
+    // (vitest.integracion.config.mts), después de `npm run build`.
+    exclude: [...configDefaults.exclude, "tests/integracion/**"],
   },
 })

@@ -1,8 +1,24 @@
 import { Link } from "@/i18n/navigation"
 import { ArrowRight } from "lucide-react"
 import { getTranslations } from "next-intl/server"
+import { routing } from "@/i18n/routing"
+
+/*
+  La metadata se traduce con el locale por defecto, explícito. `generateMetadata`
+  no recibe `params`, y el `setRequestLocale` del layout no le llega: sin
+  locale, next-intl lo busca en las cabeceras, y leer cabeceras en una ruta
+  estática es un 500 («Page changed from static to dynamic at runtime, reason:
+  headers»). Pasaba en `/foo.png`, `/wp-login.php`, `/.env` (el proxy deja
+  pasar lo que tiene extensión y Next lo encaja en `[locale]`) y en cualquier
+  `notFound()` de una ficha, p. ej. `/en/guias/<slug-que-no-existe>`.
+  Comprobado contra `next build && next start`: con el layout y las fichas
+  fijando el locale antes del `notFound()`, el 500 seguía; solo esto lo quita.
+
+  El cuerpo, más abajo, sí sale en el idioma de la URL: el componente se
+  renderiza bajo el layout, que ya ha fijado el locale.
+*/
 export async function generateMetadata() {
-  const t = await getTranslations("notfound")
+  const t = await getTranslations({ locale: routing.defaultLocale, namespace: "notfound" })
   return {
     title: t("title"),
     description: t("description"),
