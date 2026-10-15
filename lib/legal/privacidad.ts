@@ -155,7 +155,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                 [
                   "Vercel Inc.",
                   "Aloja el sitio y ejecuta la función que procesa el formulario. Registra datos técnicos de cada petición, incluida la IP.",
-                  "Estados Unidos",
+                  "Estados Unidos. La función del formulario se ejecuta en Fráncfort (UE).",
                 ],
                 [
                   "Resend, Inc.",
@@ -457,7 +457,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                 [
                   "Vercel Inc.",
                   "Hosts the site and runs the function that processes the form. Logs technical data of each request, including the IP address.",
-                  "United States",
+                  "United States. The form function runs in Frankfurt (EU).",
                 ],
                 [
                   "Resend, Inc.",
@@ -756,7 +756,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                 [
                   "Vercel Inc.",
                   "Héberge le site et exécute la fonction qui traite le formulaire. Journalise les données techniques de chaque requête, y compris l'adresse IP.",
-                  "États-Unis",
+                  "États-Unis. La fonction du formulaire s'exécute à Francfort (UE).",
                 ],
                 [
                   "Resend, Inc.",
@@ -1055,7 +1055,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                 [
                   "Vercel Inc.",
                   "Hostet die Website und führt die Funktion aus, die das Formular verarbeitet. Protokolliert technische Daten jeder Anfrage, einschließlich der IP-Adresse.",
-                  "Vereinigte Staaten",
+                  "Vereinigte Staaten. Die Formularfunktion läuft in Frankfurt (EU).",
                 ],
                 [
                   "Resend, Inc.",
