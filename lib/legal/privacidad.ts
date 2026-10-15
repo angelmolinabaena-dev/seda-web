@@ -170,7 +170,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Si reservas una llamada, tus datos los tratan además Calendly y Google, como se explica en «Reserva de una llamada con Calendly». No hay más destinatarios. No vendemos ni cedemos datos a terceros con fines comerciales. Solo se comunicarían a autoridades u organismos públicos si una norma lo exigiera.",
+                "Si reservas una llamada, tus datos los tratan además Calendly y Google Ireland Limited, como se explica en «Reserva de una llamada con Calendly». No hay más destinatarios. No vendemos ni cedemos datos a terceros con fines comerciales. Solo se comunicarían a autoridades u organismos públicos si una norma lo exigiera.",
             },
             {
               tipo: "parrafo",
@@ -210,11 +210,11 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                 ],
                 [
                   "Encargados del tratamiento",
-                  "Calendly LLC (Estados Unidos): gestiona la agenda, guarda la reserva y te envía la confirmación y los recordatorios. Google (Google Calendar y Google Meet): la cita se anota en nuestro calendario y la llamada se celebra por Google Meet. Y el proveedor del buzón {email}, donde llega el aviso.",
+                  "Calendly LLC (Estados Unidos): gestiona la agenda, guarda la reserva y te envía la confirmación y los recordatorios. Google Ireland Limited (Google Calendar y Google Meet): la cita se anota en nuestro calendario y la llamada se celebra por Google Meet. Y el proveedor del buzón {email}, donde llega el aviso.",
                 ],
                 [
                   "Conservación",
-                  "[PLAZO A DECIDIR POR ÁNGEL]",
+                  "12 meses desde la fecha de la llamada. Si de ella nace un contrato de gestión, los datos pasan al expediente del propietario y se conservan según ese contrato.",
                 ],
               ],
             },
@@ -472,7 +472,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "If you book a call, your data is also processed by Calendly and Google, as explained under “Booking a call with Calendly”. There are no other recipients. We do not sell or transfer data to third parties for commercial purposes. Data would only be disclosed to authorities or public bodies if a legal rule required it.",
+                "If you book a call, your data is also processed by Calendly and Google Ireland Limited, as explained under “Booking a call with Calendly”. There are no other recipients. We do not sell or transfer data to third parties for commercial purposes. Data would only be disclosed to authorities or public bodies if a legal rule required it.",
             },
             {
               tipo: "parrafo",
@@ -512,11 +512,11 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                 ],
                 [
                   "Processors",
-                  "Calendly LLC (United States): manages the schedule, stores the booking and sends you the confirmation and reminders. Google (Google Calendar and Google Meet): the appointment goes into our calendar and the call takes place on Google Meet. And the provider of the {email} mailbox, where the notification arrives.",
+                  "Calendly LLC (United States): manages the schedule, stores the booking and sends you the confirmation and reminders. Google Ireland Limited (Google Calendar and Google Meet): the appointment goes into our calendar and the call takes place on Google Meet. And the provider of the {email} mailbox, where the notification arrives.",
                 ],
                 [
                   "Retention",
-                  "[PLAZO A DECIDIR POR ÁNGEL]",
+                  "12 months from the date of the call. If it leads to a management contract, the data moves to the owner's file and is kept as that contract provides.",
                 ],
               ],
             },
@@ -771,7 +771,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Si vous réservez un appel, vos données sont aussi traitées par Calendly et Google, comme expliqué sous « Réservation d'un appel avec Calendly ». Il n'y a pas d'autres destinataires. Nous ne vendons ni ne cédons de données à des tiers à des fins commerciales. Elles ne seraient communiquées aux autorités ou organismes publics que si une norme l'exigeait.",
+                "Si vous réservez un appel, vos données sont aussi traitées par Calendly et Google Ireland Limited, comme expliqué sous « Réservation d'un appel avec Calendly ». Il n'y a pas d'autres destinataires. Nous ne vendons ni ne cédons de données à des tiers à des fins commerciales. Elles ne seraient communiquées aux autorités ou organismes publics que si une norme l'exigeait.",
             },
             {
               tipo: "parrafo",
@@ -811,11 +811,11 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                 ],
                 [
                   "Sous-traitants",
-                  "Calendly LLC (États-Unis) : gère l'agenda, conserve la réservation et vous envoie la confirmation et les rappels. Google (Google Calendar et Google Meet) : le rendez-vous est inscrit dans notre calendrier et l'appel a lieu sur Google Meet. Et le fournisseur de la boîte {email}, où arrive la notification.",
+                  "Calendly LLC (États-Unis) : gère l'agenda, conserve la réservation et vous envoie la confirmation et les rappels. Google Ireland Limited (Google Calendar et Google Meet) : le rendez-vous est inscrit dans notre calendrier et l'appel a lieu sur Google Meet. Et le fournisseur de la boîte {email}, où arrive la notification.",
                 ],
                 [
                   "Conservation",
-                  "[PLAZO A DECIDIR POR ÁNGEL]",
+                  "12 mois à compter de la date de l'appel. Si un contrat de gestion en découle, les données rejoignent le dossier du propriétaire et sont conservées selon ce contrat.",
                 ],
               ],
             },
@@ -1070,7 +1070,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Wenn Sie ein Gespräch buchen, verarbeiten auch Calendly und Google Ihre Daten, wie unter „Buchung eines Gesprächs über Calendly“ erläutert. Weitere Empfänger gibt es nicht. Wir verkaufen oder übermitteln keine Daten zu kommerziellen Zwecken an Dritte. An Behörden oder öffentliche Stellen würden sie nur übermittelt, wenn eine Rechtsvorschrift das verlangt.",
+                "Wenn Sie ein Gespräch buchen, verarbeiten auch Calendly und Google Ireland Limited Ihre Daten, wie unter „Buchung eines Gesprächs über Calendly“ erläutert. Weitere Empfänger gibt es nicht. Wir verkaufen oder übermitteln keine Daten zu kommerziellen Zwecken an Dritte. An Behörden oder öffentliche Stellen würden sie nur übermittelt, wenn eine Rechtsvorschrift das verlangt.",
             },
             {
               tipo: "parrafo",
@@ -1110,11 +1110,11 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                 ],
                 [
                   "Auftragsverarbeiter",
-                  "Calendly LLC (Vereinigte Staaten): verwaltet den Terminkalender, speichert die Buchung und sendet Ihnen Bestätigung und Erinnerungen. Google (Google Calendar und Google Meet): Der Termin wird in unseren Kalender eingetragen und das Gespräch findet über Google Meet statt. Und der Anbieter des Postfachs {email}, in dem die Benachrichtigung eingeht.",
+                  "Calendly LLC (Vereinigte Staaten): verwaltet den Terminkalender, speichert die Buchung und sendet Ihnen Bestätigung und Erinnerungen. Google Ireland Limited (Google Calendar und Google Meet): Der Termin wird in unseren Kalender eingetragen und das Gespräch findet über Google Meet statt. Und der Anbieter des Postfachs {email}, in dem die Benachrichtigung eingeht.",
                 ],
                 [
                   "Speicherdauer",
-                  "[PLAZO A DECIDIR POR ÁNGEL]",
+                  "12 Monate ab dem Datum des Gesprächs. Entsteht daraus ein Verwaltungsvertrag, gehen die Daten in die Akte des Eigentümers über und werden nach diesem Vertrag aufbewahrt.",
                 ],
               ],
             },
