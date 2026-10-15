@@ -29,6 +29,12 @@ import type { DocumentoLegalMultilingue } from "./types"
     · Las tipografías se sirven desde el propio dominio: `app/layout.tsx`
       usa `next/font/google`, que las descarga en tiempo de build y las
       auto-aloja — el navegador no contacta con Google Fonts.
+    · Calendly (15-oct-2026): `/meet` muestra su calendario tras una fachada
+      (`app/[locale]/meet/CalendlyFachada.tsx`): el iframe no se monta hasta
+      que el visitante pulsa «Ver calendario». Al cargarse, calendly.com fija
+      `_calendly_session` (21 días), `__cf_bm` (30 min) y `_cfuvid` (sesión),
+      medido con `curl -D -` sobre la URL del iframe. Sin `hide_gdpr_banner`:
+      Calendly muestra su propio aviso de cookies.
 
   Si cualquiera de estos hechos cambia, este texto cambia con él, y si
   aparece analítica hay que añadir además un banner de consentimiento.
@@ -37,12 +43,12 @@ import type { DocumentoLegalMultilingue } from "./types"
 export const COOKIES: DocumentoLegalMultilingue = {
   id: "cookies",
   ruta: "/cookies",
-  actualizado: "2026-08-06",
+  actualizado: "2026-10-15",
   traducciones: {
     es: {
       titulo: "Política de cookies",
       entradilla:
-        "Qué guarda este sitio en tu navegador. Es poco: una sola cookie, para recordar el idioma. Esta página explica exactamente cuál, por qué, y qué no hacemos.",
+        "Qué guarda este sitio en tu navegador. Es poco: una cookie propia, para recordar el idioma, y las de Calendly solo si abres su calendario en /meet. Esta página explica exactamente cuáles, por qué, y qué no hacemos.",
       secciones: [
         {
           id: "que-usamos",
@@ -81,7 +87,7 @@ export const COOKIES: DocumentoLegalMultilingue = {
               items: [
                 "Cookies de analítica: ninguna. Este sitio no tiene Google Analytics, ni Vercel Analytics, ni ninguna otra herramienta de medición de audiencia.",
                 "Cookies publicitarias o de redes sociales: ninguna. No hay píxeles de Meta, Google Ads, LinkedIn ni TikTok.",
-                "Cookies de terceros: ninguna.",
+                "Cookies de terceros: ninguna al visitar el sitio. Las únicas son las de Calendly, y solo si abres su calendario (ver «El calendario de Calendly en /meet»).",
                 "Tampoco usamos el almacenamiento local del navegador (localStorage o sessionStorage) para seguirte.",
               ],
             },
@@ -104,7 +110,37 @@ export const COOKIES: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "El día que este sitio incorpore analítica, publicidad o cualquier cookie de tercero, aparecerá un banner de consentimiento real, y esta página cambiará antes de que eso ocurra.",
+                "Las cookies de Calendly no se instalan al visitar el sitio: solo cuando, en /meet, pulsas «Ver calendario» después de leer el aviso que lo explica, y entonces es el propio Calendly quien muestra su aviso de cookies. El día que este sitio incorpore analítica o publicidad, aparecerá un banner de consentimiento real, y esta página cambiará antes de que eso ocurra.",
+            },
+          ],
+        },
+        {
+          id: "calendly",
+          titulo: "El calendario de Calendly en /meet",
+          bloques: [
+            {
+              tipo: "parrafo",
+              texto:
+                "La página /meet ofrece reservar una llamada con el calendario de Calendly. No se carga al abrir la página: hasta que pulsas «Ver calendario», tu navegador no se conecta con calendly.com. Al pulsarlo, el calendario se carga desde calendly.com y Calendly fija estas cookies en su propio dominio:",
+            },
+            {
+              tipo: "tabla",
+              cabeceras: ["Cookie", "Quién la instala", "Para qué", "Duración", "Tipo"],
+              filas: [
+                ["_calendly_session", "calendly.com (Calendly LLC)", "Mantener la sesión del calendario mientras eliges día y hora y reservas.", "21 días.", "Técnica."],
+                ["__cf_bm", "calendly.com (Cloudflare, proveedor de Calendly)", "Distinguir el tráfico de personas del de bots.", "30 minutos.", "Técnica, de seguridad."],
+                ["_cfuvid", "calendly.com (Cloudflare, proveedor de Calendly)", "Aplicar límites de peticiones por visitante.", "De sesión: se borra al cerrar el navegador.", "Técnica, de seguridad."],
+              ],
+            },
+            {
+              tipo: "parrafo",
+              texto:
+                "Son las que medimos al cargar el calendario el 15 de octubre de 2026. Calendly muestra además su propio aviso de cookies: lo que aceptes o rechaces ahí se rige por la política de cookies de Calendly, no por esta.",
+            },
+            {
+              tipo: "parrafo",
+              texto:
+                "Si prefieres que Calendly no instale ninguna cookie, no abras el calendario: escríbenos desde la página de contacto y te proponemos día y hora por correo.",
             },
           ],
         },
@@ -120,7 +156,7 @@ export const COOKIES: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "El resto de imágenes, tipografías y archivos del sitio se sirven desde nuestro propio dominio.",
+                "El resto de imágenes, tipografías y archivos del sitio se sirven desde nuestro propio dominio. La única excepción es el calendario de Calendly en /meet, y solo si lo abres.",
             },
             {
               tipo: "parrafo",
@@ -155,7 +191,7 @@ export const COOKIES: DocumentoLegalMultilingue = {
     en: {
       titulo: "Cookie policy",
       entradilla:
-        "What this site stores in your browser. Not much: a single cookie, to remember your language. This page explains exactly which one, why, and what we do not do.",
+        "What this site stores in your browser. Not much: one first-party cookie, to remember your language, and Calendly's only if you open its calendar on /meet. This page explains exactly which ones, why, and what we do not do.",
       secciones: [
         {
           id: "que-usamos",
@@ -191,7 +227,7 @@ export const COOKIES: DocumentoLegalMultilingue = {
               items: [
                 "Analytics cookies: none. This site has no Google Analytics, no Vercel Analytics and no other audience measurement tool.",
                 "Advertising or social network cookies: none. There are no Meta, Google Ads, LinkedIn or TikTok pixels.",
-                "Third-party cookies: none.",
+                "Third-party cookies: none when you visit the site. The only ones are Calendly's, and only if you open its calendar (see “The Calendly calendar on /meet”).",
                 "We also do not use browser storage (localStorage or sessionStorage) to track you.",
               ],
             },
@@ -214,7 +250,37 @@ export const COOKIES: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "The day this site adds analytics, advertising or any third-party cookie, a real consent banner will appear, and this page will change before that happens.",
+                "Calendly's cookies are not set when you visit the site: only when, on /meet, you press “View calendar” after reading the notice that explains it, and then Calendly itself shows its own cookie notice. The day this site adds analytics or advertising, a real consent banner will appear, and this page will change before that happens.",
+            },
+          ],
+        },
+        {
+          id: "calendly",
+          titulo: "The Calendly calendar on /meet",
+          bloques: [
+            {
+              tipo: "parrafo",
+              texto:
+                "The /meet page lets you book a call through Calendly's calendar. It is not loaded when you open the page: until you press “View calendar”, your browser does not connect to calendly.com. When you press it, the calendar loads from calendly.com and Calendly sets these cookies on its own domain:",
+            },
+            {
+              tipo: "tabla",
+              cabeceras: ["Cookie", "Who sets it", "What for", "Lifetime", "Type"],
+              filas: [
+                ["_calendly_session", "calendly.com (Calendly LLC)", "Keep the calendar session while you choose a day and time and book.", "21 days.", "Technical."],
+                ["__cf_bm", "calendly.com (Cloudflare, Calendly's provider)", "Tell human traffic apart from bots.", "30 minutes.", "Technical, security."],
+                ["_cfuvid", "calendly.com (Cloudflare, Calendly's provider)", "Apply per-visitor request limits.", "Session: deleted when you close the browser.", "Technical, security."],
+              ],
+            },
+            {
+              tipo: "parrafo",
+              texto:
+                "These are the ones we measured when loading the calendar on 15 October 2026. Calendly also shows its own cookie notice: whatever you accept or reject there is governed by Calendly's cookie policy, not this one.",
+            },
+            {
+              tipo: "parrafo",
+              texto:
+                "If you would rather Calendly set no cookies at all, do not open the calendar: write to us from the contact page and we will suggest a day and time by email.",
             },
           ],
         },
@@ -230,7 +296,7 @@ export const COOKIES: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Every other image, typeface and file on the site is served from our own domain.",
+                "Every other image, typeface and file on the site is served from our own domain. The only exception is the Calendly calendar on /meet, and only if you open it.",
             },
             {
               tipo: "parrafo",
@@ -265,7 +331,7 @@ export const COOKIES: DocumentoLegalMultilingue = {
     fr: {
       titulo: "Politique relative aux cookies",
       entradilla:
-        "Ce que ce site conserve dans votre navigateur. C'est peu : un seul cookie, pour mémoriser la langue. Cette page explique précisément lequel, pourquoi, et ce que nous ne faisons pas.",
+        "Ce que ce site conserve dans votre navigateur. C'est peu : un cookie propre, pour mémoriser la langue, et ceux de Calendly uniquement si vous ouvrez son calendrier sur /meet. Cette page explique précisément lesquels, pourquoi, et ce que nous ne faisons pas.",
       secciones: [
         {
           id: "que-usamos",
@@ -301,7 +367,7 @@ export const COOKIES: DocumentoLegalMultilingue = {
               items: [
                 "Cookies de mesure d'audience : aucun. Ce site n'a ni Google Analytics, ni Vercel Analytics, ni aucun autre outil de mesure.",
                 "Cookies publicitaires ou de réseaux sociaux : aucun. Il n'y a pas de pixel Meta, Google Ads, LinkedIn ou TikTok.",
-                "Cookies tiers : aucun.",
+                "Cookies tiers : aucun lorsque vous visitez le site. Les seuls sont ceux de Calendly, et uniquement si vous ouvrez son calendrier (voir « Le calendrier Calendly sur /meet »).",
                 "Nous n'utilisons pas non plus le stockage du navigateur (localStorage ou sessionStorage) pour vous suivre.",
               ],
             },
@@ -324,7 +390,37 @@ export const COOKIES: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Le jour où ce site intégrera de la mesure d'audience, de la publicité ou un quelconque cookie tiers, un vrai bandeau de consentement apparaîtra, et cette page changera avant.",
+                "Les cookies de Calendly ne sont pas déposés lorsque vous visitez le site : seulement lorsque, sur /meet, vous appuyez sur « Voir le calendrier » après avoir lu l'avis qui l'explique, et c'est alors Calendly lui-même qui affiche son propre avis sur les cookies. Le jour où ce site intégrera de la mesure d'audience ou de la publicité, un vrai bandeau de consentement apparaîtra, et cette page changera avant.",
+            },
+          ],
+        },
+        {
+          id: "calendly",
+          titulo: "Le calendrier Calendly sur /meet",
+          bloques: [
+            {
+              tipo: "parrafo",
+              texto:
+                "La page /meet permet de réserver un appel via le calendrier de Calendly. Il n'est pas chargé à l'ouverture de la page : tant que vous n'appuyez pas sur « Voir le calendrier », votre navigateur ne se connecte pas à calendly.com. Lorsque vous appuyez, le calendrier se charge depuis calendly.com et Calendly dépose ces cookies sur son propre domaine :",
+            },
+            {
+              tipo: "tabla",
+              cabeceras: ["Cookie", "Qui le dépose", "Pour quoi faire", "Durée", "Type"],
+              filas: [
+                ["_calendly_session", "calendly.com (Calendly LLC)", "Maintenir la session du calendrier pendant que vous choisissez le jour et l'heure et réservez.", "21 jours.", "Technique."],
+                ["__cf_bm", "calendly.com (Cloudflare, prestataire de Calendly)", "Distinguer le trafic humain de celui des robots.", "30 minutes.", "Technique, de sécurité."],
+                ["_cfuvid", "calendly.com (Cloudflare, prestataire de Calendly)", "Appliquer des limites de requêtes par visiteur.", "De session : supprimé à la fermeture du navigateur.", "Technique, de sécurité."],
+              ],
+            },
+            {
+              tipo: "parrafo",
+              texto:
+                "Ce sont ceux que nous avons mesurés en chargeant le calendrier le 15 octobre 2026. Calendly affiche en outre son propre avis sur les cookies : ce que vous y acceptez ou refusez relève de la politique de cookies de Calendly, pas de celle-ci.",
+            },
+            {
+              tipo: "parrafo",
+              texto:
+                "Si vous préférez que Calendly ne dépose aucun cookie, n'ouvrez pas le calendrier : écrivez-nous depuis la page de contact et nous vous proposerons un jour et une heure par courriel.",
             },
           ],
         },
@@ -340,7 +436,7 @@ export const COOKIES: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Toutes les autres images, polices et fichiers du site sont servis depuis notre propre domaine.",
+                "Toutes les autres images, polices et fichiers du site sont servis depuis notre propre domaine. La seule exception est le calendrier Calendly sur /meet, et uniquement si vous l'ouvrez.",
             },
             {
               tipo: "parrafo",
@@ -375,7 +471,7 @@ export const COOKIES: DocumentoLegalMultilingue = {
     de: {
       titulo: "Cookie-Richtlinie",
       entradilla:
-        "Was diese Website in Ihrem Browser speichert. Es ist wenig: ein einziges Cookie, für die Sprache. Diese Seite erklärt genau welches, warum, und was wir nicht tun.",
+        "Was diese Website in Ihrem Browser speichert. Es ist wenig: ein eigenes Cookie, für die Sprache, und die von Calendly nur, wenn Sie dessen Kalender auf /meet öffnen. Diese Seite erklärt genau welche, warum, und was wir nicht tun.",
       secciones: [
         {
           id: "que-usamos",
@@ -411,7 +507,7 @@ export const COOKIES: DocumentoLegalMultilingue = {
               items: [
                 "Analyse-Cookies: keine. Diese Website hat weder Google Analytics noch Vercel Analytics noch ein anderes Reichweiten-Messwerkzeug.",
                 "Werbe- oder Social-Media-Cookies: keine. Es gibt keine Pixel von Meta, Google Ads, LinkedIn oder TikTok.",
-                "Cookies Dritter: keine.",
+                "Cookies Dritter: keine beim Besuch der Website. Die einzigen sind die von Calendly, und nur, wenn Sie dessen Kalender öffnen (siehe „Der Calendly-Kalender auf /meet“).",
                 "Auch den Browser-Speicher (localStorage oder sessionStorage) nutzen wir nicht, um Sie zu verfolgen.",
               ],
             },
@@ -434,7 +530,37 @@ export const COOKIES: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "An dem Tag, an dem diese Website Analyse, Werbung oder irgendein Cookie Dritter einsetzt, erscheint ein echtes Einwilligungsbanner — und diese Seite ändert sich vorher.",
+                "Die Cookies von Calendly werden beim Besuch der Website nicht gesetzt: nur wenn Sie auf /meet nach dem erklärenden Hinweis auf „Kalender anzeigen“ klicken, und dann zeigt Calendly selbst seinen eigenen Cookie-Hinweis. An dem Tag, an dem diese Website Analyse oder Werbung einsetzt, erscheint ein echtes Einwilligungsbanner — und diese Seite ändert sich vorher.",
+            },
+          ],
+        },
+        {
+          id: "calendly",
+          titulo: "Der Calendly-Kalender auf /meet",
+          bloques: [
+            {
+              tipo: "parrafo",
+              texto:
+                "Auf der Seite /meet können Sie über den Kalender von Calendly ein Gespräch buchen. Er wird beim Öffnen der Seite nicht geladen: Bis Sie auf „Kalender anzeigen“ klicken, verbindet sich Ihr Browser nicht mit calendly.com. Wenn Sie klicken, lädt der Kalender von calendly.com, und Calendly setzt auf seiner eigenen Domain diese Cookies:",
+            },
+            {
+              tipo: "tabla",
+              cabeceras: ["Cookie", "Wer es setzt", "Wofür", "Dauer", "Art"],
+              filas: [
+                ["_calendly_session", "calendly.com (Calendly LLC)", "Die Kalendersitzung halten, während Sie Tag und Uhrzeit wählen und buchen.", "21 Tage.", "Technisch."],
+                ["__cf_bm", "calendly.com (Cloudflare, Dienstleister von Calendly)", "Menschlichen Verkehr von Bots unterscheiden.", "30 Minuten.", "Technisch, Sicherheit."],
+                ["_cfuvid", "calendly.com (Cloudflare, Dienstleister von Calendly)", "Anfragelimits pro Besucher anwenden.", "Sitzung: wird beim Schließen des Browsers gelöscht.", "Technisch, Sicherheit."],
+              ],
+            },
+            {
+              tipo: "parrafo",
+              texto:
+                "Diese haben wir beim Laden des Kalenders am 15. Oktober 2026 gemessen. Calendly zeigt außerdem einen eigenen Cookie-Hinweis: Was Sie dort annehmen oder ablehnen, richtet sich nach der Cookie-Richtlinie von Calendly, nicht nach dieser.",
+            },
+            {
+              tipo: "parrafo",
+              texto:
+                "Wenn Calendly überhaupt keine Cookies setzen soll, öffnen Sie den Kalender nicht: Schreiben Sie uns über die Kontaktseite, und wir schlagen Ihnen Tag und Uhrzeit per E-Mail vor.",
             },
           ],
         },
@@ -450,7 +576,7 @@ export const COOKIES: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Alle übrigen Bilder, Schriften und Dateien der Website werden von unserer eigenen Domain ausgeliefert.",
+                "Alle übrigen Bilder, Schriften und Dateien der Website werden von unserer eigenen Domain ausgeliefert. Die einzige Ausnahme ist der Calendly-Kalender auf /meet, und nur, wenn Sie ihn öffnen.",
             },
             {
               tipo: "parrafo",

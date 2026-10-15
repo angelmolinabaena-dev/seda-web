@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { Link } from "@/i18n/navigation"
 import { setRequestLocale } from "next-intl/server"
 import { Calendar, Shield, Mail, ArrowRight } from "lucide-react"
+import { CalendlyFachada, type CalendlyFachadaCopy } from "./CalendlyFachada"
 
 /*
   /meet — Booking-focused landing page.
@@ -17,16 +18,17 @@ import { Calendar, Shield, Mail, ArrowRight } from "lucide-react"
   Pattern:
     - Inline per-locale COPY object (same convention as /founding-owners)
     - noindex (this is a conversion landing, not for organic search)
-    - Calendly iframe embedded so the user never leaves the domain
-    - Fallback direct Calendly link for users who block iframes
+    - Calendly behind a facade (CalendlyFachada): the iframe only loads when
+      the visitor clicks «Ver calendario», after a notice that Calendly sets
+      its own cookies; the direct calendly.com link sits next to the button
     - Link to /founding-owners for those who want more context before booking
 */
 
 const CALENDLY_URL = "https://calendly.com/sedaprivatehomes-info"
 
-// Calendly embed URL — hides cookie banner + branding for cleaner UX
+// Calendly embed URL. No `hide_gdpr_banner`: Calendly shows its own cookie notice.
 const CALENDLY_EMBED =
-  `${CALENDLY_URL}?hide_gdpr_banner=1&hide_event_type_details=1&primary_color=4a5340`
+  `${CALENDLY_URL}?hide_event_type_details=1&primary_color=4a5340`
 
 type Locale = "es" | "en" | "fr" | "de"
 
@@ -49,6 +51,7 @@ const COPY: Record<
     diffsTitle: string
     diffs: { title: string; body: string }[]
     seats: string
+    calendly: CalendlyFachadaCopy
     fallbackTitle: string
     fallbackBody: string
     fallbackLink: string
@@ -84,6 +87,12 @@ const COPY: Record<
       },
     ],
     seats: "Alta gratuita para las 3 primeras firmas directas · 24% de comisión sobre base neta (bruto menos comisión de canal y limpieza)",
+    calendly: {
+      aviso: "El calendario lo sirve Calendly. Al pulsar «Ver calendario», tu navegador se conecta con calendly.com y Calendly pone sus propias cookies.",
+      verCalendario: "Ver calendario",
+      enlaceDirecto: "O ábrelo en calendly.com",
+      politicaCookies: "Política de cookies",
+    },
     fallbackTitle: "¿Prefieres escribir primero?",
     fallbackBody: "Escríbeme directamente a:",
     fallbackLink: "angel@sedaprivatehomes.com",
@@ -118,6 +127,12 @@ const COPY: Record<
       },
     ],
     seats: "Free setup for the first 3 direct signings · 24% commission on the net base (gross minus channel commission and cleaning)",
+    calendly: {
+      aviso: "The calendar is provided by Calendly. When you press “View calendar”, your browser connects to calendly.com and Calendly sets its own cookies.",
+      verCalendario: "View calendar",
+      enlaceDirecto: "Or open it on calendly.com",
+      politicaCookies: "Cookie policy",
+    },
     fallbackTitle: "Prefer to write first?",
     fallbackBody: "Email me directly at:",
     fallbackLink: "angel@sedaprivatehomes.com",
@@ -152,6 +167,12 @@ const COPY: Record<
       },
     ],
     seats: "Inscription offerte pour les 3 premières signatures directes · 24% de commission sur la base nette (brut moins commission de canal et ménage)",
+    calendly: {
+      aviso: "Le calendrier est fourni par Calendly. Lorsque vous appuyez sur « Voir le calendrier », votre navigateur se connecte à calendly.com et Calendly dépose ses propres cookies.",
+      verCalendario: "Voir le calendrier",
+      enlaceDirecto: "Ou ouvrez-le sur calendly.com",
+      politicaCookies: "Politique de cookies",
+    },
     fallbackTitle: "Préférez-vous écrire d'abord ?",
     fallbackBody: "Écrivez-moi directement à :",
     fallbackLink: "angel@sedaprivatehomes.com",
@@ -186,6 +207,12 @@ const COPY: Record<
       },
     ],
     seats: "Kostenlose Anmeldung für die ersten 3 Direktverträge · 24% Provision auf die Nettobasis (brutto abzüglich Kanalprovision und Reinigung)",
+    calendly: {
+      aviso: "Der Kalender wird von Calendly bereitgestellt. Wenn Sie auf „Kalender anzeigen“ klicken, verbindet sich Ihr Browser mit calendly.com, und Calendly setzt eigene Cookies.",
+      verCalendario: "Kalender anzeigen",
+      enlaceDirecto: "Oder auf calendly.com öffnen",
+      politicaCookies: "Cookie-Richtlinie",
+    },
     fallbackTitle: "Möchten Sie lieber zuerst schreiben?",
     fallbackBody: "Schreiben Sie mir direkt an:",
     fallbackLink: "angel@sedaprivatehomes.com",
@@ -289,7 +316,7 @@ export default async function MeetPage({
         </div>
       </section>
 
-      {/* ── Calendly embed ───────────────────────────────────────── */}
+      {/* ── Calendly (fachada) ────────────────────────────────────── */}
       <section id="book" className="px-6 py-16 md:py-24">
         <div className="mx-auto max-w-3xl">
           <p className="text-xs font-medium uppercase tracking-[0.18em] text-foreground/50 mb-3">
@@ -297,34 +324,11 @@ export default async function MeetPage({
           </p>
           <p className="text-sm text-foreground/60 mb-8">{t.seats}</p>
 
-          <div className="rounded-2xl border border-border bg-background overflow-hidden">
-            {/*
-              Calendly iframe embed.
-              - height=720 fits one month view on most screens
-              - sandbox is permissive (Calendly is trusted, owned by Vercel-class infra)
-              - loading=lazy so the embed doesn't block above-the-fold paint
-              - title for screen-readers
-            */}
-            <iframe
-              src={CALENDLY_EMBED}
-              title="Calendly — Seda Private Homes booking"
-              loading="lazy"
-              className="w-full"
-              style={{ height: "720px", border: "0" }}
-            />
-          </div>
-
-          {/* Fallback for users with iframe blocked */}
-          <p className="mt-6 text-center text-sm text-foreground/60">
-            <a
-              href={CALENDLY_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline underline-offset-4 hover:text-foreground"
-            >
-              {t.cta}
-            </a>
-          </p>
+          <CalendlyFachada
+            calendlyUrl={CALENDLY_URL}
+            embedUrl={CALENDLY_EMBED}
+            copy={t.calendly}
+          />
         </div>
       </section>
 
