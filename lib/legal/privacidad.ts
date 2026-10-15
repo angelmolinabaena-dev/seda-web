@@ -25,12 +25,21 @@ import type { DocumentoLegalMultilingue } from "./types"
     · Ausencia de analítica y de píxeles: comprobado por búsqueda en todo el
       árbol (`analytics`, `gtag`, `fbq`, `hotjar`, `clarity`, `posthog`,
       `plausible`, `SpeedInsights`) — cero coincidencias.
+    · Calendly (15-oct-2026): `app/[locale]/meet/page.tsx` inserta el
+      calendario en un iframe y `app/[locale]/founding-owners/page.tsx`
+      enlaza a él. Datos pedidos, leídos del tipo de evento en la API de
+      Calendly: nombre, email, día y hora, y una pregunta libre opcional;
+      lugar `google_conference` (Google Meet). El iframe hace que
+      calendly.com fije cookies propias (`_calendly_session`, `__cf_bm`,
+      `_cfuvid`), medido con una petición a la URL del iframe.
+    · Las valoraciones de huéspedes NO van aquí: viven en guest-app, que
+      tiene su propia política (`/legal/privacidad`) y no enlaza a esta.
 */
 
 export const PRIVACIDAD: DocumentoLegalMultilingue = {
   id: "privacidad",
   ruta: "/privacidad",
-  actualizado: "2026-08-06",
+  actualizado: "2026-10-15",
   traducciones: {
     es: {
       titulo: "Política de privacidad",
@@ -75,6 +84,10 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                   "Nombre, organización (opcional), correo electrónico, asunto y mensaje.",
                 ],
                 [
+                  "Reserva de una llamada con Calendly (páginas /meet y /founding-owners)",
+                  "Nombre, correo electrónico, día y hora elegidos, tu zona horaria y, si lo escribes, lo que quieras contarnos para preparar la reunión. Detalle en «Reserva de una llamada con Calendly».",
+                ],
+                [
                   "Correo o teléfono directos",
                   "Lo que decidas incluir en tu mensaje o contarnos en la llamada.",
                 ],
@@ -92,7 +105,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "No recogemos datos con fines analíticos, publicitarios ni de perfilado. Este sitio no tiene ninguna herramienta de medición —ni Google Analytics, ni Vercel Analytics, ni equivalentes—, ni píxeles de redes sociales, ni cookies de terceros.",
+                "No recogemos datos con fines analíticos, publicitarios ni de perfilado. Este sitio no tiene ninguna herramienta de medición —ni Google Analytics, ni Vercel Analytics, ni equivalentes— ni píxeles de redes sociales. La única cookie de terceros es la que pone Calendly cuando abres la página en la que está insertado su calendario (ver «Reserva de una llamada con Calendly»).",
             },
           ],
         },
@@ -115,6 +128,10 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                 [
                   "Limitar envíos automatizados o abusivos del formulario.",
                   "Artículo 6.1.f del RGPD: interés legítimo en la seguridad y disponibilidad del servicio.",
+                ],
+                [
+                  "Organizar y celebrar la videollamada que reservas con Calendly.",
+                  "Artículo 6.1.b del RGPD: aplicación de medidas precontractuales adoptadas a tu petición.",
                 ],
               ],
             },
@@ -153,12 +170,58 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "No hay más destinatarios. No vendemos ni cedemos datos a terceros con fines comerciales. Solo se comunicarían a autoridades u organismos públicos si una norma lo exigiera.",
+                "Si reservas una llamada, tus datos los tratan además Calendly y Google, como se explica en «Reserva de una llamada con Calendly». No hay más destinatarios. No vendemos ni cedemos datos a terceros con fines comerciales. Solo se comunicarían a autoridades u organismos públicos si una norma lo exigiera.",
             },
             {
               tipo: "parrafo",
               texto:
-                "Vercel y Resend son sociedades estadounidenses: el tratamiento implica una transferencia internacional de datos fuera del Espacio Económico Europeo. Puedes pedirnos información sobre las garantías aplicables a esa transferencia escribiendo a {email}.",
+                "Vercel, Resend y Calendly son sociedades estadounidenses: el tratamiento implica una transferencia internacional de datos fuera del Espacio Económico Europeo. Puedes pedirnos información sobre las garantías aplicables a esa transferencia escribiendo a {email}.",
+            },
+          ],
+        },
+        {
+          id: "calendly",
+          titulo: "Reserva de una llamada con Calendly",
+          bloques: [
+            {
+              tipo: "parrafo",
+              texto:
+                "Desde las páginas /meet y /founding-owners puedes reservar una videollamada de 30 minutos con nosotros. La reserva no la gestiona esta web, sino Calendly: su calendario aparece insertado en /meet y enlazado desde /founding-owners.",
+            },
+            {
+              tipo: "tabla",
+              cabeceras: ["Aspecto", "Reserva de una llamada"],
+              filas: [
+                [
+                  "Finalidad",
+                  "Organizar y celebrar la llamada que has pedido, normalmente para hablar de la gestión de tu propiedad.",
+                ],
+                [
+                  "Datos",
+                  "Nombre, correo electrónico, día y hora elegidos y tu zona horaria. Si lo rellenas, el campo opcional en el que nos cuentas lo que ayude a preparar la reunión.",
+                ],
+                [
+                  "Base jurídica",
+                  "Artículo 6.1.b del RGPD: aplicación de medidas precontractuales adoptadas a tu petición.",
+                ],
+                [
+                  "Quién los ve",
+                  "SEDA. Calendly nos notifica la reserva en el buzón {email}.",
+                ],
+                [
+                  "Encargados del tratamiento",
+                  "Calendly LLC (Estados Unidos): gestiona la agenda, guarda la reserva y te envía la confirmación y los recordatorios. Google (Google Calendar y Google Meet): la cita se anota en nuestro calendario y la llamada se celebra por Google Meet. Y el proveedor del buzón {email}, donde llega el aviso.",
+                ],
+                [
+                  "Conservación",
+                  "[PLAZO A DECIDIR POR ÁNGEL]",
+                ],
+              ],
+            },
+            {
+              tipo: "parrafo",
+              texto:
+                "Al abrir la página /meet, tu navegador carga el calendario directamente desde calendly.com: Calendly recibe tu dirección IP y puede fijar sus propias cookies, aunque no llegues a reservar. Si prefieres evitarlo, escríbenos a {email} y te proponemos día y hora por correo.",
             },
           ],
         },
@@ -323,6 +386,10 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                   "Name, organisation (optional), email address, subject and message.",
                 ],
                 [
+                  "Booking a call with Calendly (/meet and /founding-owners pages)",
+                  "Name, email address, chosen day and time, your time zone and, if you write it, anything you want to tell us to prepare the meeting. Details under “Booking a call with Calendly”.",
+                ],
+                [
                   "Direct email or phone",
                   "Whatever you choose to include in your message or tell us on the call.",
                 ],
@@ -340,7 +407,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "We collect no data for analytics, advertising or profiling. This site has no measurement tool at all — no Google Analytics, no Vercel Analytics, nothing equivalent — no social network pixels and no third-party cookies.",
+                "We collect no data for analytics, advertising or profiling. This site has no measurement tool at all — no Google Analytics, no Vercel Analytics, nothing equivalent — and no social network pixels. The only third-party cookie is the one Calendly sets when you open the page where its calendar is embedded (see “Booking a call with Calendly”).",
             },
           ],
         },
@@ -363,6 +430,10 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                 [
                   "Limit automated or abusive form submissions.",
                   "Article 6(1)(f) GDPR: legitimate interest in the security and availability of the service.",
+                ],
+                [
+                  "Organise and hold the video call you book with Calendly.",
+                  "Article 6(1)(b) GDPR: pre-contractual steps taken at your request.",
                 ],
               ],
             },
@@ -401,12 +472,58 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "There are no other recipients. We do not sell or transfer data to third parties for commercial purposes. Data would only be disclosed to authorities or public bodies if a legal rule required it.",
+                "If you book a call, your data is also processed by Calendly and Google, as explained under “Booking a call with Calendly”. There are no other recipients. We do not sell or transfer data to third parties for commercial purposes. Data would only be disclosed to authorities or public bodies if a legal rule required it.",
             },
             {
               tipo: "parrafo",
               texto:
-                "Vercel and Resend are US companies, so the processing involves an international transfer of data outside the European Economic Area. You can ask us about the safeguards applicable to that transfer by writing to {email}.",
+                "Vercel, Resend and Calendly are US companies, so the processing involves an international transfer of data outside the European Economic Area. You can ask us about the safeguards applicable to that transfer by writing to {email}.",
+            },
+          ],
+        },
+        {
+          id: "calendly",
+          titulo: "Booking a call with Calendly",
+          bloques: [
+            {
+              tipo: "parrafo",
+              texto:
+                "From the /meet and /founding-owners pages you can book a 30-minute video call with us. The booking is not handled by this website but by Calendly: its calendar is embedded on /meet and linked from /founding-owners.",
+            },
+            {
+              tipo: "tabla",
+              cabeceras: ["Aspect", "Booking a call"],
+              filas: [
+                [
+                  "Purpose",
+                  "Organise and hold the call you asked for, usually to talk about managing your property.",
+                ],
+                [
+                  "Data",
+                  "Name, email address, chosen day and time and your time zone. If you fill it in, the optional field where you tell us anything that helps prepare the meeting.",
+                ],
+                [
+                  "Legal basis",
+                  "Article 6(1)(b) GDPR: pre-contractual steps taken at your request.",
+                ],
+                [
+                  "Who sees it",
+                  "SEDA. Calendly notifies us of the booking in the {email} mailbox.",
+                ],
+                [
+                  "Processors",
+                  "Calendly LLC (United States): manages the schedule, stores the booking and sends you the confirmation and reminders. Google (Google Calendar and Google Meet): the appointment goes into our calendar and the call takes place on Google Meet. And the provider of the {email} mailbox, where the notification arrives.",
+                ],
+                [
+                  "Retention",
+                  "[PLAZO A DECIDIR POR ÁNGEL]",
+                ],
+              ],
+            },
+            {
+              tipo: "parrafo",
+              texto:
+                "When you open the /meet page, your browser loads the calendar directly from calendly.com: Calendly receives your IP address and may set its own cookies, even if you do not book. If you would rather avoid that, write to {email} and we will suggest a day and time by email.",
             },
           ],
         },
@@ -568,6 +685,10 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                   "Nom, organisation (facultatif), courriel, objet et message.",
                 ],
                 [
+                  "Réservation d'un appel avec Calendly (pages /meet et /founding-owners)",
+                  "Nom, courriel, jour et heure choisis, votre fuseau horaire et, si vous l'écrivez, ce que vous souhaitez nous dire pour préparer la réunion. Détails sous « Réservation d'un appel avec Calendly ».",
+                ],
+                [
                   "Courriel ou téléphone direct",
                   "Ce que vous choisissez d'inclure dans votre message ou de nous dire au téléphone.",
                 ],
@@ -585,7 +706,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Nous ne recueillons aucune donnée à des fins analytiques, publicitaires ou de profilage. Ce site n'a aucun outil de mesure — ni Google Analytics, ni Vercel Analytics, ni équivalent —, aucun pixel de réseau social et aucun cookie tiers.",
+                "Nous ne recueillons aucune donnée à des fins analytiques, publicitaires ou de profilage. Ce site n'a aucun outil de mesure — ni Google Analytics, ni Vercel Analytics, ni équivalent — ni aucun pixel de réseau social. Le seul cookie tiers est celui que dépose Calendly lorsque vous ouvrez la page où son calendrier est intégré (voir « Réservation d'un appel avec Calendly »).",
             },
           ],
         },
@@ -608,6 +729,10 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                 [
                   "Limiter les envois automatisés ou abusifs du formulaire.",
                   "Article 6.1.f du RGPD : intérêt légitime à la sécurité et à la disponibilité du service.",
+                ],
+                [
+                  "Organiser et tenir l'appel vidéo que vous réservez avec Calendly.",
+                  "Article 6.1.b du RGPD : mesures précontractuelles prises à votre demande.",
                 ],
               ],
             },
@@ -646,12 +771,58 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Il n'y a pas d'autres destinataires. Nous ne vendons ni ne cédons de données à des tiers à des fins commerciales. Elles ne seraient communiquées aux autorités ou organismes publics que si une norme l'exigeait.",
+                "Si vous réservez un appel, vos données sont aussi traitées par Calendly et Google, comme expliqué sous « Réservation d'un appel avec Calendly ». Il n'y a pas d'autres destinataires. Nous ne vendons ni ne cédons de données à des tiers à des fins commerciales. Elles ne seraient communiquées aux autorités ou organismes publics que si une norme l'exigeait.",
             },
             {
               tipo: "parrafo",
               texto:
-                "Vercel et Resend sont des sociétés américaines : le traitement implique un transfert international de données hors de l'Espace économique européen. Vous pouvez nous demander des informations sur les garanties applicables à ce transfert en écrivant à {email}.",
+                "Vercel, Resend et Calendly sont des sociétés américaines : le traitement implique un transfert international de données hors de l'Espace économique européen. Vous pouvez nous demander des informations sur les garanties applicables à ce transfert en écrivant à {email}.",
+            },
+          ],
+        },
+        {
+          id: "calendly",
+          titulo: "Réservation d'un appel avec Calendly",
+          bloques: [
+            {
+              tipo: "parrafo",
+              texto:
+                "Depuis les pages /meet et /founding-owners, vous pouvez réserver un appel vidéo de 30 minutes avec nous. La réservation n'est pas gérée par ce site mais par Calendly : son calendrier est intégré à /meet et accessible par un lien depuis /founding-owners.",
+            },
+            {
+              tipo: "tabla",
+              cabeceras: ["Aspect", "Réservation d'un appel"],
+              filas: [
+                [
+                  "Finalité",
+                  "Organiser et tenir l'appel que vous avez demandé, généralement pour parler de la gestion de votre bien.",
+                ],
+                [
+                  "Données",
+                  "Nom, courriel, jour et heure choisis et votre fuseau horaire. Si vous le remplissez, le champ facultatif où vous nous indiquez ce qui aide à préparer la réunion.",
+                ],
+                [
+                  "Base juridique",
+                  "Article 6.1.b du RGPD : mesures précontractuelles prises à votre demande.",
+                ],
+                [
+                  "Qui les voit",
+                  "SEDA. Calendly nous notifie la réservation dans la boîte {email}.",
+                ],
+                [
+                  "Sous-traitants",
+                  "Calendly LLC (États-Unis) : gère l'agenda, conserve la réservation et vous envoie la confirmation et les rappels. Google (Google Calendar et Google Meet) : le rendez-vous est inscrit dans notre calendrier et l'appel a lieu sur Google Meet. Et le fournisseur de la boîte {email}, où arrive la notification.",
+                ],
+                [
+                  "Conservation",
+                  "[PLAZO A DECIDIR POR ÁNGEL]",
+                ],
+              ],
+            },
+            {
+              tipo: "parrafo",
+              texto:
+                "Lorsque vous ouvrez la page /meet, votre navigateur charge le calendrier directement depuis calendly.com : Calendly reçoit votre adresse IP et peut déposer ses propres cookies, même si vous ne réservez pas. Si vous préférez l'éviter, écrivez-nous à {email} et nous vous proposerons un jour et une heure par courriel.",
             },
           ],
         },
@@ -813,6 +984,10 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                   "Name, Organisation (freiwillig), E-Mail-Adresse, Betreff und Nachricht.",
                 ],
                 [
+                  "Buchung eines Gesprächs über Calendly (Seiten /meet und /founding-owners)",
+                  "Name, E-Mail-Adresse, gewählter Tag und Uhrzeit, Ihre Zeitzone und, sofern Sie es schreiben, was Sie uns zur Vorbereitung des Gesprächs mitteilen möchten. Einzelheiten unter „Buchung eines Gesprächs über Calendly“.",
+                ],
+                [
                   "Direkte E-Mail oder Telefon",
                   "Was Sie in Ihrer Nachricht schreiben oder uns im Gespräch mitteilen.",
                 ],
@@ -830,7 +1005,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Wir erheben keine Daten zu Analyse-, Werbe- oder Profiling-Zwecken. Diese Website hat kein einziges Messwerkzeug — weder Google Analytics noch Vercel Analytics noch Vergleichbares —, keine Social-Media-Pixel und keine Cookies Dritter.",
+                "Wir erheben keine Daten zu Analyse-, Werbe- oder Profiling-Zwecken. Diese Website hat kein einziges Messwerkzeug — weder Google Analytics noch Vercel Analytics noch Vergleichbares — und keine Social-Media-Pixel. Das einzige Cookie Dritter setzt Calendly, wenn Sie die Seite öffnen, in die sein Kalender eingebettet ist (siehe „Buchung eines Gesprächs über Calendly“).",
             },
           ],
         },
@@ -853,6 +1028,10 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                 [
                   "Automatisierte oder missbräuchliche Formularübermittlungen begrenzen.",
                   "Art. 6 Abs. 1 lit. f DSGVO: berechtigtes Interesse an Sicherheit und Verfügbarkeit des Dienstes.",
+                ],
+                [
+                  "Das Videogespräch organisieren und führen, das Sie über Calendly buchen.",
+                  "Art. 6 Abs. 1 lit. b DSGVO: vorvertragliche Maßnahmen auf Ihre Anfrage hin.",
                 ],
               ],
             },
@@ -891,12 +1070,58 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Weitere Empfänger gibt es nicht. Wir verkaufen oder übermitteln keine Daten zu kommerziellen Zwecken an Dritte. An Behörden oder öffentliche Stellen würden sie nur übermittelt, wenn eine Rechtsvorschrift das verlangt.",
+                "Wenn Sie ein Gespräch buchen, verarbeiten auch Calendly und Google Ihre Daten, wie unter „Buchung eines Gesprächs über Calendly“ erläutert. Weitere Empfänger gibt es nicht. Wir verkaufen oder übermitteln keine Daten zu kommerziellen Zwecken an Dritte. An Behörden oder öffentliche Stellen würden sie nur übermittelt, wenn eine Rechtsvorschrift das verlangt.",
             },
             {
               tipo: "parrafo",
               texto:
-                "Vercel und Resend sind US-amerikanische Unternehmen: Die Verarbeitung umfasst eine internationale Datenübermittlung außerhalb des Europäischen Wirtschaftsraums. Informationen zu den für diese Übermittlung geltenden Garantien erhalten Sie auf Anfrage unter {email}.",
+                "Vercel, Resend und Calendly sind US-amerikanische Unternehmen: Die Verarbeitung umfasst eine internationale Datenübermittlung außerhalb des Europäischen Wirtschaftsraums. Informationen zu den für diese Übermittlung geltenden Garantien erhalten Sie auf Anfrage unter {email}.",
+            },
+          ],
+        },
+        {
+          id: "calendly",
+          titulo: "Buchung eines Gesprächs über Calendly",
+          bloques: [
+            {
+              tipo: "parrafo",
+              texto:
+                "Auf den Seiten /meet und /founding-owners können Sie ein 30-minütiges Videogespräch mit uns buchen. Die Buchung wickelt nicht diese Website ab, sondern Calendly: Sein Kalender ist in /meet eingebettet und von /founding-owners aus verlinkt.",
+            },
+            {
+              tipo: "tabla",
+              cabeceras: ["Punkt", "Buchung eines Gesprächs"],
+              filas: [
+                [
+                  "Zweck",
+                  "Das von Ihnen gewünschte Gespräch organisieren und führen, meist über die Verwaltung Ihrer Immobilie.",
+                ],
+                [
+                  "Daten",
+                  "Name, E-Mail-Adresse, gewählter Tag und Uhrzeit sowie Ihre Zeitzone. Sofern ausgefüllt, das freiwillige Feld, in dem Sie uns mitteilen, was bei der Vorbereitung hilft.",
+                ],
+                [
+                  "Rechtsgrundlage",
+                  "Art. 6 Abs. 1 lit. b DSGVO: vorvertragliche Maßnahmen auf Ihre Anfrage hin.",
+                ],
+                [
+                  "Wer sie sieht",
+                  "SEDA. Calendly meldet uns die Buchung im Postfach {email}.",
+                ],
+                [
+                  "Auftragsverarbeiter",
+                  "Calendly LLC (Vereinigte Staaten): verwaltet den Terminkalender, speichert die Buchung und sendet Ihnen Bestätigung und Erinnerungen. Google (Google Calendar und Google Meet): Der Termin wird in unseren Kalender eingetragen und das Gespräch findet über Google Meet statt. Und der Anbieter des Postfachs {email}, in dem die Benachrichtigung eingeht.",
+                ],
+                [
+                  "Speicherdauer",
+                  "[PLAZO A DECIDIR POR ÁNGEL]",
+                ],
+              ],
+            },
+            {
+              tipo: "parrafo",
+              texto:
+                "Wenn Sie die Seite /meet öffnen, lädt Ihr Browser den Kalender direkt von calendly.com: Calendly erhält Ihre IP-Adresse und kann eigene Cookies setzen, auch wenn Sie nicht buchen. Möchten Sie das vermeiden, schreiben Sie an {email}, und wir schlagen Ihnen Tag und Uhrzeit per E-Mail vor.",
             },
           ],
         },

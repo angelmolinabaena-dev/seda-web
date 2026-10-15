@@ -24,6 +24,17 @@ async function loadRoute(): Promise<Route> {
   return import("@/app/api/contact/route")
 }
 
+/**
+ * Los obligatorios de «Estancia» (asterisco en GuestForm). Los tests que no
+ * van de campos obligatorios los dan por rellenos y sólo cambian lo suyo.
+ */
+const GUEST_OK = {
+  arrival: "12/07/2027",
+  departure: "19/07/2027",
+  guests: "4",
+  name: "María García",
+}
+
 function contactRequest(
   fields: Record<string, unknown>,
   headers: Record<string, string> = {},
@@ -32,7 +43,15 @@ function contactRequest(
   return new Request("http://localhost/api/contact", {
     method: "POST",
     headers: { "content-type": "application/json", ...headers },
-    body: body ?? JSON.stringify({ type: "guest", fields }),
+    body: body ?? JSON.stringify({ type: "guest", fields: { ...GUEST_OK, ...fields } }),
+  })
+}
+
+function rawRequest(payload: unknown) {
+  return new Request("http://localhost/api/contact", {
+    method: "POST",
+    headers: { "content-type": "application/json", "x-forwarded-for": freshIp() },
+    body: JSON.stringify(payload),
   })
 }
 
@@ -250,8 +269,6 @@ describe("/api/contact — límites de tamaño", () => {
   // aquí A MANO: el test es la copia independiente, no una lectura del código.
   const MAX_BODY_BYTES = 16 * 1024
   const MAX_FIELDS = 20
-  const MAX_KEY_LENGTH = 64
-  const MAX_VALUE_LENGTH = 4000
 
   const send = async (fields: Record<string, unknown>) => {
     const { POST } = await loadRoute()
@@ -260,44 +277,73 @@ describe("/api/contact — límites de tamaño", () => {
   const ok = { email: "angel@sedaprivatehomes.com" }
 
   describe("MAX_FIELDS", () => {
-    const con = (n: number) => ({
-      ...ok,
-      ...Object.fromEntries(Array.from({ length: n - 1 }, (_, i) => [`k${i}`, "v"])),
-    })
-    it("20 campos pasa", async () => {
-      expect((await send(con(MAX_FIELDS))).status).toBe(200)
-    })
-    it("21 campos no", async () => {
-      const res = await send(con(MAX_FIELDS + 1))
+    it("21 campos no (antes de mirar cuáles son)", async () => {
+      const con21 = Object.fromEntries(Array.from({ length: MAX_FIELDS + 1 }, (_, i) => [`k${i}`, "v"]))
+      const { POST } = await loadRoute()
+      const res = await POST(rawRequest({ type: "guest", fields: con21 }))
       expect(res.status).toBe(400)
       expect(await res.json()).toEqual({ ok: false, error: "too_many_fields" })
     })
   })
 
-  describe("MAX_KEY_LENGTH", () => {
-    it("clave de 64 pasa", async () => {
-      expect((await send({ ...ok, ["k".repeat(MAX_KEY_LENGTH)]: "v" })).status).toBe(200)
-    })
-    it("clave de 65 no", async () => {
-      const res = await send({ ...ok, ["k".repeat(MAX_KEY_LENGTH + 1)]: "v" })
+  /*
+    Longitud máxima de cada campo. Copia a mano de lib/contact-fields.ts: si
+    allí cambia un número, aquí hay que cambiarlo también. Uno corto, uno
+    medio y el largo bastan para fijar que el límite es por campo.
+    Se rechaza, no se trunca.
+  */
+  describe("longitud por campo", () => {
+    const CASOS: [string, number][] = [
+      ["name", 120],
+      ["zone", 120],
+      ["services", 300],
+      ["whatsapp", 40],
+      ["notes", 4000],
+    ]
+    it.each(CASOS)("%s: %i pasa, uno más no", async (campo, max) => {
+      expect((await send({ ...ok, [campo]: "x".repeat(max) })).status).toBe(200)
+      const res = await send({ ...ok, [campo]: "x".repeat(max + 1) })
       expect(res.status).toBe(400)
-      expect(await res.json()).toEqual({ ok: false, error: "invalid_field_name" })
+      expect(await res.json()).toEqual({ ok: false, error: "field_too_long" })
     })
-    it("clave vacía no", async () => {
-      const res = await send({ ...ok, "": "v" })
-      expect(res.status).toBe(400)
-      expect(await res.json()).toEqual({ ok: false, error: "invalid_field_name" })
+
+    it("bedrooms (propiedad): 10 pasa, 11 no", async () => {
+      const { POST } = await loadRoute()
+      const owner = (bedrooms: string) =>
+        POST(
+          rawRequest({
+            type: "owner",
+            fields: { property_location: "Estepona", property_type: "Villa", bedrooms, name: "Ana", email: ok.email },
+          }),
+        )
+      expect((await owner("1".repeat(10))).status).toBe(200)
+      expect((await owner("1".repeat(11))).status).toBe(400)
+    })
+
+    it("se mide tras recortar espacios", async () => {
+      expect((await send({ ...ok, name: `  ${"x".repeat(120)}  ` })).status).toBe(200)
     })
   })
 
-  describe("MAX_VALUE_LENGTH", () => {
-    it("valor de 4000 pasa", async () => {
-      expect((await send({ ...ok, message: "m".repeat(MAX_VALUE_LENGTH) })).status).toBe(200)
-    })
-    it("valor de 4001 no (se rechaza, no se trunca)", async () => {
-      const res = await send({ ...ok, message: "m".repeat(MAX_VALUE_LENGTH + 1) })
+  describe("sólo los campos del formulario", () => {
+    it("un campo que el formulario no pide → 400 unknown_field", async () => {
+      const res = await send({ ...ok, bcc: "attacker@evil.tld" })
       expect(res.status).toBe(400)
-      expect(await res.json()).toEqual({ ok: false, error: "field_too_long" })
+      expect(await res.json()).toEqual({ ok: false, error: "unknown_field" })
+    })
+
+    it("un campo de otra variante tampoco (subject en «Estancia»)", async () => {
+      const res = await send({ ...ok, subject: "hola" })
+      expect(res.status).toBe(400)
+      expect(await res.json()).toEqual({ ok: false, error: "unknown_field" })
+    })
+
+    it("__proto__ no se cuela como campo", async () => {
+      const { POST } = await loadRoute()
+      const body = `{"type":"guest","fields":{"arrival":"a","departure":"b","guests":"2","name":"Ana","email":"${ok.email}","__proto__":"x"}}`
+      const res = await POST(contactRequest({}, { "x-forwarded-for": freshIp() }, body))
+      expect(res.status).toBe(400)
+      expect(await res.json()).toEqual({ ok: false, error: "unknown_field" })
     })
   })
 
@@ -307,7 +353,10 @@ describe("/api/contact — límites de tamaño", () => {
       const exacto = padTo(MAX_BODY_BYTES)
       expect(new TextEncoder().encode(exacto).length).toBe(MAX_BODY_BYTES)
       const res = await POST(contactRequest({}, { "x-forwarded-for": freshIp() }, exacto))
-      expect(res.status).toBe(200)
+      // Pasa el filtro de tamaño y cae en el siguiente: p0…p4 no son campos
+      // del formulario. Lo que importa aquí es que NO es 413.
+      expect(res.status).toBe(400)
+      expect(await res.json()).toEqual({ ok: false, error: "unknown_field" })
     })
 
     it("16 KiB + 1 byte no: 413 aunque no declare content-length", async () => {
@@ -344,8 +393,8 @@ describe("/api/contact — límites de tamaño", () => {
 
     /**
      * JSON válido de exactamente `bytes` bytes (ASCII). El relleno se reparte
-     * en campos p0..p4 de hasta MAX_VALUE_LENGTH: así sólo el tamaño total del
-     * cuerpo puede hacer saltar el límite, no el de un valor.
+     * en campos p0..p4 de hasta 4000: el límite de tamaño corre antes que la
+     * validación de campos, así que sólo el tamaño total puede dar 413.
      */
     function padTo(bytes: number) {
       const armar = (largos: number[]) =>
@@ -359,10 +408,187 @@ describe("/api/contact — límites de tamaño", () => {
       const largos = [0, 0, 0, 0, 0]
       let falta = bytes - new TextEncoder().encode(armar(largos)).length
       for (let i = 0; falta > 0; i++) {
-        largos[i] = Math.min(falta, MAX_VALUE_LENGTH)
+        largos[i] = Math.min(falta, 4000)
         falta -= largos[i]
       }
       return armar(largos)
     }
+  })
+})
+
+// ── (e) obligatorios, caracteres y trampa para bots ─────────────────────────
+
+describe("/api/contact — validación en el servidor", () => {
+  const email = "angel@sedaprivatehomes.com"
+  const post = async (payload: unknown) => {
+    const { POST } = await loadRoute()
+    return POST(rawRequest(payload))
+  }
+
+  /*
+    Copia a mano de los asteriscos de ContactoContent.tsx, no de
+    lib/contact-fields.ts: si alguien quita un obligatorio en uno de los dos
+    sitios, esto lo dice.
+  */
+  const OBLIGATORIOS: Record<string, Record<string, string>> = {
+    guest: { arrival: "12/07/2027", departure: "19/07/2027", guests: "4", name: "Ana", email },
+    owner: { property_location: "Estepona", property_type: "Villa", bedrooms: "4", name: "Ana", email },
+    other: { name: "Ana", email, subject: "Prensa", message: "Querría hablar con vosotros de un reportaje." },
+  }
+
+  for (const [type, campos] of Object.entries(OBLIGATORIOS)) {
+    it(`${type}: con todos los obligatorios → 200`, async () => {
+      expect((await post({ type, fields: campos })).status).toBe(200)
+    })
+    for (const falta of Object.keys(campos)) {
+      if (falta === "email") continue // lo cubre invalid_email
+      it(`${type}: sin ${falta} → 400 missing_field`, async () => {
+        const fields = { ...campos }
+        delete fields[falta]
+        const res = await post({ type, fields })
+        expect(res.status).toBe(400)
+        expect(await res.json()).toEqual({ ok: false, error: "missing_field" })
+      })
+      it(`${type}: ${falta} sólo con espacios cuenta como vacío`, async () => {
+        const res = await post({ type, fields: { ...campos, [falta]: "   " } })
+        expect(res.status).toBe(400)
+      })
+    }
+  }
+
+  it("message de menos de 20 caracteres → 400 (el navegador pide minLength=20)", async () => {
+    const res = await post({ type: "other", fields: { ...OBLIGATORIOS.other, message: "Hola" } })
+    expect(res.status).toBe(400)
+    expect(await res.json()).toEqual({ ok: false, error: "field_too_short" })
+  })
+
+  describe("saltos de línea y caracteres de control", () => {
+    const UNA_LINEA = [
+      "Ana\nEMAIL: otro@evil.tld",
+      "Ana\r\nBcc: otro@evil.tld",
+      "Ana\rX",
+      "Ana X",
+      "Ana\u0000",
+      "Ana\tGarcía",
+    ]
+    it.each(UNA_LINEA)("nombre %j → 400 invalid_characters", async (name) => {
+      const res = await post({ type: "guest", fields: { ...OBLIGATORIOS.guest, name } })
+      expect(res.status).toBe(400)
+      expect(await res.json()).toEqual({ ok: false, error: "invalid_characters" })
+    })
+
+    it("asunto con salto de línea → 400", async () => {
+      const res = await post({
+        type: "other",
+        fields: { ...OBLIGATORIOS.other, subject: "Hola\nBcc: otro@evil.tld" },
+      })
+      expect(res.status).toBe(400)
+      expect(await res.json()).toEqual({ ok: false, error: "invalid_characters" })
+    })
+
+    it("comentarios de varias líneas (\\r\\n, \\n, tabulador) sí", async () => {
+      const notes = "Línea uno\r\nLínea dos\nLínea tres\tcon tabulador"
+      expect((await post({ type: "guest", fields: { ...OBLIGATORIOS.guest, notes } })).status).toBe(200)
+    })
+
+    it("pero no otros caracteres de control en los comentarios", async () => {
+      const res = await post({ type: "guest", fields: { ...OBLIGATORIOS.guest, notes: "a\u0007b" } })
+      expect(res.status).toBe(400)
+      expect(await res.json()).toEqual({ ok: false, error: "invalid_characters" })
+    })
+  })
+
+  describe("trampa para bots (website)", () => {
+    it("rellena → 200 como un envío bueno, y no se envía nada", async () => {
+      vi.stubEnv("RESEND_API_KEY", "re_test_no_es_real")
+      const fetchSpy = vi.fn()
+      vi.stubGlobal("fetch", fetchSpy)
+      try {
+        const res = await post({
+          type: "guest",
+          fields: { ...OBLIGATORIOS.guest, website: "http://spam.example" },
+        })
+        expect(res.status).toBe(200)
+        expect(await res.json()).toEqual({ ok: true, mode: "resend" })
+        expect(fetchSpy).not.toHaveBeenCalled()
+      } finally {
+        vi.unstubAllGlobals()
+      }
+    })
+
+    it("vacía → envío normal, y no aparece en el correo", async () => {
+      const log = vi.spyOn(console, "log")
+      const res = await post({ type: "guest", fields: { ...OBLIGATORIOS.guest, website: "" } })
+      expect(res.status).toBe(200)
+      const call = log.mock.calls.find((c) => c[0] === "[/api/contact] payload")
+      expect(call?.[1].fields).not.toHaveProperty("website")
+    })
+
+    it("rellena pero con datos inválidos → el mismo 400 que cualquiera", async () => {
+      const res = await post({ type: "guest", fields: { website: "x", email } })
+      expect(res.status).toBe(400)
+      expect(await res.json()).toEqual({ ok: false, error: "missing_field" })
+    })
+  })
+})
+
+// ── (f) lo que recibe Resend — fetch simulado, nunca la clave real ──────────
+
+describe("/api/contact — el correo que sale hacia Resend", () => {
+  const email = "lead@example.com"
+  const BASE = { arrival: "12/07/2027", departure: "19/07/2027", guests: "4", name: "Ana", email }
+
+  async function enviar(fields: Record<string, string>, type = "guest") {
+    vi.stubEnv("RESEND_API_KEY", "re_test_no_es_real")
+    const fetchSpy = vi.fn<typeof fetch>(async () => new Response("{}", { status: 200 }))
+    vi.stubGlobal("fetch", fetchSpy)
+    try {
+      const { POST } = await loadRoute()
+      const res = await POST(rawRequest({ type, fields }))
+      expect(res.status).toBe(200)
+      expect(await res.json()).toEqual({ ok: true, mode: "resend" })
+    } finally {
+      vi.unstubAllGlobals()
+    }
+    expect(fetchSpy).toHaveBeenCalledTimes(1)
+    const [url, init] = fetchSpy.mock.calls[0] as [string, RequestInit]
+    expect(url).toBe("https://api.resend.com/emails")
+    return { init, body: JSON.parse(String(init.body)) }
+  }
+
+  it("destinatario, remitente, reply_to y asunto fijos", async () => {
+    const { body } = await enviar(BASE)
+    expect(body.to).toEqual(["info@sedaprivatehomes.com"])
+    expect(body.from).toBe("SEDA Private Homes <info@sedaprivatehomes.com>")
+    expect(body.reply_to).toBe(email)
+    expect(body.subject).toBe("Solicitud de estancia — sedaprivatehomes.com")
+  })
+
+  it("el asunto que escribe el visitante no llega al Subject del correo", async () => {
+    const { body } = await enviar(
+      { name: "Ana", email, subject: "URGENTE: factura impagada", message: "Mensaje de más de veinte caracteres." },
+      "other",
+    )
+    expect(body.subject).toBe("Mensaje desde sedaprivatehomes.com")
+  })
+
+  it("HTML en el nombre llega escapado, nunca como etiqueta", async () => {
+    const { body } = await enviar({ ...BASE, name: `<img src=x onerror="alert(1)">Ana & 'Co'` })
+    expect(body.html).not.toContain("<img")
+    expect(body.html).toContain("&lt;img src=x onerror=&quot;alert(1)&quot;&gt;Ana &amp; &#39;Co&#39;")
+  })
+
+  it("un comentario de varias líneas no fabrica campos en la parte de texto", async () => {
+    const { body } = await enviar({ ...BASE, notes: "Hola\nEMAIL: otro@evil.tld" })
+    const lineas: string[] = body.text.split("\n")
+    expect(lineas.filter((l) => l.startsWith("EMAIL:"))).toEqual([`EMAIL: ${email}`])
+    expect(lineas).toContain("  EMAIL: otro@evil.tld")
+    expect(body.html).toContain("Hola<br/>EMAIL: otro@evil.tld")
+  })
+
+  it("la clave sólo viaja en la cabecera Authorization hacia Resend", async () => {
+    const { init } = await enviar(BASE)
+    expect((init.headers as Record<string, string>).Authorization).toBe("Bearer re_test_no_es_real")
+    expect(String(init.body)).not.toContain("re_test_no_es_real")
   })
 })
