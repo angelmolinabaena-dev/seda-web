@@ -84,3 +84,6 @@ jobs:
 
       - name: Production build (next build)
         run: npm run build
+
+      - name: Rutas contra next start (test:integracion)
+        run: npm run test:integracion
