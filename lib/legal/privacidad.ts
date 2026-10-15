@@ -26,11 +26,13 @@ import type { DocumentoLegalMultilingue } from "./types"
       árbol (`analytics`, `gtag`, `fbq`, `hotjar`, `clarity`, `posthog`,
       `plausible`, `SpeedInsights`) — cero coincidencias.
     · Calendly (15-oct-2026): `app/[locale]/meet/page.tsx` inserta el
-      calendario en un iframe y `app/[locale]/founding-owners/page.tsx`
+      calendario en un iframe detrás de una fachada
+      (`app/[locale]/meet/CalendlyFachada.tsx`: el iframe solo se monta al
+      pulsar «Ver calendario») y `app/[locale]/founding-owners/page.tsx`
       enlaza a él. Datos pedidos, leídos del tipo de evento en la API de
       Calendly: nombre, email, día y hora, y una pregunta libre opcional;
       lugar `google_conference` (Google Meet). El iframe hace que
-      calendly.com fije cookies propias (`_calendly_session`, `__cf_bm`,
+      calendly.com fije, al abrirlo, cookies propias (`_calendly_session`, `__cf_bm`,
       `_cfuvid`), medido con una petición a la URL del iframe.
     · Las valoraciones de huéspedes NO van aquí: viven en guest-app, que
       tiene su propia política (`/legal/privacidad`) y no enlaza a esta.
@@ -105,7 +107,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "No recogemos datos con fines analíticos, publicitarios ni de perfilado. Este sitio no tiene ninguna herramienta de medición —ni Google Analytics, ni Vercel Analytics, ni equivalentes— ni píxeles de redes sociales. La única cookie de terceros es la que pone Calendly cuando abres la página en la que está insertado su calendario (ver «Reserva de una llamada con Calendly»).",
+                "No recogemos datos con fines analíticos, publicitarios ni de perfilado. Este sitio no tiene ninguna herramienta de medición —ni Google Analytics, ni Vercel Analytics, ni equivalentes— ni píxeles de redes sociales. Las únicas cookies de terceros son las que pone Calendly si, en /meet, pulsas «Ver calendario» (ver «Reserva de una llamada con Calendly»).",
             },
           ],
         },
@@ -186,7 +188,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Desde las páginas /meet y /founding-owners puedes reservar una videollamada de 30 minutos con nosotros. La reserva no la gestiona esta web, sino Calendly: su calendario aparece insertado en /meet y enlazado desde /founding-owners.",
+                "Desde las páginas /meet y /founding-owners puedes reservar una videollamada de 30 minutos con nosotros. La reserva no la gestiona esta web, sino Calendly: su calendario se puede abrir dentro de /meet y está enlazado desde /founding-owners.",
             },
             {
               tipo: "tabla",
@@ -221,7 +223,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Al abrir la página /meet, tu navegador carga el calendario directamente desde calendly.com: Calendly recibe tu dirección IP y puede fijar sus propias cookies, aunque no llegues a reservar. Si prefieres evitarlo, escríbenos a {email} y te proponemos día y hora por correo.",
+                "Abrir la página /meet no conecta con Calendly. Al pulsar «Ver calendario», tu navegador carga el calendario directamente desde calendly.com: Calendly recibe tu dirección IP y fija sus propias cookies (detalle en la política de cookies), aunque no llegues a reservar. Si prefieres evitarlo, no abras el calendario: escríbenos a {email} y te proponemos día y hora por correo.",
             },
           ],
         },
@@ -407,7 +409,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "We collect no data for analytics, advertising or profiling. This site has no measurement tool at all — no Google Analytics, no Vercel Analytics, nothing equivalent — and no social network pixels. The only third-party cookie is the one Calendly sets when you open the page where its calendar is embedded (see “Booking a call with Calendly”).",
+                "We collect no data for analytics, advertising or profiling. This site has no measurement tool at all — no Google Analytics, no Vercel Analytics, nothing equivalent — and no social network pixels. The only third-party cookies are the ones Calendly sets if, on /meet, you press “View calendar” (see “Booking a call with Calendly”).",
             },
           ],
         },
@@ -488,7 +490,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "From the /meet and /founding-owners pages you can book a 30-minute video call with us. The booking is not handled by this website but by Calendly: its calendar is embedded on /meet and linked from /founding-owners.",
+                "From the /meet and /founding-owners pages you can book a 30-minute video call with us. The booking is not handled by this website but by Calendly: its calendar can be opened within /meet and is linked from /founding-owners.",
             },
             {
               tipo: "tabla",
@@ -523,7 +525,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "When you open the /meet page, your browser loads the calendar directly from calendly.com: Calendly receives your IP address and may set its own cookies, even if you do not book. If you would rather avoid that, write to {email} and we will suggest a day and time by email.",
+                "Opening the /meet page does not connect to Calendly. When you press “View calendar”, your browser loads the calendar directly from calendly.com: Calendly receives your IP address and sets its own cookies (details in the cookie policy), even if you do not book. If you would rather avoid that, do not open the calendar: write to {email} and we will suggest a day and time by email.",
             },
           ],
         },
@@ -706,7 +708,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Nous ne recueillons aucune donnée à des fins analytiques, publicitaires ou de profilage. Ce site n'a aucun outil de mesure — ni Google Analytics, ni Vercel Analytics, ni équivalent — ni aucun pixel de réseau social. Le seul cookie tiers est celui que dépose Calendly lorsque vous ouvrez la page où son calendrier est intégré (voir « Réservation d'un appel avec Calendly »).",
+                "Nous ne recueillons aucune donnée à des fins analytiques, publicitaires ou de profilage. Ce site n'a aucun outil de mesure — ni Google Analytics, ni Vercel Analytics, ni équivalent — ni aucun pixel de réseau social. Les seuls cookies tiers sont ceux que dépose Calendly si, sur /meet, vous appuyez sur « Voir le calendrier » (voir « Réservation d'un appel avec Calendly »).",
             },
           ],
         },
@@ -787,7 +789,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Depuis les pages /meet et /founding-owners, vous pouvez réserver un appel vidéo de 30 minutes avec nous. La réservation n'est pas gérée par ce site mais par Calendly : son calendrier est intégré à /meet et accessible par un lien depuis /founding-owners.",
+                "Depuis les pages /meet et /founding-owners, vous pouvez réserver un appel vidéo de 30 minutes avec nous. La réservation n'est pas gérée par ce site mais par Calendly : son calendrier peut être ouvert dans /meet et est accessible par un lien depuis /founding-owners.",
             },
             {
               tipo: "tabla",
@@ -822,7 +824,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Lorsque vous ouvrez la page /meet, votre navigateur charge le calendrier directement depuis calendly.com : Calendly reçoit votre adresse IP et peut déposer ses propres cookies, même si vous ne réservez pas. Si vous préférez l'éviter, écrivez-nous à {email} et nous vous proposerons un jour et une heure par courriel.",
+                "Ouvrir la page /meet ne vous connecte pas à Calendly. Lorsque vous appuyez sur « Voir le calendrier », votre navigateur charge le calendrier directement depuis calendly.com : Calendly reçoit votre adresse IP et dépose ses propres cookies (détails dans la politique de cookies), même si vous ne réservez pas. Si vous préférez l'éviter, n'ouvrez pas le calendrier : écrivez-nous à {email} et nous vous proposerons un jour et une heure par courriel.",
             },
           ],
         },
@@ -1005,7 +1007,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Wir erheben keine Daten zu Analyse-, Werbe- oder Profiling-Zwecken. Diese Website hat kein einziges Messwerkzeug — weder Google Analytics noch Vercel Analytics noch Vergleichbares — und keine Social-Media-Pixel. Das einzige Cookie Dritter setzt Calendly, wenn Sie die Seite öffnen, in die sein Kalender eingebettet ist (siehe „Buchung eines Gesprächs über Calendly“).",
+                "Wir erheben keine Daten zu Analyse-, Werbe- oder Profiling-Zwecken. Diese Website hat kein einziges Messwerkzeug — weder Google Analytics noch Vercel Analytics noch Vergleichbares — und keine Social-Media-Pixel. Die einzigen Cookies Dritter setzt Calendly, wenn Sie auf /meet auf „Kalender anzeigen“ klicken (siehe „Buchung eines Gesprächs über Calendly“).",
             },
           ],
         },
@@ -1086,7 +1088,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Auf den Seiten /meet und /founding-owners können Sie ein 30-minütiges Videogespräch mit uns buchen. Die Buchung wickelt nicht diese Website ab, sondern Calendly: Sein Kalender ist in /meet eingebettet und von /founding-owners aus verlinkt.",
+                "Auf den Seiten /meet und /founding-owners können Sie ein 30-minütiges Videogespräch mit uns buchen. Die Buchung wickelt nicht diese Website ab, sondern Calendly: Sein Kalender lässt sich in /meet öffnen und ist von /founding-owners aus verlinkt.",
             },
             {
               tipo: "tabla",
@@ -1121,7 +1123,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Wenn Sie die Seite /meet öffnen, lädt Ihr Browser den Kalender direkt von calendly.com: Calendly erhält Ihre IP-Adresse und kann eigene Cookies setzen, auch wenn Sie nicht buchen. Möchten Sie das vermeiden, schreiben Sie an {email}, und wir schlagen Ihnen Tag und Uhrzeit per E-Mail vor.",
+                "Das Öffnen der Seite /meet verbindet nicht mit Calendly. Wenn Sie auf „Kalender anzeigen“ klicken, lädt Ihr Browser den Kalender direkt von calendly.com: Calendly erhält Ihre IP-Adresse und setzt eigene Cookies (Einzelheiten in der Cookie-Richtlinie), auch wenn Sie nicht buchen. Möchten Sie das vermeiden, öffnen Sie den Kalender nicht: Schreiben Sie an {email}, und wir schlagen Ihnen Tag und Uhrzeit per E-Mail vor.",
             },
           ],
         },
