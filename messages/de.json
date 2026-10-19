@@ -542,7 +542,7 @@
       "items": {
         "q1": {
           "q": "Welche Provision erhebt SEDA für die Verwaltung meiner Immobilie?",
-          "a": "Wir erheben eine Provision von 24% auf den Unterkunftserlös, nach Abzug der Plattformprovision (Airbnb, Booking...) und der Reinigungsgebühr, die Ihnen vollständig zusteht: nie auf den Bruttobetrag. Bezogen auf den vom Gast tatsächlich gezahlten Gesamtbetrag liegt der reale Effekt bei rund 18%. Einzeln aufgeführt in jeder monatlichen Abrechnung in SEDA OS. Es gibt keine Festgebühr und keine Ausstiegsgebühr. Die ersten drei Direktverträge zahlen keine Anmeldegebühr; der vierte und der fünfte zahlen 490 €, danach beträgt die Anmeldegebühr 1.290 € (zzgl. MwSt.)."
+          "a": "Wir erheben eine Provision von 24% auf die Netto-Basis der Unterkunft (brutto abzüglich Plattformprovision und Reinigungsgebühr, die Ihnen vollständig zusteht), und nie mehr als 20% der Unterkunft. Beispiel mit einer Buchung von 1.000 € Unterkunft: über Booking oder Airbnb erhebt SEDA 24% des Betrags nach Abzug der Plattformprovision (≈ 196 €); bei Direktbuchung legt die Obergrenze von 20% die Provision auf 200 € fest. Beträge zzgl. MwSt. Die Anmeldung kostet 0 € (professionelle Fotos, Inserate, Smart Lock und Inbetriebnahme); wenn Sie vor Ablauf von 12 Monaten ausscheiden, zahlen Sie den anteiligen Betrag von 1.290 €. Keine Mindestlaufzeit: Ausstieg mit 1 Monat Frist. Einzeln aufgeführt in jeder monatlichen Abrechnung in SEDA OS."
         },
         "q2": {
           "q": "Wer betreut die Gäste, und wann?",
@@ -558,7 +558,7 @@
         },
         "q5": {
           "q": "Kann ich meine Immobilie nutzen, wann ich möchte?",
-          "a": "Ja. Blockieren Sie die gewünschten Termine in SEDA OS oder im Eigentümerportal. Das Team bereitet das Haus für Ihre Ankunft wie für jeden anderen Aufenthalt vor, ohne zusätzliche Kosten (lediglich Reinigung und Auffüllen der Verbrauchsartikel zum internen Tarif)."
+          "a": "Ja. Blockieren Sie die gewünschten Termine in SEDA OS oder im Eigentümerportal, mit 14 Tagen Vorlauf (30 im Juli und August). Das Team bereitet das Haus für Ihre Ankunft wie für jeden anderen Aufenthalt vor, ohne zusätzliche Kosten (lediglich Reinigung und Auffüllen der Verbrauchsartikel zum internen Tarif)."
         },
         "q6": {
           "q": "Wie wählt SEDA aus, welche Immobilien akzeptiert werden?",
@@ -566,7 +566,7 @@
         },
         "q7": {
           "q": "Was, wenn ich die Vereinbarung beenden möchte?",
-          "a": "Sechzig Tage Kündigungsfrist, ohne Strafen. Bestätigte Buchungen werden bis zu ihrem Abreisedatum eingehalten. Betriebsdaten, professionelle Fotografie und Bewertungen gehören dem Eigentümer und sind jederzeit exportierbar."
+          "a": "Keine Mindestlaufzeit: ein Monat Kündigungsfrist, ohne Strafe für das Ausscheiden oder für die Vermietung auf eigene Faust. Wenn Sie vor Ablauf von 12 Monaten ausscheiden, zahlen Sie nur den anteiligen Betrag der Anmeldegebühr (1.290 €). Bestätigte Buchungen werden bis zu ihrem Abreisedatum eingehalten. Betriebsdaten, professionelle Fotografie und Bewertungen gehören dem Eigentümer und sind jederzeit exportierbar."
         }
       }
     },
@@ -1233,7 +1233,7 @@
       },
       "q2": {
         "q": "Welche Provisionen gelten?",
-        "a": "Wir erheben eine Provision von 24% auf den Unterkunftserlös jeder Buchung, nach Abzug der Plattformprovision und der Reinigungsgebühr. Keine Festgebühr, keine Ausstiegsgebühr. Die ersten drei Direktverträge zahlen keine Anmeldegebühr; der vierte und der fünfte zahlen 490 €, danach beträgt die Anmeldegebühr 1.290 € (zzgl. MwSt.). Jede monatliche Abrechnung weist die Berechnung aus."
+        "a": "Wir erheben eine Provision von 24% auf die Netto-Basis der Unterkunft (brutto abzüglich Plattformprovision und Reinigungsgebühr), und nie mehr als 20% der Unterkunft. Beispiel mit 1.000 € Unterkunft: über Booking oder Airbnb ≈ 196 €; bei Direktbuchung 200 € durch die Obergrenze. Beträge zzgl. MwSt. Anmeldung 0 €; wenn Sie vor Ablauf von 12 Monaten ausscheiden, zahlen Sie den anteiligen Betrag von 1.290 €. Keine Mindestlaufzeit: Ausstieg mit 1 Monat Frist. Optional und zum Selbstkostenpreis: Abwicklung der Tourismusregistrierung 490 €; Instandhaltung zum Selbstkostenpreis bis 200 € und 12 % Koordination bei größeren Arbeiten; Reinigung zum Selbstkostenpreis, vom Gast bezahlt; SEDA Care 129 €/Monat. Keine Ausgabe über 200 € ohne Ihre Zustimmung, keine Überstunden-Aufschläge. Jede monatliche Abrechnung weist die Berechnung aus."
       },
       "q3": {
         "q": "Wie sehe ich meine Erlöse?",
@@ -1479,12 +1479,6 @@
     "meta": {
       "title": "Gespräch vereinbaren",
       "description": "Dreißig Minuten. Kein Angebot am Ende, es sei denn, wir beide wollen es."
-    }
-  },
-  "founding": {
-    "meta": {
-      "title": "Gründungseigentümer",
-      "description": "Hotelstandards für Ihre Villa."
     }
   }
 }
