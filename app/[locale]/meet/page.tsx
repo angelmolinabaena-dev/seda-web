@@ -13,17 +13,17 @@ import { CalendlyFachada, type CalendlyFachadaCopy } from "./CalendlyFachada"
   their email/InMail. They've already self-selected as interested; the
   page's only job is to convert "curious owner" into "30-min call booked".
 
-  Differs from /propietarios by intent:
-    /propietarios → educational, full description of the service, soft CTA
-    /meet         → booking-only, minimal copy, Calendly embed inline
+  Differs from /founding-owners by intent:
+    /founding-owners → educational, full programme description, soft CTA
+    /meet            → booking-only, minimal copy, Calendly embed inline
 
   Pattern:
-    - Inline per-locale COPY object
+    - Inline per-locale COPY object (same convention as /founding-owners)
     - noindex (this is a conversion landing, not for organic search)
     - Calendly behind a facade (CalendlyFachada): the iframe only loads when
       the visitor clicks «Ver calendario», after a notice that Calendly sets
       its own cookies; the direct calendly.com link sits next to the button
-    - Link to /propietarios for those who want more context before booking
+    - Link to /founding-owners for those who want more context before booking
 */
 
 const CALENDLY_URL = "https://calendly.com/sedaprivatehomes-info"
@@ -68,14 +68,14 @@ const COPY: Record<
   }
 > = {
   es: {
-    eyebrow: "LLAMADA CON PROPIETARIOS",
+    eyebrow: "PROGRAMA PROPIETARIOS FUNDADORES",
     h1: ["Una conversación sobre tu residencia", "en la Costa del Sol."],
     sub: "Treinta minutos. Sin propuesta al final salvo que ambos queramos continuar.",
     cta: "Reservar una hora →",
     coverTitle: "Qué cubriremos en 30 minutos",
     coverBullets: [
       "Tu propiedad y tu situación actual",
-      "Cómo funciona la tarifa: 24% sobre la base neta, nunca más del 20% del alojamiento",
+      "Cómo funcionan las condiciones de Propietario Fundador",
       "Si somos los gestores adecuados para ti",
     ],
     diffsTitle: "Tres cosas que hacemos diferente",
@@ -93,7 +93,7 @@ const COPY: Record<
         body: "Contactas directamente conmigo. Tres personas conocerán tu casa personalmente. Nunca habrá una cola de tickets.",
       },
     ],
-    seats: "Alta 0 € · Sin permanencia: salida con 1 mes de preaviso · 24% sobre la base neta (bruto menos comisión de canal y limpieza), nunca más del 20% del alojamiento · Importes sin IVA",
+    seats: "Alta gratuita para las 3 primeras firmas directas · 24% de comisión sobre base neta (bruto menos comisión de canal y limpieza)",
     calendly: {
       aviso: "El calendario lo sirve Calendly. Al pulsar «Ver calendario», tu navegador se conecta con calendly.com y Calendly pone sus propias cookies.",
       verCalendario: "Ver calendario",
@@ -103,19 +103,19 @@ const COPY: Record<
     fallbackTitle: "¿Prefieres escribir primero?",
     fallbackBody: "Escríbeme directamente a:",
     fallbackLink: "angel@sedaprivatehomes.com",
-    contextLink: "/propietarios",
-    contextLinkLabel: "Conocer las condiciones antes de reservar →",
+    contextLink: "/founding-owners",
+    contextLinkLabel: "Conocer el programa antes de reservar →",
     footer: "Seda Private Homes S.L. · Marbella · España",
   },
   en: {
-    eyebrow: "CALL FOR PROPERTY OWNERS",
+    eyebrow: "FOUNDING OWNERS PROGRAMME",
     h1: ["A conversation about your residence", "in the Costa del Sol."],
     sub: "Thirty minutes. No proposal at the end unless we both want one.",
     cta: "Choose a time →",
     coverTitle: "What we will cover in 30 minutes",
     coverBullets: [
       "Your residence and your situation",
-      "How the fee works: 24% of the net base, never more than 20% of the accommodation",
+      "How Founding Owner terms work",
       "Whether we are the right fit for you",
     ],
     diffsTitle: "Three things we do differently",
@@ -133,7 +133,7 @@ const COPY: Record<
         body: "You always reach me directly. Three people will know your home personally. There will never be a ticket queue.",
       },
     ],
-    seats: "Onboarding €0 · No lock-in: leave with 1 month's notice · 24% of the net base (gross minus channel commission and cleaning), never more than 20% of the accommodation · Amounts exclude VAT",
+    seats: "Free setup for the first 3 direct signings · 24% commission on the net base (gross minus channel commission and cleaning)",
     calendly: {
       aviso: "The calendar is provided by Calendly. When you press “View calendar”, your browser connects to calendly.com and Calendly sets its own cookies.",
       verCalendario: "View calendar",
@@ -143,19 +143,19 @@ const COPY: Record<
     fallbackTitle: "Prefer to write first?",
     fallbackBody: "Email me directly at:",
     fallbackLink: "angel@sedaprivatehomes.com",
-    contextLink: "/propietarios",
-    contextLinkLabel: "Read the terms before booking →",
+    contextLink: "/founding-owners",
+    contextLinkLabel: "Read about the programme before booking →",
     footer: "Seda Private Homes S.L. · Marbella · Spain",
   },
   fr: {
-    eyebrow: "APPEL AVEC LES PROPRIÉTAIRES",
+    eyebrow: "PROGRAMME PROPRIÉTAIRES FONDATEURS",
     h1: ["Une conversation sur votre résidence", "sur la Costa del Sol."],
     sub: "Trente minutes. Aucune proposition à la fin sauf si nous le souhaitons tous les deux.",
     cta: "Choisir un horaire →",
     coverTitle: "Ce que nous aborderons en 30 minutes",
     coverBullets: [
       "Votre propriété et votre situation",
-      "Comment fonctionne la tarification : 24% sur la base nette, jamais plus de 20% de l'hébergement",
+      "Comment fonctionnent les conditions Propriétaire Fondateur",
       "Si nous sommes les bons gestionnaires pour vous",
     ],
     diffsTitle: "Trois choses que nous faisons différemment",
@@ -173,7 +173,7 @@ const COPY: Record<
         body: "Vous me contactez directement. Trois personnes connaîtront votre maison personnellement. Jamais de file d'attente de tickets.",
       },
     ],
-    seats: "Inscription 0 € · Sans durée minimale : sortie avec 1 mois de préavis · 24% sur la base nette (brut moins commission de canal et ménage), jamais plus de 20% de l'hébergement · Montants hors TVA",
+    seats: "Inscription offerte pour les 3 premières signatures directes · 24% de commission sur la base nette (brut moins commission de canal et ménage)",
     calendly: {
       aviso: "Le calendrier est fourni par Calendly. Lorsque vous appuyez sur « Voir le calendrier », votre navigateur se connecte à calendly.com et Calendly dépose ses propres cookies.",
       verCalendario: "Voir le calendrier",
@@ -183,19 +183,19 @@ const COPY: Record<
     fallbackTitle: "Préférez-vous écrire d'abord ?",
     fallbackBody: "Écrivez-moi directement à :",
     fallbackLink: "angel@sedaprivatehomes.com",
-    contextLink: "/propietarios",
-    contextLinkLabel: "Découvrir les conditions avant de réserver →",
+    contextLink: "/founding-owners",
+    contextLinkLabel: "En savoir plus sur le programme avant de réserver →",
     footer: "Seda Private Homes S.L. · Marbella · Espagne",
   },
   de: {
-    eyebrow: "GESPRÄCH MIT EIGENTÜMERN",
+    eyebrow: "FOUNDING-OWNERS-PROGRAMM",
     h1: ["Ein Gespräch über Ihre Residenz", "an der Costa del Sol."],
     sub: "Dreißig Minuten. Kein Angebot am Ende, es sei denn, wir beide wollen es.",
     cta: "Termin wählen →",
     coverTitle: "Was wir in 30 Minuten besprechen",
     coverBullets: [
       "Ihre Immobilie und Ihre Situation",
-      "Wie die Vergütung funktioniert: 24% der Netto-Basis, nie mehr als 20% der Unterkunft",
+      "Wie die Founding-Owner-Konditionen funktionieren",
       "Ob wir die richtige Verwaltung für Sie sind",
     ],
     diffsTitle: "Drei Dinge, die wir anders machen",
@@ -213,7 +213,7 @@ const COPY: Record<
         body: "Sie erreichen mich direkt. Drei Personen werden Ihr Haus persönlich kennen. Es wird nie eine Ticket-Warteschlange geben.",
       },
     ],
-    seats: "Anmeldung 0 € · Keine Mindestlaufzeit: Ausstieg mit 1 Monat Frist · 24% der Netto-Basis (brutto abzüglich Kanalprovision und Reinigung), nie mehr als 20% der Unterkunft · Beträge zzgl. MwSt.",
+    seats: "Kostenlose Anmeldung für die ersten 3 Direktverträge · 24% Provision auf die Nettobasis (brutto abzüglich Kanalprovision und Reinigung)",
     calendly: {
       aviso: "Der Kalender wird von Calendly bereitgestellt. Wenn Sie auf „Kalender anzeigen“ klicken, verbindet sich Ihr Browser mit calendly.com, und Calendly setzt eigene Cookies.",
       verCalendario: "Kalender anzeigen",
@@ -223,8 +223,8 @@ const COPY: Record<
     fallbackTitle: "Möchten Sie lieber zuerst schreiben?",
     fallbackBody: "Schreiben Sie mir direkt an:",
     fallbackLink: "angel@sedaprivatehomes.com",
-    contextLink: "/propietarios",
-    contextLinkLabel: "Konditionen vor der Buchung lesen →",
+    contextLink: "/founding-owners",
+    contextLinkLabel: "Mehr über das Programm vor der Buchung lesen →",
     footer: "Seda Private Homes S.L. · Marbella · Spanien",
   },
 }

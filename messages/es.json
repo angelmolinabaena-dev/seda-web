@@ -542,7 +542,7 @@
       "items": {
         "q1": {
           "q": "¿Cuánto cobra SEDA por gestionar mi propiedad?",
-          "a": "Aplicamos una comisión del 24% sobre la base neta del alojamiento (bruto menos la comisión de la plataforma y la limpieza, que es íntegramente suya) y nunca más del 20% del alojamiento. Ejemplo con una reserva de 1.000 € de alojamiento: por Booking o Airbnb, SEDA cobra el 24% de lo que queda tras la comisión de la plataforma (≈196 €); en directa, el tope del 20% fija la comisión en 200 €. Importes sin IVA. El alta cuesta 0 € (fotos profesionales, anuncios, cerradura inteligente y puesta en marcha); si sale antes de 12 meses, abona la parte proporcional de 1.290 €. Sin permanencia: salida con 1 mes de preaviso. Detallado en cada liquidación mensual en SEDA OS."
+          "a": "Aplicamos una comisión del 24% sobre el alojamiento, una vez descontadas la comisión de la plataforma (Airbnb, Booking...) y la tarifa de limpieza, que es íntegramente suya: nunca cobramos sobre el bruto. El efecto real sobre el total que paga el huésped ronda el 18%. Detallado en cada liquidación mensual en SEDA OS. No hay cuota fija ni penalizaciones por baja. Las tres primeras firmas directas no pagan el alta; la cuarta y la quinta pagan 490 € y, después, el alta es de 1.290 € (sin IVA)."
         },
         "q2": {
           "q": "¿Quién atiende a los huéspedes y cuándo?",
@@ -558,7 +558,7 @@
         },
         "q5": {
           "q": "¿Puedo usar mi propiedad cuando quiera?",
-          "a": "Sí. Bloquee las fechas en SEDA OS o en el portal de propietarios, avisando con 14 días (30 en julio y agosto). El equipo prepara la casa para su llegada como una estancia más, sin coste adicional (sólo limpieza y reposición a tarifa interna)."
+          "a": "Sí. Bloquee las fechas en SEDA OS o en el portal de propietarios. El equipo prepara la casa para su llegada como una estancia más, sin coste adicional (sólo limpieza y reposición a tarifa interna)."
         },
         "q6": {
           "q": "¿Cómo elige SEDA qué propiedades acepta?",
@@ -566,7 +566,7 @@
         },
         "q7": {
           "q": "¿Qué pasa si quiero rescindir el acuerdo?",
-          "a": "Sin permanencia: preaviso de 1 mes, sin penalización por salir ni por alquilar por su cuenta. Si sale antes de 12 meses, solo abona la parte proporcional del alta (1.290 €). Las reservas confirmadas se respetan hasta la fecha de salida. Los datos operativos, fotos profesionales y reseñas son del propietario, exportables en cualquier momento."
+          "a": "Preaviso de 60 días, sin penalizaciones. Las reservas confirmadas se respetan hasta la fecha de salida. Los datos operativos, fotos profesionales y reseñas son del propietario, exportables en cualquier momento."
         }
       }
     },
@@ -1233,7 +1233,7 @@
       },
       "q2": {
         "q": "¿Qué comisiones aplica?",
-        "a": "Aplicamos una comisión del 24% sobre la base neta del alojamiento (bruto menos la comisión de la plataforma y la limpieza) y nunca más del 20% del alojamiento. Ejemplo con 1.000 € de alojamiento: por Booking o Airbnb, ≈196 €; en directa, 200 € por el tope. Importes sin IVA. Alta 0 €; si sale antes de 12 meses, abona la parte proporcional de 1.290 €. Sin permanencia: salida con 1 mes de preaviso. Opcional y al coste: tramitación del registro turístico 490 €; mantenimiento al coste hasta 200 € y 12 % de coordinación en obras mayores; limpieza al coste, que paga el huésped; SEDA Care 129 €/mes. Ningún gasto de más de 200 € sin su aprobación, sin horas extra. Cada liquidación mensual detalla el cálculo."
+        "a": "Aplicamos una comisión del 24% sobre el alojamiento, tras descontar la comisión de la plataforma y la tarifa de limpieza de cada reserva. Sin cuota fija ni penalización por baja. Las tres primeras firmas directas no pagan el alta; la cuarta y la quinta pagan 490 € y, después, el alta es de 1.290 € (sin IVA). Cada liquidación mensual detalla el cálculo."
       },
       "q3": {
         "q": "¿Cómo veo mis ingresos?",
@@ -1479,6 +1479,12 @@
     "meta": {
       "title": "Reserva una llamada",
       "description": "Treinta minutos. Sin propuesta al final salvo que ambos queramos una."
+    }
+  },
+  "founding": {
+    "meta": {
+      "title": "Propietarios fundadores",
+      "description": "El estándar hotelero para tu villa."
     }
   }
 }

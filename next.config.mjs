@@ -31,19 +31,6 @@ const nextConfig = {
         destination: "/guestapp",
         permanent: true,
       },
-      {
-        // 19-oct-2026: el beneficio fundacional era el alta gratis y ahora la
-        // tiene todo el mundo (tarifa v4). La página se retira; el contenido
-        // vigente está en /propietarios. `permanent: true` => 308.
-        source: "/founding-owners",
-        destination: "/propietarios",
-        permanent: true,
-      },
-      {
-        source: "/:locale(en|fr|de)/founding-owners",
-        destination: "/:locale/propietarios",
-        permanent: true,
-      },
     ]
   },
 }
