@@ -542,7 +542,7 @@
       "items": {
         "q1": {
           "q": "Quelle commission SEDA applique-t-il pour gérer ma propriété ?",
-          "a": "Nous appliquons une commission de 24% sur la base nette de l'hébergement (brut moins la commission de la plateforme et le forfait de ménage, qui vous revient intégralement), et jamais plus de 20% de l'hébergement. Exemple avec une réservation de 1 000 € d'hébergement : via Booking ou Airbnb, SEDA prélève 24% de ce qui reste après la commission de la plateforme (≈ 196 €) ; en réservation directe, le plafond de 20% fixe la commission à 200 €. Montants hors TVA. L'inscription coûte 0 € (photographies professionnelles, annonces, serrure connectée et mise en service) ; si vous partez avant 12 mois, vous réglez la part proportionnelle de 1 290 €. Sans durée minimale : sortie avec 1 mois de préavis. Détaillée dans chaque relevé de gérance mensuel dans SEDA OS."
+          "a": "Nous appliquons une commission de 24% sur l'hébergement, après déduction de la commission de la plateforme (Airbnb, Booking...) et du forfait de ménage, qui vous revient intégralement : jamais sur le brut. Rapporté au total payé par le voyageur, l'effet réel avoisine 18%. Détaillée dans chaque relevé de gérance mensuel dans SEDA OS. Pas de frais fixes ni de pénalité de sortie. Les trois premières signatures directes ne paient pas de frais d'inscription ; les quatrième et cinquième paient 490 €, puis les frais s'élèvent à 1 290 € (hors TVA)."
         },
         "q2": {
           "q": "Qui s'occupe des voyageurs, et quand ?",
@@ -558,7 +558,7 @@
         },
         "q5": {
           "q": "Puis-je utiliser ma propriété quand je le souhaite ?",
-          "a": "Oui. Bloquez les dates dans SEDA OS ou dans le Portail Propriétaires, avec un préavis de 14 jours (30 en juillet et août). L'équipe prépare la maison pour votre arrivée comme pour tout autre séjour, sans coût supplémentaire (seuls le ménage et le réapprovisionnement sont facturés, aux tarifs internes)."
+          "a": "Oui. Bloquez les dates dans SEDA OS ou dans le Portail Propriétaires. L'équipe prépare la maison pour votre arrivée comme pour tout autre séjour, sans coût supplémentaire (seuls le ménage et le réapprovisionnement sont facturés, aux tarifs internes)."
         },
         "q6": {
           "q": "Comment SEDA choisit-il les propriétés qu'il accepte ?",
@@ -566,7 +566,7 @@
         },
         "q7": {
           "q": "Que se passe-t-il si je souhaite résilier le contrat ?",
-          "a": "Sans durée minimale : un mois de préavis, sans pénalité pour partir ni pour louer par vous-même. Si vous partez avant 12 mois, vous ne réglez que la part proportionnelle des frais d'inscription (1 290 €). Les réservations confirmées sont honorées jusqu'à leur date de départ. Les données opérationnelles, la photographie professionnelle et les avis appartiennent au propriétaire et sont exportables à tout moment."
+          "a": "Soixante jours de préavis, sans pénalités. Les réservations confirmées sont honorées jusqu'à leur date de départ. Les données opérationnelles, la photographie professionnelle et les avis appartiennent au propriétaire et sont exportables à tout moment."
         }
       }
     },
@@ -1233,7 +1233,7 @@
       },
       "q2": {
         "q": "Quelles commissions s'appliquent ?",
-        "a": "Nous appliquons une commission de 24% sur la base nette de l'hébergement (brut moins la commission de la plateforme et le forfait de ménage), et jamais plus de 20% de l'hébergement. Exemple avec 1 000 € d'hébergement : via Booking ou Airbnb, ≈ 196 € ; en direct, 200 € grâce au plafond. Montants hors TVA. Inscription 0 € ; si vous partez avant 12 mois, vous réglez la part proportionnelle de 1 290 €. Sans durée minimale : sortie avec 1 mois de préavis. En option et au coût : démarches d'enregistrement touristique 490 € ; maintenance au coût jusqu'à 200 € et 12 % de coordination sur les gros travaux ; ménage au coût, payé par le voyageur ; SEDA Care 129 €/mois. Aucune dépense supérieure à 200 € sans votre accord, pas d'heures supplémentaires. Chaque relevé de gérance mensuel détaille le calcul."
+        "a": "Nous appliquons une commission de 24% sur l'hébergement de chaque réservation, après déduction de la commission de la plateforme et du forfait de ménage. Pas de frais fixes ni de pénalité de sortie. Les trois premières signatures directes ne paient pas de frais d'inscription ; les quatrième et cinquième paient 490 €, puis les frais s'élèvent à 1 290 € (hors TVA). Chaque relevé de gérance mensuel détaille le calcul."
       },
       "q3": {
         "q": "Comment consulter mes revenus ?",
@@ -1479,6 +1479,12 @@
     "meta": {
       "title": "Réserver un appel",
       "description": "Trente minutes. Aucune proposition à la fin sauf si nous le souhaitons tous les deux."
+    }
+  },
+  "founding": {
+    "meta": {
+      "title": "Propriétaires fondateurs",
+      "description": "Les standards hôteliers pour votre villa."
     }
   }
 }

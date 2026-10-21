@@ -38,6 +38,7 @@ const CAMPOS = [
 const RUTAS = [
   ...SITE_PAGES.map((p) => p.path),
   "/meet",
+  "/founding-owners",
   "/guias",
   ...guias.map((g) => `/guias/${g.slug}`),
   ...Object.keys(autores).map((id) => `/guias/autores/${id}`),
