@@ -1,0 +1,27 @@
+{
+  "_leeme": "ÚNICO ORIGEN de las cifras de la tarifa que la web publica (tarifa v6, decisión de Ángel del 25-26-oct-2026). messages/*.json, /founding-owners, /meet, el simulador, las maquetas, el JSON-LD FAQPage, /llms.txt y /llms-full.txt las leen de aquí a través de lib/tarifa/index.ts: un texto escribe [[tarifa.comision]], no «21%». Para la v7 se cambia este fichero y nada más. tests/tarifa.test.ts confronta estas cifras con el cálculo hecho a mano.",
+  "version": "v6",
+  "gestion": {
+    "comisionPct": 21,
+    "topePct": 20,
+    "ivaPct": 21
+  },
+  "preavisoMeses": 1,
+  "permanencia": false,
+  "alta": {
+    "gratisPrimerasFirmas": 3,
+    "reducidaHastaFirma": 5,
+    "reducidaEur": 490,
+    "estandarEur": 1290
+  },
+  "mantenimiento": {
+    "margenPct": 12,
+    "umbralEur": 200
+  },
+  "ejemplos": {
+    "alojamiento": 1000,
+    "canalPct": 15,
+    "reserva": { "bruto": 1200, "limpieza": 120, "comisionCanal": 180 },
+    "liquidacion": { "bruto": 1000, "limpieza": 100 }
+  }
+}

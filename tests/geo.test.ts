@@ -9,6 +9,7 @@ import { getGuiasPublicadas } from "@/lib/guias"
 import { breadcrumbJsonLd, businessJsonLd, faqPageJsonLd, zonasJsonLd, type JsonLd } from "@/lib/jsonld"
 import { buildLlmsTxt } from "@/lib/llms"
 import { asLocale, pageMetadata, SITE_PAGES } from "@/lib/site-pages"
+import { resolverMensajes } from "@/lib/tarifa"
 import { ZONAS } from "@/lib/zonas"
 import de from "@/messages/de.json"
 import en from "@/messages/en.json"
@@ -32,7 +33,14 @@ import fr from "@/messages/fr.json"
   «faq.items.q1.q».
 */
 
-const MESSAGES = { es, en, fr, de } as const
+// Los mensajes llegan a la web ya con las cifras de la tarifa resueltas (i18n/request.ts):
+// el test lee lo mismo que sirve la web, no los `[[tarifa.x]]` en bruto.
+const MESSAGES = {
+  es: resolverMensajes(es, "es"),
+  en: resolverMensajes(en, "en"),
+  fr: resolverMensajes(fr, "fr"),
+  de: resolverMensajes(de, "de"),
+} as const
 const SITE = "https://sedaprivatehomes.com"
 
 function translator(locale: Locale): Translate {

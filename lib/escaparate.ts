@@ -7,16 +7,23 @@
   ── Puerta: SEDA_FLAG_ESCAPARATE_VILLAS ─────────────────────────────────
 
   En Andalucía un anuncio de vivienda turística tiene que mostrar su número
-  de inscripción en el Registro de Turismo (VFT). Mientras no lo haya, el
-  escaparate entero va detrás de este flag, APAGADO salvo que valga
-  exactamente "1". Se lee en build (las fichas son estáticas): cambiarlo en
-  Vercel exige un nuevo despliegue.
+  de inscripción en el Registro de Turismo (VFT). El escaparate lleva DOS
+  cerraduras y las dos tienen que estar abiertas:
 
-    · Flag apagado → /villa/<slug> da 404, fuera del sitemap, sin enlaces
-      internos y con noindex.
-    · Flag encendido sin número de registro → la ficha se ve (para revisarla
-      en la preview) pero sigue con noindex y fuera del sitemap.
-    · Flag encendido y número de registro → indexable.
+    · el flag, APAGADO salvo que valga exactamente "1". Se lee en build (las
+      fichas son estáticas): cambiarlo en Vercel exige un nuevo despliegue;
+    · la casa: número de registro turístico informado Y arrendador (el
+      propietario) informado, porque la ficha pinta los dos. Sin alguno de
+      ellos la casa no se publica, con el flag que sea.
+
+  El flag solo no basta (REA seda-web 2026-10, B-1): era una cerradura sin
+  llave. Una ficha sin VFT con un botón «Reservar» es un anuncio ilegal aunque
+  lleve noindex, porque la URL circula.
+
+    · Flag apagado, o casa sin VFT / sin arrendador → /villa/<slug> da 404,
+      fuera del sitemap, sin enlaces internos, y /coleccion dice «Próxima
+      apertura».
+    · Flag encendido y casa completa → ficha visible e indexable.
 
   ── Datos ───────────────────────────────────────────────────────────────
 
@@ -48,9 +55,22 @@ export type FichaVilla = {
   municipio: string
   /**
    * Número de inscripción en el Registro de Turismo de Andalucía (VFT/…).
-   * `null` mientras no exista: la ficha no se indexa ni entra en el sitemap.
+   * `null` mientras no exista: sin él la casa no se publica (ver `esPublicable`).
    */
   registroTuristico: string | null
+  /**
+   * Arrendador: el propietario, tal y como figura en el contrato de gestión
+   * (nombre o razón social). SEDA gestiona «en nombre y por cuenta» suya (DGT
+   * V0367-18) y la ficha lo dice: «Arrendador: … · gestiona SEDA Private
+   * Homes». `null` mientras Ángel no lo dé: sin él la casa no se publica. No se
+   * inventa.
+   */
+  arrendador: string | null
+  /**
+   * ¿La casa tiene cerradura conectada con acceso autónomo? Solo entonces la
+   * ficha promete «llegada sin llaves». `false` = no consta (por defecto).
+   */
+  cerradura: boolean
   /** Fuente: Beds24, `checkInStart`/`checkInEnd`/`checkOutEnd` (15-oct-2026). */
   horario: { entradaDesde: string; entradaHasta: string; salidaHasta: string }
   /** Lo esencial de un vistazo. Sin fuente en el repo → `undefined` → no se pinta. */
@@ -76,6 +96,10 @@ export const VILLAS: FichaVilla[] = [
     tipo: "apartamento",
     municipio: "Estepona",
     registroTuristico: null,
+    arrendador: null,
+    // Bay Side no tiene nuki_id ni nuki_code en la base (REA-GLOBAL-PLATAFORMA
+    // 2026-10 §1): no se promete llegada sin llaves hasta que lo tenga.
+    cerradura: false,
     horario: { entradaDesde: "16:00", entradaHasta: "24:00", salidaHasta: "10:00" },
     // Sin fuente en el repo para ninguno de estos datos. Beds24 dice
     // maxPeople = 4, pero no está entre los datos autorizados: lo confirma Ángel.
@@ -97,22 +121,38 @@ export function escaparateActivo(env: Env = process.env): boolean {
   return env.SEDA_FLAG_ESCAPARATE_VILLAS === "1"
 }
 
-/** Las fichas que existen como ruta. Flag apagado → ninguna. */
+/**
+ * ¿Puede esta casa anunciarse? Número de registro turístico Y arrendador
+ * informados (la ficha pinta los dos). Es la llave; el flag, la cerradura.
+ */
+export function esPublicable(villa: FichaVilla): boolean {
+  return Boolean(villa.registroTuristico?.trim()) && Boolean(villa.arrendador?.trim())
+}
+
+/** Las fichas que existen como ruta: flag encendido Y casa publicable. Si no, ninguna. */
 export function villasVisibles(env: Env = process.env): FichaVilla[] {
-  return escaparateActivo(env) ? VILLAS : []
+  return escaparateActivo(env) ? VILLAS.filter(esPublicable) : []
 }
 
 export function getVillaVisible(slug: string, env: Env = process.env): FichaVilla | undefined {
   return villasVisibles(env).find((v) => v.slug === slug)
 }
 
-/** Indexable = flag encendido Y número de registro turístico. Si no, noindex y fuera del sitemap. */
+/**
+ * Indexable = visible. Ya no hay rama intermedia «visible pero noindex»: lo que
+ * se ve, con su botón de reserva, es lo que se anuncia, y se anuncia con VFT.
+ */
 export function esIndexable(villa: FichaVilla, env: Env = process.env): boolean {
-  return escaparateActivo(env) && Boolean(villa.registroTuristico?.trim())
+  return escaparateActivo(env) && esPublicable(villa)
 }
 
 export function villasIndexables(env: Env = process.env): FichaVilla[] {
   return villasVisibles(env).filter((v) => esIndexable(v, env))
+}
+
+/** Claves de `escaparate.incluye.*` que esta casa puede prometer. «Llegada sin llaves» solo con cerradura. */
+export function incluyeVilla(villa: FichaVilla): ("llegada" | "concierge" | "limpieza")[] {
+  return [...(villa.cerradura ? (["llegada"] as const) : []), "concierge", "limpieza"]
 }
 
 export type Beds24Ids = { propId: number; roomId?: number }

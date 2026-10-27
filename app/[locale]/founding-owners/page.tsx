@@ -1,6 +1,6 @@
 import { ArrowRight, Activity, Euro, Shield } from "lucide-react"
 import type { Metadata } from "next"
-import { getTranslations } from "next-intl/server"
+import { getTranslations, setRequestLocale } from "next-intl/server"
 import type { LocaleParams } from "@/i18n/routing"
 import { localizedMetadata } from "@/lib/site-pages"
 
@@ -17,147 +17,11 @@ export async function generateMetadata({ params }: LocaleParams): Promise<Metada
 
 const CALENDLY_URL = "https://calendly.com/sedaprivatehomes-info"
 
-type Locale = "es" | "en" | "fr" | "de"
-
-const COPY: Record<
-  Locale,
-  {
-    badge: string
-    seatsLeft: string
-    h1: [string, string]
-    body: string
-    trust: string[]
-    cta: string
-    diffs: { title: string; body: string }[]
-    founderTitle: string
-    founderBio: string
-    ctaEyebrow: string
-    ctaH2: [string, string]
-    ctaBody: string
-    ctaBtn: string
-  }
-> = {
-  es: {
-    badge: "PROPIETARIOS FUNDADORES · ALTA GRATUITA LIMITADA",
-    seatsLeft: "Alta gratuita para las 3 primeras firmas directas",
-    h1: ["El estándar hotelero", "para tu villa."],
-    body: "Somos Ángel Molina (8 años en Iberostar + Les Roches MHM) y equipo. En la Costa del Sol construimos la primera gestión de villas al nivel de un hotel de lujo: transparencia total y tecnología propia.",
-    trust: ["8 años Iberostar", "Les Roches MHM", "2 propietarios en programa"],
-    cta: "Reservar reunión privada",
-    diffs: [
-      {
-        title: "Transparencia total",
-        body: "Dashboard propio 24/7 con reservas, ingresos y gastos en tiempo real. Sin sorpresas en la liquidación mensual. Acceso directo a cada número.",
-      },
-      {
-        title: "Comisión justa y clara",
-        body: "Comisión del 24% sobre la base neta del alojamiento: el bruto de la reserva, menos la comisión del canal (Airbnb, Booking...) y la limpieza. Ejemplo: reserva de 1.200 € vía Airbnb, menos 180 € de comisión del canal y 120 € de limpieza → base 900 € → comisión SEDA 216 €. Sin letra pequeña: pide siempre la base de cálculo.",
-      },
-      {
-        title: "Cumplimiento documentado",
-        body: "Registro de viajeros integrado (RD 933/2021), preparado para la comunicación a SES.Hospedajes. Preparamos la documentación de las informativas de cesión turística (Modelo 179/238, según normativa vigente) y del IRNR de no residentes para que tu gestoría la presente.",
-      },
-    ],
-    founderTitle: "Quiénes somos",
-    founderBio:
-      "Ángel Molina combina 8 años de operaciones hoteleras en Iberostar con formación en gestión de hoteles de lujo (Les Roches MHM). Seda Private Homes es la gestora que quería que existiera: el rigor de un gran hotel aplicado a villas privadas en la Costa del Sol.",
-    ctaEyebrow: "PROGRAMA PROPIETARIOS FUNDADORES",
-    ctaH2: ["15 minutos bastan", "para saber si encajamos."],
-    ctaBody:
-      "Cuéntanos tu propiedad. Si vemos el encaje, te enviamos la propuesta completa en 24 horas.",
-    ctaBtn: "Reservar llamada privada",
-  },
-  en: {
-    badge: "FOUNDING OWNERS · FREE SETUP, LIMITED SLOTS",
-    seatsLeft: "Free setup for the first 3 direct signings",
-    h1: ["Hotel standards", "for your villa."],
-    body: "We're Ángel Molina (8 years at Iberostar + Les Roches MHM) and team. On the Costa del Sol we're building the first villa management at true luxury-hotel level: full transparency and proprietary technology.",
-    trust: ["8 years Iberostar", "Les Roches MHM", "2 owners in programme"],
-    cta: "Book a private call",
-    diffs: [
-      {
-        title: "Full transparency",
-        body: "Your own 24/7 dashboard with real-time bookings, revenue, and expenses. No surprises on your monthly settlement. Direct access to every number.",
-      },
-      {
-        title: "Fair, clear commission",
-        body: "A 24% commission on the net accommodation base: the booking's gross amount, minus the channel commission (Airbnb, Booking...) and the cleaning fee. Example: a €1,200 Airbnb booking, minus €180 channel commission and €120 cleaning → base €900 → SEDA commission €216. No fine print: always ask for the calculation base.",
-      },
-      {
-        title: "Documented compliance",
-        body: "Integrated guest registration (RD 933/2021), ready for reporting to SES.Hospedajes. We prepare the documentation for the tourist-rental informational declarations (Modelo 179/238, as per current regulation) and for non-resident IRNR, so your tax adviser can file it.",
-      },
-    ],
-    founderTitle: "Who we are",
-    founderBio:
-      "Ángel Molina combines 8 years of hotel operations at Iberostar with luxury hotel management training (Les Roches MHM). Seda Private Homes is the management company I always wanted to exist: hotel-grade rigour applied to private villas on the Costa del Sol.",
-    ctaEyebrow: "FOUNDING OWNERS PROGRAMME",
-    ctaH2: ["15 minutes is all", "it takes to know."],
-    ctaBody:
-      "Tell us about your property. If it's a fit, we'll send you the full proposal within 24 hours.",
-    ctaBtn: "Book a private call",
-  },
-  fr: {
-    badge: "PROPRIÉTAIRES FONDATEURS · INSCRIPTION OFFERTE LIMITÉE",
-    seatsLeft: "Inscription offerte pour les 3 premières signatures directes",
-    h1: ["Les standards hôteliers", "pour votre villa."],
-    body: "Nous sommes Ángel Molina (8 ans chez Iberostar + Les Roches MHM) et notre équipe. Sur la Costa del Sol, nous construisons la première gestion de villas au niveau d'un hôtel de luxe : transparence totale et technologie propriétaire.",
-    trust: ["8 ans Iberostar", "Les Roches MHM", "2 propriétaires dans le programme"],
-    cta: "Réserver un entretien",
-    diffs: [
-      {
-        title: "Transparence totale",
-        body: "Votre propre tableau de bord 24/7 avec réservations, revenus et dépenses en temps réel. Aucune surprise lors du règlement mensuel.",
-      },
-      {
-        title: "Commission juste et claire",
-        body: "Commission de 24% sur la base nette de l'hébergement : le montant brut de la réservation, moins la commission du canal (Airbnb, Booking...) et le forfait de ménage. Exemple : une réservation Airbnb de 1 200 €, moins 180 € de commission du canal et 120 € de ménage → base 900 € → commission SEDA 216 €. Sans clause cachée : demandez toujours la base de calcul.",
-      },
-      {
-        title: "Conformité documentée",
-        body: "Enregistrement des voyageurs intégré (RD 933/2021), prêt pour la communication à SES.Hospedajes. Nous préparons la documentation des déclarations informatives de location touristique (Modelo 179/238, selon la réglementation en vigueur) et de l'IRNR des non-résidents pour que votre cabinet comptable la dépose.",
-      },
-    ],
-    founderTitle: "Qui sommes-nous",
-    founderBio:
-      "Ángel Molina combine 8 ans d'opérations hôtelières chez Iberostar avec une formation en gestion hôtelière de luxe (Les Roches MHM). Seda Private Homes est la société de gestion que j'aurais voulu voir exister : la rigueur d'un grand hôtel appliquée aux villas privées de la Costa del Sol.",
-    ctaEyebrow: "PROGRAMME PROPRIÉTAIRES FONDATEURS",
-    ctaH2: ["15 minutes suffisent", "pour savoir si ça correspond."],
-    ctaBody:
-      "Parlez-nous de votre propriété. Si c'est un bon match, nous vous enverrons la proposition complète sous 24 heures.",
-    ctaBtn: "Réserver un appel",
-  },
-  de: {
-    badge: "GRÜNDUNGSEIGENTÜMER · KOSTENLOSE ANMELDUNG, BEGRENZT",
-    seatsLeft: "Kostenlose Anmeldung für die ersten 3 Direktverträge",
-    h1: ["Hotelstandards", "für Ihre Villa."],
-    body: "Wir sind Ángel Molina (8 Jahre bei Iberostar + Les Roches MHM) und unser Team. An der Costa del Sol bauen wir das erste Villenmanagement auf echtem Luxushotel-Niveau: vollständige Transparenz und eigene Technologie.",
-    trust: ["8 Jahre Iberostar", "Les Roches MHM", "2 Eigentümer im Programm"],
-    cta: "Privates Gespräch buchen",
-    diffs: [
-      {
-        title: "Vollständige Transparenz",
-        body: "Ihr eigenes 24/7-Dashboard mit Buchungen, Einnahmen und Ausgaben in Echtzeit. Keine Überraschungen bei der monatlichen Abrechnung.",
-      },
-      {
-        title: "Faire, klare Provision",
-        body: "24% Provision auf die Netto-Basis der Unterkunft: der Bruttobetrag der Buchung abzüglich der Kanalprovision (Airbnb, Booking...) und der Reinigungsgebühr. Beispiel: eine Airbnb-Buchung über 1.200 €, abzüglich 180 € Kanalprovision und 120 € Reinigung → Basis 900 € → SEDA-Provision 216 €. Kein Kleingedrucktes: fragen Sie immer nach der Berechnungsgrundlage.",
-      },
-      {
-        title: "Dokumentierte Compliance",
-        body: "Integrierte Gästeregistrierung (RD 933/2021), vorbereitet für die Meldung an SES.Hospedajes. Wir bereiten die Unterlagen für die Informationserklärungen zur touristischen Vermietung (Modelo 179/238, gemäß geltender Vorschrift) und für die IRNR von Nichtansässigen vor, damit Ihr Steuerberater sie einreichen kann.",
-      },
-    ],
-    founderTitle: "Wer wir sind",
-    founderBio:
-      "Ángel Molina verbindet 8 Jahre Hotelbetrieb bei Iberostar mit Luxushotelmanagement-Ausbildung (Les Roches MHM). Seda Private Homes ist die Verwaltungsgesellschaft, die ich immer aufbauen wollte: Hotelqualität auf private Villen an der Costa del Sol angewendet.",
-    ctaEyebrow: "GRÜNDUNGSEIGENTÜMER-PROGRAMM",
-    ctaH2: ["15 Minuten reichen", "um zu wissen ob es passt."],
-    ctaBody:
-      "Erzählen Sie uns von Ihrer Immobilie. Wenn es passt, erhalten Sie innerhalb von 24 Stunden ein vollständiges Angebot.",
-    ctaBtn: "Privaten Anruf buchen",
-  },
-}
+/*
+  Los textos viven en messages/<locale>.json, namespace `founding.copy`: así los
+  cubren messages-parity.test.ts y los tests de tarifa, y las cifras de precio
+  salen de lib/tarifa (`[[tarifa.<nombre>]]`), no de un número escrito aquí.
+*/
 
 const DIFF_ICONS = [Activity, Euro, Shield] as const
 
@@ -167,7 +31,23 @@ export default async function FoundingOwnersPage({
   params: Promise<{ locale: string }>
 }) {
   const { locale } = await params
-  const c = COPY[(locale as Locale)] ?? COPY.es
+  setRequestLocale(locale)
+  const t = await getTranslations({ locale, namespace: "founding.copy" })
+  const c = {
+    badge: t("badge"),
+    seatsLeft: t("seatsLeft"),
+    h1: [t("h1.l1"), t("h1.l2")],
+    body: t("body"),
+    trust: [t("trust.t1"), t("trust.t2")],
+    cta: t("cta"),
+    diffs: (["d1", "d2", "d3"] as const).map((k) => ({ title: t(`diffs.${k}.title`), body: t(`diffs.${k}.body`) })),
+    founderTitle: t("founderTitle"),
+    founderBio: t("founderBio"),
+    ctaEyebrow: t("ctaEyebrow"),
+    ctaH2: [t("ctaH2.l1"), t("ctaH2.l2")],
+    ctaBody: t("ctaBody"),
+    ctaBtn: t("ctaBtn"),
+  }
 
   return (
     <main id="main-content">

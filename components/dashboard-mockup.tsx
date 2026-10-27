@@ -1,6 +1,7 @@
 "use client"
 
 import { useTranslations } from "next-intl"
+import { liquidacionEjemplo, numero } from "@/lib/tarifa"
 
 const calendarCells = Array.from({ length: 40 }).map((_, i) => {
   if ([3, 4, 5, 6, 7, 8, 9].includes(i)) return "olive"
@@ -13,19 +14,16 @@ const calendarCells = Array.from({ length: 40 }).map((_, i) => {
 export function DashboardMockup() {
   const t = useTranslations()
 
-  const kpis = [
-    { label: t("home.dashboard.kpi.ingresos"), value: "€ 142.300", sub: t("home.dashboard.kpi.ingresos_sub") },
-    { label: t("home.dashboard.kpi.reservas"), value: "14", sub: t("home.dashboard.kpi.reservas_sub") },
-  ]
-
-  // Ejemplo de seda_os/docs/PRICING.md §1.1 (reserva directa, 0% de canal):
-  // bruto 1.000 − limpieza 100 = base 900; comisión 24% × 900 = 216;
-  // neto propietario = 1.000 − 216 = 784 (la limpieza queda dentro del neto).
+  // Misma cuenta que la tarifa publicada (lib/tarifa): bruto 1.000 − limpieza 100 = base 900;
+  // el 21 % serían 189 € pero manda el tope del 20 % → 180 €; neto = 1.000 − 180 = 820 (IVA aparte).
+  // La maqueta no enseña KPIs (ingresos previstos, reservas activas): no hay cartera de la que salgan.
+  const l = liquidacionEjemplo()
+  const eur = (n: number) => `€ ${numero(Math.round(n * 100), "es")}` // «1.000», no «1000» (es no agrupa 4 cifras en Intl)
   const liquidacion: ReadonlyArray<readonly [string, string]> = [
-    [t("home.dashboard.liquidacion.row1"), "€ 1.000"],
-    [t("home.dashboard.liquidacion.row2"), "€ 900"],
-    [t("home.dashboard.liquidacion.row3"), "− € 216"],
-    [t("home.dashboard.liquidacion.row4"), "€ 784"],
+    [t("home.dashboard.liquidacion.row1"), eur(l.bruto)],
+    [t("home.dashboard.liquidacion.row2"), eur(l.base)],
+    [t("home.dashboard.liquidacion.row3"), `− ${eur(l.comision)}`],
+    [t("home.dashboard.liquidacion.row4"), eur(l.neto)],
   ] as const
 
   return (
@@ -39,24 +37,6 @@ export function DashboardMockup() {
         <span className="ml-auto text-foreground/70 flex-none whitespace-nowrap">
           {t("home.dashboard.location")}
         </span>
-      </div>
-
-      {/* KPIs */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-        {kpis.map((k) => (
-          <div
-            key={k.label}
-            className="bg-background border border-foreground/8 p-3 rounded-sm"
-          >
-            <p className="font-mono text-[9px] tracking-[0.2em] uppercase text-muted-foreground">
-              {k.label}
-            </p>
-            <p className="font-serif font-light text-2xl md:text-[1.75rem] leading-tight tracking-tight text-foreground mt-1">
-              {k.value}
-            </p>
-            <p className="font-mono text-[9px] text-muted-foreground/80 mt-1">{k.sub}</p>
-          </div>
-        ))}
       </div>
 
       {/* Calendar */}

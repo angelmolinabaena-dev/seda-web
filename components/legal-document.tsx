@@ -1,6 +1,7 @@
 import { Link } from "@/i18n/navigation"
 import type { Locale } from "@/i18n/routing"
 import {
+  bloqueAplica,
   ETIQUETAS_IDENTIFICACION,
   legalEntity,
   resolverTokens,
@@ -223,9 +224,11 @@ export function LegalDocument({
                 <h2 className="font-serif font-light text-2xl md:text-[1.85rem] leading-tight tracking-[-0.01em] text-foreground mb-6">
                   {seccion.titulo}
                 </h2>
-                {seccion.bloques.map((bloque, j) => (
-                  <Bloque key={j} bloque={bloque} locale={locale} />
-                ))}
+                {seccion.bloques
+                  .filter((bloque) => bloque.tipo !== "parrafo" || bloqueAplica(bloque))
+                  .map((bloque, j) => (
+                    <Bloque key={j} bloque={bloque} locale={locale} />
+                  ))}
                 {seccion.enlaces && (
                   <div className="flex flex-wrap gap-x-6 gap-y-2 mt-6">
                     {seccion.enlaces.map((enlace) => (

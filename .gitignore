@@ -21,3 +21,6 @@ next-env.d.ts
 lint-output.txt
 
 /brand/
+
+# Prototipos y material de trabajo local (REA seda-web 2026-10, M-3): no se versionan
+.tmp/

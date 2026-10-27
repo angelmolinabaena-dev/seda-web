@@ -24,20 +24,45 @@ import { fileURLToPath } from "node:url"
 import { dirname, join } from "node:path"
 
 const RAIZ = join(dirname(fileURLToPath(import.meta.url)), "..")
-const FICHERO = join(RAIZ, "lib", "legal", "identidad.json")
+// Un primer argumento sustituye al fichero (lo usan los tests con identidades de prueba).
+const FICHERO = process.argv[2] ?? join(RAIZ, "lib", "legal", "identidad.json")
 
 /*
-  `inscripcionRegistral` es la única excepción: hoy vale `null` porque no hay
-  sociedad inscrita, y eso es un hecho cierto, no un dato pendiente.
+  Dos formas jurídicas:
+
+    · persona_fisica (hoy): titular, nif, domicilio y proveedorCorreo.
+    · sociedad: sociedad.denominacion, sociedad.cif, sociedad.domicilioSocial
+      y proveedorCorreo. `sociedad.inscripcionRegistral` nunca bloquea: una
+      sociedad recién constituida puede no estar inscrita todavía.
+
+  El bloque `sociedad` a `null` NO bloquea mientras la forma sea persona_fisica:
+  es la S.L. preparada, a falta de datos. El script los lista como aviso.
 */
-const OPCIONALES = new Set(["_leeme", "inscripcionRegistral"])
+const FORMAS = new Set(["persona_fisica", "sociedad"])
 
 const identidad = JSON.parse(readFileSync(FICHERO, "utf8"))
 
-const faltan = Object.entries(identidad)
-  .filter(([campo]) => !OPCIONALES.has(campo))
-  .filter(([, valor]) => typeof valor !== "string" || valor.trim() === "")
-  .map(([campo]) => campo)
+const vacio = (valor) => typeof valor !== "string" || valor.trim() === ""
+
+if (!FORMAS.has(identidad.formaJuridica)) {
+  console.error(
+    `\n  ✖  lib/legal/identidad.json: formaJuridica debe ser "persona_fisica" o "sociedad" (vale ${JSON.stringify(identidad.formaJuridica)}).\n`,
+  )
+  process.exit(1)
+}
+
+const sociedad = identidad.sociedad ?? {}
+const faltanSociedad = ["denominacion", "cif", "domicilioSocial"].filter((c) => vacio(sociedad[c]))
+
+const requeridos =
+  identidad.formaJuridica === "sociedad"
+    ? [
+        ...faltanSociedad.map((c) => `sociedad.${c}`),
+        ...(vacio(identidad.proveedorCorreo) ? ["proveedorCorreo"] : []),
+      ]
+    : ["titular", "nif", "domicilio", "proveedorCorreo"].filter((c) => vacio(identidad[c]))
+
+const faltan = requeridos
 
 if (faltan.length > 0) {
   console.error(
@@ -45,12 +70,12 @@ if (faltan.length > 0) {
       "",
       "  ✖  BUILD DETENIDO — las páginas legales no pueden publicarse todavía.",
       "",
-      "     Faltan estos datos en lib/legal/identidad.json:",
+      `     Forma jurídica: ${identidad.formaJuridica}. Faltan estos datos en lib/legal/identidad.json:`,
       ...faltan.map((campo) => `       · ${campo}`),
       "",
       "     Son los datos que el artículo 10 de la LSSI y el artículo 13 del",
       "     RGPD obligan a publicar para identificar a quien responde del",
-      "     sitio. Mientras la S.L.U. no exista, son los de la persona física.",
+      "     sitio. Mientras la S.L. no exista, son los de la persona física.",
       "",
       "     NO los rellenes con datos de ejemplo ni con una sociedad que aún",
       "     no esté inscrita. La explicación, campo por campo, está en el",
@@ -61,4 +86,15 @@ if (faltan.length > 0) {
   process.exit(1)
 }
 
-console.log("✓ Datos identificativos completos — las páginas legales pueden publicarse.")
+console.log(`✓ Datos identificativos completos (${identidad.formaJuridica}) — las páginas legales pueden publicarse.`)
+if (identidad.formaJuridica === "persona_fisica" && faltanSociedad.length > 0) {
+  console.log(
+    [
+      "",
+      "  ℹ  Para pasar a la S.L. faltan en lib/legal/identidad.json (bloque «sociedad»):",
+      ...faltanSociedad.map((campo) => `       · sociedad.${campo}`),
+      '     (y sociedad.inscripcionRegistral cuando esté inscrita). Después, formaJuridica: "sociedad".',
+      "",
+    ].join("\n"),
+  )
+}

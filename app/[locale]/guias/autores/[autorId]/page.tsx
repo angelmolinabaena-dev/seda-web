@@ -7,6 +7,7 @@ import { asLocale, localizedMetadata } from "@/lib/site-pages"
 import { autores, getAutor } from "@/lib/autores"
 import { getGuiasPublicadas } from "@/lib/guias"
 import type { Locale } from "@/i18n/routing"
+import { jsonLdString } from "@/lib/jsonld"
 
 /*
   Entidad de autor. Solo hechos verificables (lib/autores.ts) — nada de
@@ -56,10 +57,10 @@ export default async function AutorPage({
   }
 
   return (
-    <main className="px-6 pt-32 pb-24 md:px-12 lg:px-20 max-w-2xl mx-auto">
+    <main id="main-content" className="px-6 pt-32 pb-24 md:px-12 lg:px-20 max-w-2xl mx-auto">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdString(personJsonLd) }}
       />
       <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-muted-foreground/60 mb-4">
         {t("eyebrow")}

@@ -1,8 +1,14 @@
 {
-  "_leeme": "Datos que identifican legalmente a quien responde de sedaprivatehomes.com. Están a null porque la S.L.U. no está constituida y estos datos no viven en el repositorio. NO LOS INVENTES: mientras cualquiera de ellos (salvo inscripcionRegistral) siga a null, 'npm run build' falla a propósito y el sitio no se despliega. La explicación completa, campo por campo, está en lib/legal/entity.ts.",
+  "_leeme": "Datos que identifican legalmente a quien responde de sedaprivatehomes.com. NO LOS INVENTES. Hoy responde la PERSONA FÍSICA (formaJuridica = persona_fisica, campos titular/nif/domicilio). La S.L. está preparada en el bloque «sociedad», con todo a null: cuando Ángel dé razón social, CIF y domicilio social, se rellenan esos tres campos (y inscripcionRegistral cuando la sociedad esté inscrita) y se cambia formaJuridica a «sociedad» en el MISMO PR. Ese cambio sustituye en toda la web los datos de la persona física por los de la sociedad (aviso legal, privacidad, cookies, pie de /meet) y deja de publicar el NIF y el domicilio personales (bórralos de aquí en ese PR). Con formaJuridica = sociedad y algún campo de «sociedad» a null, 'npm run build' falla a propósito. 'npm run check:legal' lista lo que falta. La explicación completa está en lib/legal/entity.ts.",
+  "formaJuridica": "persona_fisica",
   "titular": "Ángel Molina Baena",
   "nif": "25726908M",
   "domicilio": "Calle Centurión y Córdoba 2, Apartamento 207, 29620 Torremolinos, Málaga",
   "proveedorCorreo": "Hostinger International Ltd. (Chipre)",
-  "inscripcionRegistral": null
+  "sociedad": {
+    "denominacion": null,
+    "cif": null,
+    "domicilioSocial": null,
+    "inscripcionRegistral": null
+  }
 }

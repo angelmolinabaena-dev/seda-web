@@ -17,6 +17,15 @@ import { REGION, ZONAS } from "@/lib/zonas"
 
 export type JsonLd = Record<string, unknown>
 
+/**
+ * JSON listo para ir DENTRO de un `<script type="application/ld+json">`: escapa
+ * «<» como \u003c, de modo que un `</script>` en cualquier dato no cierre el
+ * bloque ni rompa la página (REA seda-web 2026-10, M-4). Hoy los datos son del
+ * repo y no es explotable; esto lo deja a prueba de datos futuros. Es JSON
+ * válido: el parser lo lee igual.
+ */
+export const jsonLdString = (data: unknown): string => JSON.stringify(data).replace(/</g, "\\u003c")
+
 const region = { "@type": "Place", name: REGION }
 
 /** Cada zona de lib/zonas.ts como `Place`, dentro de la Costa del Sol. */

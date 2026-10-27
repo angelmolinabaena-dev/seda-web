@@ -7,12 +7,12 @@
   bloque de identificación de aquí. No hay ningún otro sitio donde figuren
   estos datos.
 
-  ⚠️ TRES CAMPOS ESTÁN A `null` A PROPÓSITO.
+  ⚠️ LOS DATOS DE LA SOCIEDAD ESTÁN A `null` A PROPÓSITO.
 
-  La S.L.U. no está constituida: no hay denominación social, NIF de sociedad
-  ni inscripción registral. Mientras eso sea así, quien responde legalmente
-  del sitio es la PERSONA FÍSICA que lo opera, y el artículo 10 de la LSSI
-  exige publicar su nombre, su NIF y su domicilio. Esos datos no están en el
+  La S.L. no está constituida: no hay denominación social, CIF ni inscripción
+  registral. Mientras eso sea así, quien responde legalmente del sitio es la
+  PERSONA FÍSICA que lo opera, y el artículo 10 de la LSSI exige publicar su
+  nombre, su NIF y su domicilio. Los datos de la sociedad no están en el
   repositorio y no se inventan (el 2 de agosto se retiraron de este mismo
   sitio métricas, garantías y una licencia turística inventadas — ver
   docs/audit/VERACIDAD-PUBLICA.md; un aviso legal con datos de ejemplo sería
@@ -22,9 +22,9 @@
   Es un JSON aparte por una razón concreta: el guion que bloquea el build
   (`scripts/check-legal-entity.mjs`) corre en Node antes que Next, sin
   TypeScript por medio, y `JSON.parse` no puede equivocarse leyéndolo.
-  Aquí queda la documentación y el tipado; allí, sólo los cinco valores.
+  Aquí queda la documentación y el tipado; allí, sólo los valores.
 
-  QUÉ PASA SI SE DEJAN A `null`:
+  QUÉ PASA SI FALTA UN DATO DE LA FORMA JURÍDICA ACTIVA:
 
     · `npm run build` FALLA antes de arrancar Next, con un error que nombra
       los campos que faltan — y con él falla el despliegue en Vercel, que
@@ -38,52 +38,98 @@
       rojo arriba que lista lo que falta, para poder revisar el texto sin
       tener los datos.
 
-  EL DÍA QUE EXISTA LA SOCIEDAD:
+  LA S.L. YA ESTÁ PREPARADA (REA seda-web 2026-10, I-7 / D-5):
 
-    Se sustituye la persona física por la sociedad — `titular` pasa a ser la
-    denominación social, `nif` el CIF, `domicilio` el domicilio social — y se
-    RELLENA `inscripcionRegistral`, que hoy es `null` porque no hay registro
-    que citar. Ese campo no bloquea el build: su ausencia es hoy la verdad,
-    no un dato pendiente.
+    `identidad.json` lleva `formaJuridica` ("persona_fisica" hoy) y un bloque
+    `sociedad` con denominacion, cif, domicilioSocial e inscripcionRegistral,
+    todo a `null`. Mientras `formaJuridica` sea "persona_fisica":
+
+      · el aviso legal dice que no hay sociedad (bloques `solo: "persona_fisica"`);
+      · NINGUNA página nombra una S.L. (el pie de /meet sale de `pieLegal`).
+
+    El día que Ángel dé razón social, CIF y domicilio social, en UN solo PR:
+    rellenar `sociedad.denominacion`, `sociedad.cif` y `sociedad.domicilioSocial`
+    (y `sociedad.inscripcionRegistral` cuando esté inscrita), poner
+    `formaJuridica: "sociedad"` y borrar el NIF y el domicilio personales.
+    `legalEntity` pasa entonces a servir los datos de la sociedad y las tres
+    páginas legales, la privacidad y el pie de /meet cambian solos. Con
+    "sociedad" y algún campo a `null`, el build falla (scripts/check-legal-entity.mjs).
+    Qué falta hoy: `npm run check:legal`.
 */
 
 import type { Locale } from "@/i18n/routing"
 import identidad from "./identidad.json"
 
 /**
- * Los cinco campos de `identidad.json`, ya tipados.
+ * Forma jurídica de quien responde del sitio. Decide qué texto legal se
+ * publica y de dónde salen `titular`, `nif`, `domicilio` e `inscripcionRegistral`.
+ */
+export type FormaJuridica = "persona_fisica" | "sociedad"
+
+/**
+ * Contenido de `identidad.json`.
  *
- * - `titular`: nombre y apellidos de la persona física titular del sitio,
- *   tal y como figuran en su documento de identidad. Cuando exista la
- *   S.L.U., su denominación social.
- * - `nif`: NIF/DNI de esa persona física, con la letra. Después, el CIF de
- *   la sociedad.
- * - `domicilio`: domicilio a efectos de notificaciones — calle, número,
- *   código postal, municipio y provincia. Es el que la LSSI obliga a
- *   publicar; si no se quiere publicar un domicilio particular, la
- *   alternativa legítima es un domicilio profesional real (un apartado de
- *   correos no vale como domicilio).
+ * - `formaJuridica`: "persona_fisica" mientras no haya sociedad constituida.
+ * - `titular`: nombre y apellidos de la persona física, tal y como figuran en
+ *   su documento de identidad.
+ * - `nif`: NIF/DNI de esa persona física, con la letra.
+ * - `domicilio`: domicilio a efectos de notificaciones — calle, número, código
+ *   postal, municipio y provincia. Es el que la LSSI obliga a publicar; si no
+ *   se quiere publicar un domicilio particular, la alternativa legítima es un
+ *   domicilio profesional real (un apartado de correos no vale).
  * - `proveedorCorreo`: razón social y país del proveedor del buzón
  *   `info@sedaprivatehomes.com`. Aparece en la tabla de destinatarios de la
- *   política de privacidad, porque el mensaje del formulario acaba viviendo
- *   ahí. Forma esperada: "Google Ireland Ltd. (Irlanda)".
- * - `inscripcionRegistral`: `null` mientras no haya sociedad inscrita. NO
- *   bloquea el build — hoy su ausencia es un hecho cierto, no un dato que
- *   falte. El día que se inscriba: "Registro Mercantil de Málaga, tomo X,
- *   folio Y, hoja Z".
+ *   política de privacidad. Forma esperada: "Google Ireland Ltd. (Irlanda)".
+ * - `sociedad`: los datos de la S.L., a `null` hasta que existan. Denominación
+ *   social, CIF y domicilio social bloquean el build SOLO si `formaJuridica`
+ *   es "sociedad"; `inscripcionRegistral` no bloquea nunca (una sociedad
+ *   recién constituida puede no estar inscrita todavía). Forma esperada de la
+ *   inscripción: "Registro Mercantil de Málaga, tomo X, folio Y, hoja Z".
  */
 type Identidad = {
+  formaJuridica: FormaJuridica
   titular: string | null
   nif: string | null
   domicilio: string | null
   proveedorCorreo: string | null
-  inscripcionRegistral: string | null
+  sociedad: {
+    denominacion: string | null
+    cif: string | null
+    domicilioSocial: string | null
+    inscripcionRegistral: string | null
+  }
 }
 
-const { titular, nif, domicilio, proveedorCorreo, inscripcionRegistral } =
-  identidad as Identidad
+/** Qué datos de la sociedad faltan para poder pasar a `formaJuridica: "sociedad"`. */
+export function camposSociedadPendientes(id: Identidad = identidad as Identidad): string[] {
+  const { denominacion, cif, domicilioSocial } = id.sociedad
+  return Object.entries({ denominacion, cif, domicilioSocial })
+    .filter(([, v]) => !v?.trim())
+    .map(([k]) => k)
+}
+
+/**
+ * Los datos efectivos de quien responde del sitio. Con "sociedad" salen del
+ * bloque `sociedad`; con "persona_fisica", de los campos de la persona.
+ */
+export function resolverIdentidad(id: Identidad) {
+  const esSociedad = id.formaJuridica === "sociedad"
+  return {
+    formaJuridica: id.formaJuridica,
+    titular: esSociedad ? id.sociedad.denominacion : id.titular,
+    nif: esSociedad ? id.sociedad.cif : id.nif,
+    domicilio: esSociedad ? id.sociedad.domicilioSocial : id.domicilio,
+    proveedorCorreo: id.proveedorCorreo,
+    inscripcionRegistral: esSociedad ? id.sociedad.inscripcionRegistral : null,
+  }
+}
+
+const { formaJuridica, titular, nif, domicilio, proveedorCorreo, inscripcionRegistral } = resolverIdentidad(
+  identidad as Identidad,
+)
 
 export const legalEntity = {
+  formaJuridica,
   titular,
   nif,
   domicilio,
@@ -98,6 +144,27 @@ export const legalEntity = {
   nombreComercial: "SEDA Private Homes",
   dominio: "sedaprivatehomes.com",
 } satisfies Record<string, string | null>
+
+/**
+ * ¿Se publica este bloque con la forma jurídica activa? Un párrafo con
+ * `solo: "persona_fisica"` o `solo: "sociedad"` solo sale con esa forma; sin
+ * `solo`, siempre. El resto de bloques, siempre.
+ */
+export function bloqueAplica(bloque: { tipo: string; solo?: FormaJuridica }, forma: FormaJuridica = legalEntity.formaJuridica): boolean {
+  return !bloque.solo || bloque.solo === forma
+}
+
+/**
+ * Línea de pie de página que identifica a quien responde, para las páginas que
+ * no son legales (/meet). Sale de los mismos datos que el aviso legal: con
+ * persona física no nombra ninguna sociedad ni ninguna sede; con sociedad,
+ * nombra la sociedad y su domicilio social.
+ */
+export function pieLegal(locale: Locale, e: Pick<typeof legalEntity, "formaJuridica" | "titular" | "domicilio" | "nombreComercial"> = legalEntity): string {
+  if (e.formaJuridica === "sociedad" && e.titular && e.domicilio) return `${e.titular} · ${e.domicilio}`
+  const pais = { es: "España", en: "Spain", fr: "Espagne", de: "Spanien" }[locale]
+  return `${e.nombreComercial} · Costa del Sol · ${pais}`
+}
 
 /*
   `dpd@sedaprivatehomes.com` NO se usa en ninguna de las tres páginas.

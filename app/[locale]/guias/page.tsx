@@ -6,6 +6,7 @@ import { localeUrl } from "@/lib/seo-urls"
 import { localizedMetadata } from "@/lib/site-pages"
 import { getGuiasPublicadas } from "@/lib/guias"
 import type { Locale } from "@/i18n/routing"
+import { jsonLdString } from "@/lib/jsonld"
 
 /*
   Índice de `/guias`. Server component — sin interactividad, no necesita
@@ -62,10 +63,10 @@ export default async function GuiasIndexPage({
   }
 
   return (
-    <main className="px-6 pt-32 pb-24 md:px-12 lg:px-20">
+    <main id="main-content" className="px-6 pt-32 pb-24 md:px-12 lg:px-20">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdString(collectionJsonLd) }}
       />
       <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-muted-foreground/60 mb-4">
         {t("eyebrow")}

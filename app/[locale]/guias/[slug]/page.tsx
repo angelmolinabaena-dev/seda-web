@@ -7,6 +7,7 @@ import { localizedMetadata } from "@/lib/site-pages"
 import { esPublicable, getGuiaBySlug, guias } from "@/lib/guias"
 import { getAutor } from "@/lib/autores"
 import type { Locale } from "@/i18n/routing"
+import { jsonLdString } from "@/lib/jsonld"
 
 /*
   Ficha individual de guía. Puerta de indexación fail-closed:
@@ -89,11 +90,11 @@ export default async function GuiaPage({
     : null
 
   return (
-    <main className="px-6 pt-32 pb-24 md:px-12 lg:px-20 max-w-2xl mx-auto">
+    <main id="main-content" className="px-6 pt-32 pb-24 md:px-12 lg:px-20 max-w-2xl mx-auto">
       {articleJsonLd && (
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+          dangerouslySetInnerHTML={{ __html: jsonLdString(articleJsonLd) }}
         />
       )}
 
