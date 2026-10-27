@@ -42,7 +42,7 @@ function contactRequest(
 ) {
   return new Request("http://localhost/api/contact", {
     method: "POST",
-    headers: { "content-type": "application/json", ...headers },
+    headers: { "content-type": "application/json", origin: "http://localhost", ...headers },
     body: body ?? JSON.stringify({ type: "guest", fields: { ...GUEST_OK, ...fields } }),
   })
 }
@@ -50,7 +50,7 @@ function contactRequest(
 function rawRequest(payload: unknown) {
   return new Request("http://localhost/api/contact", {
     method: "POST",
-    headers: { "content-type": "application/json", "x-forwarded-for": freshIp() },
+    headers: { "content-type": "application/json", origin: "http://localhost", "x-forwarded-for": freshIp() },
     body: JSON.stringify(payload),
   })
 }

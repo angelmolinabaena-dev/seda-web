@@ -7,19 +7,20 @@ import { Link } from "@/i18n/navigation"
 import { IllustrativeTag } from "@/components/illustrative-tag"
 import { JsonLdScript } from "@/components/page-json-ld"
 import { ReservaBeds24 } from "@/components/escaparate/reserva-beds24"
-import { beds24Ids, esIndexable, getVillaVisible, villasVisibles, type FichaVilla } from "@/lib/escaparate"
+import { beds24Ids, esIndexable, getVillaVisible, incluyeVilla, villasVisibles, type FichaVilla } from "@/lib/escaparate"
 import { accommodationJsonLd, breadcrumbJsonLd } from "@/lib/jsonld"
 import { buildAlternates, localeUrl } from "@/lib/seo-urls"
 import { asLocale, OG_IMAGE, OG_LOCALE, SITE_NAME } from "@/lib/site-pages"
 
 /*
-  Ficha de una casa del escaparate. Todo detrás de SEDA_FLAG_ESCAPARATE_VILLAS
-  (ver lib/escaparate.ts):
-    · flag apagado → `generateStaticParams` no devuelve ninguna ficha y
-      `dynamicParams = false`: cualquier /villa/<slug> es 404. El `notFound()`
-      de la página es la segunda cerradura.
-    · flag encendido sin número de registro turístico → la ficha se ve, con
-      noindex y sin JSON-LD de alojamiento.
+  Ficha de una casa del escaparate. Detrás de SEDA_FLAG_ESCAPARATE_VILLAS Y de
+  que la casa tenga número de registro turístico y arrendador (ver
+  lib/escaparate.ts):
+    · flag apagado, o casa sin VFT / sin arrendador → `generateStaticParams`
+      no devuelve la ficha y `dynamicParams = false`: /villa/<slug> es 404. El
+      `notFound()` de la página es la segunda cerradura.
+    · flag encendido y casa completa → ficha visible, indexable, con el VFT y
+      «Arrendador: … · gestiona SEDA Private Homes» junto al botón de reservar.
 
   Los cuatro slugs de las villas ficticias retiradas en agosto siguen
   respondiendo 410 desde proxy.ts, antes de llegar aquí.
@@ -45,11 +46,12 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
     nombre: villa.nombre,
     tipo: t(`escaparate.tipo.${villa.tipo}`),
     municipio: villa.municipio,
+    arrendador: villa.arrendador ?? "",
   })
   return {
     title,
     description,
-    // Fail closed: sin flag o sin número de registro, noindex. Sin rama intermedia.
+    // Fail closed: lo que no es indexable no llega aquí (404), pero se deja la guarda.
     robots: esIndexable(villa) ? { index: true, follow: true } : { index: false, follow: false },
     alternates: { canonical: localeUrl(locale, path), languages: buildAlternates(path) },
     openGraph: {
@@ -177,9 +179,10 @@ export default async function VillaPage({ params }: Params) {
           <div className="md:col-span-7 space-y-14">
             <Bloque titulo={t("escaparate.incluye.titulo")}>
               <ul className="space-y-3 text-base leading-[1.7] text-foreground/85">
-                <li>{t("escaparate.incluye.llegada")}</li>
-                <li>{t("escaparate.incluye.concierge")}</li>
-                <li>{t("escaparate.incluye.limpieza")}</li>
+                {/* «Llegada sin llaves» solo si la casa tiene cerradura (FichaVilla.cerradura). */}
+                {incluyeVilla(villa).map((k) => (
+                  <li key={k}>{t(`escaparate.incluye.${k}`)}</li>
+                ))}
               </ul>
             </Bloque>
 
@@ -221,6 +224,13 @@ export default async function VillaPage({ params }: Params) {
 
           <aside className="md:col-span-5">
             <div className="md:sticky md:top-28">
+              {/* Quién alquila, antes del botón de reservar (DGT V0367-18: SEDA gestiona en nombre y por cuenta del propietario). */}
+              <div className="mb-8 border-l border-foreground/20 pl-5" data-arrendador>
+                <p className="text-base leading-[1.6] text-foreground">
+                  {t("escaparate.arrendador.linea", { nombre: villa.arrendador ?? "" })}
+                </p>
+                <p className="mt-2 text-sm leading-[1.6] text-muted-foreground">{t("escaparate.arrendador.nota")}</p>
+              </div>
               <ReservaBeds24 ids={beds24Ids(villa.slug)} slug={villa.slug} maxHuespedes={villa.esencial.huespedes} />
             </div>
           </aside>

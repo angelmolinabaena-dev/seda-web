@@ -2,6 +2,7 @@ import { ChevronRight } from "lucide-react"
 import { Link } from "@/i18n/navigation"
 import { getTranslations, getLocale } from "next-intl/server"
 import { localeUrl } from "@/lib/seo-urls"
+import { jsonLdString } from "@/lib/jsonld"
 
 /*
   Server-rendered breadcrumb trail.
@@ -101,7 +102,7 @@ export async function Breadcrumbs({
           in SERPs with the named trail. */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdString(jsonLd) }}
       />
     </>
   )

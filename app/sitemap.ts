@@ -20,13 +20,10 @@ import { villasIndexables } from "@/lib/escaparate"
 */
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const now = new Date()
-
   // Static routes — emit one entry per (path × locale), with hreflang links.
   const staticRoutes: MetadataRoute.Sitemap = SITE_PAGES.flatMap((entry) =>
     routing.locales.map((locale) => ({
       url: localeUrl(locale, entry.path),
-      lastModified: now,
       changeFrequency: entry.changeFrequency,
       priority: entry.priority,
       alternates: { languages: buildAlternates(entry.path) },
@@ -38,12 +35,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // responden 410 desde `proxy.ts` — ver docs/audit/RETIRADA-COLECCION.md §3.
 
   // Las fichas del escaparate (lib/escaparate.ts) entran SOLO si son
-  // indexables: flag SEDA_FLAG_ESCAPARATE_VILLAS encendido Y número de
-  // registro turístico. Flag apagado, o sin VFT → ninguna. Fail closed.
+  // indexables: flag SEDA_FLAG_ESCAPARATE_VILLAS encendido Y casa publicable
+  // (número de registro turístico y arrendador). Si no → ninguna. Fail closed.
+  //
+  // Sin `lastModified` en las páginas estáticas ni en las fichas: antes valía
+  // `new Date()` y cada despliegue «modificaba» las 52 URLs aunque no cambiara
+  // ni una (REA M-2). Un `lastModified` falso es peor que ninguno; solo lo
+  // llevan las guías, que tienen fecha de revisión real.
   const villaRoutes: MetadataRoute.Sitemap = villasIndexables().flatMap((villa) =>
     routing.locales.map((locale) => ({
       url: localeUrl(locale, `/villa/${villa.slug}`),
-      lastModified: now,
       changeFrequency: "weekly" as const,
       priority: 0.8,
       alternates: { languages: buildAlternates(`/villa/${villa.slug}`) },
@@ -58,7 +59,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ? [
         ...routing.locales.map((locale) => ({
           url: localeUrl(locale, "/guias"),
-          lastModified: now,
           changeFrequency: "weekly" as const,
           priority: 0.7,
           alternates: { languages: buildAlternates("/guias") },
@@ -66,7 +66,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
         ...getGuiasPublicadas().flatMap((guia) =>
           routing.locales.map((locale) => ({
             url: localeUrl(locale, `/guias/${guia.slug}`),
-            lastModified: guia.fechaRevision ?? guia.fechaPublicacion ?? now,
+            lastModified: guia.fechaRevision ?? guia.fechaPublicacion ?? undefined,
             changeFrequency: "monthly" as const,
             priority: 0.6,
             alternates: { languages: buildAlternates(`/guias/${guia.slug}`) },

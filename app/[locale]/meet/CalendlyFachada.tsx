@@ -24,6 +24,8 @@ export type CalendlyFachadaCopy = {
   verCalendario: string
   enlaceDirecto: string
   politicaCookies: string
+  /** `title` del iframe, en el idioma de la página (WCAG 4.1.2). */
+  tituloIframe: string
 }
 
 export function CalendlyFachada({
@@ -42,7 +44,7 @@ export function CalendlyFachada({
       <div className="rounded-2xl border border-border bg-background overflow-hidden">
         <iframe
           src={embedUrl}
-          title="Calendly — Seda Private Homes booking"
+          title={copy.tituloIframe}
           className="w-full"
           style={{ height: "720px", border: "0" }}
         />

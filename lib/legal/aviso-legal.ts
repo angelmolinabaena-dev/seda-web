@@ -5,11 +5,20 @@ import type { DocumentoLegalMultilingue } from "./types"
 
   Cada afirmación de este texto se sostiene en un hecho comprobable del
   repositorio. Las comprobaciones, una a una, están en la descripción del
-  PR. Las tres que más condicionan la redacción:
+  PR. Las que más condicionan la redacción:
 
-    · No hay contratación en línea: la única entrada de datos del sitio es
+    · El sitio no cobra ni formaliza reservas: la única entrada de datos es
       `app/api/contact/route.ts`, que compone un correo y lo envía. No hay
-      pasarela de pago, ni motor de reservas, ni base de datos.
+      pasarela de pago ni base de datos. Cuando una casa tiene ficha
+      (`lib/escaparate.ts`, detrás de flag + VFT + arrendador), el botón
+      «Reservar» enlaza a la booking page de Beds24, donde se paga; SEDA actúa
+      en nombre y por cuenta del propietario, que es el arrendador (REA
+      seda-web 2026-10, B-2). El texto lo dice así: ni «no publica precios»
+      (publica los de gestión) ni «no formaliza reservas» a secas.
+    · Quién es el titular depende de `legalEntity.formaJuridica`: los párrafos
+      con `solo: "persona_fisica"` / `solo: "sociedad"` se publican según el
+      caso, y ninguna otra página puede nombrar una S.L. mientras sea persona
+      física (REA I-7).
     · Los cinco distintivos de premios de `/nosotros` se sirven desde
       `public/images/nosotros/` (`NosotrosContent.tsx`, constante `AWARDS`)
       y pertenecen a las plataformas que los otorgan, referidos al Hotel
@@ -21,7 +30,7 @@ import type { DocumentoLegalMultilingue } from "./types"
 export const AVISO_LEGAL: DocumentoLegalMultilingue = {
   id: "aviso-legal",
   ruta: "/aviso-legal",
-  actualizado: "2026-08-06",
+  actualizado: "2026-10-27",
   traducciones: {
     es: {
       titulo: "Aviso legal",
@@ -35,11 +44,19 @@ export const AVISO_LEGAL: DocumentoLegalMultilingue = {
             { tipo: "identificacion" },
             {
               tipo: "parrafo",
+              solo: "persona_fisica",
               texto:
                 "SEDA Private Homes es el nombre comercial bajo el que la persona física identificada arriba presta los servicios que este sitio describe.",
             },
             {
               tipo: "parrafo",
+              solo: "sociedad",
+              texto:
+                "SEDA Private Homes es el nombre comercial bajo el que {titular} presta los servicios que este sitio describe.",
+            },
+            {
+              tipo: "parrafo",
+              solo: "persona_fisica",
               texto:
                 "No existe todavía sociedad mercantil constituida: no hay denominación social, ni NIF de sociedad, ni inscripción en el Registro Mercantil que declarar. Preferimos decirlo a dejar el apartado en blanco. El día que la sociedad se constituya e inscriba, este bloque pasará a recoger sus datos y la fecha de revisión del pie cambiará.",
             },
@@ -57,7 +74,7 @@ export const AVISO_LEGAL: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "No dispone de sistema de contratación en línea. No publica disponibilidad ni precios, no procesa pagos y no formaliza reservas. Lo que envías por el formulario de contacto llega como un correo electrónico y se atiende después, de forma individual, fuera de la web.",
+                "Este sitio no procesa pagos ni formaliza reservas. Cuando una casa tiene ficha, el botón «Reservar» lleva a la página de reserva de Beds24, donde se consulta la disponibilidad y el precio final y se paga; el arrendador es el propietario de la casa, que figura en su ficha, y SEDA Private Homes actúa en su nombre y por su cuenta. Este sitio no publica tarifas de alquiler: publica el precio de los servicios de gestión que SEDA presta a los propietarios (comisión y alta). Lo que envías por el formulario de contacto llega como un correo electrónico y se atiende después, de forma individual, fuera de la web.",
             },
             {
               tipo: "parrafo",
@@ -110,7 +127,7 @@ export const AVISO_LEGAL: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Este sitio enlaza a destinos que no controla: la aplicación de huéspedes (guests.sedaprivatehomes.com), el portal de propietarios (portal.sedaprivatehomes.com), hotelesteponaplaza.com y plataformas de reseñas.",
+                "Este sitio enlaza a destinos que no controla: la aplicación de huéspedes (guests.sedaprivatehomes.com), el portal de propietarios (portal.sedaprivatehomes.com), la página de reserva de Beds24 (beds24.com), hotelesteponaplaza.com y plataformas de reseñas.",
             },
             {
               tipo: "parrafo",
@@ -131,7 +148,7 @@ export const AVISO_LEGAL: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "La información publicada tiene carácter informativo y no constituye una oferta contractual vinculante. Las condiciones de una estancia o de un encargo de gestión se acuerdan por escrito con cada huésped o propietario.",
+                "La información publicada tiene carácter informativo y no constituye una oferta contractual vinculante. Las condiciones de una estancia se muestran y se aceptan en la página de reserva; las de un encargo de gestión se acuerdan por escrito con cada propietario.",
             },
           ],
         },
@@ -187,11 +204,19 @@ export const AVISO_LEGAL: DocumentoLegalMultilingue = {
             { tipo: "identificacion" },
             {
               tipo: "parrafo",
+              solo: "persona_fisica",
               texto:
                 "SEDA Private Homes is the trading name under which the individual identified above provides the services this site describes.",
             },
             {
               tipo: "parrafo",
+              solo: "sociedad",
+              texto:
+                "SEDA Private Homes is the trading name under which {titular} provides the services this site describes.",
+            },
+            {
+              tipo: "parrafo",
+              solo: "persona_fisica",
               texto:
                 "No company has been incorporated yet: there is no registered company name, no company tax number and no Commercial Registry entry to declare. We would rather say so than leave the section blank. Once the company exists and is registered, this block will carry its details and the revision date in the footer will change.",
             },
@@ -209,7 +234,7 @@ export const AVISO_LEGAL: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "There is no online contracting system. The site publishes no availability and no prices, processes no payments and confirms no bookings. Whatever you send through the contact form arrives as an email and is dealt with afterwards, individually, away from the website.",
+                "This site does not process payments or confirm bookings. When a home has a listing page, the “Book” button leads to the Beds24 booking page, where availability and the final price are shown and payment is made; the lessor is the owner of the home, named on its listing page, and SEDA Private Homes acts in the owner's name and on the owner's behalf. This site does not publish rental rates: it publishes the price of the management services SEDA provides to owners (commission and onboarding fee). Whatever you send through the contact form arrives as an email and is dealt with afterwards, individually, away from the website.",
             },
             {
               tipo: "parrafo",
@@ -262,7 +287,7 @@ export const AVISO_LEGAL: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "This site links to destinations it does not control: the guest app (guests.sedaprivatehomes.com), the owner portal (portal.sedaprivatehomes.com), hotelesteponaplaza.com and review platforms.",
+                "This site links to destinations it does not control: the guest app (guests.sedaprivatehomes.com), the owner portal (portal.sedaprivatehomes.com), the Beds24 booking page (beds24.com), hotelesteponaplaza.com and review platforms.",
             },
             {
               tipo: "parrafo",
@@ -283,7 +308,7 @@ export const AVISO_LEGAL: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "The information published is informational and does not constitute a binding contractual offer. The terms of a stay or of a management engagement are agreed in writing with each guest or owner.",
+                "The information published is informational and does not constitute a binding contractual offer. The terms of a stay are shown and accepted on the booking page; those of a management engagement are agreed in writing with each owner.",
             },
           ],
         },
@@ -338,11 +363,19 @@ export const AVISO_LEGAL: DocumentoLegalMultilingue = {
             { tipo: "identificacion" },
             {
               tipo: "parrafo",
+              solo: "persona_fisica",
               texto:
                 "SEDA Private Homes est le nom commercial sous lequel la personne physique identifiée ci-dessus fournit les services décrits sur ce site.",
             },
             {
               tipo: "parrafo",
+              solo: "sociedad",
+              texto:
+                "SEDA Private Homes est le nom commercial sous lequel {titular} fournit les services décrits sur ce site.",
+            },
+            {
+              tipo: "parrafo",
+              solo: "persona_fisica",
               texto:
                 "Aucune société n'est encore constituée : il n'existe ni dénomination sociale, ni numéro fiscal de société, ni immatriculation au registre du commerce à déclarer. Nous préférons le dire plutôt que laisser la rubrique vide. Le jour où la société sera constituée et immatriculée, ce bloc reprendra ses données et la date de révision indiquée en bas de page changera.",
             },
@@ -360,7 +393,7 @@ export const AVISO_LEGAL: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Il ne dispose d'aucun système de contractualisation en ligne. Il ne publie ni disponibilités ni tarifs, ne traite aucun paiement et ne confirme aucune réservation. Ce que vous envoyez via le formulaire de contact arrive sous forme de courriel et est traité ensuite, individuellement, en dehors du site.",
+                "Ce site ne traite aucun paiement et ne confirme aucune réservation. Lorsqu'une maison a une fiche, le bouton « Réserver » mène à la page de réservation de Beds24, où l'on consulte la disponibilité et le prix final et où l'on paie ; le bailleur est le propriétaire de la maison, indiqué sur sa fiche, et SEDA Private Homes agit en son nom et pour son compte. Ce site ne publie pas de tarifs de location : il publie le prix des services de gestion que SEDA fournit aux propriétaires (commission et frais d'inscription). Ce que vous envoyez via le formulaire de contact arrive sous forme de courriel et est traité ensuite, individuellement, en dehors du site.",
             },
             {
               tipo: "parrafo",
@@ -413,7 +446,7 @@ export const AVISO_LEGAL: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Ce site renvoie vers des destinations qu'il ne contrôle pas : l'application voyageurs (guests.sedaprivatehomes.com), le portail propriétaires (portal.sedaprivatehomes.com), hotelesteponaplaza.com et des plateformes d'avis.",
+                "Ce site renvoie vers des destinations qu'il ne contrôle pas : l'application voyageurs (guests.sedaprivatehomes.com), le portail propriétaires (portal.sedaprivatehomes.com), la page de réservation de Beds24 (beds24.com), hotelesteponaplaza.com et des plateformes d'avis.",
             },
             {
               tipo: "parrafo",
@@ -434,7 +467,7 @@ export const AVISO_LEGAL: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Les informations publiées ont une valeur informative et ne constituent pas une offre contractuelle ferme. Les conditions d'un séjour ou d'un mandat de gestion sont convenues par écrit avec chaque voyageur ou propriétaire.",
+                "Les informations publiées ont une valeur informative et ne constituent pas une offre contractuelle ferme. Les conditions d'un séjour sont affichées et acceptées sur la page de réservation ; celles d'un mandat de gestion sont convenues par écrit avec chaque propriétaire.",
             },
           ],
         },
@@ -489,11 +522,19 @@ export const AVISO_LEGAL: DocumentoLegalMultilingue = {
             { tipo: "identificacion" },
             {
               tipo: "parrafo",
+              solo: "persona_fisica",
               texto:
                 "SEDA Private Homes ist die Geschäftsbezeichnung, unter der die oben genannte natürliche Person die auf dieser Website beschriebenen Leistungen erbringt.",
             },
             {
               tipo: "parrafo",
+              solo: "sociedad",
+              texto:
+                "SEDA Private Homes ist die Geschäftsbezeichnung, unter der {titular} die auf dieser Website beschriebenen Leistungen erbringt.",
+            },
+            {
+              tipo: "parrafo",
+              solo: "persona_fisica",
               texto:
                 "Eine Gesellschaft ist noch nicht gegründet: Es gibt keine Firma, keine Umsatzsteuer-Identifikationsnummer einer Gesellschaft und keine Eintragung im Handelsregister, die anzugeben wären. Wir sagen das lieber, als den Abschnitt leer zu lassen. Sobald die Gesellschaft gegründet und eingetragen ist, stehen hier ihre Daten, und das Revisionsdatum am Ende der Seite ändert sich.",
             },
@@ -511,7 +552,7 @@ export const AVISO_LEGAL: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Es gibt kein Online-Vertragssystem. Die Website veröffentlicht weder Verfügbarkeiten noch Preise, verarbeitet keine Zahlungen und bestätigt keine Buchungen. Was Sie über das Kontaktformular senden, kommt als E-Mail an und wird anschließend individuell außerhalb der Website bearbeitet.",
+                "Diese Website wickelt keine Zahlungen ab und bestätigt keine Buchungen. Hat ein Haus eine Detailseite, führt die Schaltfläche „Buchen“ zur Buchungsseite von Beds24, auf der Verfügbarkeit und Endpreis angezeigt werden und bezahlt wird; Vermieter ist der Eigentümer des Hauses, der auf der Detailseite genannt wird, und SEDA Private Homes handelt in seinem Namen und für seine Rechnung. Diese Website veröffentlicht keine Mietpreise: Sie veröffentlicht den Preis der Verwaltungsleistungen, die SEDA für Eigentümer erbringt (Provision und Anmeldegebühr). Was Sie über das Kontaktformular senden, kommt als E-Mail an und wird anschließend individuell außerhalb der Website bearbeitet.",
             },
             {
               tipo: "parrafo",
@@ -564,7 +605,7 @@ export const AVISO_LEGAL: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Diese Website verlinkt Ziele, die sie nicht kontrolliert: die Gäste-App (guests.sedaprivatehomes.com), das Eigentümerportal (portal.sedaprivatehomes.com), hotelesteponaplaza.com und Bewertungsplattformen.",
+                "Diese Website verlinkt Ziele, die sie nicht kontrolliert: die Gäste-App (guests.sedaprivatehomes.com), das Eigentümerportal (portal.sedaprivatehomes.com), die Buchungsseite von Beds24 (beds24.com), hotelesteponaplaza.com und Bewertungsplattformen.",
             },
             {
               tipo: "parrafo",
@@ -585,7 +626,7 @@ export const AVISO_LEGAL: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Die veröffentlichten Informationen sind informativ und stellen kein bindendes Vertragsangebot dar. Die Bedingungen eines Aufenthalts oder eines Verwaltungsauftrags werden mit jedem Gast bzw. Eigentümer schriftlich vereinbart.",
+                "Die veröffentlichten Informationen sind informativ und stellen kein bindendes Vertragsangebot dar. Die Bedingungen eines Aufenthalts werden auf der Buchungsseite angezeigt und akzeptiert; die eines Verwaltungsauftrags werden mit jedem Eigentümer schriftlich vereinbart.",
             },
           ],
         },

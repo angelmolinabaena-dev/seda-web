@@ -1,10 +1,10 @@
 import { getTranslations } from "next-intl/server"
-import { breadcrumbJsonLd, type Crumb, type JsonLd } from "@/lib/jsonld"
+import { breadcrumbJsonLd, type Crumb, type JsonLd, jsonLdString } from "@/lib/jsonld"
 import { asLocale, getSitePage } from "@/lib/site-pages"
 
 /** Un bloque `<script type="application/ld+json">`. */
 export function JsonLdScript({ data }: { data: JsonLd }) {
-  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />
+  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdString(data) }} />
 }
 
 /*

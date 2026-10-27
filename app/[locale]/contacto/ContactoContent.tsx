@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, type ReactNode } from "react"
+import { useEffect, useId, useState, type ReactNode } from "react"
 import { ArrowUpRight } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { Link } from "@/i18n/navigation"
@@ -25,13 +25,16 @@ function Field({
   defaultValue?: string
   autoComplete?: string
 }) {
+  const id = useId()
   return (
     <div className="flex flex-col gap-2">
-      <span className="font-mono text-[10px] tracking-[0.22em] uppercase text-muted-foreground">
+      {/* <label> de verdad (WCAG 1.3.1 / 3.3.2 / 4.1.2): el placeholder no es un nombre accesible. */}
+      <label htmlFor={id} className="font-mono text-[10px] tracking-[0.22em] uppercase text-muted-foreground">
         {label}
         {required && <span aria-hidden className="text-[hsl(var(--gold))] ml-1">*</span>}
-      </span>
+      </label>
       <input
+        id={id}
         type={type}
         name={name}
         placeholder={placeholder}
@@ -82,10 +85,11 @@ function GuestForm() {
         <Field name="services"      label={t("contacto.form.labels.services")} placeholder={t("contacto.form.placeholders.services")} />
       </FormRow>
       <div className="flex flex-col gap-2">
-        <span className="font-mono text-[10px] tracking-[0.22em] uppercase text-muted-foreground">
+        <label htmlFor="campo-notes" className="font-mono text-[10px] tracking-[0.22em] uppercase text-muted-foreground">
           {t("contacto.form.labels.notes")}
-        </span>
+        </label>
         <textarea
+          id="campo-notes"
           name="notes"
           maxLength={FIELD_SPEC.notes.max}
           placeholder={t("contacto.form.placeholders.notes_guest")}
@@ -124,10 +128,11 @@ function OwnerForm() {
       </FormRow>
       <Field name="goal" label={t("contacto.form.labels.goal")} placeholder={t("contacto.form.placeholders.goal")} />
       <div className="flex flex-col gap-2">
-        <span className="font-mono text-[10px] tracking-[0.22em] uppercase text-muted-foreground">
+        <label htmlFor="campo-notes" className="font-mono text-[10px] tracking-[0.22em] uppercase text-muted-foreground">
           {t("contacto.form.labels.notes")}
-        </span>
+        </label>
         <textarea
+          id="campo-notes"
           name="notes"
           maxLength={FIELD_SPEC.notes.max}
           placeholder={t("contacto.form.placeholders.notes_owner")}
@@ -165,11 +170,12 @@ function OtherForm() {
         <Field name="subject" label={t("contacto.form.labels.subject")} placeholder={t("contacto.form.placeholders.subject")} required />
       </FormRow>
       <div className="flex flex-col gap-2">
-        <span className="font-mono text-[10px] tracking-[0.22em] uppercase text-muted-foreground">
+        <label htmlFor="campo-message" className="font-mono text-[10px] tracking-[0.22em] uppercase text-muted-foreground">
           {t("contacto.form.labels.message")}
           <span aria-hidden className="text-[hsl(var(--gold))] ml-1">*</span>
-        </span>
+        </label>
         <textarea
+          id="campo-message"
           name="message"
           required
           minLength={FIELD_SPEC.message.min}

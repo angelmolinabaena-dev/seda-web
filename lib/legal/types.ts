@@ -1,5 +1,5 @@
 import type { Locale } from "@/i18n/routing"
-import type { DocumentoId } from "./entity"
+import type { DocumentoId, FormaJuridica } from "./entity"
 
 /*
   Modelo de contenido de las páginas legales.
@@ -17,7 +17,11 @@ import type { DocumentoId } from "./entity"
 */
 
 export type BloqueLegal =
-  | { tipo: "parrafo"; texto: string }
+  /**
+   * `solo`: el párrafo se publica únicamente con esa forma jurídica
+   * (`legalEntity.formaJuridica`). Sin `solo`, siempre.
+   */
+  | { tipo: "parrafo"; texto: string; solo?: FormaJuridica }
   | { tipo: "lista"; items: string[] }
   | { tipo: "tabla"; cabeceras: string[]; filas: string[][] }
   /** Bloque de datos identificativos, pintado desde `legalEntity`. */

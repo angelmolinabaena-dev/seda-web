@@ -15,7 +15,8 @@ import "./globals.css"
 */
 
 export const metadata = {
-  title: "Not found · Página no encontrada — SEDA Private Homes",
+  // Sin «· SEDA Private Homes»: la plantilla del layout ya lo añade (REA M-5).
+  title: "Not found · Página no encontrada",
 }
 
 export default function RootNotFound() {

@@ -12,6 +12,16 @@ import {
 /*
   Contact form backend — the only data-entry point of the public site.
 
+  Solo acepta POST del propio sitio (REA seda-web 2026-10, I-12): `Origin`
+  tiene que ser el host al que se ha llamado (o sedaprivatehomes.com) y el
+  cuerpo tiene que llegar como `application/json`. Antes entraba un
+  `text/plain` desde cualquier origen —una petición «simple», sin preflight—
+  y un goteo desde una página ajena agotaba el cupo diario de Resend. Esto
+  frena los POST entre sitios hechos desde un navegador; NO frena un script
+  que falsee las cabeceras: eso es del límite de frecuencia (abajo, por
+  instancia) y de una regla en el Firewall de Vercel, que solo se pone en el
+  panel.
+
   Setup:
     1. Create account at resend.com (free tier: 100 emails/day, 3k/mo)
     2. Add domain sedaprivatehomes.com + verify DNS
@@ -165,6 +175,32 @@ function rateLimit(key: string) {
   return { ok: true as const }
 }
 
+const SITE_HOSTS = ["sedaprivatehomes.com", "www.sedaprivatehomes.com"]
+
+/**
+ * ¿La petición viene de una página de este mismo sitio? Un navegador manda
+ * `Origin` en todo POST y la página que lo escribe no puede falsearlo.
+ * `Sec-Fetch-Site`, si viene, tiene que decir same-origin. Sin `Origin`
+ * (curl, scripts) no se acepta.
+ */
+function esMismoOrigen(req: Request): boolean {
+  const origin = req.headers.get("origin")
+  if (!origin) return false
+  const fetchSite = req.headers.get("sec-fetch-site")
+  if (fetchSite && fetchSite !== "same-origin") return false
+  let host: string
+  try {
+    host = new URL(origin).host
+  } catch {
+    return false
+  }
+  const propios = new Set(SITE_HOSTS)
+  for (const h of [new URL(req.url).host, req.headers.get("host"), req.headers.get("x-forwarded-host")]) {
+    if (h) propios.add(h.split(",")[0].trim())
+  }
+  return propios.has(host)
+}
+
 function clientKey(req: Request) {
   const fwd = req.headers.get("x-forwarded-for")
   if (fwd) return fwd.split(",")[0].trim()
@@ -172,6 +208,14 @@ function clientKey(req: Request) {
 }
 
 export async function POST(req: Request) {
+  // Antes que el límite de frecuencia: lo que viene de otro sitio no gasta cupo de nadie.
+  if (!esMismoOrigen(req)) {
+    return NextResponse.json({ ok: false, error: "forbidden_origin" }, { status: 403 })
+  }
+  if (!/^application\/json\b/i.test(req.headers.get("content-type") ?? "")) {
+    return NextResponse.json({ ok: false, error: "unsupported_media_type" }, { status: 415 })
+  }
+
   const limit = rateLimit(clientKey(req))
   if (!limit.ok) {
     return NextResponse.json(

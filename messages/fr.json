@@ -60,7 +60,7 @@
       "eyebrow": "— 02 · Qui nous sommes",
       "h2": "Gestion de villas privées sur la Costa del Sol, pilotée par notre propre logiciel.",
       "body1": "Seda OS est le système d'exploitation sur lequel nous avons bâti tout le reste. Il relie chaque villa à ceux qui la gèrent et à ceux qui l'habitent.",
-      "body2": "Les propriétaires disposent d'un portail avec compte de résultat, relevés de gérance, tarification et conformité fiscale en temps réel. Les voyageurs reçoivent une Guest App avec un concierge IA en cinq langues — et tout ce dont ils ont besoin se trouve à un message près.",
+      "body2": "Les propriétaires disposent d'un portail avec compte de résultat, relevés de gérance et conformité fiscale en temps réel. Les voyageurs reçoivent une Guest App avec un concierge IA en cinq langues — et tout ce dont ils ont besoin se trouve à un message près.",
       "tagline": "L'hospitalité d'un hôtel, dans l'intimité d'une maison."
     },
     "journey": {
@@ -183,7 +183,7 @@
         "italic": "ne voyez pas",
         "line2": ", mais qui coordonne tout."
       },
-      "body": "Notre propre couche logicielle, qui relie réservations, voyageurs, propriétaires, maintenance et opérations en temps réel. Pas de SaaS générique. Pas d'improvisation.",
+      "body": "Notre propre couche logicielle, connectée à Beds24, qui réunit réservations, voyageurs, propriétaires, maintenance et opérations. Pas d'improvisation.",
       "cta": "Découvrir SEDA OS",
       "modules": {
         "reservas": "Réservations",
@@ -196,13 +196,7 @@
     },
     "dashboard": {
       "topbar": "Reporting propriétaire",
-      "location": "Marbella · Aujourd'hui",
-      "kpi": {
-        "ingresos": "Revenu prévisionnel",
-        "ingresos_sub": "T3 2026",
-        "reservas": "Réservations actives",
-        "reservas_sub": "90 prochains jours"
-      },
+      "location": "Données d'exemple",
       "calendar": {
         "title": "Calendrier unifié · Casa Ciprés",
         "range": "Juil — Sept 2026",
@@ -214,9 +208,9 @@
         "title": "Relevé de gérance d'exemple · réservation directe",
         "row1": "Revenu brut",
         "row2": "Base de calcul (hors ménage)",
-        "row3": "Commission SEDA · 24% de la base",
+        "row3": "Commission SEDA · [[tarifa.comision]], max. [[tarifa.tope]]",
         "row4": "Net au propriétaire",
-        "note": "Réservation directe. Pour une réservation via un canal, la commission de la plateforme est déduite en premier. Le ménage revient au propriétaire et n'entre pas dans la base."
+        "note": "Réservation directe. Pour une réservation via un canal, la commission de la plateforme est déduite en premier. Le ménage revient au propriétaire et n'entre pas dans la base. La commission est soumise à la TVA en sus ([[tarifa.liqIva]] dans cet exemple, non déduite du net)."
       },
       "status": {
         "title": "État opérationnel",
@@ -298,7 +292,7 @@
         },
         "q7": {
           "q": "Comment ma propriété est-elle protégée ?",
-          "a": "Vérification des voyageurs, assurances spécifiques, inventaire numérique, inspections entre séjours et protocoles d'entretien. Votre résidence est traitée comme si elle était la nôtre."
+          "a": "Inventaire numérique, inspections entre séjours et protocoles d'entretien. Votre résidence est traitée comme si elle était la nôtre."
         }
       }
     },
@@ -341,7 +335,7 @@
         "line1": "Votre propriété,",
         "italic": "pleinement sous contrôle."
       },
-      "body": "SEDA OS est la couche logicielle propriétaire qui orchestre réservations, opérations, maintenance, marketing et relevés de gérance. Pas de SaaS générique. Pas d'improvisation.",
+      "body": "SEDA OS est notre propre couche logicielle, connectée à Beds24, qui orchestre réservations, opérations, maintenance, marketing et relevés de gérance. Pas d'improvisation.",
       "image_alt": "Résidence au coucher du soleil avec le Portail Propriétaires"
     },
     "os": {
@@ -353,8 +347,8 @@
         "resenas": "Avis",
         "propietario": "Propriétaire"
       },
-      "live": "SEDA OS · LIVE",
-      "operative": "OPÉRATIONNEL",
+      "live": "SEDA OS · VUE D'EXEMPLE",
+      "operative": "EXEMPLE",
       "kpi": {
         "llegadas": "Arrivées aujourd'hui",
         "llegadas_d": "2 confirmées",
@@ -364,9 +358,9 @@
       "liq_title": "Relevé de gérance d'exemple · réservation directe",
       "liq_sepa": "Versement SEPA · 01 Nov",
       "liq_ingresos": "Revenu brut",
-      "liq_comision": "Commission 24%",
+      "liq_comision": "Commission · max. [[tarifa.tope]]",
       "liq_base": "Base (hors ménage)",
-      "liq_nota": "Réservation directe. Pour une réservation via un canal, la commission de la plateforme est déduite en premier. Le ménage revient au propriétaire et n'entre pas dans la base.",
+      "liq_nota": "Réservation directe. Pour une réservation via un canal, la commission de la plateforme est déduite en premier. Le ménage revient au propriétaire et n'entre pas dans la base. La commission est soumise à la TVA en sus ([[tarifa.liqIva]] dans cet exemple, non déduite du net).",
       "ga_title": "État Guest App",
       "ga_app": "Guest App",
       "ga_app_state": "Active",
@@ -403,7 +397,7 @@
     "marketing": {
       "eyebrow": "— Intelligence marketing",
       "h2": {
-        "line1": "Conversion, tarification, réputation,",
+        "line1": "Conversion, réputation,",
         "italic": "SEO."
       },
       "body": "Une fenêtre transparente sur votre investissement et un moteur marketing sans relâche. Informations opérationnelles, financières et juridiques en temps réel.",
@@ -412,15 +406,10 @@
       "desc_h3": "Descriptions premium",
       "desc_body": "Textes éditoriaux qui mettent en valeur la singularité de votre propriété.",
       "desc_quote": "« Un refuge où le calcaire rencontre la mer d'Alboran… »",
-      "compset_h3": "Analyse concurrentielle",
-      "compset_body": "Suivi du compset Costa del Sol.",
-      "pricing_h3": "Tarification dynamique",
-      "pricing_body": "Demande, saisonnalité et événements locaux.",
-      "pricing_suggested": "SUGGÉRÉ AUJOURD'HUI",
       "reputation_h3": "Réputation premium",
       "reputation_body": "Gestion impeccable des avis pour maintenir le statut 5★.",
       "seo_h3": "SEO à forte intention",
-      "seo_meta": "Position moyenne",
+      "seo_meta": "Exemples de recherches",
       "seo_kw1": "Villa de luxe Marbella",
       "seo_kw2": "Location Costa del Sol",
       "seo_kw3": "Villa Puerto Banús",
@@ -442,7 +431,7 @@
         },
         "ses": {
           "t": "SES Hospedajes",
-          "b": "Vérification d'identité du voyageur à l'arrivée."
+          "b": "Communication des données voyageurs au ministère de l'Intérieur : intégration en préparation."
         },
         "m179": {
           "t": "Déclarations AEAT",
@@ -476,12 +465,11 @@
         "line1": "Six modules.",
         "italic": "Un seul système."
       },
-      "version": "v 4.2 · Build 2026.10",
       "mod": {
         "reservas": {
           "name": "Réservations",
-          "label": "Moteur de réservation",
-          "body": "Moteur multicanal propriétaire avec synchronisation en temps réel, anti-surréservation et politiques dynamiques."
+          "label": "Calendrier et canaux",
+          "body": "Logiciel propre connecté à Beds24 : réservations et canaux dans un calendrier unifié."
         },
         "huespedes": {
           "name": "Voyageurs",
@@ -496,7 +484,7 @@
         "marketing": {
           "name": "Marketing",
           "label": "Distribution",
-          "body": "Gestion des OTA, SEO, tarification dynamique et campagnes internationales coordonnées depuis un tableau de bord unique."
+          "body": "Gestion des OTA, SEO et campagnes internationales coordonnées depuis un tableau de bord unique."
         },
         "finanzas": {
           "name": "Finances",
@@ -528,9 +516,10 @@
       "cta": "Demander une évaluation précise",
       "projection": "Projection SEDA OS",
       "gross": "Revenu brut annuel",
-      "net": "Net au propriétaire (OTA – direct)",
-      "disclaimer": "ⓘ Estimation calculée uniquement à partir du taux d'occupation et de l'ADR que vous saisissez : revenus bruts = occupation × 365 jours × ADR. Le net est présenté sous forme de fourchette entre une réservation directe (0% de commission de canal) et une OTA type Airbnb (15%) : dans les deux cas, la commission SEDA de 24% s'applique à l'hébergement après déduction de la commission du canal et du forfait de ménage, jamais sur le brut. L'ADR s'entend comme le tarif d'hébergement, hors ménage. Hors impôts, charges et dépenses de la propriété. Il ne s'agit ni d'une offre ni d'une prévision de résultats.",
-      "net_note": "Les 24% s'appliquent uniquement à l'hébergement : nous déduisons d'abord la commission de la plateforme et le forfait de ménage, qui vous revient intégralement. Rapporté au total payé par le voyageur, l'effet réel avoisine 18%. Certaines conciergeries annoncent un pourcentage plus bas appliqué à une base plus large : demandez toujours la base de calcul."
+      "net": "Net au propriétaire, avant TVA (OTA – direct)",
+      "disclaimer": "ⓘ Estimation calculée uniquement à partir du taux d'occupation et de l'ADR que vous saisissez : revenus bruts = occupation × 365 jours × ADR. Le net est présenté sous forme de fourchette entre une réservation directe (0% de commission de canal) et une OTA type Airbnb ([[tarifa.ejCanalPct]]) : dans les deux cas, la commission SEDA est la plus basse entre [[tarifa.comision]] de l'hébergement après la commission du canal et [[tarifa.tope]] de l'hébergement, jamais sur le brut ni sur le ménage. L'ADR s'entend comme le tarif d'hébergement, hors ménage. Le net est avant la TVA sur la commission, présentée séparément. Hors impôts, charges et dépenses de la propriété. Il ne s'agit ni d'une offre ni d'une prévision de résultats.",
+      "net_note": "Les [[tarifa.comision]] s'appliquent uniquement à l'hébergement, après déduction de la commission de la plateforme (le ménage vous revient intégralement et ne compte pas), et ne dépassent jamais [[tarifa.tope]] du prix de l'hébergement. La TVA de [[tarifa.iva]] sur la commission s'ajoute et n'est pas incluse dans ces chiffres. Certaines conciergeries annoncent un pourcentage plus bas appliqué à une base plus large : demandez toujours la base de calcul.",
+      "iva_label": "TVA sur la commission, en sus (OTA – direct)"
     },
     "faq": {
       "eyebrow": "— Questions fréquentes",
@@ -542,11 +531,11 @@
       "items": {
         "q1": {
           "q": "Quelle commission SEDA applique-t-il pour gérer ma propriété ?",
-          "a": "Nous appliquons une commission de 24% sur l'hébergement, après déduction de la commission de la plateforme (Airbnb, Booking...) et du forfait de ménage, qui vous revient intégralement : jamais sur le brut. Rapporté au total payé par le voyageur, l'effet réel avoisine 18%. Détaillée dans chaque relevé de gérance mensuel dans SEDA OS. Pas de frais fixes ni de pénalité de sortie. Les trois premières signatures directes ne paient pas de frais d'inscription ; les quatrième et cinquième paient 490 €, puis les frais s'élèvent à 1 290 € (hors TVA)."
+          "a": "Un seul forfait, sans engagement de durée : [[tarifa.comision]] + TVA sur ce qui reste de l'hébergement après la commission du canal (Airbnb, Booking...), hors ménage, qui vous revient intégralement ; et jamais plus de [[tarifa.tope]] du prix de l'hébergement. Pour [[tarifa.ejAlojamiento]] d'hébergement : en réservation directe, ce taux donnerait [[tarifa.ejDirecta21]], mais le plafond s'applique et cela fait [[tarifa.ejDirecta]] ; via un canal qui prélève [[tarifa.ejCanalPct]] ([[tarifa.ejCanal]]), [[tarifa.ejAirbnb]]. La TVA de [[tarifa.iva]] s'ajoute à ces chiffres. Pour l'entretien, une marge de [[tarifa.margen]] ne s'applique que sur la part au-delà de [[tarifa.umbral]] (hors TVA). Détaillée dans chaque relevé de gérance mensuel dans SEDA OS. Pas de frais fixes ni de pénalité de sortie, avec un mois de préavis. Les trois premières signatures directes ne paient pas de frais d'inscription ; les quatrième et cinquième paient [[tarifa.alta490]], puis les frais s'élèvent à [[tarifa.altaEstandar]] (hors TVA)."
         },
         "q2": {
           "q": "Qui s'occupe des voyageurs, et quand ?",
-          "a": "Une équipe SEDA salariée localement sur la Costa del Sol, disponible 24 h/24, 7 j/7 via la Guest App. Les questions courantes sont préfiltrées par Ask SEDA (concierge IA) puis transmises à un concierge humain selon le contexte. Temps de réponse moyen : moins de 2 minutes."
+          "a": "L'équipe SEDA accompagne les voyageurs via la Guest App. Les questions courantes sont préfiltrées par Ask SEDA (concierge IA) puis transmises à un membre de l'équipe selon le contexte."
         },
         "q3": {
           "q": "Qu'en est-il des obligations fiscales sur ma propriété ?",
@@ -558,7 +547,7 @@
         },
         "q5": {
           "q": "Puis-je utiliser ma propriété quand je le souhaite ?",
-          "a": "Oui. Bloquez les dates dans SEDA OS ou dans le Portail Propriétaires. L'équipe prépare la maison pour votre arrivée comme pour tout autre séjour, sans coût supplémentaire (seuls le ménage et le réapprovisionnement sont facturés, aux tarifs internes)."
+          "a": "Oui, avec un préavis. Bloquez les dates à l'avance dans SEDA OS ou dans le Portail Propriétaires. L'équipe prépare la maison pour votre arrivée comme pour tout autre séjour ; seuls le ménage et le réapprovisionnement sont facturés, détaillés dans votre relevé de gérance."
         },
         "q6": {
           "q": "Comment SEDA choisit-il les propriétés qu'il accepte ?",
@@ -566,7 +555,7 @@
         },
         "q7": {
           "q": "Que se passe-t-il si je souhaite résilier le contrat ?",
-          "a": "Soixante jours de préavis, sans pénalités. Les réservations confirmées sont honorées jusqu'à leur date de départ. Les données opérationnelles, la photographie professionnelle et les avis appartiennent au propriétaire et sont exportables à tout moment."
+          "a": "Préavis d'un mois, sans engagement de durée et sans pénalités. Les réservations confirmées sont honorées jusqu'à leur date de départ. Les données opérationnelles, la photographie professionnelle et les avis appartiennent au propriétaire et sont exportables à tout moment."
         }
       }
     },
@@ -733,13 +722,13 @@
         "concierge_t": "Conciergerie 24/7",
         "concierge_b": "Équipe locale SEDA + Ask SEDA IA. Réponse en moins de 2 min.",
         "lang_t": "Multilingue",
-        "lang_b": "ES · EN · DE · FR nativement, sans traduction automatique.",
+        "lang_b": "ES · EN · DE · FR · IT.",
         "exp_t": "Expériences",
         "exp_b": "Chef, massage, bateau et golf, réservables à l'avance.",
         "manual_t": "Manuel de la villa",
         "manual_b": "Climatisation, cuisine, piscine, sauna — tout est documenté.",
         "privacy_t": "Confidentialité",
-        "privacy_b": "Données chiffrées. Aucun pistage tiers.",
+        "privacy_b": "Données chiffrées.",
         "compliance_t": "Conformité",
         "compliance_b": "RD 933/2021 · SES Hospedajes · signature numérique."
       }
@@ -749,7 +738,7 @@
       "i2": "Conciergerie en direct",
       "i3": "Découvrir la Costa del Sol",
       "i4": "Réservations intégrées",
-      "i5": "Multilingue ES·EN·DE·FR",
+      "i5": "Multilingue ES·EN·DE·FR·IT",
       "i6": "Climatisation intelligente",
       "i7": "Assistance 24/7",
       "i8": "Manuel natif de la villa"
@@ -757,10 +746,10 @@
     "final": {
       "eyebrow": "— Un produit réel",
       "h2": {
-        "line1": "Essayez l'app",
-        "italic": "comme un vrai voyageur."
+        "line1": "Voici comment",
+        "italic": "un voyageur vit l'app."
       },
-      "body": "Accès direct à l'environnement voyageur SEDA. Ouverture de porte, plan, Ask SEDA et Découvrir.",
+      "body": "Les voyageurs se connectent avec le lien ou le code de leur réservation : arrivée, plan, Ask SEDA et Discover.",
       "cta_acceso": "Espace voyageurs"
     }
   },
@@ -912,7 +901,7 @@
       "t3": {
         "period": "Fondateur",
         "location": "Estepona · Málaga",
-        "body": "Propriétaire-exploitant d'un hôtel boutique de 36 chambres en bord de mer. Hôtel de l'année en Espagne (Core Hospitality), Travellers' Choice TripAdvisor, Traveller Review Award Booking.com, Expedia et Orbitz — cinq distinctions consécutives, obtenues en partant de zéro."
+        "body": "Propriétaire-exploitant d'un hôtel boutique de 36 chambres en bord de mer. Hôtel de l'année en Espagne (Core Hospitality), Travellers' Choice TripAdvisor, Traveller Review Award Booking.com, Expedia et Orbitz — cinq distinctions de cinq plateformes, obtenues en partant de zéro."
       },
       "t4": {
         "period": "Prochaine ouverture",
@@ -928,10 +917,10 @@
     "hotel": {
       "eyebrow": "01 · L'hôtel",
       "h2": "Hotel Estepona Plaza, bâti sur les <i>avis</i>.",
-      "body": "Hôtel boutique de 36 chambres face à la plage de La Rada, à Estepona. Récompensé de manière consécutive par les plateformes qui mesurent la seule chose qui compte : ce que le voyageur dit en rentrant chez lui.",
+      "body": "Hôtel boutique de 36 chambres face à la plage de La Rada, à Estepona. Récompensé par les plateformes qui mesurent la seule chose qui compte : ce que le voyageur dit en rentrant chez lui.",
       "k1": "Chambres\n4 catégories",
       "k2": "Note moyenne\nBooking · TripAdvisor",
-      "k3": "Distinctions consécutives\nBooking · TripAdvisor · Expedia · Orbitz · Core",
+      "k3": "Cinq distinctions\nBooking · TripAdvisor · Expedia · Orbitz · Core",
       "k4_value": "N° 1",
       "k4": "Hôtel de l'année\nEspagne · Core Hospitality"
     },
@@ -958,7 +947,7 @@
     "awards": {
       "eyebrow": "03 · Distinctions",
       "h2": "La mesure d'<i>un métier bien fait</i>.",
-      "body": "Cinq distinctions consécutives — non pour le marketing, mais pour la seule chose que mesurent les plateformes : ce que les voyageurs disent en rentrant chez eux.",
+      "body": "Cinq distinctions de cinq plateformes — non pour le marketing, mais pour la seule chose que mesurent les plateformes : ce que les voyageurs disent en rentrant chez eux.",
       "more": "Plus sur"
     },
     "cta": {
@@ -1233,7 +1222,7 @@
       },
       "q2": {
         "q": "Quelles commissions s'appliquent ?",
-        "a": "Nous appliquons une commission de 24% sur l'hébergement de chaque réservation, après déduction de la commission de la plateforme et du forfait de ménage. Pas de frais fixes ni de pénalité de sortie. Les trois premières signatures directes ne paient pas de frais d'inscription ; les quatrième et cinquième paient 490 €, puis les frais s'élèvent à 1 290 € (hors TVA). Chaque relevé de gérance mensuel détaille le calcul."
+        "a": "Un seul forfait, sans engagement de durée : [[tarifa.comision]] + TVA sur l'hébergement de chaque réservation après la commission du canal (le ménage ne compte pas), et jamais plus de [[tarifa.tope]] du prix de l'hébergement. Pour [[tarifa.ejAlojamiento]] d'hébergement : [[tarifa.ejDirecta]] en réservation directe et [[tarifa.ejAirbnb]] via un canal à [[tarifa.ejCanalPct]] ; la TVA de [[tarifa.iva]] s'ajoute. Pour l'entretien, une marge de [[tarifa.margen]] ne s'applique que sur la part au-delà de [[tarifa.umbral]] (hors TVA). Pas de frais fixes ni de pénalité de sortie (préavis d'un mois). Les trois premières signatures directes ne paient pas de frais d'inscription ; les quatrième et cinquième paient [[tarifa.alta490]], puis les frais s'élèvent à [[tarifa.altaEstandar]] (hors TVA). Chaque relevé de gérance mensuel détaille le calcul."
       },
       "q3": {
         "q": "Comment consulter mes revenus ?",
@@ -1245,11 +1234,11 @@
       },
       "q5": {
         "q": "Comment ma propriété est-elle protégée ?",
-        "a": "Vérification des voyageurs, assurances spécifiques, inventaire numérique, inspections entre séjours et protocoles d'entretien. Votre résidence est traitée comme si elle était la nôtre."
+        "a": "Inventaire numérique, inspections entre séjours et protocoles d'entretien. Votre résidence est traitée comme si elle était la nôtre."
       },
       "q6": {
         "q": "Conformité fiscale ? Déclarations AEAT, RD 933, IRNR.",
-        "a": "Automatisé dès l'intégration de la villa dans SEDA OS. Votre conseiller fiscal reçoit des données rapprochées, exportables dans le format qu'il souhaite."
+        "a": "SEDA OS prépare les données dès l'intégration de la villa. Votre conseiller fiscal reçoit des données rapprochées, exportables dans le format qu'il souhaite, et c'est lui qui dépose les déclarations."
       }
     }
   },
@@ -1464,27 +1453,109 @@
       "personas": "Personnes",
       "fechas_error": "Le départ doit être postérieur à l'arrivée.",
       "cta": "Réserver",
-      "nota": "La disponibilité, le prix final et le paiement sont gérés dans Beds24, le système de réservation de SEDA."
+      "nota": "La disponibilité, le prix final et le paiement sont gérés sur la page de réservation de Beds24."
     },
     "meta": {
-      "description": "{nombre} : {tipo} à {municipio}, Costa del Sol. Réservation directe avec SEDA Private Homes."
+      "description": "{nombre} : {tipo} à {municipio}, Costa del Sol. Bailleur : {arrendador} · géré par SEDA Private Homes."
     },
     "fotos": {
       "terraza": "Image illustrative : un verre de vin blanc sur une terrasse face à la mer, au coucher du soleil",
       "bienvenida": "Image illustrative : console d'accueil avec des fleurs, des clés et une carte",
       "despedida": "Image illustrative : table de terrasse avec un café et un mot d'au revoir, à l'aube"
+    },
+    "arrendador": {
+      "linea": "Bailleur : {nombre} · géré par SEDA Private Homes",
+      "nota": "SEDA Private Homes agit au nom et pour le compte du propriétaire."
     }
   },
   "meet": {
     "meta": {
       "title": "Réserver un appel",
       "description": "Trente minutes. Aucune proposition à la fin sauf si nous le souhaitons tous les deux."
+    },
+    "copy": {
+      "eyebrow": "PROGRAMME PROPRIÉTAIRES FONDATEURS",
+      "h1": {
+        "l1": "Une conversation sur votre résidence",
+        "l2": "sur la Costa del Sol."
+      },
+      "sub": "Trente minutes. Aucune proposition à la fin sauf si nous le souhaitons tous les deux.",
+      "cta": "Choisir un horaire →",
+      "coverTitle": "Ce que nous aborderons en 30 minutes",
+      "cover": {
+        "b1": "Votre propriété et votre situation",
+        "b2": "Comment fonctionnent les conditions Propriétaire Fondateur",
+        "b3": "Si nous sommes les bons gestionnaires pour vous"
+      },
+      "diffsTitle": "Trois choses que nous faisons différemment",
+      "diffs": {
+        "d1": {
+          "title": "Conformité documentée",
+          "body": "Enregistrement des voyageurs (RD 933/2021) intégré et prêt pour SES.HOSPEDAJES. Nous préparons et documentons les informations fiscales pour que votre conseiller les dépose."
+        },
+        "d2": {
+          "title": "Rapport mensuel dans votre langue",
+          "body": "Un état financier de deux pages le 5 de chaque mois."
+        },
+        "d3": {
+          "title": "Géré par le fondateur",
+          "body": "Vous me contactez directement. Trois personnes connaîtront votre maison personnellement. Jamais de file d'attente de tickets."
+        }
+      },
+      "seats": "Inscription offerte pour les 3 premières signatures directes · [[tarifa.comision]] + TVA sur l'hébergement après la commission du canal (hors ménage), jamais plus de [[tarifa.tope]] du prix de l'hébergement · sans engagement de durée, préavis d'un mois",
+      "calendly": {
+        "aviso": "Le calendrier est fourni par Calendly. Lorsque vous appuyez sur « Voir le calendrier », votre navigateur se connecte à calendly.com et Calendly dépose ses propres cookies.",
+        "verCalendario": "Voir le calendrier",
+        "enlaceDirecto": "Ou ouvrez-le sur calendly.com",
+        "politicaCookies": "Politique de cookies",
+        "tituloIframe": "Calendrier Calendly pour réserver un appel avec SEDA Private Homes"
+      },
+      "fallbackTitle": "Préférez-vous écrire d'abord ?",
+      "fallbackBody": "Écrivez-moi directement à :",
+      "contextLinkLabel": "En savoir plus sur le programme avant de réserver →"
     }
   },
   "founding": {
     "meta": {
       "title": "Propriétaires fondateurs",
       "description": "Les standards hôteliers pour votre villa."
+    },
+    "copy": {
+      "badge": "PROPRIÉTAIRES FONDATEURS · INSCRIPTION OFFERTE LIMITÉE",
+      "seatsLeft": "Inscription offerte pour les 3 premières signatures directes",
+      "h1": {
+        "l1": "Les standards hôteliers",
+        "l2": "pour votre villa."
+      },
+      "body": "Nous sommes Ángel Molina (8 ans chez Iberostar + Les Roches MHM) et notre équipe. Sur la Costa del Sol, nous construisons la première gestion de villas au niveau d'un hôtel de luxe : transparence totale et technologie propriétaire.",
+      "trust": {
+        "t1": "8 ans Iberostar",
+        "t2": "Les Roches MHM"
+      },
+      "cta": "Réserver un entretien",
+      "diffs": {
+        "d1": {
+          "title": "Transparence totale",
+          "body": "Votre propre tableau de bord 24/7 avec réservations, revenus et dépenses en temps réel. Aucune surprise lors du règlement mensuel."
+        },
+        "d2": {
+          "title": "Commission juste et claire",
+          "body": "Un seul forfait : [[tarifa.comision]] + TVA sur l'hébergement après déduction de la commission du canal (Airbnb, Booking...), hors forfait de ménage, et jamais plus de [[tarifa.tope]] du prix de l'hébergement. Exemple : une réservation Airbnb de [[tarifa.resBruto]] avec [[tarifa.resLimpieza]] de ménage → hébergement [[tarifa.resAlojamiento]] ; moins [[tarifa.resCanal]] de commission du canal → base [[tarifa.resBase]] → commission SEDA [[tarifa.resComision]] (le plafond de [[tarifa.tope]] serait de [[tarifa.resTope]] : il ne s'applique pas), plus [[tarifa.resIva]] de TVA. Sans engagement de durée et avec un mois de préavis. Sans clause cachée : demandez toujours la base de calcul."
+        },
+        "d3": {
+          "title": "Conformité documentée",
+          "body": "Enregistrement des voyageurs intégré (RD 933/2021), prêt pour la communication à SES.Hospedajes. Nous préparons la documentation des déclarations informatives de location touristique exigées par l'administration fiscale (AEAT) et de l'IRNR des non-résidents pour que votre cabinet comptable la dépose."
+        }
+      },
+      "founderTitle": "Qui sommes-nous",
+      "founderBio": "Ángel Molina combine 8 ans d'opérations hôtelières chez Iberostar avec une formation en gestion hôtelière de luxe (Les Roches MHM). Seda Private Homes est la société de gestion que j'aurais voulu voir exister : la rigueur d'un grand hôtel appliquée aux villas privées de la Costa del Sol.",
+      "ctaEyebrow": "PROGRAMME PROPRIÉTAIRES FONDATEURS",
+      "ctaH2": {
+        "l1": "15 minutes suffisent",
+        "l2": "pour savoir si ça correspond."
+      },
+      "ctaBody": "Parlez-nous de votre propriété. Si c'est un bon match, nous vous enverrons la proposition complète sous 24 heures.",
+      "ctaBtn": "Réserver un appel"
     }
   }
 }

@@ -1,7 +1,8 @@
 import type { Metadata } from "next"
 import { Link } from "@/i18n/navigation"
 import { getTranslations, setRequestLocale } from "next-intl/server"
-import type { LocaleParams } from "@/i18n/routing"
+import type { Locale, LocaleParams } from "@/i18n/routing"
+import { pieLegal } from "@/lib/legal/entity"
 import { localizedMetadata } from "@/lib/site-pages"
 import { Calendar, Shield, Mail, ArrowRight } from "lucide-react"
 import { CalendlyFachada, type CalendlyFachadaCopy } from "./CalendlyFachada"
@@ -18,7 +19,7 @@ import { CalendlyFachada, type CalendlyFachadaCopy } from "./CalendlyFachada"
     /meet            → booking-only, minimal copy, Calendly embed inline
 
   Pattern:
-    - Inline per-locale COPY object (same convention as /founding-owners)
+    - Copy in messages/<locale>.json (`meet.copy`, same as /founding-owners)
     - noindex (this is a conversion landing, not for organic search)
     - Calendly behind a facade (CalendlyFachada): the iframe only loads when
       the visitor clicks «Ver calendario», after a notice that Calendly sets
@@ -27,12 +28,11 @@ import { CalendlyFachada, type CalendlyFachadaCopy } from "./CalendlyFachada"
 */
 
 const CALENDLY_URL = "https://calendly.com/sedaprivatehomes-info"
+const CONTACT_EMAIL = "angel@sedaprivatehomes.com"
 
 // Calendly embed URL. No `hide_gdpr_banner`: Calendly shows its own cookie notice.
 const CALENDLY_EMBED =
   `${CALENDLY_URL}?hide_event_type_details=1&primary_color=4a5340`
-
-type Locale = "es" | "en" | "fr" | "de"
 
 // Title and description in the URL's language (messages/<locale>.json,
 // `meet.meta`). The root layout appends « · SEDA Private Homes».
@@ -46,207 +46,50 @@ export async function generateMetadata({ params }: LocaleParams): Promise<Metada
   }
 }
 
-const COPY: Record<
-  Locale,
-  {
-    eyebrow: string
-    h1: [string, string]
-    sub: string
-    cta: string
-    coverTitle: string
-    coverBullets: string[]
-    diffsTitle: string
-    diffs: { title: string; body: string }[]
-    seats: string
-    calendly: CalendlyFachadaCopy
-    fallbackTitle: string
-    fallbackBody: string
-    fallbackLink: string
-    contextLink: string
-    contextLinkLabel: string
-    footer: string
-  }
-> = {
-  es: {
-    eyebrow: "PROGRAMA PROPIETARIOS FUNDADORES",
-    h1: ["Una conversación sobre tu residencia", "en la Costa del Sol."],
-    sub: "Treinta minutos. Sin propuesta al final salvo que ambos queramos continuar.",
-    cta: "Reservar una hora →",
-    coverTitle: "Qué cubriremos en 30 minutos",
-    coverBullets: [
-      "Tu propiedad y tu situación actual",
-      "Cómo funcionan las condiciones de Propietario Fundador",
-      "Si somos los gestores adecuados para ti",
-    ],
-    diffsTitle: "Tres cosas que hacemos diferente",
-    diffs: [
-      {
-        title: "Compliance automatizado",
-        body: "Registro de viajeros (RD 933/2021) integrado y preparado para SES.HOSPEDAJES. Preparamos y documentamos la información fiscal para que tu asesor la presente.",
-      },
-      {
-        title: "Informe mensual en tu idioma",
-        body: "Un estado financiero de dos páginas el día 5 de cada mes. Estructura de comisión fiscalmente deducible documentada.",
-      },
-      {
-        title: "Gestionado por el fundador",
-        body: "Contactas directamente conmigo. Tres personas conocerán tu casa personalmente. Nunca habrá una cola de tickets.",
-      },
-    ],
-    seats: "Alta gratuita para las 3 primeras firmas directas · 24% de comisión sobre base neta (bruto menos comisión de canal y limpieza)",
-    calendly: {
-      aviso: "El calendario lo sirve Calendly. Al pulsar «Ver calendario», tu navegador se conecta con calendly.com y Calendly pone sus propias cookies.",
-      verCalendario: "Ver calendario",
-      enlaceDirecto: "O ábrelo en calendly.com",
-      politicaCookies: "Política de cookies",
-    },
-    fallbackTitle: "¿Prefieres escribir primero?",
-    fallbackBody: "Escríbeme directamente a:",
-    fallbackLink: "angel@sedaprivatehomes.com",
-    contextLink: "/founding-owners",
-    contextLinkLabel: "Conocer el programa antes de reservar →",
-    footer: "Seda Private Homes S.L. · Marbella · España",
-  },
-  en: {
-    eyebrow: "FOUNDING OWNERS PROGRAMME",
-    h1: ["A conversation about your residence", "in the Costa del Sol."],
-    sub: "Thirty minutes. No proposal at the end unless we both want one.",
-    cta: "Choose a time →",
-    coverTitle: "What we will cover in 30 minutes",
-    coverBullets: [
-      "Your residence and your situation",
-      "How Founding Owner terms work",
-      "Whether we are the right fit for you",
-    ],
-    diffsTitle: "Three things we do differently",
-    diffs: [
-      {
-        title: "Compliance automation",
-        body: "RD 933/2021 guest registration, integrated and ready for reporting to SES.HOSPEDAJES. We prepare and document the tax information so your accountant can file it.",
-      },
-      {
-        title: "Monthly P&L in your language",
-        body: "A two-page statement on the 5th of every month. Tax-deductible operating-fee structure documented.",
-      },
-      {
-        title: "Founder-led, not a call center",
-        body: "You always reach me directly. Three people will know your home personally. There will never be a ticket queue.",
-      },
-    ],
-    seats: "Free setup for the first 3 direct signings · 24% commission on the net base (gross minus channel commission and cleaning)",
-    calendly: {
-      aviso: "The calendar is provided by Calendly. When you press “View calendar”, your browser connects to calendly.com and Calendly sets its own cookies.",
-      verCalendario: "View calendar",
-      enlaceDirecto: "Or open it on calendly.com",
-      politicaCookies: "Cookie policy",
-    },
-    fallbackTitle: "Prefer to write first?",
-    fallbackBody: "Email me directly at:",
-    fallbackLink: "angel@sedaprivatehomes.com",
-    contextLink: "/founding-owners",
-    contextLinkLabel: "Read about the programme before booking →",
-    footer: "Seda Private Homes S.L. · Marbella · Spain",
-  },
-  fr: {
-    eyebrow: "PROGRAMME PROPRIÉTAIRES FONDATEURS",
-    h1: ["Une conversation sur votre résidence", "sur la Costa del Sol."],
-    sub: "Trente minutes. Aucune proposition à la fin sauf si nous le souhaitons tous les deux.",
-    cta: "Choisir un horaire →",
-    coverTitle: "Ce que nous aborderons en 30 minutes",
-    coverBullets: [
-      "Votre propriété et votre situation",
-      "Comment fonctionnent les conditions Propriétaire Fondateur",
-      "Si nous sommes les bons gestionnaires pour vous",
-    ],
-    diffsTitle: "Trois choses que nous faisons différemment",
-    diffs: [
-      {
-        title: "Conformité automatisée",
-        body: "Enregistrement des voyageurs (RD 933/2021) intégré et prêt pour SES.HOSPEDAJES. Nous préparons et documentons les informations fiscales pour que votre conseiller les dépose.",
-      },
-      {
-        title: "Rapport mensuel dans votre langue",
-        body: "Un état financier de deux pages le 5 de chaque mois. Structure de commission fiscalement déductible documentée.",
-      },
-      {
-        title: "Géré par le fondateur",
-        body: "Vous me contactez directement. Trois personnes connaîtront votre maison personnellement. Jamais de file d'attente de tickets.",
-      },
-    ],
-    seats: "Inscription offerte pour les 3 premières signatures directes · 24% de commission sur la base nette (brut moins commission de canal et ménage)",
-    calendly: {
-      aviso: "Le calendrier est fourni par Calendly. Lorsque vous appuyez sur « Voir le calendrier », votre navigateur se connecte à calendly.com et Calendly dépose ses propres cookies.",
-      verCalendario: "Voir le calendrier",
-      enlaceDirecto: "Ou ouvrez-le sur calendly.com",
-      politicaCookies: "Politique de cookies",
-    },
-    fallbackTitle: "Préférez-vous écrire d'abord ?",
-    fallbackBody: "Écrivez-moi directement à :",
-    fallbackLink: "angel@sedaprivatehomes.com",
-    contextLink: "/founding-owners",
-    contextLinkLabel: "En savoir plus sur le programme avant de réserver →",
-    footer: "Seda Private Homes S.L. · Marbella · Espagne",
-  },
-  de: {
-    eyebrow: "FOUNDING-OWNERS-PROGRAMM",
-    h1: ["Ein Gespräch über Ihre Residenz", "an der Costa del Sol."],
-    sub: "Dreißig Minuten. Kein Angebot am Ende, es sei denn, wir beide wollen es.",
-    cta: "Termin wählen →",
-    coverTitle: "Was wir in 30 Minuten besprechen",
-    coverBullets: [
-      "Ihre Immobilie und Ihre Situation",
-      "Wie die Founding-Owner-Konditionen funktionieren",
-      "Ob wir die richtige Verwaltung für Sie sind",
-    ],
-    diffsTitle: "Drei Dinge, die wir anders machen",
-    diffs: [
-      {
-        title: "Automatisierte Compliance",
-        body: "Gästeregistrierung (RD 933/2021) integriert und vorbereitet für SES.HOSPEDAJES. Wir bereiten die Steuerinformationen auf und dokumentieren sie, damit Ihr Steuerberater sie einreichen kann.",
-      },
-      {
-        title: "Monatlicher Bericht in Ihrer Sprache",
-        body: "Eine zweiseitige Finanzaufstellung am 5. jedes Monats. Steuerlich absetzbare Provisionsstruktur dokumentiert.",
-      },
-      {
-        title: "Vom Gründer geführt",
-        body: "Sie erreichen mich direkt. Drei Personen werden Ihr Haus persönlich kennen. Es wird nie eine Ticket-Warteschlange geben.",
-      },
-    ],
-    seats: "Kostenlose Anmeldung für die ersten 3 Direktverträge · 24% Provision auf die Nettobasis (brutto abzüglich Kanalprovision und Reinigung)",
-    calendly: {
-      aviso: "Der Kalender wird von Calendly bereitgestellt. Wenn Sie auf „Kalender anzeigen“ klicken, verbindet sich Ihr Browser mit calendly.com, und Calendly setzt eigene Cookies.",
-      verCalendario: "Kalender anzeigen",
-      enlaceDirecto: "Oder auf calendly.com öffnen",
-      politicaCookies: "Cookie-Richtlinie",
-    },
-    fallbackTitle: "Möchten Sie lieber zuerst schreiben?",
-    fallbackBody: "Schreiben Sie mir direkt an:",
-    fallbackLink: "angel@sedaprivatehomes.com",
-    contextLink: "/founding-owners",
-    contextLinkLabel: "Mehr über das Programm vor der Buchung lesen →",
-    footer: "Seda Private Homes S.L. · Marbella · Spanien",
-  },
-}
+/*
+  Los textos viven en messages/<locale>.json, namespace `meet.copy` (REA M-8: antes
+  estaban en un objeto COPY de este fichero, fuera de los tests de idioma y de
+  la guarda de tarifa). Las cifras de precio salen de lib/tarifa.
+*/
 
 export default async function MeetPage({
   params,
 }: {
   params: Promise<{ locale: string }>
 }) {
-  const { locale: rawLocale } = await params
-  const locale = (
-    (["es", "en", "fr", "de"] as const).includes(rawLocale as Locale)
-      ? rawLocale
-      : "es"
-  ) as Locale
+  const { locale } = await params
 
   setRequestLocale(locale)
 
-  const t = COPY[locale]
+  const m = await getTranslations({ locale, namespace: "meet.copy" })
+  const t = {
+    eyebrow: m("eyebrow"),
+    h1: [m("h1.l1"), m("h1.l2")],
+    sub: m("sub"),
+    cta: m("cta"),
+    coverTitle: m("coverTitle"),
+    coverBullets: [m("cover.b1"), m("cover.b2"), m("cover.b3")],
+    diffsTitle: m("diffsTitle"),
+    diffs: (["d1", "d2", "d3"] as const).map((k) => ({ title: m(`diffs.${k}.title`), body: m(`diffs.${k}.body`) })),
+    seats: m("seats"),
+    calendly: {
+      aviso: m("calendly.aviso"),
+      verCalendario: m("calendly.verCalendario"),
+      enlaceDirecto: m("calendly.enlaceDirecto"),
+      politicaCookies: m("calendly.politicaCookies"),
+      tituloIframe: m("calendly.tituloIframe"),
+    } satisfies CalendlyFachadaCopy,
+    fallbackTitle: m("fallbackTitle"),
+    fallbackBody: m("fallbackBody"),
+    fallbackLink: CONTACT_EMAIL,
+    contextLink: "/founding-owners",
+    contextLinkLabel: m("contextLinkLabel"),
+    // Sale de los mismos datos que el aviso legal (lib/legal/entity.ts): no nombra una sociedad que el aviso dice que no existe.
+    footer: pieLegal(locale as Locale),
+  }
 
   return (
-    <main className="min-h-screen bg-background">
+    <main id="main-content" className="min-h-screen bg-background">
       {/* ── Hero ─────────────────────────────────────────────────── */}
       <section className="px-6 pt-32 pb-16 md:pt-40 md:pb-24">
         <div className="mx-auto max-w-3xl">

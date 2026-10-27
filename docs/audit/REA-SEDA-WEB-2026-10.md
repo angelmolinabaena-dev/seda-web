@@ -430,3 +430,27 @@ fallidas, cero desbordes horizontales, `h1` único en todas, `lang` correcto):
 
 Un `it.fails` se pone **rojo** cuando alguien arregla el defecto: es la señal para quitarle la marca,
 no un estorbo (misma convención que las REA de `seda_os`).
+
+---
+
+## Resolución — PR `fix/rea-seda-web` (2026-10-27)
+
+Las decisiones de Cowork se aplicaron como recomendaba el informe (D-1…D-9). Los 49 `it.fails` de
+[`tests/rea-seda-web-2026-10.test.ts`](../../tests/rea-seda-web-2026-10.test.ts) pasaron a `it` en verde, cada uno con su
+**control negativo** (el mismo predicado, sobre una muestra con el defecto original, lo detecta); además se comprobó por
+mutación que cada arreglo se pone rojo si se reintroduce el defecto (VFT → `true`, 24 %, tope, origen, «sin llaves», S.L., `<`).
+
+| # | Estado | Cómo |
+|---|---|---|
+| B-1 | arreglado | `villasVisibles()` exige flag **y** VFT **y** arrendador (`esPublicable`). Sin VFT: ficha 404, fuera del sitemap, `/coleccion` en «Próxima apertura». |
+| B-2 | arreglado | La ficha pinta «Arrendador: [propietario] · gestiona SEDA Private Homes» antes del botón; la meta ya no dice «Reserva directa con SEDA»; el aviso legal cuenta que se reserva en Beds24 y que SEDA actúa en nombre y por cuenta del propietario. **Pendiente de Ángel:** el nombre del arrendador y el VFT de Bay Side (`lib/escaparate.ts`); y el resumen 30/70 + enlace a cancelación/fianza junto al botón (D-4), que no se ha escrito porque no se ha podido contrastar el texto de Beds24. |
+| I-1…I-4 | arreglado | Un único origen: `lib/tarifa/tarifa.json`. Los textos llevan `[[tarifa.x]]`; `i18n/request.ts` los resuelve, y la web, el JSON-LD `FAQPage`, `/llms.txt` y `/llms-full.txt` heredan la cifra. Simulador y maquetas calculan con `lib/tarifa`. Ejemplos recalculados a mano (`tests/tarifa.test.ts`). |
+| I-5, I-6 | arreglado | Sin «2 propietarios en programa» ni «Modelo 179/238». |
+| I-7 | arreglado | `identidad.json` lleva `formaJuridica` y un bloque `sociedad` (a `null`); el aviso, `/meet` y el build leen de ahí. **Faltan:** `sociedad.denominacion`, `sociedad.cif`, `sociedad.domicilioSocial` (`npm run check:legal` los lista). |
+| I-8…I-11 | arreglado | SES, «automatizado», panel «EN DIRECTO», «motor propio / sin SaaS», «llegada sin llaves» (dato `cerradura` por casa). |
+| I-12 | arreglado en el código | Solo POST del propio origen, `application/json`. **Sigue siendo de Ángel:** la regla de límite en el Firewall de Vercel y el plan de Resend (D-9); el límite por instancia se mantiene. |
+| I-13 | arreglado | `<label>` en el formulario, deslizadores con nombre y valor, `id="main-content"` en `/meet` y `/guias*`, título del iframe en el idioma. |
+| I-14 | parcial | Arreglados: idiomas (IT), «menos de 2 minutos» / «plantilla local 24/7», seguros y verificación de huéspedes, «sin tracking de terceros», «Pruebe la app». **Siguen:** los «24/7» de rótulos sueltos de la Guest App, «Opera en Marbella, Estepona, Benahavís, Casares y Málaga» y `areaServed`. Hay que decidir si se retiran o se miden. |
+| M-2, M-3, M-4, M-5, M-8, M-9 | arreglado | Sitemap sin `lastModified` falso; `.tmp/` fuera del índice y en `.gitignore` (el pack de git sigue pesando: es historia); JSON-LD escapa `<`; título de la 404; textos de `/meet` y `/founding-owners` en `messages/`; «consecutivos» fuera. |
+| M-1 | sin cambio | `CCBot` permitido (D-6). |
+| M-6 | sin cambio | Garantías de las transferencias a EE. UU. en la política de privacidad: hace falta saber qué mecanismo usa cada proveedor (DPF o cláusulas) y eso no está en el repo. |

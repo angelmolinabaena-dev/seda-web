@@ -60,7 +60,7 @@
       "eyebrow": "— 02 · Who we are",
       "h2": "Private villa management on the Costa del Sol, operated on proprietary software.",
       "body1": "Seda OS is the operating system on which we have built everything else. It connects each villa with those who manage it and those who inhabit it.",
-      "body2": "Owners receive a portal with P&L, settlements, pricing and tax compliance in real time. Guests receive a guest app with an AI concierge in five languages — and everything they need is a message away.",
+      "body2": "Owners receive a portal with P&L, settlements and tax compliance in real time. Guests receive a guest app with an AI concierge in five languages — and everything they need is a message away.",
       "tagline": "The hospitality of a hotel, in the privacy of a home."
     },
     "journey": {
@@ -183,7 +183,7 @@
         "italic": "do not see",
         "line2": ", but that coordinates everything."
       },
-      "body": "A proprietary layer that connects bookings, guests, owners, maintenance and operations in real time. No generic SaaS. No improvisation.",
+      "body": "Our own layer, connected to Beds24, that brings together bookings, guests, owners, maintenance and operations. No improvisation.",
       "cta": "Discover SEDA OS",
       "modules": {
         "reservas": "Bookings",
@@ -196,13 +196,7 @@
     },
     "dashboard": {
       "topbar": "Owner Reporting",
-      "location": "Marbella · Today",
-      "kpi": {
-        "ingresos": "Forecast revenue",
-        "ingresos_sub": "Q3 2026",
-        "reservas": "Active bookings",
-        "reservas_sub": "Next 90 days"
-      },
+      "location": "Sample data",
       "calendar": {
         "title": "Unified calendar · Casa Ciprés",
         "range": "Jul — Sep 2026",
@@ -214,9 +208,9 @@
         "title": "Sample settlement · direct booking",
         "row1": "Gross revenue",
         "row2": "Calculation base (excl. cleaning)",
-        "row3": "SEDA commission · 24% of base",
+        "row3": "SEDA commission · [[tarifa.comision]], max [[tarifa.tope]]",
         "row4": "Net to owner",
-        "note": "Direct booking. On a channel booking, the platform's commission is deducted first. Cleaning belongs to the owner and is not part of the base."
+        "note": "Direct booking. On a channel booking, the platform's commission is deducted first. Cleaning belongs to the owner and is not part of the base. VAT is charged on the commission on top ([[tarifa.liqIva]] in this example, not deducted from the net)."
       },
       "status": {
         "title": "Operational status",
@@ -298,7 +292,7 @@
         },
         "q7": {
           "q": "How is my property protected?",
-          "a": "Guest verification, specific insurance, digital inventory, between-stay inspections and care protocols. Your residence is treated as if it were our own."
+          "a": "Digital inventory, between-stay inspections and care protocols. Your residence is treated as if it were our own."
         }
       }
     },
@@ -341,7 +335,7 @@
         "line1": "Your property,",
         "italic": "fully under control."
       },
-      "body": "SEDA OS is the proprietary software layer that orchestrates bookings, operations, maintenance, marketing and settlements. No generic SaaS. No improvisation.",
+      "body": "SEDA OS is our own software layer, connected to Beds24, that orchestrates bookings, operations, maintenance, marketing and settlements. No improvisation.",
       "image_alt": "Residence at sunset with the Owners Portal"
     },
     "os": {
@@ -353,8 +347,8 @@
         "resenas": "Reviews",
         "propietario": "Owner"
       },
-      "live": "SEDA OS · LIVE",
-      "operative": "OPERATIONAL",
+      "live": "SEDA OS · SAMPLE VIEW",
+      "operative": "SAMPLE",
       "kpi": {
         "llegadas": "Arrivals today",
         "llegadas_d": "2 confirmed",
@@ -364,9 +358,9 @@
       "liq_title": "Sample settlement · direct booking",
       "liq_sepa": "SEPA · 01 Nov",
       "liq_ingresos": "Gross revenue",
-      "liq_comision": "Commission 24%",
+      "liq_comision": "Commission · max [[tarifa.tope]]",
       "liq_base": "Base (excl. cleaning)",
-      "liq_nota": "Direct booking. On a channel booking, the platform's commission is deducted first. Cleaning belongs to the owner and is not part of the base.",
+      "liq_nota": "Direct booking. On a channel booking, the platform's commission is deducted first. Cleaning belongs to the owner and is not part of the base. VAT is charged on the commission on top ([[tarifa.liqIva]] in this example, not deducted from the net).",
       "ga_title": "Guest App Status",
       "ga_app": "Guest App",
       "ga_app_state": "Active",
@@ -403,7 +397,7 @@
     "marketing": {
       "eyebrow": "— Marketing intelligence",
       "h2": {
-        "line1": "Conversion, pricing, reputation,",
+        "line1": "Conversion, reputation,",
         "italic": "SEO."
       },
       "body": "A transparent window into your investment and a relentless marketing engine. Operational, financial and legal information in real time.",
@@ -412,15 +406,10 @@
       "desc_h3": "Premium descriptions",
       "desc_body": "Editorial copy that highlights what is unique about your property.",
       "desc_quote": "“A retreat where limestone meets the Alborán Sea…”",
-      "compset_h3": "Competitive analysis",
-      "compset_body": "Monitoring the Costa del Sol compset.",
-      "pricing_h3": "Dynamic pricing",
-      "pricing_body": "Demand, seasonality and local events.",
-      "pricing_suggested": "SUGGESTED TODAY",
       "reputation_h3": "Premium reputation",
       "reputation_body": "Impeccable review management to sustain 5★ status.",
       "seo_h3": "High-intent SEO",
-      "seo_meta": "Average position",
+      "seo_meta": "Example searches",
       "seo_kw1": "Luxury villa Marbella",
       "seo_kw2": "Costa del Sol rental",
       "seo_kw3": "Villa Puerto Banús",
@@ -442,7 +431,7 @@
         },
         "ses": {
           "t": "SES Hospedajes",
-          "b": "Guest identity verification at check-in."
+          "b": "Reporting of guest data to the Ministry of the Interior: integration in preparation."
         },
         "m179": {
           "t": "AEAT reporting",
@@ -476,12 +465,11 @@
         "line1": "Six modules.",
         "italic": "One system."
       },
-      "version": "v 4.2 · Build 2026.10",
       "mod": {
         "reservas": {
           "name": "Bookings",
-          "label": "Booking engine",
-          "body": "Proprietary multi-channel engine with real-time sync, anti-overbooking and dynamic policies."
+          "label": "Calendar and channels",
+          "body": "Our own software connected to Beds24: bookings and channels in one unified calendar."
         },
         "huespedes": {
           "name": "Guests",
@@ -496,7 +484,7 @@
         "marketing": {
           "name": "Marketing",
           "label": "Distribution",
-          "body": "OTA management, SEO, dynamic pricing and international campaigns coordinated from a single panel."
+          "body": "OTA management, SEO and international campaigns coordinated from a single panel."
         },
         "finanzas": {
           "name": "Finance",
@@ -528,9 +516,10 @@
       "cta": "Request a precise valuation",
       "projection": "SEDA OS projection",
       "gross": "Annual gross revenue",
-      "net": "Net to owner (OTA – direct)",
-      "disclaimer": "ⓘ Estimate calculated solely from the occupancy and ADR you enter: gross revenue = occupancy × 365 days × ADR. Net is shown as a range between a direct booking (0% channel commission) and an OTA such as Airbnb (15%): in both cases, SEDA's 24% commission applies to the accommodation revenue after deducting the channel's commission and the cleaning fee, never to the gross. ADR is understood as the accommodation rate, excluding cleaning. It excludes taxes, utilities and property expenses. It is neither an offer nor a forecast of results.",
-      "net_note": "The 24% applies only to the accommodation fee: we first deduct the platform's commission and the cleaning fee, which is entirely yours. As a share of what the guest actually pays, the real effect is closer to 18%. Some managers advertise a lower percentage applied to a larger base: always ask for the calculation base."
+      "net": "Net to owner, before VAT (OTA – direct)",
+      "disclaimer": "ⓘ Estimate calculated solely from the occupancy and ADR you enter: gross revenue = occupancy × 365 days × ADR. Net is shown as a range between a direct booking (0% channel commission) and an OTA such as Airbnb ([[tarifa.ejCanalPct]]): in both cases, SEDA's commission is the lower of [[tarifa.comision]] of the accommodation revenue after the channel's commission and [[tarifa.tope]] of the accommodation revenue, never on the gross or on cleaning. ADR is understood as the accommodation rate, excluding cleaning. Net is before the VAT on the commission, which is shown separately. It excludes taxes, utilities and property expenses. It is neither an offer nor a forecast of results.",
+      "net_note": "The [[tarifa.comision]] applies only to the accommodation revenue, after the platform's commission (cleaning is entirely yours and does not count), and never exceeds [[tarifa.tope]] of the accommodation price. VAT at [[tarifa.iva]] on the commission is charged on top and is not included in these figures. Some managers advertise a lower percentage applied to a larger base: always ask for the calculation base.",
+      "iva_label": "VAT on the commission, on top (OTA – direct)"
     },
     "faq": {
       "eyebrow": "— Frequently asked questions",
@@ -542,11 +531,11 @@
       "items": {
         "q1": {
           "q": "How much does SEDA charge to manage my property?",
-          "a": "We apply a 24% commission on the accommodation revenue, after deducting the platform's commission (Airbnb, Booking...) and the cleaning fee, which is entirely yours: we never charge on the gross. As a share of what the guest actually pays, the real effect is closer to 18%. Itemised in each monthly settlement in SEDA OS. There is no fixed fee and no exit penalty. The first three direct signings pay no onboarding fee; the fourth and fifth pay €490 and after that the fee is €1,290 (excl. VAT)."
+          "a": "A single plan, no lock-in: [[tarifa.comision]] + VAT on what is left of the accommodation revenue after the channel's commission (Airbnb, Booking...), not counting cleaning, which is entirely yours; and never more than [[tarifa.tope]] of the accommodation price. On [[tarifa.ejAlojamiento]] of accommodation: a direct booking would be [[tarifa.ejDirecta21]] at that rate, but the cap applies and it comes to [[tarifa.ejDirecta]]; through a channel charging [[tarifa.ejCanalPct]] ([[tarifa.ejCanal]]), [[tarifa.ejAirbnb]]. VAT at [[tarifa.iva]] is added to those figures. For maintenance, a [[tarifa.margen]] margin applies only to the part above [[tarifa.umbral]] (excl. VAT). Itemised in each monthly settlement in SEDA OS. There is no fixed fee and no exit penalty, with one month's notice. The first three direct signings pay no onboarding fee; the fourth and fifth pay [[tarifa.alta490]] and after that the fee is [[tarifa.altaEstandar]] (excl. VAT)."
         },
         "q2": {
           "q": "Who looks after guests, and when?",
-          "a": "A SEDA team employed locally on the Costa del Sol, available 24/7 through the Guest App. Routine queries are pre-filtered by Ask SEDA (AI concierge) and escalated to a human concierge as context requires. Average response time: under 2 minutes."
+          "a": "The SEDA team looks after guests through the Guest App. Routine queries are pre-filtered by Ask SEDA (AI concierge) and escalated to a member of the team as context requires."
         },
         "q3": {
           "q": "What about the tax obligations on my property?",
@@ -558,7 +547,7 @@
         },
         "q5": {
           "q": "Can I use my property whenever I want?",
-          "a": "Yes. Block the dates in SEDA OS or the Owners Portal. The team prepares the home for your arrival as it would for any other stay, at no additional cost (only housekeeping and replenishment at internal rates)."
+          "a": "Yes, with advance notice. Block the dates ahead of time in SEDA OS or the Owners Portal. The team prepares the home for your arrival as it would for any other stay; only housekeeping and replenishment are charged, itemised in your settlement."
         },
         "q6": {
           "q": "How does SEDA choose which properties to accept?",
@@ -566,7 +555,7 @@
         },
         "q7": {
           "q": "What if I want to end the agreement?",
-          "a": "Sixty days' notice, no penalties. Confirmed bookings are honoured up to their departure date. Operational data, professional photography and reviews belong to the owner and are exportable at any time."
+          "a": "One month's notice, no lock-in and no penalties. Confirmed bookings are honoured up to their departure date. Operational data, professional photography and reviews belong to the owner and are exportable at any time."
         }
       }
     },
@@ -733,13 +722,13 @@
         "concierge_t": "24/7 concierge",
         "concierge_b": "Local SEDA team + Ask SEDA AI. Response under 2 min.",
         "lang_t": "Multilingual",
-        "lang_b": "ES · EN · DE · FR natively, no machine translation.",
+        "lang_b": "ES · EN · DE · FR · IT.",
         "exp_t": "Experiences",
         "exp_b": "Chef, massage, boat trips and golf, all bookable in advance.",
         "manual_t": "Villa manual",
         "manual_b": "Climate control, kitchen, pool, sauna — all documented.",
         "privacy_t": "Privacy",
-        "privacy_b": "Encrypted data. No third-party tracking.",
+        "privacy_b": "Encrypted data.",
         "compliance_t": "Compliance",
         "compliance_b": "RD 933/2021 · SES Hospedajes · digital signature."
       }
@@ -749,7 +738,7 @@
       "i2": "Live concierge",
       "i3": "Discover Costa del Sol",
       "i4": "Integrated bookings",
-      "i5": "Multilingual ES·EN·DE·FR",
+      "i5": "Multilingual ES·EN·DE·FR·IT",
       "i6": "Smart climate control",
       "i7": "24/7 assistance",
       "i8": "Native villa manual"
@@ -757,10 +746,10 @@
     "final": {
       "eyebrow": "— A real product",
       "h2": {
-        "line1": "Try the app",
-        "italic": "as a real guest."
+        "line1": "This is how",
+        "italic": "a guest sees the app."
       },
-      "body": "Direct access to the SEDA guest environment. Door opening, map, Ask SEDA and Discover.",
+      "body": "Guests sign in with the link or code of their booking: arrival, map, Ask SEDA and Discover.",
       "cta_acceso": "Guest sign in"
     }
   },
@@ -912,7 +901,7 @@
       "t3": {
         "period": "Founder",
         "location": "Estepona · Málaga",
-        "body": "Owner-operator of a 36-room boutique hotel on the seafront. Hotel of the Year Spain (Core Hospitality), TripAdvisor Travellers' Choice, Booking.com Traveller Review Award, Expedia and Orbitz — five consecutive awards built from scratch."
+        "body": "Owner-operator of a 36-room boutique hotel on the seafront. Hotel of the Year Spain (Core Hospitality), TripAdvisor Travellers' Choice, Booking.com Traveller Review Award, Expedia and Orbitz — five awards from five platforms, built from scratch."
       },
       "t4": {
         "period": "Opening soon",
@@ -928,10 +917,10 @@
     "hotel": {
       "eyebrow": "01 · The hotel",
       "h2": "Hotel Estepona Plaza, built on <i>reviews</i>.",
-      "body": "A 36-room boutique hotel facing La Rada beach in Estepona. Recognised year after year by the platforms that measure the only thing that matters: what guests say when they get home.",
+      "body": "A 36-room boutique hotel facing La Rada beach in Estepona. Recognised by the platforms that measure the only thing that matters: what guests say when they get home.",
       "k1": "Rooms\n4 categories",
       "k2": "Average rating\nBooking · TripAdvisor",
-      "k3": "Consecutive awards\nBooking · TripAdvisor · Expedia · Orbitz · Core",
+      "k3": "Five awards\nBooking · TripAdvisor · Expedia · Orbitz · Core",
       "k4_value": "No. 1",
       "k4": "Hotel of the Year\nSpain · Core Hospitality"
     },
@@ -958,7 +947,7 @@
     "awards": {
       "eyebrow": "03 · Recognition",
       "h2": "The measure of <i>a job well done</i>.",
-      "body": "Five consecutive awards — not for marketing, but for the only thing the platforms measure: what guests say when they get home.",
+      "body": "Five awards from five platforms — not for marketing, but for the only thing the platforms measure: what guests say when they get home.",
       "more": "More at"
     },
     "cta": {
@@ -1233,7 +1222,7 @@
       },
       "q2": {
         "q": "What commissions apply?",
-        "a": "We apply a 24% commission on the accommodation revenue of each booking, after the platform's commission and the cleaning fee. No fixed fee and no exit penalty. The first three direct signings pay no onboarding fee; the fourth and fifth pay €490 and after that the fee is €1,290 (excl. VAT). Every monthly settlement itemises the calculation."
+        "a": "A single plan, no lock-in: [[tarifa.comision]] + VAT on the accommodation revenue of each booking after the channel's commission (cleaning is not counted), and never more than [[tarifa.tope]] of the accommodation price. On [[tarifa.ejAlojamiento]] of accommodation: [[tarifa.ejDirecta]] for a direct booking and [[tarifa.ejAirbnb]] through a channel charging [[tarifa.ejCanalPct]]; VAT at [[tarifa.iva]] is on top. For maintenance, a [[tarifa.margen]] margin applies only to the part above [[tarifa.umbral]] (excl. VAT). No fixed fee and no exit penalty (one month's notice). The first three direct signings pay no onboarding fee; the fourth and fifth pay [[tarifa.alta490]] and after that the fee is [[tarifa.altaEstandar]] (excl. VAT). Every monthly settlement itemises the calculation."
       },
       "q3": {
         "q": "How do I see my revenue?",
@@ -1245,11 +1234,11 @@
       },
       "q5": {
         "q": "How is my property protected?",
-        "a": "Guest verification, specific insurance, digital inventory, between-stay inspections and care protocols. Your residence is treated as if it were our own."
+        "a": "Digital inventory, between-stay inspections and care protocols. Your residence is treated as if it were our own."
       },
       "q6": {
         "q": "Tax compliance? AEAT reporting, RD 933, IRNR.",
-        "a": "Automated from the moment the villa is set up in SEDA OS. Your tax adviser receives reconciled data, exportable in whichever format they request."
+        "a": "SEDA OS prepares the data from the moment the villa is set up. Your tax adviser receives reconciled data, exportable in whichever format they request, and is the one who files the returns."
       }
     }
   },
@@ -1464,27 +1453,109 @@
       "personas": "Guests",
       "fechas_error": "Departure must be after arrival.",
       "cta": "Book",
-      "nota": "Availability, the final price and payment are handled in Beds24, SEDA's booking system."
+      "nota": "Availability, the final price and payment are handled on the Beds24 booking page."
     },
     "meta": {
-      "description": "{nombre}: {tipo} in {municipio}, Costa del Sol. Book direct with SEDA Private Homes."
+      "description": "{nombre}: {tipo} in {municipio}, Costa del Sol. Lessor: {arrendador} · managed by SEDA Private Homes."
     },
     "fotos": {
       "terraza": "Illustrative image: a glass of white wine on a sea-view terrace at sunset",
       "bienvenida": "Illustrative image: welcome console with flowers, keys and a card",
       "despedida": "Illustrative image: terrace table with a coffee and a farewell note at dawn"
+    },
+    "arrendador": {
+      "linea": "Lessor: {nombre} · managed by SEDA Private Homes",
+      "nota": "SEDA Private Homes acts in the owner's name and on the owner's behalf."
     }
   },
   "meet": {
     "meta": {
       "title": "Book a call",
       "description": "Thirty minutes. No proposal at the end unless we both want one."
+    },
+    "copy": {
+      "eyebrow": "FOUNDING OWNERS PROGRAMME",
+      "h1": {
+        "l1": "A conversation about your residence",
+        "l2": "in the Costa del Sol."
+      },
+      "sub": "Thirty minutes. No proposal at the end unless we both want one.",
+      "cta": "Choose a time →",
+      "coverTitle": "What we will cover in 30 minutes",
+      "cover": {
+        "b1": "Your residence and your situation",
+        "b2": "How Founding Owner terms work",
+        "b3": "Whether we are the right fit for you"
+      },
+      "diffsTitle": "Three things we do differently",
+      "diffs": {
+        "d1": {
+          "title": "Documented compliance",
+          "body": "RD 933/2021 guest registration, integrated and ready for reporting to SES.HOSPEDAJES. We prepare and document the tax information so your accountant can file it."
+        },
+        "d2": {
+          "title": "Monthly P&L in your language",
+          "body": "A two-page statement on the 5th of every month."
+        },
+        "d3": {
+          "title": "Founder-led, not a call center",
+          "body": "You always reach me directly. Three people will know your home personally. There will never be a ticket queue."
+        }
+      },
+      "seats": "Free setup for the first 3 direct signings · [[tarifa.comision]] + VAT on the accommodation revenue after the channel commission (cleaning not counted), never more than [[tarifa.tope]] of the accommodation price · no lock-in, one month's notice",
+      "calendly": {
+        "aviso": "The calendar is provided by Calendly. When you press “View calendar”, your browser connects to calendly.com and Calendly sets its own cookies.",
+        "verCalendario": "View calendar",
+        "enlaceDirecto": "Or open it on calendly.com",
+        "politicaCookies": "Cookie policy",
+        "tituloIframe": "Calendly calendar to book a call with SEDA Private Homes"
+      },
+      "fallbackTitle": "Prefer to write first?",
+      "fallbackBody": "Email me directly at:",
+      "contextLinkLabel": "Read about the programme before booking →"
     }
   },
   "founding": {
     "meta": {
       "title": "Founding owners",
       "description": "Hotel standards for your villa."
+    },
+    "copy": {
+      "badge": "FOUNDING OWNERS · FREE SETUP, LIMITED SLOTS",
+      "seatsLeft": "Free setup for the first 3 direct signings",
+      "h1": {
+        "l1": "Hotel standards",
+        "l2": "for your villa."
+      },
+      "body": "We're Ángel Molina (8 years at Iberostar + Les Roches MHM) and team. On the Costa del Sol we're building the first villa management at true luxury-hotel level: full transparency and proprietary technology.",
+      "trust": {
+        "t1": "8 years Iberostar",
+        "t2": "Les Roches MHM"
+      },
+      "cta": "Book a private call",
+      "diffs": {
+        "d1": {
+          "title": "Full transparency",
+          "body": "Your own 24/7 dashboard with real-time bookings, revenue, and expenses. No surprises on your monthly settlement. Direct access to every number."
+        },
+        "d2": {
+          "title": "Fair, clear commission",
+          "body": "A single plan: [[tarifa.comision]] + VAT on the accommodation revenue after the channel commission (Airbnb, Booking...), not counting the cleaning fee, and never more than [[tarifa.tope]] of the accommodation price. Example: a [[tarifa.resBruto]] Airbnb booking with [[tarifa.resLimpieza]] cleaning → accommodation [[tarifa.resAlojamiento]]; minus [[tarifa.resCanal]] channel commission → base [[tarifa.resBase]] → SEDA commission [[tarifa.resComision]] (the [[tarifa.tope]] cap would be [[tarifa.resTope]]: it does not apply), plus [[tarifa.resIva]] VAT. No lock-in and one month's notice. No fine print: always ask for the calculation base."
+        },
+        "d3": {
+          "title": "Documented compliance",
+          "body": "Integrated guest registration (RD 933/2021), ready for reporting to SES.Hospedajes. We prepare the documentation for the tourist-rental informational declarations required by the tax authority (AEAT) and for non-resident IRNR, so your tax adviser can file it."
+        }
+      },
+      "founderTitle": "Who we are",
+      "founderBio": "Ángel Molina combines 8 years of hotel operations at Iberostar with luxury hotel management training (Les Roches MHM). Seda Private Homes is the management company I always wanted to exist: hotel-grade rigour applied to private villas on the Costa del Sol.",
+      "ctaEyebrow": "FOUNDING OWNERS PROGRAMME",
+      "ctaH2": {
+        "l1": "15 minutes is all",
+        "l2": "it takes to know."
+      },
+      "ctaBody": "Tell us about your property. If it's a fit, we'll send you the full proposal within 24 hours.",
+      "ctaBtn": "Book a private call"
     }
   }
 }

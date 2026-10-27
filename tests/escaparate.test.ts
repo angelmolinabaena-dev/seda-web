@@ -5,7 +5,9 @@ import {
   beds24Ids,
   escaparateActivo,
   esIndexable,
+  esPublicable,
   getVillaVisible,
+  incluyeVilla,
   urlReservaBeds24,
   villasIndexables,
   villasVisibles,
@@ -17,9 +19,10 @@ import {
 
   Sin número de registro turístico (VFT) no se puede anunciar una vivienda
   turística en Andalucía: todo el escaparate va detrás de
-  SEDA_FLAG_ESCAPARATE_VILLAS, apagado por defecto. Estos tests fijan que con
-  el flag apagado no hay ficha ni entrada de sitemap, y que la URL de Beds24
-  lleva las fechas solo cuando son válidas.
+  SEDA_FLAG_ESCAPARATE_VILLAS, apagado por defecto, Y de que la casa tenga VFT
+  y arrendador (REA seda-web 2026-10, B-1/B-2). Estos tests fijan que con el
+  flag apagado —o encendido pero sin VFT— no hay ficha ni entrada de sitemap,
+  y que la URL de Beds24 lleva las fechas solo cuando son válidas.
 
   El 404 real de /villa/<slug> con el flag apagado se comprueba contra
   `next start` en tests/integracion/rutas-404.test.ts.
@@ -63,26 +66,44 @@ describe("flag apagado", () => {
   })
 })
 
-describe("flag encendido", () => {
-  it("Bay Side existe como ficha", () => {
-    vi.stubEnv("SEDA_FLAG_ESCAPARATE_VILLAS", "1")
-    expect(getVillaVisible("bay-side")?.nombre).toBe("Bay Side")
-  })
+describe("flag encendido: el flag es la cerradura, el VFT y el arrendador la llave (REA B-1)", () => {
+  const ON = { SEDA_FLAG_ESCAPARATE_VILLAS: "1" }
+  const completa: FichaVilla = { ...VILLAS[0], registroTuristico: "VFT/MA/00000", arrendador: "Propietario de ejemplo" }
 
-  it("sin número de registro: noindex y fuera del sitemap", () => {
+  it("Bay Side, sin número de registro, NO es visible aunque el flag esté encendido", () => {
     vi.stubEnv("SEDA_FLAG_ESCAPARATE_VILLAS", "1")
-    const bay = getVillaVisible("bay-side")!
+    const bay = VILLAS.find((v) => v.slug === "bay-side")!
     expect(bay.registroTuristico).toBeNull()
-    expect(esIndexable(bay)).toBe(false)
+    expect(esPublicable(bay)).toBe(false)
+    expect(getVillaVisible("bay-side")).toBeUndefined() // la ficha da 404
+    expect(villasVisibles()).toEqual([]) // /coleccion sigue en «Próxima apertura»
     expect(villasIndexables()).toEqual([])
     expect(urlsVilla()).toEqual([])
   })
 
-  it("con número de registro: indexable", () => {
-    const conVft: FichaVilla = { ...VILLAS[0], registroTuristico: "VFT/MA/00000" }
-    expect(esIndexable(conVft, { SEDA_FLAG_ESCAPARATE_VILLAS: "1" })).toBe(true)
-    // …pero nunca con el flag apagado, aunque tenga número.
-    expect(esIndexable(conVft, {})).toBe(false)
+  it("con número de registro y arrendador, y el flag encendido: visible e indexable", () => {
+    expect(esPublicable(completa)).toBe(true)
+    expect(esIndexable(completa, ON)).toBe(true)
+  })
+
+  it("el número de registro solo no basta: sin arrendador la ficha no puede decir quién alquila", () => {
+    expect(esPublicable({ ...completa, arrendador: null })).toBe(false)
+    expect(esPublicable({ ...completa, arrendador: "  " })).toBe(false)
+  })
+
+  it("el arrendador solo no basta: sin VFT no se publica", () => {
+    expect(esPublicable({ ...completa, registroTuristico: null })).toBe(false)
+    expect(esPublicable({ ...completa, registroTuristico: "   " })).toBe(false)
+  })
+
+  it("…y nunca con el flag apagado, aunque la casa esté completa", () => {
+    expect(esIndexable(completa, {})).toBe(false)
+  })
+
+  it("«llegada sin llaves» solo si la casa tiene cerradura (REA I-11)", () => {
+    expect(incluyeVilla({ ...completa, cerradura: false })).toEqual(["concierge", "limpieza"])
+    expect(incluyeVilla({ ...completa, cerradura: true })).toEqual(["llegada", "concierge", "limpieza"])
+    expect(VILLAS.find((v) => v.slug === "bay-side")!.cerradura).toBe(false)
   })
 })
 

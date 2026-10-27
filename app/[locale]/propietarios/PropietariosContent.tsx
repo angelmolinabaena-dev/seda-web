@@ -8,7 +8,6 @@ import {
   Globe,
   FileText,
   TrendingUp,
-  Euro,
   Star,
   Search,
   User,
@@ -23,6 +22,7 @@ import {
 import { useTranslations } from "next-intl"
 import { IllustrativeTag } from "@/components/illustrative-tag"
 import Image from "next/image"
+import { liquidacionEjemplo, netoAnual, numero } from "@/lib/tarifa"
 
 // Owner PORTAL home — was pointing at the internal /admin panel (bounces a
 // prospective owner to an admin login). "/" is the owner-facing portal home.
@@ -44,6 +44,10 @@ function SedaOSWindow() {
     t("prop.os.tabs.propietario"),
   ]
   const activeTab = tabs[0]
+  // Misma cuenta que la tarifa publicada (lib/tarifa): bruto 1.000 − limpieza 100 = base 900;
+  // el 21 % serían 189 € pero manda el tope del 20 % → 180 €; neto = 1.000 − 180 = 820 (IVA aparte).
+  const liq = liquidacionEjemplo()
+  const eur = (n: number) => `€ ${numero(Math.round(n * 100), "es")}` // «1.000», no «1000» (es no agrupa 4 cifras en Intl)
 
   return (
     <div className="rounded-2xl overflow-hidden shadow-2xl bg-[#fcf9f8] text-foreground border border-background/10">
@@ -57,9 +61,7 @@ function SedaOSWindow() {
         <div className="flex-1 flex items-center justify-center gap-2">
           <span className="w-4 h-4 rounded-md bg-[hsl(var(--olive))] text-[hsl(var(--gold-light))] grid place-items-center font-serif italic text-[10px]">S</span>
           <span className="font-mono text-[10px] tracking-[0.14em] uppercase">{t("prop.os.live")}</span>
-          <span className="text-[10px] opacity-60">· app.sedaprivatehomes.com/os</span>
         </div>
-        <span className="font-mono text-[10px] opacity-60">v4.2.1</span>
       </div>
 
       {/* Tabs */}
@@ -77,8 +79,8 @@ function SedaOSWindow() {
             {label}
           </span>
         ))}
-        <span className="ml-auto inline-flex items-center gap-1.5 text-[10px] text-[#2f7f52] font-semibold whitespace-nowrap pr-3">
-          <span className="w-1.5 h-1.5 bg-[#3a9a64] rounded-full" />
+        <span className="ml-auto inline-flex items-center gap-1.5 text-[10px] text-muted-foreground font-semibold whitespace-nowrap pr-3">
+          <span className="w-1.5 h-1.5 bg-[hsl(var(--gold))] rounded-full" />
           {t("prop.os.operative")}
         </span>
       </div>
@@ -116,15 +118,13 @@ function SedaOSWindow() {
           <div className="bg-white border border-border rounded-xl p-4">
             <p className="font-mono text-[9px] tracking-[0.18em] uppercase text-muted-foreground">{t("prop.os.liq_title")}</p>
             <div className="flex justify-between items-end mt-1.5">
-              <p className="font-serif text-2xl">€ 784</p>
+              <p className="font-serif text-2xl">{eur(liq.neto)}</p>
               <span className="inline-flex items-center gap-1 text-[10px] text-[hsl(var(--olive))]">
                 <Building2 className="h-3 w-3" strokeWidth={1.5} /> {t("prop.os.liq_sepa")}
               </span>
             </div>
             <div className="grid grid-cols-3 gap-2 mt-3">
-              {/* Ejemplo de seda_os/docs/PRICING.md §1.1 (reserva directa): bruto 1.000
-                  − limpieza 100 = base 900; 24% × 900 = 216; neto = 1.000 − 216 = 784. */}
-              {[[t("prop.os.liq_ingresos"), "€ 1.000"], [t("prop.os.liq_base"), "€ 900"], [t("prop.os.liq_comision"), "− € 216"]].map(([k, v]) => (
+              {[[t("prop.os.liq_ingresos"), eur(liq.bruto)], [t("prop.os.liq_base"), eur(liq.base)], [t("prop.os.liq_comision"), `− ${eur(liq.comision)}`]].map(([k, v]) => (
                 <div key={k} className="bg-secondary/60 rounded-md px-2.5 py-2">
                   <p className="text-[9px] text-muted-foreground">{k}</p>
                   <p className="font-mono text-[11px] font-semibold mt-0.5">{v}</p>
@@ -185,21 +185,6 @@ function SedaOSWindow() {
   )
 }
 
-/* -------- Compset 3-line spark -------- */
-function CompsetSpark() {
-  const W = 220, H = 56
-  const pts = (arr: number[]) => arr.map((v, i) => `${(i / (arr.length - 1)) * W},${H - v}`).join(" ")
-  return (
-    <svg width="100%" height={H + 10} viewBox={`0 0 ${W} ${H + 10}`} preserveAspectRatio="none" className="overflow-visible">
-      <polyline points={pts([20, 24, 28, 32, 38, 42, 48, 52])} fill="none" stroke="hsl(var(--olive))" strokeWidth="2" />
-      <polyline points={pts([24, 26, 28, 30, 32, 34, 36, 38])} fill="none" stroke="hsl(var(--gold))" strokeWidth="1.5" strokeDasharray="3 3" />
-      <polyline points={pts([28, 30, 28, 32, 30, 34, 32, 34])} fill="none" stroke="hsl(var(--muted-foreground))" strokeWidth="1" opacity="0.5" />
-      <text x="0" y={H + 8} fill="hsl(var(--muted-foreground))" fontFamily="JetBrains Mono, monospace" fontSize="8" letterSpacing="1">ENE</text>
-      <text x={W - 20} y={H + 8} fill="hsl(var(--muted-foreground))" fontFamily="JetBrains Mono, monospace" fontSize="8" letterSpacing="1">AGO</text>
-    </svg>
-  )
-}
-
 /* -------- FAQ Item -------- */
 function FaqItem({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false)
@@ -234,14 +219,14 @@ function Projection() {
   const [occ, setOcc] = useState(72)
   const [adr, setAdr] = useState(1450)
 
-  // Fórmula real (seda_os/lib/reserva-financials.ts, docs/PRICING.md v3):
-  // la comisión SEDA (24%) se aplica sobre el alojamiento YA NETO de la
-  // comisión del canal, nunca sobre el bruto. No existe un mix de canal
-  // por defecto en el repo, así que se muestra un rango entre los dos
-  // extremos honestos: reserva directa (0% canal) y OTA tipo Airbnb (15%).
+  // Tarifa v6 (lib/tarifa, cifras en lib/tarifa/tarifa.json): la comisión SEDA es
+  // la menor entre el 21 % del alojamiento tras la comisión del canal y el 20 %
+  // del alojamiento; la limpieza no cuenta; el IVA de la comisión va aparte. No
+  // existe un mix de canal por defecto en el repo, así que se muestra un rango
+  // entre los dos extremos honestos: reserva directa (0 % canal) y OTA tipo
+  // Airbnb (15 %). El neto es antes de IVA; el IVA se enseña aparte.
   const annualGross = Math.round((occ / 100) * 365 * adr)
-  const netDirect = Math.round(annualGross * (1 - 0.24))
-  const netOTA = Math.round(annualGross * (1 - 0.15) * (1 - 0.24))
+  const { directa: netDirect, ota: netOTA, ivaDirecta, ivaOta } = netoAnual(annualGross)
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -249,9 +234,9 @@ function Projection() {
       <div className="bg-background border border-border rounded-2xl p-8 md:p-10">
         <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-muted-foreground">{t("prop.sim.configure")}</p>
 
-        <SimSlider label={t("prop.sim.occupancy")} value={occ} min={20} max={95} suffix="%"
+        <SimSlider id="sim-occ" label={t("prop.sim.occupancy")} value={occ} min={20} max={95} suffix="%"
           ticks={[t("prop.sim.occupancy_tick_low"), t("prop.sim.occupancy_tick_high")]} onChange={setOcc} />
-        <SimSlider label={t("prop.sim.adr")} value={adr} min={300} max={5000} step={50} prefix="€"
+        <SimSlider id="sim-adr" label={t("prop.sim.adr")} value={adr} min={300} max={5000} step={50} prefix="€"
           ticks={[t("prop.sim.adr_tick_low"), t("prop.sim.adr_tick_high")]} onChange={setAdr} />
 
         <Link href="/contacto"
@@ -281,8 +266,15 @@ function Projection() {
           <p className="font-serif font-light text-4xl md:text-[2.75rem] leading-none mt-1.5 tabular-nums text-[hsl(var(--olive))]">
             €{netOTA.toLocaleString("es")} – €{netDirect.toLocaleString("es")}
           </p>
-          {/* La base se enuncia junto al tipo: 24% NO es lo mismo sobre el neto de canal que sobre el bruto. */}
+          {/* La base se enuncia junto al tipo: el 21 % NO es lo mismo sobre el neto de canal que sobre el bruto. */}
           <p className="text-[0.8rem] leading-relaxed text-muted-foreground mt-2">{t("prop.sim.net_note")}</p>
+        </div>
+
+        <div className="mt-6">
+          <p className="font-mono text-[10px] tracking-[0.18em] uppercase text-muted-foreground">{t("prop.sim.iva_label")}</p>
+          <p className="font-serif font-light text-2xl leading-none mt-1.5 tabular-nums text-foreground/80">
+            €{ivaOta.toLocaleString("es")} – €{ivaDirecta.toLocaleString("es")}
+          </p>
         </div>
 
         {/* Retirado el bloque «Mejora vs mercado · +24% RevPAR»: no hay compset ni
@@ -298,14 +290,15 @@ function Projection() {
 
 /* SimSelect y SimCounter eliminados junto con los cuatro controles que no se usaban. */
 
-function SimSlider({ label, value, min, max, step = 1, prefix, suffix, ticks, onChange }: { label: string; value: number; min: number; max: number; step?: number; prefix?: string; suffix?: string; ticks: string[]; onChange: (n: number) => void }) {
+function SimSlider({ id, label, value, min, max, step = 1, prefix, suffix, ticks, onChange }: { id: string; label: string; value: number; min: number; max: number; step?: number; prefix?: string; suffix?: string; ticks: string[]; onChange: (n: number) => void }) {
   return (
     <div className="mt-5">
       <div className="flex justify-between items-baseline">
-        <p className="font-mono text-[10px] tracking-[0.18em] uppercase text-muted-foreground">{label}</p>
-        <p className="font-serif text-xl">{prefix}{Number(value).toLocaleString("es")}{suffix}</p>
+        <label htmlFor={id} className="font-mono text-[10px] tracking-[0.18em] uppercase text-muted-foreground">{label}</label>
+        <p className="font-serif text-xl" aria-hidden>{prefix}{Number(value).toLocaleString("es")}{suffix}</p>
       </div>
-      <input type="range" min={min} max={max} step={step} value={value}
+      <input id={id} type="range" min={min} max={max} step={step} value={value}
+        aria-valuetext={`${prefix ?? ""}${Number(value).toLocaleString("es")}${suffix ?? ""}`}
         onChange={(e) => onChange(Number(e.target.value))}
         className="w-full mt-2 accent-[hsl(var(--olive))]" />
       <div className="flex justify-between text-[10px] text-muted-foreground mt-1">
@@ -451,7 +444,7 @@ export function PropietariosContent() {
             {/* Retirados «+24% RevPAR vs mercado», «14 propiedades en gestión» y la
                 citación «12.480 reservas analizadas»: las tres cifras solo son
                 trazables al prototipo de diseño .tmp/seda4, no a una cartera ni a un
-                compset. Con 2 propietarios en programa no hay base que las sostenga. */}
+                compset. Hoy no hay cartera publicada que las sostenga. */}
           </div>
           <SedaOSWindow />
         </div>
@@ -505,31 +498,6 @@ export function PropietariosContent() {
               </blockquote>
             </article>
 
-            {/* Análisis competencia */}
-            <article className="bg-background border border-border rounded-2xl p-7">
-              <TrendingUp className="h-5 w-5 text-[hsl(var(--olive))]" strokeWidth={1.5} />
-              <h3 className="font-serif text-[1.35rem] mt-4">{t("prop.marketing.compset_h3")}</h3>
-              <p className="text-[0.85rem] leading-[1.65] text-muted-foreground mt-2">
-                {t("prop.marketing.compset_body")}
-              </p>
-              <div className="mt-4"><CompsetSpark /></div>
-            </article>
-
-            {/* Pricing dinámico — DARK */}
-            <article className="bg-foreground text-background rounded-2xl p-7">
-              <Euro className="h-5 w-5 text-[hsl(var(--gold))]" strokeWidth={1.5} />
-              <h3 className="font-serif text-[1.35rem] mt-4">{t("prop.marketing.pricing_h3")}</h3>
-              <p className="text-[0.8rem] text-background/65 mt-2">{t("prop.marketing.pricing_body")}</p>
-              <div className="mt-4 p-3 bg-[hsl(var(--gold))]/10 border border-[hsl(var(--gold))]/30 rounded-lg">
-                <p className="font-mono text-[8.5px] tracking-[0.18em] text-[hsl(var(--gold))]">{t("prop.marketing.pricing_suggested")}</p>
-                {/* Retirado «↑ 12% vs baseline»: no hay motor de pricing ni serie
-                    histórica en el repo contra la que medir ese delta. */}
-                <div className="flex justify-between items-baseline mt-1">
-                  <span className="font-serif text-2xl">€2.890</span>
-                </div>
-              </div>
-            </article>
-
             {/* Reputación premium */}
             <article className="bg-background border border-border rounded-2xl p-7">
               <div className="flex justify-between items-start">
@@ -565,10 +533,10 @@ export function PropietariosContent() {
                 <span className="font-mono text-[9px] tracking-[0.16em] uppercase text-muted-foreground">{t("prop.marketing.seo_meta")}</span>
               </div>
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5">
-                {[[t("prop.marketing.seo_kw1"), "#2"], [t("prop.marketing.seo_kw2"), "#4"], [t("prop.marketing.seo_kw3"), "#1"], [t("prop.marketing.seo_kw4"), "#3"]].map(([k, p]) => (
+                {/* Sin posiciones: no hay ranking medido de ninguna casa publicada. Solo las búsquedas que se trabajan. */}
+                {[t("prop.marketing.seo_kw1"), t("prop.marketing.seo_kw2"), t("prop.marketing.seo_kw3"), t("prop.marketing.seo_kw4")].map((k) => (
                   <div key={k} className="p-3 bg-secondary/60 rounded-lg">
-                    <p className="text-[10.5px] text-foreground/75">{k}</p>
-                    <p className="font-serif text-2xl text-[hsl(var(--olive))] mt-1">{p}</p>
+                    <p className="text-[12px] text-foreground/80">{k}</p>
                   </div>
                 ))}
               </div>
@@ -745,7 +713,6 @@ export function PropietariosContent() {
                 {t("prop.arch.h2.line1")} <span className="italic text-[hsl(var(--gold))]">{t("prop.arch.h2.italic")}</span>
               </h2>
             </div>
-            <span className="font-mono text-[11px] tracking-[0.2em] uppercase text-background/55">{t("prop.arch.version")}</span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
