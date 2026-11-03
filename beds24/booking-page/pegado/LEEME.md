@@ -54,3 +54,8 @@ Tiene que quedar en **14 500 caracteres o menos** (el panel deja de guardar sobr
 - **«por N noches» junto al precio: NO hecho.** El precio lo escribe el JS de Beds24 en `#price-roomprice-1-*` (vacío en la instantánea) y N está en `#inputnumnight`, otro elemento: CSS no puede leer un valor de un `<select>`. Hacerlo exige `<script>`, que el panel no admite en estos bloques.
 - **No hay HTML nuevo:** header y footer no cambian (1 127 y 1 978 caracteres), sin `<script>` ni apóstrofo recto.
 - **Capturas:** `node beds24/booking-page/preview/capturar.mjs` → `preview/capturas/{portada,formulario}-{375,1440}.png`, sobre las instantáneas reales. Las fotos son de prueba (media.xmlcal.com no es accesible desde el entorno) y falta `include/booking2.css`/`booking3.css`.
+
+## v5.1 (3-nov): móvil
+- Carrusel con height:auto (Beds24 fijaba 520 px en línea y dejaba un hueco de ~220 px bajo la foto).
+- En móvil (<768 px), las fechas y Personas van como campos blancos iguales, con la etiqueta a la izquierda. Sin desbordamiento horizontal a 390 px.
+- 14018 caracteres, guardado en Beds24.
