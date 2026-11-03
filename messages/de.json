@@ -1557,5 +1557,10 @@
       "ctaBody": "Erzählen Sie uns von Ihrer Immobilie. Wenn es passt, erhalten Sie innerhalb von 24 Stunden ein vollständiges Angebot.",
       "ctaBtn": "Privaten Anruf buchen"
     }
+  },
+  "tour360": {
+    "ver": "In 360° ansehen",
+    "titulo": "360°-Rundgang durch {nombre}",
+    "cerrar": "Rundgang schließen"
   }
 }

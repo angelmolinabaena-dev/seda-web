@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "slug": "plantilla",
+  "nombre": "Nombre de la casa",
+  "publicado": false,
+  "escenaInicial": "salon",
+  "tiles": { "base": "/tours/plantilla/v1" },
+  "escenas": [
+    {
+      "id": "salon",
+      "titulos": { "es": "Salón", "en": "Living room", "de": "Wohnzimmer", "fr": "Salon", "it": "Soggiorno" },
+      "hotspots": [
+        { "escena": "cocina", "pitch": 0, "yaw": 90 },
+        { "escena": "dormitorio-1", "pitch": 0, "yaw": 180 },
+        { "escena": "terraza", "pitch": 0, "yaw": -90 }
+      ]
+    },
+    {
+      "id": "cocina",
+      "titulos": { "es": "Cocina", "en": "Kitchen", "de": "Küche", "fr": "Cuisine", "it": "Cucina" },
+      "hotspots": [{ "escena": "salon", "pitch": 0, "yaw": 180 }]
+    },
+    {
+      "id": "dormitorio-1",
+      "titulos": { "es": "Dormitorio 1", "en": "Bedroom 1", "de": "Schlafzimmer 1", "fr": "Chambre 1", "it": "Camera da letto 1" },
+      "hotspots": [{ "escena": "salon", "pitch": 0, "yaw": 0 }]
+    },
+    {
+      "id": "terraza",
+      "titulos": { "es": "Terraza", "en": "Terrace", "de": "Terrasse", "fr": "Terrasse", "it": "Terrazza" },
+      "hotspots": [
+        { "escena": "salon", "pitch": 0, "yaw": 90 },
+        { "escena": "piscina", "pitch": -10, "yaw": -90 }
+      ]
+    },
+    {
+      "id": "piscina",
+      "titulos": { "es": "Piscina", "en": "Pool", "de": "Pool", "fr": "Piscine", "it": "Piscina" },
+      "hotspots": [{ "escena": "terraza", "pitch": -5, "yaw": 90 }]
+    }
+  ]
+}

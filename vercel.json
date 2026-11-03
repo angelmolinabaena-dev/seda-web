@@ -4,14 +4,36 @@
   "regions": ["fra1"],
   "headers": [
     {
-      "source": "/(.*)",
+      "source": "/((?!tour/).*)",
       "headers": [
         { "key": "X-Frame-Options",           "value": "SAMEORIGIN" },
         { "key": "X-Content-Type-Options",    "value": "nosniff" },
         { "key": "Referrer-Policy",           "value": "strict-origin-when-cross-origin" },
         { "key": "Permissions-Policy",        "value": "camera=(), microphone=(), geolocation=(), interest-cohort=()" },
         { "key": "Strict-Transport-Security", "value": "max-age=63072000; includeSubDomains; preload" },
-        { "key": "Content-Security-Policy",   "value": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; connect-src 'self'; media-src 'self'; frame-src https://calendly.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'" }
+        { "key": "Content-Security-Policy",   "value": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; connect-src 'self'; media-src 'self'; frame-src 'self' https://calendly.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'" }
+      ]
+    },
+    {
+      "source": "/tour/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options",    "value": "nosniff" },
+        { "key": "Referrer-Policy",           "value": "strict-origin-when-cross-origin" },
+        { "key": "Permissions-Policy",        "value": "camera=(), microphone=(), geolocation=(), interest-cohort=()" },
+        { "key": "Strict-Transport-Security", "value": "max-age=63072000; includeSubDomains; preload" },
+        { "key": "Content-Security-Policy",   "value": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; connect-src 'self'; media-src 'none'; frame-src 'none'; frame-ancestors 'self' https://guests.sedaprivatehomes.com https://beds24.com https://www.beds24.com; base-uri 'self'; form-action 'none'; object-src 'none'" }
+      ]
+    },
+    {
+      "source": "/tours/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/vendor/pannellum/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=2592000" }
       ]
     },
     {

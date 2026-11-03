@@ -7,6 +7,8 @@ import { Link } from "@/i18n/navigation"
 import { IllustrativeTag } from "@/components/illustrative-tag"
 import { JsonLdScript } from "@/components/page-json-ld"
 import { ReservaBeds24 } from "@/components/escaparate/reserva-beds24"
+import { Tour360Lanzador } from "@/components/tour360/tour360-lanzador"
+import { getTourPublicado } from "@/lib/tour360/cargar"
 import { beds24Ids, esIndexable, getVillaVisible, incluyeVilla, villasVisibles, type FichaVilla } from "@/lib/escaparate"
 import { accommodationJsonLd, breadcrumbJsonLd } from "@/lib/jsonld"
 import { buildAlternates, localeUrl } from "@/lib/seo-urls"
@@ -98,6 +100,7 @@ export default async function VillaPage({ params }: Params) {
   const path = `/villa/${villa.slug}`
   const [portada, ...resto] = villa.fotos
   const indexable = esIndexable(villa)
+  const tour360 = getTourPublicado(villa.slug)
 
   return (
     <main id="main-content" className="pb-28 md:pb-0">
@@ -169,6 +172,15 @@ export default async function VillaPage({ params }: Params) {
                 />
               </figure>
             ))}
+          </div>
+        </section>
+      )}
+
+      {/* Recorrido 360: solo si la casa tiene uno PUBLICADO (tours/<slug>/tour.json). Carga diferida: ver Tour360Lanzador. */}
+      {tour360 && (
+        <section className="px-6 md:px-12 lg:px-20 pt-8">
+          <div className="max-w-7xl mx-auto">
+            <Tour360Lanzador slug={tour360.slug} nombre={villa.nombre} />
           </div>
         </section>
       )}
