@@ -172,11 +172,10 @@ capturado**.
 
 ### 5.4 · Dos cosas de las instantáneas subidas al repo
 
-1. **Las dos instantáneas contienen una clave de API de Google Maps** (en el `src` del `<iframe>`, `key=AIza…`) y un
-   **identificador de sesión** de Beds24 (`booking=…`) en los enlaces. Es la clave que Beds24 ya sirve en su HTML público,
-   pero el repo es **público** y queda en el historial. Conviene redactarla en esos dos ficheros (no se ha tocado: son
-   instantáneas de Cowork). `preview/build.mjs` quita el iframe y neutraliza el identificador de sesión en lo que
-   genera, así que los `index*.html` no los llevan.
+1. **Clave de API de Google Maps e identificador de sesión: ya redactados en los ficheros** (commit `6b964fa`:
+   `key=REDACTADA`, `booking=REDACTADO`). **Siguen en el historial de git** de los commits anteriores (`c5e7666`), y el
+   repo es público: si esa clave se considera sensible, la decisión de rotarla en Google es de quien la gestiona
+   (es la clave que Beds24 sirve en su HTML público). `preview/build.mjs` quita además el iframe en lo que genera.
 2. `preview/vendor/bootstrap-3.3.4/` es Bootstrap 3.3.4 (MIT, con su `LICENSE`), copiado de npm: es la versión exacta
    que carga la página real.
 
