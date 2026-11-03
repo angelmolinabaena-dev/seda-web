@@ -4,6 +4,7 @@ import { localeUrl, buildAlternates } from "@/lib/seo-urls"
 import { getGuiasPublicadas, haySeccionGuias } from "@/lib/guias"
 import { SITE_PAGES } from "@/lib/site-pages"
 import { villasIndexables } from "@/lib/escaparate"
+import { RUTA_CALCULADORA, calculadoraPropietariosActiva } from "@/lib/calculadora-propietarios"
 
 /*
   Multilingual sitemap with hreflang alternates.
@@ -75,5 +76,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
       ]
     : []
 
-  return [...staticRoutes, ...villaRoutes, ...guiaRoutes]
+  // /propietarios/calculadora: solo con el flag SEDA_FLAG_CALCULADORA_PROPIETARIOS
+  // encendido (lib/calculadora-propietarios.ts). Apagado es un 404 y no se lista.
+  const calculadoraRoutes: MetadataRoute.Sitemap = calculadoraPropietariosActiva()
+    ? routing.locales.map((locale) => ({
+        url: localeUrl(locale, RUTA_CALCULADORA),
+        changeFrequency: "monthly" as const,
+        priority: 0.8,
+        alternates: { languages: buildAlternates(RUTA_CALCULADORA) },
+      }))
+    : []
+
+  return [...staticRoutes, ...villaRoutes, ...guiaRoutes, ...calculadoraRoutes]
 }

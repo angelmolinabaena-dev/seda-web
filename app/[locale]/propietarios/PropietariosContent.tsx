@@ -214,7 +214,7 @@ function FaqItem({ q, a }: { q: string; a: string }) {
    No se han honrado porque el mapeo opción→días (y opción→ADR/ocupación) no existe en
    ningún punto del repo; inventarlo es una decisión de negocio, no aritmética. Un input
    retirado no miente; un input ignorado sí. Ver docs/audit/VERACIDAD-PUBLICA.md §7.9. */
-function Projection() {
+function Projection({ calculadora }: { calculadora: boolean }) {
   const t = useTranslations()
   const [occ, setOcc] = useState(72)
   const [adr, setAdr] = useState(1450)
@@ -243,6 +243,13 @@ function Projection() {
           className="inline-flex items-center gap-2 mt-7 font-mono text-[11px] tracking-[0.22em] uppercase text-foreground border-b border-foreground/30 hover:border-foreground pb-1">
           {t("prop.sim.cta")} <ArrowRight className="h-3 w-3" strokeWidth={1.75} />
         </Link>
+        {/* Solo con el flag de la calculadora encendido (lib/calculadora-propietarios.ts). */}
+        {calculadora && (
+          <Link href="/propietarios/calculadora"
+            className="flex items-center gap-2 mt-4 font-mono text-[11px] tracking-[0.22em] uppercase text-foreground border-b border-foreground/30 hover:border-foreground pb-1 w-fit">
+            {t("calculadora.link")} <ArrowRight className="h-3 w-3" strokeWidth={1.75} />
+          </Link>
+        )}
       </div>
 
       {/* Output */}
@@ -399,7 +406,7 @@ function ProductTabSwitcher({
 }
 
 /* ================ PAGE ================ */
-export function PropietariosContent() {
+export function PropietariosContent({ calculadora = false }: { calculadora?: boolean }) {
   const [productTab, setProductTab] = useState<ProductTab>("marketing")
   const t = useTranslations()
   return (
@@ -756,7 +763,7 @@ export function PropietariosContent() {
               {t("prop.sim.body")}
             </p>
           </div>
-          <Projection />
+          <Projection calculadora={calculadora} />
         </div>
       </section>
 

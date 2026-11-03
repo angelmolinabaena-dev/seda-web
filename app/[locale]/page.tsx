@@ -16,6 +16,7 @@ import { ContactSection } from "@/components/contact-section"
 import { JsonLdScript } from "@/components/page-json-ld"
 import { faqPortada } from "@/lib/faq"
 import { faqPageJsonLd } from "@/lib/jsonld"
+import { calculadoraPropietariosActiva } from "@/lib/calculadora-propietarios"
 import { pageMetadata } from "@/lib/site-pages"
 
 // Título, descripción, Open Graph y Twitter salen de `home.meta.*` de cada
@@ -44,7 +45,7 @@ export default async function Page({ params }: LocaleParams) {
           `ValueProp` → `EditorialBreak` enlaza sin bloque intermedio. */}
       <EditorialBreak />
       <JourneySection />
-      <DualConversion />
+      <DualConversion calculadora={calculadoraPropietariosActiva()} />
       <GuestAppSection />
       <ServicesSlider />
       <SedaOSSection />

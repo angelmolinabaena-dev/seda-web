@@ -8,7 +8,7 @@ import { IllustrativeTag } from "@/components/illustrative-tag"
 import { useScrollReveal } from "@/hooks/use-scroll-reveal"
 import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion"
 
-export function DualConversion() {
+export function DualConversion({ calculadora = false }: { calculadora?: boolean }) {
   const t = useTranslations()
   const { ref: leftRef, isVisible: leftVisible } = useScrollReveal(0.12)
   const { ref: rightRef, isVisible: rightVisible } = useScrollReveal(0.12)
@@ -104,6 +104,19 @@ export function DualConversion() {
                 strokeWidth={1.75}
               />
             </Link>
+            {/* Solo con el flag de la calculadora encendido (lib/calculadora-propietarios.ts). */}
+            {calculadora && (
+              <Link
+                href="/propietarios/calculadora"
+                className="group mt-5 flex w-fit items-center gap-3 font-mono text-[11px] tracking-[0.25em] uppercase text-background/85 hover:text-background border-b border-background/30 hover:border-background/85 pb-1 transition-colors"
+              >
+                {t("calculadora.link")}
+                <ArrowUpRight
+                  className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                  strokeWidth={1.75}
+                />
+              </Link>
+            )}
           </div>
         </div>
       </div>

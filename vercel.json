@@ -52,6 +52,9 @@
   "functions": {
     "app/api/contact/route.ts": {
       "maxDuration": 10
+    },
+    "app/api/leads/propietario/route.ts": {
+      "maxDuration": 10
     }
   }
 }
