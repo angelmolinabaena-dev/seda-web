@@ -64,3 +64,7 @@ Tiene que quedar en **14 500 caracteres o menos** (el panel deja de guardar sobr
 - El calendario se abría desplazado y cortado por la izquierda (Beds24 le pone left negativo en línea). En móvil ahora es una ventana fija centrada, con 16 px de margen a cada lado.
 - Entrada, Salida y Personas alineados a los mismos bordes.
 - 14712 caracteres, guardado en Beds24.
+
+## v5.3 (3-nov): móvil, toque fantasma
+- v5.2 centraba el calendario encima de los campos: al tocar Entrada o Salida, el mismo toque caía en un día del calendario y cambiaba la fecha sola. Ahora el calendario se abre debajo de la barra (fechas y personas), sin tapar ningún campo.
+- 14942 caracteres, guardado en Beds24.
