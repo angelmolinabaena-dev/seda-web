@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+
+<meta name="viewport" content="width=device-width, initial-scale=1"><META name="description" content="Secure online booking page for Bay Side"><META name="keywords" content="Bay Side, secure online booking, reservation calendar, book now, booking engine, booking button, booking widget, channel manager, property management, OTA distribution"><link rel="shortcut icon" href="/favicon2.ico" /><title>Secure Online Booking</title>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="vendor/bootstrap-3.3.4/css/bootstrap.min.css">
+<style type='text/css'>
+.plist_tagblock {background-color: #ffffff;}
+a {color: #008acc;}
+.fakelink {color: #008acc;}
+.colorbody {background-color: #f4f4f4; font-family:arial,helvetica,sans-serif; font-size:14px; }
+.atcolor{color: #424242; background-color: #f4f4f4;}
+.border{border: 1px solid #dfdfdf;}
+.bt{border-top: 1px solid #dfdfdf;}
+.br{border-right: 1px solid #dfdfdf;}
+.bb{border-bottom: 1px solid #dfdfdf;}
+.bl{border-left: 1px solid #dfdfdf;}
+.border2{border: 3px solid #dfdfdf;}
+.bt2{border-top: 3px solid #dfdfdf;}
+.br2{border-right: 3px solid #dfdfdf;}
+.bb2{border-bottom: 3px solid #dfdfdf;}
+.bl2{border-left: 3px solid #dfdfdf;}
+.monthcalendar {border-color: #dfdfdf;}
+.monthcalendar td {border-color: #dfdfdf;}
+.at_datenotavailable {background-color: #f2dede; color: #a94442;}
+.at_dateavailable {background-color: #f2f2f2; color: #424242;}
+.at_daterequest {background-color: #dddddd; color: #777777;}
+.datenotavail {background-color: #f2dede; color: #a94442;}
+.dateavail {background-color: #f2f2f2; color: #424242;}
+.daterequest {background-color: #dddddd; color: #777777;}
+.warnnotavail {background-color: #f2dede; color: #a94442;}
+.at_pricestay {color: #222222;}
+.datestay {color: #222222;}
+.at_headstay{color: #222222;}
+.setsplitdates1 .dateavail.prevdateavail {background: linear-gradient(-45deg, #f2f2f2, #f2f2f2 50%, #f2f2f2 50%)}
+.setsplitdates1 .dateavail.prevdatenotavail {background: linear-gradient(-45deg, #f2f2f2, #f2f2f2 50%, #f2dede 50%)}
+.setsplitdates1 .dateavail.prevdaterequest {background: linear-gradient(-45deg, #f2f2f2, #f2f2f2 50%, #dddddd 50%)}
+.setsplitdates1 .datenotavail.prevdateavail {background: linear-gradient(-45deg, #f2dede, #f2dede 50%, #f2f2f2 50%)}
+.setsplitdates1 .datenotavail.prevdatenotavail {background: linear-gradient(-45deg, #f2dede, #f2dede 50%, #f2dede 50%)}
+.setsplitdates1 .datenotavail.prevdaterequest {background: linear-gradient(-45deg, #f2dede, #f2dede 50%, #dddddd 50%)}
+.setsplitdates1 .daterequest.prevdateavail {background: linear-gradient(-45deg, #dddddd, #dddddd 50%, #f2f2f2 50%)}
+.setsplitdates1 .daterequest.prevdatenotavail {background: linear-gradient(-45deg, #dddddd, #dddddd 50%, #f2dede 50%)}
+.setsplitdates1 .daterequest.prevdaterequest {background: linear-gradient(-45deg, #dddddd, #dddddd 50%, #dddddd 50%)}
+.setborderstyle1 #b24scroller {box-shadow: 0 1px 6px 0  #dfdfdf, 1px 1px 1px 0px #dfdfdf}
+.setborderstyle1 #b24bookshoppingcart {box-shadow: 0 1px 6px 0  #dfdfdf, 1px 1px 1px 0px #dfdfdf}
+.setborderstyle1 .b24panel-room {box-shadow: 0 1px 6px 0  #dfdfdf, 1px 1px 1px 0px #dfdfdf}
+.setborderstyle1 .b24panel-prop {box-shadow: 0 1px 6px 0  #dfdfdf, 1px 1px 1px 0px #dfdfdf}
+.colorbookingform, .b24panel {color:#424242; background-color:#ffffff;}
+.colorbookingstripto {color:#424242; background-color:#ffffff;}
+.colorstripfrom {background-color: #ffffff}
+.colorbookingstrip a {color: #424242; font-weight:normal;}
+.colorbookingstrip {
+	background-color: #ffffff;
+	background: linear-gradient(to bottom, #ffffff, #ffffff);
+	background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#ffffff));
+	background: -moz-linear-gradient(top, #ffffff, #ffffff);
+	background: -webkit-linear-gradient(top,  #ffffff, #ffffff);
+	background: -o-linear-gradient(top, #ffffff, #ffffff);
+	background: linear-gradient(top,  #ffffff, #ffffff);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr="#ffffff", endColorstr="#ffffff");
+	color: #424242;
+	}.button, .buttondis {color:#ffffff; background: #008acc;
+	border: none;
+	}.button:hover{
+ background: #00608e;
+}
+.button a{
+ color: #ffffff;
+}
+
+</style>
+<link rel="stylesheet" href="../custom.css">
+<style>
+  /* SOLO de la preview: no se pega en Beds24 */
+  .preview-aviso { margin: 0; padding: 8px 24px; font: 500 12px/1.4 "JetBrains Mono", ui-monospace, monospace; color: #faf8f4; background: #211f1c; text-align: center; }
+  .preview-mapa { display: grid; place-items: center; height: 300px; padding: 16px; text-align: center; font: 500 12px/1.5 "JetBrains Mono", ui-monospace, monospace; color: #6c6760; background: #f4f1eb; border: 1px solid #d9d7d4; }
+  #b24scroller { position: relative; }
+  .preview-widget { display: none; position: absolute; top: calc(100% - 8px); left: 0; z-index: 1000; float: none; }
+  @media (max-width: 767px) { .preview-widget { left: -8px; } }
+  body.preview-widget-abierto .preview-widget { display: block; }
+</style>
+</head>
+<body class="colorbody colorbody-es layout1">
+<p class="preview-aviso" role="note">PREVISUALIZACIÓN · instantánea real de Beds24 del 3-nov-2026 + custom.css · precio de prueba · sin include/booking3.css · header y footer en ubicación supuesta</p>
+<!--
+  SEDA Private Homes · cabecera de la booking page de Beds24
+  Pegar en: SETTINGS → BOOKING PAGE → (campo «Header HTML»). Ver COMO-PEGAR.md.
+
+  · Funciona con custom.css pegado (las clases .seda-bp-* y .seda-t viven allí).
+  · Logo: el isotipo que ya usa la navegación de la web (public/brand/svg/seda-isotipo-ink.svg,
+    45×30 px, mismo fichero y mismo tamaño). Se sirve desde sedaprivatehomes.com.
+  · Idioma: cada enlace lleva data-l="xx" y custom.css deja visible solo el del idioma de la página.
+    El idioma se toma de ?lang= (la web lo envía), si no del <html lang>, si no inglés.
+    El <script> es opcional: si Beds24 lo elimina, queda el atributo <html lang> (Beds24 sí lo pone,
+    comprobado en la instantánea real) y, sin él, inglés.
+  · it: la web no tiene versión en italiano; el enlace de vuelta va a /en.
+  · Textos nuevos (no están en messages/*.json): ver textos.md §8.
+-->
+<script>
+  (function () {
+    try {
+      var ok = ["es", "en", "fr", "de", "it"];
+      var q = new URLSearchParams(window.location.search).get("lang");
+      var l = (q || document.documentElement.lang || navigator.language || "en").slice(0, 2).toLowerCase();
+      document.documentElement.setAttribute("data-seda-lang", ok.indexOf(l) > -1 ? l : "en");
+    } catch (e) {}
+  })();
+</script>
+<header class="seda-bp-header">
+  <div class="seda-bp-header__inner">
+    <a class="seda-bp-brand" href="https://sedaprivatehomes.com/">
+      <img
+        class="seda-bp-brand__mark"
+        src="../../../public/brand/svg/seda-isotipo-ink.svg"
+        alt=""
+        width="45"
+        height="30"
+      />
+      <span class="seda-bp-brand__name">SEDA Private Homes</span>
+    </a>
+    <a class="seda-bp-back seda-t" data-l="es" href="https://sedaprivatehomes.com/"><span aria-hidden="true">←</span> Volver a la web</a>
+    <a class="seda-bp-back seda-t" data-l="en" href="https://sedaprivatehomes.com/en"><span aria-hidden="true">←</span> Back to the website</a>
+    <a class="seda-bp-back seda-t" data-l="fr" href="https://sedaprivatehomes.com/fr"><span aria-hidden="true">←</span> Retour au site</a>
+    <a class="seda-bp-back seda-t" data-l="de" href="https://sedaprivatehomes.com/de"><span aria-hidden="true">←</span> Zurück zur Website</a>
+    <a class="seda-bp-back seda-t" data-l="it" href="https://sedaprivatehomes.com/en"><span aria-hidden="true">←</span> Torna al sito</a>
+  </div>
+</header>
+
+<div id="ajaxqueue"></div>
+<div id="topofthebookingpage" class="b24fullcontainer b24fullcontainer-top">
+  <div class="container container2 atcolor">
+    <div class="pull-left">
+    <div class="dropdown b24languagedropdown">
+  <button class="btn dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+Español  <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+<li class="lang-en"><a href="?propid=348601&amp;lang=en&booking=REDACTADO">English</a></li><li class="lang-de"><a href="?propid=348601&amp;lang=de&booking=REDACTADO">Deutsch</a></li><li class="lang-es"><a href="?propid=348601&amp;lang=es&booking=REDACTADO">Español</a></li><li class="lang-fr"><a href="?propid=348601&amp;lang=fr&booking=REDACTADO">Français</a></li>  </ul>
+</div>	
+    </div>	
+		<div class="pull-right">
+		
+
+        </div>	
+    <div class="clearfix"></div>
+  </div>
+<div class="clearfix"></div>
+</div>
+
+
+<div class="b24fullcontainer b24fullcontainer-ownerrow1"><div class="container container2 atcolor">
+<div class="row">
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 b24-module b24-owner-module b24-owner-desc1 b24-owner-170049"><div class="agencydesc1 ckedit">
+
+</div></div></div>
+</div>
+<div class="clearfix"></div>
+</div>
+
+
+<form id="formlook" method="GET"><input type="hidden" name="booking" value="SESION" /><input type="hidden" name="propid" value="348601"><input type="hidden" name="width" value="960"><input type="hidden" name="page" value="book3"><input type="hidden" id="limitstart" name="limitstart" value="0"><div id="ajaxroomofferprop348601"><div class="b24fullcontainer b24fullcontainer-proprow1"><div class="container container2 atcolor">
+<div class="row">
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 b24-module b24-prop-module b24-prop-slider b24-prop-348601"></div></div>
+</div>
+<div class="clearfix"></div>
+</div>
+
+
+<div id="b24scroller-fullcontainer" class="b24fullcontainer b24fullcontainer-selector">
+<div id="b24scroller-container" class="container atcolor">
+<!-- thislayout = 3 --><div class="clearfix"></div>
+<div id="b24scroller-anchor"></div> 
+<div id="b24scroller" class="colorbookingstrip b24-bookingstrip bt bb bl br">
+<div class="row">
+
+
+
+<div class="col-md-1 col-lg-1">
+</div>
+<div class="col-xs-6 col-sm-3 col-md-3 col-lg-3 b24-selector-checkin"><div id="inputcheckingroup" class="form-group"><label class="control-label" for="inputcheckin">Fecha de Entrada</label><div id="checkin" class="input-group date"><span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span><input readonly="readonly" name="checkin" id="inputcheckin" type="text" class="form-control" data-date-format="dd D MMM YYYY" value="ma 3 nov 2026"><input name="checkin_hide" id="checkin_hide" type="hidden" value=""></div><div class="bootstrap-datetimepicker-widget dropdown-menu bottom preview-widget" role="dialog" aria-label="noviembre de 2026"><ul class="list-unstyled"><li class="collapse in"><div class="datepicker"><div class="datepicker-days"><table class="table-condensed"><thead><tr><th class="prev" data-action="previous"><span class="glyphicon glyphicon-chevron-left"></span></th><th class="picker-switch" data-action="pickerSwitch" colspan="5">noviembre de 2026</th><th class="next" data-action="next"><span class="glyphicon glyphicon-chevron-right"></span></th></tr><tr><th class="dow">lu</th><th class="dow">ma</th><th class="dow">mi</th><th class="dow">ju</th><th class="dow">vi</th><th class="dow">sá</th><th class="dow">do</th></tr></thead><tbody><tr><td class="day old disabled">26</td><td class="day old disabled">27</td><td class="day old disabled">28</td><td class="day old disabled">29</td><td class="day old disabled">30</td><td class="day old disabled">31</td><td class="day disabled" data-action="selectDay">1</td></tr><tr><td class="day disabled" data-action="selectDay">2</td><td class="day today active" data-action="selectDay">3</td><td class="day" data-action="selectDay">4</td><td class="day" data-action="selectDay">5</td><td class="day" data-action="selectDay">6</td><td class="day" data-action="selectDay">7</td><td class="day" data-action="selectDay">8</td></tr><tr><td class="day" data-action="selectDay">9</td><td class="day" data-action="selectDay">10</td><td class="day" data-action="selectDay">11</td><td class="day" data-action="selectDay">12</td><td class="day" data-action="selectDay">13</td><td class="day" data-action="selectDay">14</td><td class="day" data-action="selectDay">15</td></tr><tr><td class="day" data-action="selectDay">16</td><td class="day" data-action="selectDay">17</td><td class="day" data-action="selectDay">18</td><td class="day" data-action="selectDay">19</td><td class="day" data-action="selectDay">20</td><td class="day" data-action="selectDay">21</td><td class="day" data-action="selectDay">22</td></tr><tr><td class="day" data-action="selectDay">23</td><td class="day" data-action="selectDay">24</td><td class="day" data-action="selectDay">25</td><td class="day" data-action="selectDay">26</td><td class="day" data-action="selectDay">27</td><td class="day" data-action="selectDay">28</td><td class="day" data-action="selectDay">29</td></tr><tr><td class="day" data-action="selectDay">30</td><td class="day new">1</td><td class="day new">2</td><td class="day new">3</td><td class="day new">4</td><td class="day new">5</td><td class="day new">6</td></tr></tbody></table></div></div></li></ul></div></div>	
+</div>
+
+<div class="col-xs-6 col-sm-3 col-md-3 col-lg-3 b24-selector-checkout"><div id="inputcheckoutgroup" class="form-group"><label class="control-label" for="inputcheckout">Fecha de Salida</label><div id="checkout" class="input-group date"><span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span><input readonly="readonly" name="checkout" id="inputcheckout" type="text" class="form-control" data-date-format="dd D MMM YYYY" value="ju 5 nov 2026"><input name="checkout_hide" id="checkout_hide" type="hidden" value=""></div></div></div>
+
+<div class="hidden-xs col-sm-3 col-md-2 col-lg-2 b24-selector-numnight"><div class="form-group"><label class="control-label" for="inputnumnight">Noches</label><select class="form-control" id="inputnumnight" name="numnight"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option><option>17</option><option>18</option><option>19</option><option>20</option><option>21</option><option>22</option><option>23</option><option>24</option><option>25</option><option>26</option><option>27</option><option>28</option><option>29</option><option>30</option><option>31</option><option>32</option><option>33</option><option>34</option><option>35</option><option>36</option><option>37</option><option>38</option><option>39</option><option>40</option><option>41</option><option>42</option><option>43</option><option>44</option><option>45</option><option>46</option><option>47</option><option>48</option><option>49</option><option>50</option><option>51</option><option>52</option><option>53</option><option>54</option><option>55</option><option>56</option><option>57</option><option>58</option><option>59</option><option>60</option><option>61</option><option>62</option><option>63</option><option>64</option><option>65</option><option>66</option><option>67</option><option>68</option><option>69</option><option>70</option><option>71</option><option>72</option><option>73</option><option>74</option><option>75</option><option>76</option><option>77</option><option>78</option><option>79</option><option>80</option><option>81</option><option>82</option><option>83</option><option>84</option><option>85</option><option>86</option><option>87</option><option>88</option><option>89</option><option>90</option><option>91</option><option>92</option><option>93</option><option>94</option><option>95</option><option>96</option><option>97</option><option>98</option><option>99</option><option>100</option><option>101</option><option>102</option><option>103</option><option>104</option><option>105</option><option>106</option><option>107</option><option>108</option><option>109</option><option>110</option><option>111</option><option>112</option><option>113</option><option>114</option><option>115</option><option>116</option><option>117</option><option>118</option><option>119</option><option>120</option><option>121</option><option>122</option><option>123</option><option>124</option><option>125</option><option>126</option><option>127</option><option>128</option><option>129</option><option>130</option><option>131</option><option>132</option><option>133</option><option>134</option><option>135</option><option>136</option><option>137</option><option>138</option><option>139</option><option>140</option><option>141</option><option>142</option><option>143</option><option>144</option><option>145</option><option>146</option><option>147</option><option>148</option><option>149</option><option>150</option><option>151</option><option>152</option><option>153</option><option>154</option><option>155</option><option>156</option><option>157</option><option>158</option><option>159</option><option>160</option><option>161</option><option>162</option><option>163</option><option>164</option><option>165</option><option>166</option><option>167</option><option>168</option><option>169</option><option>170</option><option>171</option><option>172</option><option>173</option><option>174</option><option>175</option><option>176</option><option>177</option><option>178</option><option>179</option><option>180</option><option>181</option><option>182</option><option>183</option><option>184</option><option>185</option><option>186</option><option>187</option><option>188</option><option>189</option><option>190</option><option>191</option><option>192</option><option>193</option><option>194</option><option>195</option><option>196</option><option>197</option><option>198</option><option>199</option><option>200</option><option>201</option><option>202</option><option>203</option><option>204</option><option>205</option><option>206</option><option>207</option><option>208</option><option>209</option><option>210</option><option>211</option><option>212</option><option>213</option><option>214</option><option>215</option><option>216</option><option>217</option><option>218</option><option>219</option><option>220</option><option>221</option><option>222</option><option>223</option><option>224</option><option>225</option><option>226</option><option>227</option><option>228</option><option>229</option><option>230</option><option>231</option><option>232</option><option>233</option><option>234</option><option>235</option><option>236</option><option>237</option><option>238</option><option>239</option><option>240</option><option>241</option><option>242</option><option>243</option><option>244</option><option>245</option><option>246</option><option>247</option><option>248</option><option>249</option><option>250</option><option>251</option><option>252</option><option>253</option><option>254</option><option>255</option><option>256</option><option>257</option><option>258</option><option>259</option><option>260</option><option>261</option><option>262</option><option>263</option><option>264</option><option>265</option><option>266</option><option>267</option><option>268</option><option>269</option><option>270</option><option>271</option><option>272</option><option>273</option><option>274</option><option>275</option><option>276</option><option>277</option><option>278</option><option>279</option><option>280</option><option>281</option><option>282</option><option>283</option><option>284</option><option>285</option><option>286</option><option>287</option><option>288</option><option>289</option><option>290</option><option>291</option><option>292</option><option>293</option><option>294</option><option>295</option><option>296</option><option>297</option><option>298</option><option>299</option><option>300</option><option>301</option><option>302</option><option>303</option><option>304</option><option>305</option><option>306</option><option>307</option><option>308</option><option>309</option><option>310</option><option>311</option><option>312</option><option>313</option><option>314</option><option>315</option><option>316</option><option>317</option><option>318</option><option>319</option><option>320</option><option>321</option><option>322</option><option>323</option><option>324</option><option>325</option><option>326</option><option>327</option><option>328</option><option>329</option><option>330</option><option>331</option><option>332</option><option>333</option><option>334</option><option>335</option><option>336</option><option>337</option><option>338</option><option>339</option><option>340</option><option>341</option><option>342</option><option>343</option><option>344</option><option>345</option><option>346</option><option>347</option><option>348</option><option>349</option><option>350</option><option>351</option><option>352</option><option>353</option><option>354</option><option>355</option><option>356</option><option>357</option><option>358</option><option>359</option><option>360</option><option>361</option><option>362</option><option>363</option><option>364</option><option>365</option></select></div></div>
+		
+<div class="col-sm-3 col-md-2 col-lg-2 b24-selector-numadult"><div class="form-group"><label class="control-label" for="inputnumadult">Personas</label><select class="form-control multiroomdisable" id="inputnumadult" name="numadult"><option value="1">1</option><option selected value="2">2</option><option value="3">3</option><option value="4">4</option></select></div></div>
+<div class="col-md-1 col-lg-1">
+</div>
+			
+
+
+
+
+
+    
+</div>	
+</div>
+	
+
+	
+
+	
+
+</div>
+<div class="clearfix"></div>
+</div>
+
+<div class="b24fullcontainer b24fullcontainer-rooms">
+<div class="container atcolor">
+<div id="ajaxroomoffer719434">		
+<div id="roomid719434" class="b24room">
+<div class="panel b24panel-room atcolor border">	
+<div class="panel-heading b24-roompanel-heading colorbookingstrip bb">
+<div id="roomnametext719434" class="at_roomnametext b24inline-block">
+Bay Side
+</div>
+<div class="roomalert"></div>
+</div>
+<div class="panel-body b24panel">
+<div id="ajaxroomoffer1-719434" class="offer offer-o719434-1 offerid1">		
+<div class="">
+<div id="offernametext1-719434" class="at_offername">
+
+</div>
+<div class="clearfix"></div>
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 b24-module b24-offer-module b24-offer-pic b24-offer--o719434-1"><img alt="" class="img-responsive" src="https://media.xmlcal.com/pic/p0034/8601/01.400.png"></div><div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 b24-module b24-offer-module b24-offer-summary b24-offer--o719434-1"><div class="at_offersummary ckedit">
+
+</div></div><div class="col-xs-12 col-sm-2 col-md-2 col-lg-2 b24-module b24-offer-module b24-offer-select b24-offer--o719434-1"><div class="multiroomhide">
+<div id="warn-roomprice-1-719434" class="hidden at_offerwarndiv alert alert-danger text-center b24-roomwarn"></div>
+<div id="roomprice-1-719434" class="">
+<div id="price-roomprice-1-719434" class="text-right at_roomofferprice">400,00 €</div>
+<div class="b24-roombuttondiv">
+<input type="submit" class="btn pull-right btn-lg button at_bookingbut" name="br1-719434" id="brbut1-719434" value="Reservar">    
+<div class="clearfix"></div>    
+</div>   
+</div>
+<div id="enquire-roomprice-1-719434" class="hidden b24roomenquire">
+<a href="?numadult=2&amp;numchild=0&amp;firstnight=2026-11-03&amp;numnight=2&amp;multiroom=0&amp;width=960&amp;limitstart=0&amp;propid=348601&amp;version=3&amp;page=enquire&amp;enquireid=719434&booking=REDACTADO">Preguntar
+</a>
+</div>	 
+</div>	
+</div></div>
+<div class="clearfix"></div>
+<div class="row">
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 b24-module b24-offer-module b24-offer-cal b24-offer--o719434-1"><div class="fakelink" onclick="showid('collapsecal-o719434-1');"><span class="b24fa glyphicon glyphicon-calendar" aria-hidden="true">&nbsp;</span>Comprobar Disponibilidad</div><div id="collapsecal-o719434-1" class=" hidden-xs hidden-sm hidden-md hidden-lg"><div class="fakelink" onclick="hideid('collapsecal-o719434-1');"><span class="b24fa glyphicon glyphicon-remove" aria-hidden="true">&nbsp;</span>Cerrar</div><div><div id="roomcalendar1-719434" class="ajaxroomcalendar row"><div class="roomoffercalendarmonth calendarmonth1  col-xs-12 col-sm-3 col-md-3 col-lg-3"><table id="roomcalendar1-719434-1" class="monthcalendar monthcalendarnotlast calendar1-719434"><tr><td colspan="7" class="monthcalendarhead"><div class="pull-left pointer b24backonemonth"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></div><span id="roomcalendarmonth1-719434-1">noviembre de 2026</span></td></tr><tr><td class="monthcalendarday day1 dayMon">lun</td><td class="monthcalendarday day2 dayTue">mar</td><td class="monthcalendarday day3 dayWed">mié</td><td class="monthcalendarday day4 dayThu">jue</td><td class="monthcalendarday day5 dayFri">vie</td><td class="monthcalendarday day6 daySat">sáb</td><td class="monthcalendarday day7 daySun">dom</td></tr><tr><td id="calcell1-719434-1" class="daymon">&nbsp;</td><td id="calcell1-719434-2" class="daytue">&nbsp;</td><td id="calcell1-719434-3" class="daywed">&nbsp;</td><td id="calcell1-719434-4" class="daythu">&nbsp;</td><td id="calcell1-719434-5" class="dayfri">&nbsp;</td><td id="calcell1-719434-6" class="daysat">&nbsp;</td><td id="calcell1-719434-7" class="daysun datenotavail">1</td></tr><tr><td id="calcell1-719434-8" class="daymon dateavail">2</td><td id="calcell1-719434-9" class="daytue dateavail">3</td><td id="calcell1-719434-10" class="daywed dateavail">4</td><td id="calcell1-719434-11" class="daythu datenotavail">5</td><td id="calcell1-719434-12" class="dayfri datenotavail">6</td><td id="calcell1-719434-13" class="daysat datenotavail">7</td><td id="calcell1-719434-14" class="daysun dateavail">8</td></tr><tr><td id="calcell1-719434-15" class="daymon dateavail">9</td><td id="calcell1-719434-16" class="daytue dateavail">10</td><td id="calcell1-719434-17" class="daywed dateavail">11</td><td id="calcell1-719434-18" class="daythu dateavail">12</td><td id="calcell1-719434-19" class="dayfri dateavail">13</td><td id="calcell1-719434-20" class="daysat dateavail">14</td><td id="calcell1-719434-21" class="daysun dateavail">15</td></tr><tr><td id="calcell1-719434-22" class="daymon dateavail">16</td><td id="calcell1-719434-23" class="daytue dateavail">17</td><td id="calcell1-719434-24" class="daywed dateavail">18</td><td id="calcell1-719434-25" class="daythu dateavail">19</td><td id="calcell1-719434-26" class="dayfri dateavail">20</td><td id="calcell1-719434-27" class="daysat dateavail">21</td><td id="calcell1-719434-28" class="daysun dateavail">22</td></tr><tr><td id="calcell1-719434-29" class="daymon dateavail">23</td><td id="calcell1-719434-30" class="daytue dateavail">24</td><td id="calcell1-719434-31" class="daywed dateavail">25</td><td id="calcell1-719434-32" class="daythu dateavail">26</td><td id="calcell1-719434-33" class="dayfri dateavail">27</td><td id="calcell1-719434-34" class="daysat dateavail">28</td><td id="calcell1-719434-35" class="daysun dateavail">29</td></tr><tr><td id="calcell1-719434-36" class="daymon dateavail">30</td><td id="calcell1-719434-37" class="daytue">&nbsp;</td><td id="calcell1-719434-38" class="daywed">&nbsp;</td><td id="calcell1-719434-39" class="daythu">&nbsp;</td><td id="calcell1-719434-40" class="dayfri">&nbsp;</td><td id="calcell1-719434-41" class="daysat">&nbsp;</td><td id="calcell1-719434-42" class="daysun">&nbsp;</td></tr></table></div><div class="roomoffercalendarmonth calendarmonth2  col-xs-12 col-sm-3 col-md-3 col-lg-3"><table id="roomcalendar1-719434-2" class="monthcalendar monthcalendarnotlast calendar1-719434"><tr><td colspan="7" class="monthcalendarhead"><span id="roomcalendarmonth1-719434-2">diciembre de 2026</span></td></tr><tr><td class="monthcalendarday day1 dayMon">lun</td><td class="monthcalendarday day2 dayTue">mar</td><td class="monthcalendarday day3 dayWed">mié</td><td class="monthcalendarday day4 dayThu">jue</td><td class="monthcalendarday day5 dayFri">vie</td><td class="monthcalendarday day6 daySat">sáb</td><td class="monthcalendarday day7 daySun">dom</td></tr><tr><td id="calcell1-719434-43" class="daymon">&nbsp;</td><td id="calcell1-719434-44" class="daytue dateavail">1</td><td id="calcell1-719434-45" class="daywed dateavail">2</td><td id="calcell1-719434-46" class="daythu dateavail">3</td><td id="calcell1-719434-47" class="dayfri dateavail">4</td><td id="calcell1-719434-48" class="daysat dateavail">5</td><td id="calcell1-719434-49" class="daysun dateavail">6</td></tr><tr><td id="calcell1-719434-50" class="daymon dateavail">7</td><td id="calcell1-719434-51" class="daytue dateavail">8</td><td id="calcell1-719434-52" class="daywed dateavail">9</td><td id="calcell1-719434-53" class="daythu dateavail">10</td><td id="calcell1-719434-54" class="dayfri dateavail">11</td><td id="calcell1-719434-55" class="daysat dateavail">12</td><td id="calcell1-719434-56" class="daysun dateavail">13</td></tr><tr><td id="calcell1-719434-57" class="daymon dateavail">14</td><td id="calcell1-719434-58" class="daytue dateavail">15</td><td id="calcell1-719434-59" class="daywed dateavail">16</td><td id="calcell1-719434-60" class="daythu dateavail">17</td><td id="calcell1-719434-61" class="dayfri dateavail">18</td><td id="calcell1-719434-62" class="daysat dateavail">19</td><td id="calcell1-719434-63" class="daysun dateavail">20</td></tr><tr><td id="calcell1-719434-64" class="daymon dateavail">21</td><td id="calcell1-719434-65" class="daytue dateavail">22</td><td id="calcell1-719434-66" class="daywed dateavail">23</td><td id="calcell1-719434-67" class="daythu dateavail">24</td><td id="calcell1-719434-68" class="dayfri dateavail">25</td><td id="calcell1-719434-69" class="daysat dateavail">26</td><td id="calcell1-719434-70" class="daysun dateavail">27</td></tr><tr><td id="calcell1-719434-71" class="daymon dateavail">28</td><td id="calcell1-719434-72" class="daytue dateavail">29</td><td id="calcell1-719434-73" class="daywed dateavail">30</td><td id="calcell1-719434-74" class="daythu dateavail">31</td><td id="calcell1-719434-75" class="dayfri">&nbsp;</td><td id="calcell1-719434-76" class="daysat">&nbsp;</td><td id="calcell1-719434-77" class="daysun">&nbsp;</td></tr><tr><td id="calcell1-719434-78" class="daymon">&nbsp;</td><td id="calcell1-719434-79" class="daytue">&nbsp;</td><td id="calcell1-719434-80" class="daywed">&nbsp;</td><td id="calcell1-719434-81" class="daythu">&nbsp;</td><td id="calcell1-719434-82" class="dayfri">&nbsp;</td><td id="calcell1-719434-83" class="daysat">&nbsp;</td><td id="calcell1-719434-84" class="daysun">&nbsp;</td></tr></table></div><div class="roomoffercalendarmonth calendarmonth3  col-xs-12 col-sm-3 col-md-3 col-lg-3"><table id="roomcalendar1-719434-3" class="monthcalendar calendar1-719434"><tr><td colspan="7" class="monthcalendarhead"><span id="roomcalendarmonth1-719434-3">enero de 2027</span><div class="pull-right b24forwardonemonth"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></div></td></tr><tr><td class="monthcalendarday day1 dayMon">lun</td><td class="monthcalendarday day2 dayTue">mar</td><td class="monthcalendarday day3 dayWed">mié</td><td class="monthcalendarday day4 dayThu">jue</td><td class="monthcalendarday day5 dayFri">vie</td><td class="monthcalendarday day6 daySat">sáb</td><td class="monthcalendarday day7 daySun">dom</td></tr><tr><td id="calcell1-719434-85" class="daymon">&nbsp;</td><td id="calcell1-719434-86" class="daytue">&nbsp;</td><td id="calcell1-719434-87" class="daywed">&nbsp;</td><td id="calcell1-719434-88" class="daythu">&nbsp;</td><td id="calcell1-719434-89" class="dayfri dateavail">1</td><td id="calcell1-719434-90" class="daysat dateavail">2</td><td id="calcell1-719434-91" class="daysun dateavail">3</td></tr><tr><td id="calcell1-719434-92" class="daymon dateavail">4</td><td id="calcell1-719434-93" class="daytue dateavail">5</td><td id="calcell1-719434-94" class="daywed dateavail">6</td><td id="calcell1-719434-95" class="daythu dateavail">7</td><td id="calcell1-719434-96" class="dayfri dateavail">8</td><td id="calcell1-719434-97" class="daysat dateavail">9</td><td id="calcell1-719434-98" class="daysun dateavail">10</td></tr><tr><td id="calcell1-719434-99" class="daymon dateavail">11</td><td id="calcell1-719434-100" class="daytue dateavail">12</td><td id="calcell1-719434-101" class="daywed dateavail">13</td><td id="calcell1-719434-102" class="daythu dateavail">14</td><td id="calcell1-719434-103" class="dayfri dateavail">15</td><td id="calcell1-719434-104" class="daysat dateavail">16</td><td id="calcell1-719434-105" class="daysun dateavail">17</td></tr><tr><td id="calcell1-719434-106" class="daymon dateavail">18</td><td id="calcell1-719434-107" class="daytue dateavail">19</td><td id="calcell1-719434-108" class="daywed dateavail">20</td><td id="calcell1-719434-109" class="daythu dateavail">21</td><td id="calcell1-719434-110" class="dayfri dateavail">22</td><td id="calcell1-719434-111" class="daysat dateavail">23</td><td id="calcell1-719434-112" class="daysun dateavail">24</td></tr><tr><td id="calcell1-719434-113" class="daymon dateavail">25</td><td id="calcell1-719434-114" class="daytue dateavail">26</td><td id="calcell1-719434-115" class="daywed dateavail">27</td><td id="calcell1-719434-116" class="daythu dateavail">28</td><td id="calcell1-719434-117" class="dayfri dateavail">29</td><td id="calcell1-719434-118" class="daysat dateavail">30</td><td id="calcell1-719434-119" class="daysun dateavail">31</td></tr><tr><td id="calcell1-719434-120" class="daymon">&nbsp;</td><td id="calcell1-719434-121" class="daytue">&nbsp;</td><td id="calcell1-719434-122" class="daywed">&nbsp;</td><td id="calcell1-719434-123" class="daythu">&nbsp;</td><td id="calcell1-719434-124" class="dayfri">&nbsp;</td><td id="calcell1-719434-125" class="daysat">&nbsp;</td><td id="calcell1-719434-126" class="daysun">&nbsp;</td></tr></table></div></div></div></div></div></div>
+</div>	
+<hr id="offerlinebreak-719434-1" class="bb">
+</div>
+
+
+
+
+
+	
+<div id="ajaxroomnooffer719434" class="hidden">No disponible</div>
+<div class="clearfix"></div>
+<div class="row">
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 b24-module b24-room-module b24-room-106 b24-room-719434"><div class="b24-features b24-room-features-719434"></div>
+</div></div>
+</div>
+</div>
+</div>
+</div>
+
+
+<div id="notavailableforselection" class="alert alert-danger text-center hidden">
+No disponible para su selección
+</div>
+
+</div>
+
+<div class="clearfix"></div>
+
+<div class="container atcolor">
+
+</div>
+<div class="clearfix"></div>
+
+</div>
+
+
+
+<div class="b24fullcontainer b24fullcontainer-proprow11"><div class="container container2 atcolor">
+<div class="row">
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 b24-module b24-prop-module b24-prop-59 b24-prop-348601"><div class="preview-mapa">Mapa de Google (iframe) — no se carga en la preview</div>
+</div></div>
+</div>
+<div class="clearfix"></div>
+</div>
+
+</div></form>
+
+<div class="b24fullcontainer b24fullcontainer-ownerrow11"><div class="container container2 atcolor">
+<div class="row">
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 b24-module b24-owner-module b24-owner-desc2 b24-owner-170049"><div class="agencydesc2 ckedit">
+
+</div></div></div>
+</div>
+<div class="clearfix"></div>
+</div>
+
+
+
+<!--
+  SEDA Private Homes · pie de la booking page de Beds24
+  Pegar en: SETTINGS → BOOKING PAGE → (campo «Footer HTML»). Ver COMO-PEGAR.md.
+
+  · Contacto: info@sedaprivatehomes.com (lib/site-contact.ts → generalContact.email).
+  · Privacidad: /privacidad. «Condiciones»: /aviso-legal, que lleva el apartado «Condiciones de uso» de la
+    web (lib/legal/aviso-legal.ts). La web NO tiene una página propia de «condiciones de reserva»: las
+    condiciones de la estancia se muestran y se aceptan en esta página (aviso legal, «Las condiciones de una
+    estancia se muestran y se aceptan en la página de reserva»). Ver textos.md §6.
+  · La nota «actúa en nombre y por cuenta del propietario» es literal de messages/*.json
+    (escaparate.arrendador.nota) en es, en, fr y de. La versión italiana es traducción nueva.
+  · Sin año: un pie fijo con «© 2026» caduca. El aviso de derechos lo da la web.
+  · it: la web no tiene /it; los enlaces legales van a la versión inglesa.
+-->
+<footer class="seda-bp-footer">
+  <div class="seda-bp-footer__inner">
+    <div class="seda-bp-footer__col">
+      <p class="seda-bp-footer__brand">SEDA Private Homes</p>
+      <p class="seda-bp-footer__text">
+        <span class="seda-t" data-l="es">Costa del Sol · Andalucía</span>
+        <span class="seda-t" data-l="en">Costa del Sol · Andalucía</span>
+        <span class="seda-t" data-l="fr">Costa del Sol · Andalousie</span>
+        <span class="seda-t" data-l="de">Costa del Sol · Andalusien</span>
+        <span class="seda-t" data-l="it">Costa del Sol · Andalusia</span>
+      </p>
+      <p class="seda-bp-footer__text">
+        <span class="seda-t" data-l="es">SEDA Private Homes actúa en nombre y por cuenta del propietario.</span>
+        <span class="seda-t" data-l="en">SEDA Private Homes acts in the owner's name and on the owner's behalf.</span>
+        <span class="seda-t" data-l="fr">SEDA Private Homes agit au nom et pour le compte du propriétaire.</span>
+        <span class="seda-t" data-l="de">SEDA Private Homes handelt im Namen und für Rechnung des Eigentümers.</span>
+        <span class="seda-t" data-l="it">SEDA Private Homes agisce in nome e per conto del proprietario.</span>
+      </p>
+    </div>
+
+    <div class="seda-bp-footer__col">
+      <p class="seda-bp-footer__label">
+        <span class="seda-t" data-l="es">Contacto</span>
+        <span class="seda-t" data-l="en">Contact</span>
+        <span class="seda-t" data-l="fr">Contact</span>
+        <span class="seda-t" data-l="de">Kontakt</span>
+        <span class="seda-t" data-l="it">Contatti</span>
+      </p>
+      <a class="seda-bp-footer__link seda-bp-footer__link--mono" href="mailto:info@sedaprivatehomes.com">info@sedaprivatehomes.com</a>
+    </div>
+
+    <nav class="seda-bp-footer__col" aria-label="Legal">
+      <p class="seda-bp-footer__label">Legal</p>
+      <a class="seda-bp-footer__link seda-t" data-l="es" href="https://sedaprivatehomes.com/privacidad">Privacidad</a>
+      <a class="seda-bp-footer__link seda-t" data-l="en" href="https://sedaprivatehomes.com/en/privacidad">Privacy</a>
+      <a class="seda-bp-footer__link seda-t" data-l="fr" href="https://sedaprivatehomes.com/fr/privacidad">Confidentialité</a>
+      <a class="seda-bp-footer__link seda-t" data-l="de" href="https://sedaprivatehomes.com/de/privacidad">Datenschutz</a>
+      <a class="seda-bp-footer__link seda-t" data-l="it" href="https://sedaprivatehomes.com/en/privacidad">Privacy</a>
+
+      <a class="seda-bp-footer__link seda-t" data-l="es" href="https://sedaprivatehomes.com/aviso-legal">Aviso legal y condiciones</a>
+      <a class="seda-bp-footer__link seda-t" data-l="en" href="https://sedaprivatehomes.com/en/aviso-legal">Legal notice and terms</a>
+      <a class="seda-bp-footer__link seda-t" data-l="fr" href="https://sedaprivatehomes.com/fr/aviso-legal">Mentions légales et conditions</a>
+      <a class="seda-bp-footer__link seda-t" data-l="de" href="https://sedaprivatehomes.com/de/aviso-legal">Impressum und Bedingungen</a>
+      <a class="seda-bp-footer__link seda-t" data-l="it" href="https://sedaprivatehomes.com/en/aviso-legal">Note legali e condizioni</a>
+    </nav>
+  </div>
+</footer>
+
+<div class="b24fullcontainer b24fullcontainer-footer">
+  <div class="container container2 atcolor">
+
+<footer>
+<div class="pull-left hidden-md hidden-lg">
+    <a  href="#topofthebookingpage" class="btn btn-default btn-sm pull-left button">
+  	<span class="glyphicon glyphicon-arrow-up"></span>Up
+	</a>
+ </div>
+<div class="clearfix"></div>		
+<div class="book_poweredby pull-right"><a target="_blank" href="https://beds24.com">powered by Beds24.com</a></div>
+</footer>
+<div class="clearfix"></div>
+</div>	
+</div>
+  
+
+<div class="hide" data-businessId="0"></div><script>
+  // ?paso=busqueda → calendario de fechas abierto · ?paso=habitaciones → disponibilidad del alojamiento abierta
+  (function () {
+    var p = new URLSearchParams(location.search).get("paso");
+    if (p === "busqueda") document.body.classList.add("preview-widget-abierto");
+    if (p === "habitaciones") {
+      var c = document.getElementById("collapsecal-o719434-1");
+      if (c) { c.className = ""; c.previousElementSibling.className += " hidden"; }
+    }
+  })();
+</script>
+</body>
+</html>

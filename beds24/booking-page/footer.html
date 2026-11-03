@@ -1,0 +1,61 @@
+<!--
+  SEDA Private Homes · pie de la booking page de Beds24
+  Pegar en: SETTINGS → BOOKING PAGE → (campo «Footer HTML»). Ver COMO-PEGAR.md.
+
+  · Contacto: info@sedaprivatehomes.com (lib/site-contact.ts → generalContact.email).
+  · Privacidad: /privacidad. «Condiciones»: /aviso-legal, que lleva el apartado «Condiciones de uso» de la
+    web (lib/legal/aviso-legal.ts). La web NO tiene una página propia de «condiciones de reserva»: las
+    condiciones de la estancia se muestran y se aceptan en esta página (aviso legal, «Las condiciones de una
+    estancia se muestran y se aceptan en la página de reserva»). Ver textos.md §6.
+  · La nota «actúa en nombre y por cuenta del propietario» es literal de messages/*.json
+    (escaparate.arrendador.nota) en es, en, fr y de. La versión italiana es traducción nueva.
+  · Sin año: un pie fijo con «© 2026» caduca. El aviso de derechos lo da la web.
+  · it: la web no tiene /it; los enlaces legales van a la versión inglesa.
+-->
+<footer class="seda-bp-footer">
+  <div class="seda-bp-footer__inner">
+    <div class="seda-bp-footer__col">
+      <p class="seda-bp-footer__brand">SEDA Private Homes</p>
+      <p class="seda-bp-footer__text">
+        <span class="seda-t" data-l="es">Costa del Sol · Andalucía</span>
+        <span class="seda-t" data-l="en">Costa del Sol · Andalucía</span>
+        <span class="seda-t" data-l="fr">Costa del Sol · Andalousie</span>
+        <span class="seda-t" data-l="de">Costa del Sol · Andalusien</span>
+        <span class="seda-t" data-l="it">Costa del Sol · Andalusia</span>
+      </p>
+      <p class="seda-bp-footer__text">
+        <span class="seda-t" data-l="es">SEDA Private Homes actúa en nombre y por cuenta del propietario.</span>
+        <span class="seda-t" data-l="en">SEDA Private Homes acts in the owner's name and on the owner's behalf.</span>
+        <span class="seda-t" data-l="fr">SEDA Private Homes agit au nom et pour le compte du propriétaire.</span>
+        <span class="seda-t" data-l="de">SEDA Private Homes handelt im Namen und für Rechnung des Eigentümers.</span>
+        <span class="seda-t" data-l="it">SEDA Private Homes agisce in nome e per conto del proprietario.</span>
+      </p>
+    </div>
+
+    <div class="seda-bp-footer__col">
+      <p class="seda-bp-footer__label">
+        <span class="seda-t" data-l="es">Contacto</span>
+        <span class="seda-t" data-l="en">Contact</span>
+        <span class="seda-t" data-l="fr">Contact</span>
+        <span class="seda-t" data-l="de">Kontakt</span>
+        <span class="seda-t" data-l="it">Contatti</span>
+      </p>
+      <a class="seda-bp-footer__link seda-bp-footer__link--mono" href="mailto:info@sedaprivatehomes.com">info@sedaprivatehomes.com</a>
+    </div>
+
+    <nav class="seda-bp-footer__col" aria-label="Legal">
+      <p class="seda-bp-footer__label">Legal</p>
+      <a class="seda-bp-footer__link seda-t" data-l="es" href="https://sedaprivatehomes.com/privacidad">Privacidad</a>
+      <a class="seda-bp-footer__link seda-t" data-l="en" href="https://sedaprivatehomes.com/en/privacidad">Privacy</a>
+      <a class="seda-bp-footer__link seda-t" data-l="fr" href="https://sedaprivatehomes.com/fr/privacidad">Confidentialité</a>
+      <a class="seda-bp-footer__link seda-t" data-l="de" href="https://sedaprivatehomes.com/de/privacidad">Datenschutz</a>
+      <a class="seda-bp-footer__link seda-t" data-l="it" href="https://sedaprivatehomes.com/en/privacidad">Privacy</a>
+
+      <a class="seda-bp-footer__link seda-t" data-l="es" href="https://sedaprivatehomes.com/aviso-legal">Aviso legal y condiciones</a>
+      <a class="seda-bp-footer__link seda-t" data-l="en" href="https://sedaprivatehomes.com/en/aviso-legal">Legal notice and terms</a>
+      <a class="seda-bp-footer__link seda-t" data-l="fr" href="https://sedaprivatehomes.com/fr/aviso-legal">Mentions légales et conditions</a>
+      <a class="seda-bp-footer__link seda-t" data-l="de" href="https://sedaprivatehomes.com/de/aviso-legal">Impressum und Bedingungen</a>
+      <a class="seda-bp-footer__link seda-t" data-l="it" href="https://sedaprivatehomes.com/en/aviso-legal">Note legali e condizioni</a>
+    </nav>
+  </div>
+</footer>
