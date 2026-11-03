@@ -24,3 +24,8 @@ lint-output.txt
 
 # Prototipos y material de trabajo local (REA seda-web 2026-10, M-3): no se versionan
 .tmp/
+
+# Salida de scripts/tour360-preparar (tiles de los recorridos 360): se aloja fuera del repo, ver docs/TOUR-360.md
+/tours-salida/
+# Fotos ORIGINALES de la Insta360 (72 MP, con EXIF/GPS): nunca al repo. Ver docs/TOUR-360-GUIA-RODAJE.md
+/tours-entrada/
