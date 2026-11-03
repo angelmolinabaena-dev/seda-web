@@ -59,3 +59,8 @@ Tiene que quedar en **14 500 caracteres o menos** (el panel deja de guardar sobr
 - Carrusel con height:auto (Beds24 fijaba 520 px en línea y dejaba un hueco de ~220 px bajo la foto).
 - En móvil (<768 px), las fechas y Personas van como campos blancos iguales, con la etiqueta a la izquierda. Sin desbordamiento horizontal a 390 px.
 - 14018 caracteres, guardado en Beds24.
+
+## v5.2 (3-nov): móvil, calendario
+- El calendario se abría desplazado y cortado por la izquierda (Beds24 le pone left negativo en línea). En móvil ahora es una ventana fija centrada, con 16 px de margen a cada lado.
+- Entrada, Salida y Personas alineados a los mismos bordes.
+- 14712 caracteres, guardado en Beds24.
