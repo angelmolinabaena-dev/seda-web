@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0, user-scalable=yes" />
+
+<META name="description" content="Secure online booking page for Bay Side"><META name="keywords" content="Bay Side, secure online booking, reservation calendar, book now, booking engine, booking button, booking widget, channel manager, property management, OTA distribution"><link rel="shortcut icon" href="/favicon2.ico" /><title>Secure Online Booking</title>
+<script type="text/javascript" src="include/jquery/jquery-1.12.4.min.js"></script>
+<script>
+jQuery.ajaxPrefilter( function( s ) {
+    if ( s.crossDomain ) {
+        s.contents.script = false;
+    }
+} );
+</script>
+<script src="include/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" href="include/bootstrap/3.3.4/css/bootstrap.min.css" />
+
+<script src="include/moment/2.29.4/moment-with-locales.min.js"></script>
+<script type="text/javascript" src="include/bootstrap/eonasdan/bootstrap-datetimepicker_4.7.14a.js"></script>
+
+<link rel="stylesheet" href="include/font-awesome/fontawesome-pro-5.14.0-web/css/all.min.css">
+<link rel="stylesheet" href="include/booking2.css" /><link rel="stylesheet" href="include/booking3.css" /><!--[if lte IE 8]>
+<link rel="stylesheet" href="include/booking2_medialarge.css" type="text/css" media="all" />
+<link rel="stylesheet" href="include/booking2_mediamedium.css" type="text/css" media="all" />
+<script src="include/json2.js"></script>
+<![endif]-->
+
+<style type='text/css'>
+DIV.shadow {background-color: #8b8b8b;}DIV.shadow {border: #989898;}DIV.shadow2 {background-color: #a5a5a5;}DIV.shadow2 {border: #b2b2b2;}DIV.shadow3 {background-color: #bfbfbf;}DIV.shadow3 {border: #cbcbcb;}DIV.shadow4 {background-color: #d8d8d8;}DIV.shadow4 {border: #e5e5e5;}DIV.shadow5 {background-color: #f2f2f2;}DIV.shadow5 {border: #ffffff;}DIV.shadow IMG.noshadow {background-color: #ffffff;}.plist_tagblock {background-color: #ffffff;}
+a {color: #008acc;}
+.fakelink {color: #008acc;}
+.linkcolor {color: #008acc;}
+#bookingpage {max-width:1200px;}
+.colorbody {background-color: #f4f4f4; font-family:arial,helvetica,sans-serif; font-size:14px; }
+.atcolor{color: #424242; background-color: #f4f4f4;}
+.border{border: 1px solid #dfdfdf;}
+.bt{border-top: 1px solid #dfdfdf;}
+.br{border-right: 1px solid #dfdfdf;}
+.bb{border-bottom: 1px solid #dfdfdf;}
+.bl{border-left: 1px solid #dfdfdf;}
+.border2{border: 3px solid #dfdfdf;}
+.bt2{border-top: 3px solid #dfdfdf;}
+.br2{border-right: 3px solid #dfdfdf;}
+.bb2{border-bottom: 3px solid #dfdfdf;}
+.bl2{border-left: 3px solid #dfdfdf;}
+.monthcalendar {border: 1px solid #dfdfdf;}
+.monthcalendar td {border: 1px solid #dfdfdf;}
+.at_datenotavailable {background-color: #f2dede; color: #a94442;}
+.at_dateavailable {background-color: #f2f2f2; color: #424242;}
+.at_daterequest {background-color: #dddddd; color: #777777;}
+.datenotavail {background-color: #f2dede; color: #a94442;}
+.dateavail {background-color: #f2f2f2; color: #424242;}
+.daterequest {background-color: #dddddd; color: #777777;}
+.warnnotavail {background-color: #f2dede; color: #a94442;}
+.at_pricestay {color: #222222;}
+.datestay {color: #222222;}
+.at_headstay{color: #222222;}
+.dropdown dd ul {background-color: #f4f4f4;}
+.dropdown dd ul li a em {color: #424242;}
+.dropdown dt a {color:#424242;}
+.colorbookingform, .b24panel {color:#424242; background-color:#ffffff;}
+.colorbookingstripto {color:#424242; background-color:#ffffff;}
+.colorstripfrom {background-color: #ffffff}
+.colorbookingstrip a {color: #424242; font-weight:normal;}
+.colorbookingstrip {
+background-color: #ffffff;
+background: linear-gradient(to bottom, #ffffff, #ffffff);
+background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#ffffff));
+background: -moz-linear-gradient(top, #ffffff, #ffffff);
+background: -webkit-linear-gradient(top,  #ffffff, #ffffff);
+background: -o-linear-gradient(top, #ffffff, #ffffff);
+background: linear-gradient(to top,  #ffffff, #ffffff);
+filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr="#ffffff", endColorstr="#ffffff");
+color: #424242;
+}
+.button, .buttondis {color:#ffffff; background: #008acc;
+border: none;
+}.button:hover{
+background: #00608e;
+}
+.button a{
+color: #ffffff;
+}
+
+</style><STYLE type="text/css">@import url(https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Manrope:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap);:root{--seda-bg:#faf8f4;--seda-card:#f4f1eb;--seda-secondary:#ebe7e0;--seda-border:#e0dad2;--seda-line:#d9d7d4;--seda-field-border:#85827d;--seda-fg:#211f1c;--seda-fg-hover:#373532;--seda-muted:#6c6760;--seda-olive:#536043;--seda-olive-deep:#39442c;--seda-gold:#bf9040;--seda-danger:#994733;--seda-serif:"Cormorant Garamond", Georgia, serif;--seda-sans:"Manrope", system-ui, sans-serif;--seda-mono:"JetBrains Mono", ui-monospace, monospace;--seda-gutter:24px;--seda-max:1280px;--seda-target:44px;color-scheme:light}@media (min-width:768px){:root{--seda-gutter:48px}}@media (min-width:1280px){:root{--seda-gutter:80px}}html{-webkit-text-size-adjust:100%;text-size-adjust:100%}body.colorbody{margin:0;background-color:var(--seda-bg);color:var(--seda-fg);font-family:var(--seda-sans);font-size:16px;font-weight:400;line-height:1.6;-webkit-font-smoothing:antialiased}.colorbody ::selection{background:var(--seda-olive);color:var(--seda-bg)}.colorbody a{color:var(--seda-olive);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px;transition:color .3s}.colorbody a:hover{color:var(--seda-olive-deep)}.colorbody a:focus-visible,.colorbody button:focus-visible,.colorbody input:focus-visible,.colorbody select:focus-visible,.colorbody textarea:focus-visible,.colorbody [tabindex]:focus-visible{outline:2px solid var(--seda-olive);outline-offset:2px}.colorbody h1,.colorbody h2,.colorbody h3{font-family:var(--seda-serif);font-weight:300;color:var(--seda-fg);letter-spacing:-.015em;text-wrap:balance}.colorbody h1{font-size:30px;line-height:1.05}.colorbody h2{font-size:24px;line-height:1.18}.colorbody h3{font-size:22px;font-weight:400;line-height:1.2}@media (min-width:768px){.colorbody h1{font-size:36px}.colorbody h2{font-size:30px}}@media (min-width:1280px){.colorbody h1{font-size:40px}.colorbody h2{font-size:36px}}.colorbody hr{border:0;border-top:1px solid var(--seda-border)}.colorbody small,.colorbody .help-block,.colorbody .text-muted{color:var(--seda-muted);font-size:14px}.colorbody .atcolor{background-color:transparent;color:var(--seda-fg)}.colorbody .container{width:auto;max-width:var(--seda-max);padding-left:var(--seda-gutter);padding-right:var(--seda-gutter)}.colorbody .b24fullcontainer-top{padding:8px 0}.colorbody .b24languagedropdown .dropdown-toggle{display:inline-flex;align-items:center;gap:10px;min-height:var(--seda-target);padding:8px 16px;font-family:var(--seda-mono);font-size:11px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--seda-fg);background:0 0;border:1px solid var(--seda-fg);border-radius:0;box-shadow:none}.colorbody .b24languagedropdown .dropdown-toggle:hover{background:var(--seda-secondary);color:var(--seda-fg)}.colorbody .dropdown-menu{min-width:192px;margin-top:4px;padding:8px 0;background:var(--seda-bg);border:1px solid var(--seda-line);border-radius:0;box-shadow:0 20px 40px -20px rgba(33,31,28,.35)}.colorbody .dropdown-menu>li>a{display:flex;align-items:center;min-height:var(--seda-target);padding:8px 20px;color:var(--seda-fg);text-decoration:none}.colorbody .dropdown-menu>li>a:hover,.colorbody .dropdown-menu>li>a:focus{color:var(--seda-fg);background:var(--seda-secondary)}.colorbody .seda-bp-header{background:var(--seda-bg);border-bottom:1px solid var(--seda-border)}.colorbody .seda-bp-header__inner{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:0 16px;max-width:var(--seda-max);margin:0 auto;padding:12px var(--seda-gutter)}.colorbody .seda-bp-brand{display:inline-flex;align-items:center;gap:16px;min-height:var(--seda-target);color:var(--seda-fg);text-decoration:none}.colorbody .seda-bp-brand:hover{color:var(--seda-fg)}.colorbody .seda-bp-brand__mark{display:block;width:45px;height:30px}.colorbody .seda-bp-brand__name{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;font-size:14px;font-weight:600;letter-spacing:.35em;text-transform:uppercase}.colorbody .seda-bp-back{display:inline-flex;align-items:center;gap:8px;min-height:var(--seda-target);font-family:var(--seda-mono);font-size:11px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--seda-fg);text-decoration:none;border-bottom:1px solid transparent}.colorbody .seda-bp-back:hover{color:var(--seda-olive-deep);border-bottom-color:currentColor}@media (min-width:768px){.colorbody .seda-bp-brand__mark{width:51px;height:34px}.colorbody .seda-bp-brand__name{position:static;width:auto;height:auto;overflow:visible;clip-path:none}}.colorbody .seda-bp-footer{margin-top:64px;background:var(--seda-bg);border-top:1px solid var(--seda-border);color:var(--seda-fg)}.colorbody .seda-bp-footer__inner{display:grid;grid-template-columns:1fr;gap:32px;max-width:var(--seda-max);margin:0 auto;padding:48px var(--seda-gutter)}.colorbody .seda-bp-footer__brand{margin:0 0 16px;font-size:14px;font-weight:600;letter-spacing:.35em;text-transform:uppercase}.colorbody .seda-bp-footer__text{max-width:384px;margin:0 0 12px;font-size:14px;line-height:1.75;color:var(--seda-muted)}.colorbody .seda-bp-footer__label{margin:0 0 8px;font-family:var(--seda-mono);font-size:11px;font-weight:500;letter-spacing:.3em;text-transform:uppercase;color:var(--seda-muted)}.colorbody .seda-bp-footer__link{display:flex;align-items:center;min-height:var(--seda-target);font-size:14px;color:var(--seda-fg);text-decoration:none}.colorbody .seda-bp-footer__link--mono{font-family:var(--seda-mono);font-size:13px}.colorbody .seda-bp-footer__link:hover{color:var(--seda-olive-deep);text-decoration:underline;text-underline-offset:3px}@media (min-width:768px){.colorbody .seda-bp-footer__inner{grid-template-columns:5fr 3fr 4fr;gap:48px}}html[data-seda-lang=es] .seda-t:not([data-l=es]),html:not([data-seda-lang]):lang(es) .seda-t:not([data-l=es]),html[data-seda-lang=de] .seda-t:not([data-l=de]),html:not([data-seda-lang]):lang(de) .seda-t:not([data-l=de]),html[data-seda-lang=fr] .seda-t:not([data-l=fr]),html:not([data-seda-lang]):lang(fr) .seda-t:not([data-l=fr]),html[data-seda-lang=it] .seda-t:not([data-l=it]),html:not([data-seda-lang]):lang(it) .seda-t:not([data-l=it]),html[data-seda-lang=en] .seda-t:not([data-l=en]),html:not([data-seda-lang]):not(:lang(es)):not(:lang(de)):not(:lang(fr)):not(:lang(it)) .seda-t:not([data-l=en]){display:none}.colorbody label,.colorbody .control-label{display:block;margin-bottom:8px;font-family:var(--seda-mono);font-size:11px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--seda-muted)}.colorbody .form-control{height:auto;min-height:var(--seda-target);padding:10px 12px;font-family:var(--seda-sans);font-size:16px;line-height:1.4;color:var(--seda-fg);background-color:transparent;border:1px solid var(--seda-field-border);border-radius:0;box-shadow:none;transition:border-color .3s}.colorbody textarea.form-control{min-height:120px}.colorbody .form-control::placeholder{color:var(--seda-muted);opacity:1}.colorbody .form-control:hover{border-color:var(--seda-fg)}.colorbody .form-control:focus{border-color:var(--seda-fg);outline:2px solid var(--seda-olive);outline-offset:2px;box-shadow:none}.colorbody .form-control[readonly]{background-color:transparent;cursor:pointer}.colorbody .form-control:disabled,.colorbody .form-control[disabled]{color:var(--seda-muted);background-color:var(--seda-secondary);cursor:not-allowed}.colorbody select.form-control{appearance:none;padding-right:40px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5l5-5' fill='none' stroke='%23211f1c' stroke-width='1.5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}.colorbody .input-group-addon{min-width:var(--seda-target);color:var(--seda-fg);background:0 0;border:1px solid var(--seda-field-border);border-right:0;border-radius:0}.colorbody .input-group .form-control:first-child,.colorbody .input-group .form-control:last-child{border-radius:0}@media (max-width:479px){.colorbody .input-group-addon{display:none}}.colorbody .has-error .form-control,.colorbody .form-control[aria-invalid=true]{border-color:var(--seda-danger);border-width:2px;box-shadow:none}.colorbody .has-error .help-block,.colorbody .has-error .control-label,.colorbody .text-danger{color:var(--seda-danger)}.colorbody .checkbox label,.colorbody .radio label{display:flex;align-items:flex-start;gap:12px;min-height:var(--seda-target);padding:10px 0;font-family:var(--seda-sans);font-size:16px;letter-spacing:0;text-transform:none;color:var(--seda-fg)}.colorbody .checkbox input[type=checkbox],.colorbody .radio input[type=radio]{position:static;flex:none;width:22px;height:22px;margin:0;accent-color:var(--seda-olive)}.colorbody .btn,.colorbody .button,.colorbody input[type=submit]{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:var(--seda-target);padding:12px 28px;font-family:var(--seda-mono);font-size:11px;font-weight:500;line-height:1.2;letter-spacing:.22em;text-transform:uppercase;text-decoration:none;color:var(--seda-bg);background-color:var(--seda-fg);border:1px solid var(--seda-fg);border-radius:0;box-shadow:none;cursor:pointer;transition:background-color .3s,color .3s}.colorbody .btn:hover,.colorbody .button:hover,.colorbody input[type=submit]:hover{color:var(--seda-bg);background-color:var(--seda-fg-hover);border-color:var(--seda-fg-hover)}.colorbody .btn:disabled,.colorbody .btn.disabled,.colorbody .buttondis{color:var(--seda-bg);background-color:var(--seda-fg);opacity:.5;cursor:not-allowed}.colorbody .btn-default:not(.button){color:var(--seda-fg);background-color:transparent;border-color:var(--seda-fg)}.colorbody .btn-default:not(.button):hover{color:var(--seda-fg);background-color:var(--seda-secondary);border-color:var(--seda-fg)}.colorbody .btn-sm{min-height:var(--seda-target)}.colorbody .panel,.colorbody .b24panel-room{margin-bottom:24px;background-color:var(--seda-bg);border:1px solid var(--seda-line);border-radius:0;box-shadow:none}.colorbody .b24panel{background-color:var(--seda-bg);color:var(--seda-fg)}.colorbody .panel-body{padding:24px}.colorbody .panel-heading,.colorbody .b24-roompanel-heading{padding:24px 24px 0;background:0 0;border:0}@media (min-width:768px){.colorbody .panel-body{padding:32px}.colorbody .panel-heading,.colorbody .b24-roompanel-heading{padding:32px 32px 0}}.colorbody .at_roomnametext{font-family:var(--seda-serif);font-size:28px;font-weight:300;line-height:1.1;letter-spacing:-.015em;color:var(--seda-fg)}.colorbody .colorbookingstrip,.colorbody .b24-bookingstrip{background:var(--seda-card);filter:none;color:var(--seda-fg);border:1px solid var(--seda-line)}.colorbody .b24-roompanel-heading.colorbookingstrip{background:0 0;border:0}.colorbody #b24scroller{padding:16px 0 0}.colorbody .bootstrap-datetimepicker-widget.dropdown-menu{width:min(368px,calc(100vw - 32px));padding:8px 8px 16px;font-family:var(--seda-sans)}.colorbody .bootstrap-datetimepicker-widget table{width:100%;table-layout:fixed}.colorbody .bootstrap-datetimepicker-widget table th,.colorbody .bootstrap-datetimepicker-widget table td{height:var(--seda-target);line-height:var(--seda-target);padding:0;text-align:center;border-radius:0}.colorbody .bootstrap-datetimepicker-widget table th.picker-switch{font-family:var(--seda-serif);font-size:22px;font-weight:400}.colorbody .bootstrap-datetimepicker-widget table th.dow{height:auto;line-height:1.5;padding:4px 0 8px;font-family:var(--seda-mono);font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--seda-muted)}.colorbody .bootstrap-datetimepicker-widget table th.prev,.colorbody .bootstrap-datetimepicker-widget table th.next{cursor:pointer}.colorbody .bootstrap-datetimepicker-widget table td.day{font-size:15px;color:var(--seda-fg);border:1px solid transparent;cursor:pointer}.colorbody .bootstrap-datetimepicker-widget table td.day:hover{background:var(--seda-secondary);border-color:var(--seda-fg)}.colorbody .bootstrap-datetimepicker-widget table td.day.old,.colorbody .bootstrap-datetimepicker-widget table td.day.new{color:var(--seda-muted)}.colorbody .bootstrap-datetimepicker-widget table td.day.today{border-color:var(--seda-olive)}.colorbody .bootstrap-datetimepicker-widget table td.day.active,.colorbody .bootstrap-datetimepicker-widget table td.day.active:hover{color:var(--seda-bg);background:var(--seda-olive);border-color:var(--seda-olive)}.colorbody .bootstrap-datetimepicker-widget table td.day.disabled,.colorbody .bootstrap-datetimepicker-widget table td.day.disabled:hover{color:var(--seda-muted);background:0 0;border-color:transparent;text-decoration:line-through;cursor:not-allowed}.colorbody .b24-offer-pic img{width:100%;aspect-ratio:3/2;object-fit:cover}.colorbody .at_roomofferprice{font-family:var(--seda-serif);font-size:24px;font-weight:300;color:var(--seda-fg);text-align:left}.colorbody .b24-roombuttondiv .btn{float:none;width:100%}@media (max-width:991px){.colorbody .b24-offer-select{width:100%;margin-top:16px}}.colorbody .fakelink{display:inline-flex;align-items:center;gap:8px;min-height:var(--seda-target);color:var(--seda-olive);text-decoration:underline;text-underline-offset:3px;cursor:pointer}.colorbody .fakelink:hover{color:var(--seda-olive-deep)}.colorbody .roomoffercalendarmonth{width:100%;margin-bottom:24px}@media (min-width:1200px){.colorbody .roomoffercalendarmonth{width:33.3333%}}@media (max-width:767px){.colorbody .b24-offer-cal{width:calc(100% + 48px);margin-left:-24px;padding-left:0;padding-right:0}.colorbody .b24-offer-cal .fakelink{margin-left:24px}.colorbody .b24-offer-cal .ajaxroomcalendar{margin-left:0;margin-right:0}.colorbody .b24-offer-cal .roomoffercalendarmonth{padding-left:0;padding-right:0}}.colorbody .monthcalendar{width:100%;table-layout:fixed;border-collapse:collapse;border-color:var(--seda-border)}.colorbody .monthcalendar td{height:var(--seda-target);padding:0;text-align:center;vertical-align:middle;font-size:15px;border-color:var(--seda-border)}.colorbody .monthcalendar td.monthcalendarhead{font-family:var(--seda-serif);font-size:22px;font-weight:400}.colorbody .monthcalendar td.monthcalendarhead>span{display:inline-block}.colorbody .monthcalendar td.monthcalendarhead>span::first-letter{text-transform:uppercase}.colorbody .monthcalendar td.monthcalendarday{height:auto;padding:8px 0;font-family:var(--seda-mono);font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--seda-muted)}.colorbody .monthcalendar td.dateavail,.colorbody .monthcalendar td.at_dateavailable{background:var(--seda-card);color:var(--seda-fg)}.colorbody .monthcalendar td.datenotavail,.colorbody .monthcalendar td.at_datenotavailable{background:var(--seda-secondary);color:var(--seda-muted);text-decoration:line-through}.colorbody .monthcalendar td.daterequest,.colorbody .monthcalendar td.at_daterequest{background:var(--seda-bg);color:var(--seda-fg);outline:1px dashed var(--seda-field-border);outline-offset:-3px}.colorbody .alert{margin-bottom:16px;padding:16px 20px;color:var(--seda-fg);background:var(--seda-card);border:1px solid var(--seda-line);border-left:4px solid var(--seda-olive);border-radius:0}.colorbody .alert-danger{color:var(--seda-fg);background:var(--seda-card);border-color:var(--seda-line);border-left-color:var(--seda-danger)}.colorbody .alert-warning{color:var(--seda-fg);background:var(--seda-card);border-color:var(--seda-line);border-left-color:var(--seda-gold)}.colorbody .alert a{color:var(--seda-olive-deep)}.colorbody .book_poweredby a{display:inline-flex;align-items:center;min-height:var(--seda-target);font-size:14px;color:var(--seda-muted)}.colorbody .table>thead>tr>th,.colorbody .table>tbody>tr>td,.colorbody .table>tfoot>tr>td{padding:12px 8px;border-top:0;border-bottom:1px solid var(--seda-border);overflow-wrap:anywhere}.colorbody .table>thead>tr>th{font-family:var(--seda-mono);font-size:11px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--seda-muted)}@media (prefers-reduced-motion:reduce){.colorbody *,.colorbody ::before,.colorbody ::after{transition:none;scroll-behavior:auto}}@media print{.colorbody .seda-bp-header,.colorbody .seda-bp-footer{display:none}body.colorbody{background:#fff}}body.colorbody #topofthebookingpage,#b24scroller-container{position:static!important}</STYLE>
+
+<script src="include/js/booking2.js" ></script></head>
+<body class="colorbody colorbody-es">
+<!-- property custom body top -->
+<header class="seda-bp-header">
+  <div class="seda-bp-header__inner">
+    <a class="seda-bp-brand" href="https://sedaprivatehomes.com/">
+      <img
+        class="seda-bp-brand__mark"
+        src="https://sedaprivatehomes.com/brand/svg/seda-isotipo-ink.svg"
+        alt=""
+        width="45"
+        height="30"
+      />
+      <span class="seda-bp-brand__name">SEDA Private Homes</span>
+    </a>
+    <a class="seda-bp-back seda-t" data-l="es" href="https://sedaprivatehomes.com/"><span aria-hidden="true">←</span> Volver a la web</a>
+    <a class="seda-bp-back seda-t" data-l="en" href="https://sedaprivatehomes.com/en"><span aria-hidden="true">←</span> Back to the website</a>
+    <a class="seda-bp-back seda-t" data-l="fr" href="https://sedaprivatehomes.com/fr"><span aria-hidden="true">←</span> Retour au site</a>
+    <a class="seda-bp-back seda-t" data-l="de" href="https://sedaprivatehomes.com/de"><span aria-hidden="true">←</span> Zurück zur Website</a>
+    <a class="seda-bp-back seda-t" data-l="it" href="https://sedaprivatehomes.com/en"><span aria-hidden="true">←</span> Torna al sito</a>
+  </div>
+</header>
+<div class="innertube"><div id="bookingpage" class="container atcolor bp2book"><div  class="row">
+<div id="selectorstripinfo">
+<div class="col-sm-10 ssi_makeabooking">Reservar <span class="ssi_propname">Bay Side</span></div><div class="col-sm-2 book_bookingbackright"><a href="?numadult=2&amp;numchild=0&amp;firstnight=2026-12-10&amp;numnight=2&amp;multiroom=0&amp;width=960&amp;limitstart=0&amp;propid=348601&amp;version=3&amp;page=book&amp;sr1-719434=1&booking=REDACTADO"  class="textdeconone"><span class="button fakebutton">Atrás</span></a></div></div>	
+<div class="clearboth"></div>
+</div>
+<form id="formbook" method="post"><input type="hidden" name="booking" value="REDACTADO" /><input type="hidden" name="propid" value="348601"><input type="hidden" name="width" value="960"><input type="hidden" name="page" value="book"><input type="hidden" id="limitstart" name="limitstart" value="0"><input type="hidden" name="firstnight" value="2026-12-10"><input type="hidden" name="lastnight" value="2026-12-11"><input type="hidden" name="checkout" value="2026-12-12"><input type="hidden" name="numnight" value="2"><div class="row"><div class="b24-bookingdetails col-xs-12 col-sm-5 col-md-5 col-lg-5 b24-guest-details-right">
+<div class="panel b24panel-room border">	
+<div class="panel-heading b24-roompanel-heading colorbookingstrip bb"><div class="at_roomnametext b24inline-block"> Detalles de la reserva</div>
+</div><div class="panel-body b24panel"><input id="na1-719434-1" name="na1-719434-1" type="hidden" value="2"><input id="nc1-719434-1" name="nc1-719434-1" type="hidden" value="0"><input type="hidden" name="sr1-719434-1" value="1"><input type='hidden' id='x1roomprice' value='300'><div class="at_roomnametext b24inline-block"> Bay Side</div>
+<div class="at_roomqtyselector b24inline-block pull-right"></div><div class="row">
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><img alt="" class="img-responsive" src="https://media.xmlcal.com/pic/p0034/8601/01.400.png"></div> 
+</div> 
+
+<div class="at_offername inline"></div><div class="row">
+<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">Fecha de Entrada</div> 
+<div class="col-xs-7 col-sm-7 col-md-7 col-lg-7 strong">jueves, 10 diciembre, 2026</div> 
+</div><div class="row">
+<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">Fecha de Salida</div> 
+<div class="col-xs-7 col-sm-7 col-md-7 col-lg-7 strong">sábado, 12 diciembre, 2026</div> 
+</div><div class="row">
+<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">Ocupación</div> 
+<div class="col-xs-7 col-sm-7 col-md-7 col-lg-7"><span class="glyphicon glyphicon-user occupancyadult"></span><span class="glyphicon glyphicon-user occupancyadult"></span><div class="b24inline-block pull-right"><span class="bookingpagecurrency">EUR </span><span id="x1drprice" class="bookingpageamount">300,00</span></div></div> 
+</div><hr class="border b24-checkout-divder"><div id="zupsellrow1">
+<div class="b24-upsellprice b24inline-block pull-right"><span class="bookingpagecurrency">EUR </span><span id="x1dispprice" class="bookingpageamount">60,00</span></div>
+<div class="b24-upsellname">Limpieza final </div> 
+</div>
+<div class="clearfix"></div><input type='hidden' id='x1oblig' value='60.0000'><div class="clearfix"></div>
+<div class="row totalpricerow">
+<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">Total</div> 
+<div class="col-xs-7 col-sm-7 col-md-7 col-lg-7 strong text-right"><span class="bookingpagecurrency">EUR </span><span id="totaldispprice" class="bookingpageamount">360,00</span></div> 
+</div><input type='hidden' id='x1period' value='0'><input type='hidden' id='x2period' value='0'><input type='hidden' id='x3period' value='0'><input type='hidden' id='x4period' value='0'><input type='hidden' id='x5period' value='0'><input type='hidden' id='x6period' value='0'><input type='hidden' id='x7period' value='0'><input type='hidden' id='x8period' value='0'><input type='hidden' id='x9period' value='0'><input type='hidden' id='x10period' value='0'><input type='hidden' id='x11period' value='0'><input type='hidden' id='x12period' value='0'><input type='hidden' id='x13period' value='0'><input type='hidden' id='x14period' value='0'><input type='hidden' id='x15period' value='0'><input type='hidden' id='x16period' value='0'><input type='hidden' id='x17period' value='0'><input type='hidden' id='x18period' value='0'><input type='hidden' id='x19period' value='0'><input type='hidden' id='x20period' value='0'></div>
+</div> 
+</div><div class="b24-guestdetails col-xs-12 col-sm-7 col-md-7 col-lg-7 b24-guest-details-left">
+<div class="b24room">
+<div class="panel b24panel-room border">	
+<div class="panel-heading b24-roompanel-heading colorbookingstrip bb">
+<div class="at_roomnametext b24inline-block">Datos Personales</div>
+</div>
+<div class="panel-body b24panel">
+<div class="row questionrow questionrow-guestfirstname"><div class="col-sm-4"><span class='requiredfield'>*</span> &nbsp;Nombre</div><div class="col-sm-8 col-xs-12"><div class="booktextdiv"><input type="text" id="guestfirstname" name="guestfirstname" value="" class="booktextinput form-control" aria-label="Nombre"></div></div></div><div class="row questionrow questionrow-guestname"><div class="col-sm-4"><span class='requiredfield'>*</span> &nbsp;Apellidos</div><div class="col-sm-8 col-xs-12"><div class="booktextdiv"><input type="text" id="guestname" name="guestname" value="" class="booktextinput form-control" aria-label="Apellidos"></div></div></div><div class="row questionrow questionrow-guestemail"><div class="col-sm-4"><span class='requiredfield'>*</span> &nbsp;Correo electrónico</div><div class="col-sm-8 col-xs-12"><div class="booktextdiv"><input type="text" id="guestemail" name="guestemail" value="" class="booktextinput form-control" aria-label="Correo electrónico"></div></div></div><div class="row questionrow questionrow-guestmobile"><div class="col-sm-4"><span class='requiredfield'>*</span> &nbsp;Móvil</div><div class="col-sm-8 col-xs-12"><div class="booktextdiv"><input type="text" id="guestmobile" name="guestmobile" value="" class="booktextinput form-control" aria-label="Móvil"></div></div></div><div class="row questionrow questionrow-guestaddress"><div class="col-sm-4">Dirección</div><div class="col-sm-8 col-xs-12"><div class="booktextdiv"><textarea id="guestaddress" name="guestaddress" class="booktextareainput form-control" aria-label="Dirección"></textarea></div></div></div><div class="row questionrow questionrow-guestcity"><div class="col-sm-4">Ciudad</div><div class="col-sm-8 col-xs-12"><div class="booktextdiv"><input type="text" id="guestcity" name="guestcity" value="" class="booktextinput form-control" aria-label="Ciudad"></div></div></div><div class="row questionrow questionrow-guestpostcode"><div class="col-sm-4">Código postal</div><div class="col-sm-8 col-xs-12"><div class="booktextdiv"><input type="text" id="guestpostcode" name="guestpostcode" value="" class="booktextinput form-control" aria-label="Código postal"></div></div></div><div class="row questionrow questionrow-guestcountry2"><div class="col-sm-4"><span class='requiredfield'>*</span> &nbsp;País de Residencia</div><div class="col-sm-8 col-xs-12"><div class="booktextdiv"><select id="guestcountry2" name="guestcountry2" class="bookselect form-control" aria-label="País de Residencia"><option selected value='0'>Por favor, seleccione</OPTION><option value='173'>España</OPTION><option value='271'>Abkhazia</OPTION><option value='59'>Afganistán</OPTION><option value='135'>Albania</OPTION><option value='149'>Alemania</OPTION><option value='136'>Andorra</OPTION><option value='6'>Angola</OPTION><option value='235'>Anguilla</OPTION><option value='122'>Antigua y Barbuda</OPTION><option value='192'>Arabia Saudita</OPTION><option value='5'>Argelia</OPTION><option value='222'>Argentina</OPTION><option value='179'>Armenia</OPTION><option value='257'>Aruba</OPTION><option value='108'>Australia</OPTION><option value='137'>Austria</OPTION><option value='180'>Azerbaiyán</OPTION><option value='123'>Bahamas</OPTION><option value='181'>Bahrein</OPTION><option value='63'>Bangladesh</OPTION><option value='124'>Barbados</OPTION><option value='201'>Belice</OPTION><option value='7'>Benin</OPTION><option value='138'>Bielorrusia</OPTION><option value='223'>Bolivia</OPTION><option value='263'>Bonaire, San Estaquio y Saba</OPTION><option value='140'>Bosnia Herzegovina</OPTION><option value='8'>Botswana</OPTION><option value='224'>Brasil</OPTION><option value='65'>Brunei</OPTION><option value='141'>Bulgaria</OPTION><option value='9'>Burkina Faso</OPTION><option value='10'>Burundi</OPTION><option value='64'>Bután</OPTION><option value='139'>Bélgica</OPTION><option value='12'>Cabo Verde</OPTION><option value='67'>Camboya</OPTION><option value='11'>Camerún</OPTION><option value='202'>Canadá</OPTION><option value='14'>Chad</OPTION><option value='225'>Chile</OPTION><option value='68'>China</OPTION><option value='143'>Chipre</OPTION><option value='178'>Ciudad del Vaticano</OPTION><option value='226'>Colombia</OPTION><option value='15'>Comoras</OPTION><option value='16'>Congo</OPTION><option value='79'>Corea del Norte</OPTION><option value='80'>Corea del Sur</OPTION><option value='184'>Corrí</OPTION><option value='203'>Costa Rica</OPTION><option value='18'>Costa de Marfil</OPTION><option value='270'>Crimea</OPTION><option value='142'>Croacia</OPTION><option value='125'>Cuba</OPTION><option value='258'>Curacao</OPTION><option value='145'>Dinamarca</OPTION><option value='19'>Djibouti</OPTION><option value='227'>Ecuador</OPTION><option value='20'>Egipto</OPTION><option value='207'>El Salvador</OPTION><option value='196'>Emiratos Árabes Unidos</OPTION><option value='22'>Eritrea</OPTION><option value='251'>Escocia</OPTION><option value='171'>Eslovaquia</OPTION><option value='172'>Eslovenia</OPTION><option value='221'>Estados Unidos de America</OPTION><option value='146'>Estonia</OPTION><option value='23'>Etiopía</OPTION><option value='109'>Fiji</OPTION><option value='92'>Filipinas</OPTION><option value='147'>Finlandia</OPTION><option value='148'>Francia</OPTION><option value='24'>Gabón</OPTION><option value='252'>Gales</OPTION><option value='25'>Gambia</OPTION><option value='69'>Georgia</OPTION><option value='26'>Ghana</OPTION><option value='243'>Gibraltar</OPTION><option value='259'>Gran Bretaña</OPTION><option value='128'>Granada</OPTION><option value='150'>Grecia</OPTION><option value='265'>Guadalupe</OPTION><option value='210'>Guatemala</OPTION><option value='229'>Guayana</OPTION><option value='228'>Guayana francés</OPTION><option value='241'>Guernsey (Reino Unido)</OPTION><option value='27'>Guinea</OPTION><option value='28'>Guinea Bissau</OPTION><option value='21'>Guinea Ecuatorial</OPTION><option value='129'>Haití</OPTION><option value='212'>Honduras</OPTION><option value='70'>Hong Kong</OPTION><option value='151'>Hungría</OPTION><option value='71'>India</OPTION><option value='72'>Indonesia</OPTION><option value='249'>Inglaterra</OPTION><option value='54'>Ir</OPTION><option value='185'>Irak</OPTION><option value='153'>Irlanda</OPTION><option value='250'>Irlanda del Norte</OPTION><option value='244'>Isla de Man (Reino Unido)</OPTION><option value='38'>Isla mauricio</OPTION><option value='152'>Islandia</OPTION><option value='240'>Islas Caimán</OPTION><option value='255'>Islas Cook</OPTION><option value='262'>Islas Faroe</OPTION><option value='242'>Islas Malvinas</OPTION><option value='111'>Islas Marshall</OPTION><option value='246'>Islas Pitcairn</OPTION><option value='118'>Islas Salomón</OPTION><option value='239'>Islas Vírgenes (británica)</OPTION><option value='186'>Israel</OPTION><option value='154'>Italia</OPTION><option value='130'>Jamaica</OPTION><option value='76'>Japón</OPTION><option value='261'>Jersey (Reino Unido)</OPTION><option value='187'>Jordán</OPTION><option value='191'>Katar</OPTION><option value='78'>Kazajstán</OPTION><option value='30'>Kenia</OPTION><option value='82'>Kirguizistán</OPTION><option value='110'>Kiribati</OPTION><option value='269'>Kosovo</OPTION><option value='188'>Kuwait</OPTION><option value='83'>Laos</OPTION><option value='31'>Lesoto</OPTION><option value='155'>Letonia</OPTION><option value='32'>Liberia</OPTION><option value='33'>Libia</OPTION><option value='156'>Liechtenstein</OPTION><option value='157'>Lituania</OPTION><option value='158'>Luxemburgo</OPTION><option value='189'>Líbano</OPTION><option value='34'>Madagascar</OPTION><option value='85'>Malasia</OPTION><option value='35'>Malawi</OPTION><option value='86'>Maldivas</OPTION><option value='160'>Malta</OPTION><option value='39'>Marruecos</OPTION><option value='267'>Martinica</OPTION><option value='37'>Mauritania</OPTION><option value='214'>Mexico</OPTION><option value='161'>Moldavia</OPTION><option value='87'>Mongolia</OPTION><option value='236'>Montenegro</OPTION><option value='245'>Montserrat</OPTION><option value='40'>Mozambique</OPTION><option value='66'>Myanmar</OPTION><option value='162'>Mónaco</OPTION><option value='41'>Namibia</OPTION><option value='113'>Nauru</OPTION><option value='89'>Nepal</OPTION><option value='215'>Nicaragua</OPTION><option value='43'>Nigeria</OPTION><option value='159'>North Macedonia</OPTION><option value='164'>Noruega</OPTION><option value='254'>Nueva Caledonia</OPTION><option value='114'>Nueva Zelanda</OPTION><option value='42'>Níger</OPTION><option value='190'>Omán</OPTION><option value='91'>Pakistán</OPTION><option value='115'>Palau</OPTION><option value='216'>Panamá</OPTION><option value='116'>Papúa Nueva Guinea</OPTION><option value='230'>Paraguay</OPTION><option value='163'>Países Bajos</OPTION><option value='231'>Perú</OPTION><option value='253'>Polinesia francés</OPTION><option value='165'>Polonia</OPTION><option value='166'>Portugal</OPTION><option value='274'>Puerto Rico</OPTION><option value='17'>RD del Congo</OPTION><option value='260'>Reino Unido</OPTION><option value='144'>Republica checa</OPTION><option value='13'>República Centroafricana</OPTION><option value='127'>República Dominicana</OPTION><option value='44'>Ruanda</OPTION><option value='167'>Rumania</OPTION><option value='168'>Rusia</OPTION><option value='272'>Réunion</OPTION><option value='268'>Saint Barthélemy</OPTION><option value='131'>Saint Kitts y Nevis</OPTION><option value='117'>Samoa</OPTION><option value='169'>San Marino</OPTION><option value='266'>San Martín</OPTION><option value='133'>San Vicente y las Granadinas</OPTION><option value='247'>Santa Helena</OPTION><option value='132'>Santa Lucía</OPTION><option value='45'>Santo Tomé y Príncipe</OPTION><option value='46'>Senegal</OPTION><option value='170'>Serbia</OPTION><option value='47'>Seychelles</OPTION><option value='48'>Sierra Leona</OPTION><option value='96'>Singapur</OPTION><option value='264'>Sint Maarten</OPTION><option value='193'>Siria</OPTION><option value='49'>Somalia</OPTION><option value='97'>Sri Lanka</OPTION><option value='50'>Sudáfrica</OPTION><option value='51'>Sudán</OPTION><option value='174'>Suecia</OPTION><option value='175'>Suiza</OPTION><option value='232'>Surinam</OPTION><option value='52'>Swazilandia</OPTION><option value='101'>Tailandia</OPTION><option value='99'>Taiwán</OPTION><option value='53'>Tanzania</OPTION><option value='100'>Tayikistán</OPTION><option value='238'>Territorio Británico del Océano Ãndico</OPTION><option value='208'>Tierra Verde</OPTION><option value='119'>Tonga</OPTION><option value='134'>Trinidad y Tobago</OPTION><option value='103'>Turkmenistán</OPTION><option value='248'>Turks y Caicos</OPTION><option value='102'>Turquía</OPTION><option value='120'>Tuvalu</OPTION><option value='55'>Túnez</OPTION><option value='273'>U.S. Virgin Islands</OPTION><option value='176'>Ucrania</OPTION><option value='56'>Uganda</OPTION><option value='233'>Uruguay</OPTION><option value='105'>Uzbekistán</OPTION><option value='121'>Vanuatu</OPTION><option value='234'>Venezuela</OPTION><option value='106'>Vietnam</OPTION><option value='197'>Yemen</OPTION><option value='57'>Zambia</OPTION><option value='58'>Zimbabue</OPTION><option value='126'>dominica</OPTION><option value='237'>islas Bermudas</OPTION><option value='36'>mali</OPTION><option value='112'>micronesia</OPTION></select></div></div></div><div class="row questionrow questionrow-guestarrivaltime"><div class="col-sm-4">Hora de llegada</div><div class="col-sm-8 col-xs-12"><div class="booktextdiv"><input type="text" id="guestarrivaltime" name="guestarrivaltime" value="" class="booktextinput form-control" aria-label="Hora de llegada"></div></div></div><div class="row questionrow questionrow-guestcomments"><div class="col-sm-4">Comentarios</div><div class="col-sm-8 col-xs-12"><div class="booktextdiv"><textarea id="guestcomments" name="guestcomments" class="booktextareainput form-control" aria-label="Comentarios"></textarea></div></div></div><div class="row questionrow questionrow-guestcustq1"><div class="col-sm-4"><span class='requiredfield'>*</span> &nbsp;Acepto las condiciones de reserva, la fianza (hasta 400 €, según la duración de la estancia) y la política de cancelación.</div><div class="col-sm-8 col-xs-12"><div class="booktextdiv"><input type='hidden' name='guestcustq1' value='not ticked'><input type="checkbox" id="guestcustq1" name="guestcustq1" class="bookcheckinput " value="ticked" aria-label="Custom Question 1"></div></div></div></div> 
+</div> 
+</div>    
+</div><div class="col-xs-12 col-sm-7 col-md-7 col-lg-7 b24-guest-details-left"><div class="row"><div class="col-sm-12"><div class="ckedit propconfirmbookmessage"><p>Al confirmar su reserva acepta las condiciones de reserva (30 % ahora y 70 % catorce días antes de la llegada, y una fianza de hasta 400 € según la duración de la estancia) y la política de cancelación.</p><details><summary>Ver condiciones completas de reserva, fianza y cancelación</summary><p><strong>Pago.</strong> Al reservar se cobra el 30 % del precio (nunca menos que la tarifa de limpieza) y el 70 % restante catorce días antes de la llegada, en la misma tarjeta. Si reserva con menos de catorce días de antelación, se cobra el 100 % al reservar. Si el 70 % restante no puede cobrarse en su fecha y no se paga en las 72 horas siguientes, la reserva se cancela ese día como cancelación del huésped, según la política de cancelación. Al reservar, autoriza a SEDA Private Homes a guardar su tarjeta de forma segura (Stripe) para esos cobros y para la fianza.</p><p><strong>Fianza: hasta 400 €, según la duración de la estancia</strong> (1–2 noches 400 € · 3–6 noches 300 € · 7–13 noches 350 € · 14 noches o más 400 €). Solo se cobra si hay daños acreditados. En estancias de hasta 5 noches se retiene en la tarjeta con la que reservó la víspera de la llegada y se libera tras revisar el apartamento, como máximo 48 horas después de la salida. En estancias de 6 noches o más no se retiene nada: guardamos su tarjeta y la liberamos tras la salida. Si hubiera algún daño o faltara algo, se lo comunicaremos con fotos y facturas y podremos cobrar el coste, hasta el importe de la fianza. Si su tarjeta no se puede usar, le enviaremos un enlace para registrar otra.</p><p><strong>Registro de viajeros.</strong> La normativa española obliga a registrar a todos los viajeros antes de la llegada. Unos días antes le enviaremos el enlace para hacerlo y, después, las instrucciones de acceso.</p><p><strong>Contacto.</strong> SEDA Private Homes · info@sedaprivatehomes.com</p><p><strong>Política de cancelación</strong></p><p><strong>Si cancela usted:</strong></p><ul><li>con 14 días o más de antelación: reembolso completo;</li><li>entre 7 y 13 días antes de la llegada: reembolso del 50 % del alojamiento;</li><li>con menos de 7 días: sin reembolso del alojamiento.</li></ul><p>La tarifa de limpieza se devuelve siempre entera si el servicio no llegó a prestarse. No se descuenta ninguna comisión por el medio de pago.</p><p><strong>Fuerza mayor justificada</strong> (restricciones oficiales al viaje, catástrofe o meteorología grave con aviso oficial, cierre del aeropuerto, fallecimiento del huésped o de un familiar de primer grado): reembolso íntegro, cancele quien cancele.</p><p><strong>Si cancelamos nosotros:</strong> le devolvemos todo lo pagado y, si faltan menos de 10 días para la llegada, le indemnizamos además con el 30 % del precio.</p></details></div></div></div><div class="row"><div class="col-sm-12"><div class="book_bookingback"><a href="?numadult=2&amp;numchild=0&amp;firstnight=2026-12-10&amp;numnight=2&amp;multiroom=0&amp;width=960&amp;limitstart=0&amp;propid=348601&amp;version=3&amp;page=book&amp;sr1-719434=1&booking=REDACTADO" class="textdeconone"><span class="button fakebutton">Atrás</span></a></div><div class="book_confirmbooking"><input type="hidden" name="bookattempt" value="982533476"><input type="hidden" name="booksession" value="184743991"><input id="booking2Submit" class="button book_confirmbookingbut" type="submit" name="bookbook" value="Confirmar la reserva" onClick='$("#pleasewaitimg").removeClass("hidden")'><div id="pleasewaitimg" class="book_pleasewait hidden"><br><img src="include/loading.gif" alt=""><br>por favor espere .... </div></div></div></div></div></div><div class="row"><div class="col-xs-12 col-sm-5 col-md-4 col-lg-4 b24-guest-details-right"><div class="book_securelogo"><img alt="secure site" src="include/comodo_secure_transparent.png"></div></div></div><input type='hidden' id='subtotalprice' name='subtotalprice' value='360,00'><input type='hidden' id='subtotaltax' name='subtotaltax' value='0,00'><script>
+function jschangeall (n,e)
+{
+var v = document.getElementById(e).checked;
+//for (var i=n; i<=200; i=i+20)
+for (var i=n; i<=2000; i=i+20)
+  {
+  if (document.getElementById('optpercent'+i))
+    {
+    document.getElementById('optpercent'+i).checked = v;
+    }
+  }
+}
+function jsshowprices ()
+{
+var j;
+var ii;
+var r = new Array();
+var n = new Array();
+var v;
+var tt = 0;
+var ttax = 0;
+var e = new Array();
+var decimalSeparator = ',';
+var thousandsSeparator = '.';
+//for (ii=1; ii<=10; ii++)
+for (ii=1; ii<=100; ii++)
+{
+var t = 0;
+n[ii] = 0;
+if (document.getElementById('roomopt'+ii))
+	{
+	if ((document.getElementById('roomopt'+ii).tagName=='SELECT') && document.getElementById('roomopt'+ii).value>0)
+		{
+		n[ii] = Number(document.getElementById('roomopt'+ii).value);
+		t += Number(document.getElementById('x'+ii+'roomprice').value * document.getElementById('roomopt'+ii).value);
+		}
+	else	
+		{
+		t = 0;
+		}
+//	document.getElementById('x'+ii+'drprice').childNodes[0].nodeValue = t.toFixed(2).replace('.',decimalSeparator);
+	document.getElementById('x'+ii+'drprice').childNodes[0].nodeValue = humanNumber(t, decimalSeparator, thousandsSeparator);
+	if (document.getElementById('xroomtax')) 
+		{
+		ttax+=t*Number(document.getElementById('xroomtax').value)/100;
+		}
+	}
+else if (document.getElementById('x'+ii+'roomprice'))
+  {
+  n[ii] = 1;
+  t += Number(document.getElementById('x'+ii+'roomprice').value);
+	if (document.getElementById('xroomtax')) 
+		{
+		ttax+=t*Number(document.getElementById('xroomtax').value)/100;
+		}
+  }
+r[ii]=Number(t);
+tt=tt+Number(t);
+}
+var ee=Number(t);
+var sm;
+var rf=0;
+//for (j=1; j<=200; j++)
+var vv=0;
+var donevoucher=0;
+
+for (j=1; j<=2000; j++)
+{
+sm=false;
+t=0;
+v=0;
+ii=1+parseInt((j-1)/20);
+e[j]=0;
+if (j % 20 == 1)
+  {
+	ee = r[ii];
+  donevoucher = 0;
+	var vouch = 0;  //moved here for Ticket 558008
+  }
+  
+if (document.getElementById('optextra'+j))
+	{
+	if (document.getElementById('optextra'+j).checked)
+		{
+		v = document.getElementById('x'+j+'totprice').value * 1;
+		sm=true;
+		}
+	else if ((document.getElementById('optextra'+j).tagName=='SELECT') && document.getElementById('optextra'+j).value>0)
+		{
+		v = document.getElementById('x'+j+'totprice').value * document.getElementById('optextra'+j).value;
+		sm=true;
+		}
+	else	
+		{
+		v = 0;
+		}
+	document.getElementById('x'+j+'dispprice').childNodes[0].nodeValue = humanNumber(v, decimalSeparator, thousandsSeparator);
+	e[j]+=Number(v);
+	t+=Number(v);
+	if (document.getElementById('x'+ii+'period').value==3)
+		{
+		rf+=Number(v);
+		}
+	if (document.getElementById('x'+j+'opttax')) 
+		{
+		ttax+=Number(v)*Number(document.getElementById('x'+j+'opttax').value)/100;
+		}
+	}
+else if (document.getElementById('optextraroom'+j))
+	{
+	if (document.getElementById('optextraroom'+j).checked)
+		{
+		v = n[ii] * Number(document.getElementById('x'+j+'totprice').value);
+		sm=true;
+		}
+	else if ((document.getElementById('optextraroom'+j).tagName=='SELECT') && document.getElementById('optextraroom'+j).value>0)
+		{
+		v = n[ii] * Number(document.getElementById('x'+j+'totprice').value * document.getElementById('optextraroom'+j).value);
+		sm=true;
+		}
+	else	
+		{
+		v = 0;
+		}
+	document.getElementById('x'+j+'dispprice').childNodes[0].nodeValue = humanNumber(v, decimalSeparator, thousandsSeparator);
+	e[j]+=Number(v);
+	t+=Number(v);
+	
+	if (document.getElementById('x'+ii+'period').value==3)
+		{
+		rf+=Number(v);
+		}
+	if (document.getElementById('x'+j+'opttax')) 
+		{
+		ttax+=Number(v)*Number(document.getElementById('x'+j+'opttax').value)/100;
+		}
+	}
+else if (document.getElementById('optpercent'+j))
+	{
+	if (document.getElementById('optpercent'+j).checked)
+		{
+		sm=true;
+		if (document.getElementById('x'+j+'per') && document.getElementById('x'+j+'per').value==4) 
+			{
+			v = r[ii] * Number (document.getElementById('x'+j+'totprice').value);
+			}
+		else if (typeof(document.getElementById('x'+j+'obligpercent')) != 'undefined' && document.getElementById('x'+j+'obligpercent') != null)
+			{
+			v = ee * Number (document.getElementById('x'+j+'obligpercent').value);
+			}
+		else if (typeof(document.getElementById('x'+j+'obligpercenttax')) != 'undefined' && document.getElementById('x'+j+'obligpercenttax') != null)
+			{
+			v = ee * Number (document.getElementById('x'+j+'obligpercenttax').value);
+			}
+		else
+			{
+			if (document.getElementById('x'+j+'per') && document.getElementById('x'+j+'per').value==0)
+				v = tt * Number (document.getElementById('x'+j+'totprice').value);
+			else
+				v = r[ii] * Number (document.getElementById('x'+j+'totprice').value);
+			}
+		}
+	else	
+		{
+		v = 0;
+		}
+	document.getElementById('x'+j+'dispprice').childNodes[0].nodeValue = humanNumber(v, decimalSeparator, thousandsSeparator);
+	e[j]+=Number(v);
+	t+=Number(v);
+	if (document.getElementById('x'+ii+'period').value==3)
+		{
+		rf+=Number(v);
+		}
+	if (document.getElementById('x'+j+'opttax')) 
+		{
+		ttax+=Number(v)*Number(document.getElementById('x'+j+'opttax').value)/100;
+		}
+	}
+if (document.getElementById('x'+j+'oblig'))
+	{
+	sm=true;
+	v = n[ii] * Number (document.getElementById('x'+j+'oblig').value);
+	document.getElementById('x'+j+'dispprice').childNodes[0].nodeValue = humanNumber(v, decimalSeparator, thousandsSeparator);
+	e[j]+=Number(v);
+	t+=Number(v);
+	if (document.getElementById('x'+ii+'period').value==3)
+		{
+		rf+=Number(v);
+		}
+	if (document.getElementById('x'+j+'opttax')) 
+		{
+		ttax+=Number(v)*Number(document.getElementById('x'+j+'opttax').value)/100;
+		}
+	}
+if (document.getElementById('x'+j+'obligpercent') || document.getElementById('x'+j+'obligpercenttax'))
+	{
+	sm=true;
+	if (donevoucher<1)
+    {
+    donevoucher = 1;
+    if (document.getElementById('voucherpercent'+ii))
+      {
+      vouch = ee * Number (document.getElementById('voucherpercent'+ii).value) / 100;
+      vouch = Number (vouch);
+      ee += vouch;
+      tt += vouch;
+      vv += vouch;
+			if (document.getElementById('x'+j+'dispvoucherprice'))
+				{
+				document.getElementById('x'+j+'dispvoucherprice').childNodes[0].nodeValue = humanNumber(vv, decimalSeparator, thousandsSeparator);
+				vv = 0;
+				}
+     	if (document.getElementById('xroomtax')) 
+				{
+				ttax+=vouch*Number(document.getElementById('xroomtax').value)/100;
+				}
+      }
+    else if (document.getElementById('voucherroompercent'+ii))
+      {
+      vouch = (r[ii]) * Number (document.getElementById('voucherroompercent'+ii).value) / 100;
+      vouch = Number (vouch);
+      ee += vouch;
+      tt += vouch;
+      vv += vouch;
+			if (document.getElementById('x'+j+'dispvoucherprice'))
+				{
+				document.getElementById('x'+j+'dispvoucherprice').childNodes[0].nodeValue = humanNumber(vv, decimalSeparator, thousandsSeparator);
+				vv = 0;
+				}
+      if (document.getElementById('xroomtax')) 
+				{
+				ttax+=vouch*Number(document.getElementById('xroomtax').value)/100;
+				}
+      }
+    else if (document.getElementById('voucherextrapercent'+ii))
+      {
+      vouch = (ee - r[ii]) * Number (document.getElementById('voucherextrapercent'+ii).value) / 100;
+      vouch = Number (vouch);
+      ee += vouch;
+      tt += vouch;
+      vv += vouch;
+			if (document.getElementById('x'+j+'dispvoucherprice'))
+				{
+				document.getElementById('x'+j+'dispvoucherprice').childNodes[0].nodeValue = humanNumber(vv, decimalSeparator, thousandsSeparator);
+				vv = 0;
+				}
+     	if (document.getElementById('xroomtax')) 
+				{
+				ttax+=vouch*Number(document.getElementById('xroomtax').value)/100;
+				}
+      }
+    else if (document.getElementById('voucheramount'+ii))
+      {
+      vouch = Number (document.getElementById('voucheramount'+ii).value);
+      ee += vouch;
+      tt += vouch;
+     	if (document.getElementById('xroomtax')) 
+				{
+				ttax+=vouch*Number(document.getElementById('xroomtax').value)/100;
+				}
+      }
+    }
+
+
+
+	if (document.getElementById('x'+j+'obligpercent'))
+		{
+		if (document.getElementById('x'+j+'per') && document.getElementById('x'+j+'per').value==4) //per room
+			{
+			v = (r[ii]) * Number (document.getElementById('x'+j+'obligpercent').value); //ticket 765221 //if percent use this
+			}
+		else
+			{
+			v = ee * Number (document.getElementById('x'+j+'obligpercent').value);
+			}
+		}
+	if (document.getElementById('x'+j+'obligpercenttax'))
+		{
+		if (document.getElementById('x'+j+'per') && document.getElementById('x'+j+'per').value==4) //per room
+			{
+			v = (r[ii]+vouch) * Number (document.getElementById('x'+j+'obligpercenttax').value); //ticket 698907 //if tax use this
+			}
+		else
+			{
+			v = ee * Number (document.getElementById('x'+j+'obligpercenttax').value);
+			}
+		}
+
+	document.getElementById('x'+j+'dispprice').childNodes[0].nodeValue = humanNumber(v, decimalSeparator, thousandsSeparator);
+	e[j]+=Number(v);
+	t+=Number(v);
+	if (document.getElementById('x'+ii+'period').value==3)
+		{
+		rf+=Number(v);
+		}
+	if (document.getElementById('x'+j+'opttax')) 
+		{
+		ttax+=Number(v)*Number(document.getElementById('x'+j+'opttax').value)/100;
+		}
+	}
+
+if (j%20==0 && donevoucher<1)
+  {
+  var jj = j + 1;
+  donevoucher = 1;
+  if (document.getElementById('voucherpercent'+ii))
+    {
+    v = ee * Number (document.getElementById('voucherpercent'+ii).value) / 100;
+    ee += Number (v);
+    tt += Number (v);
+    document.getElementById('x'+jj+'dispvoucherprice').childNodes[0].nodeValue = humanNumber(v, decimalSeparator, thousandsSeparator);
+   	if (document.getElementById('xroomtax')) 
+			{
+			ttax+=Number(v)*Number(document.getElementById('xroomtax').value)/100;
+			}
+    }
+  else if (document.getElementById('voucherroompercent'+ii))
+    {
+    v = (r[ii]) * Number (document.getElementById('voucherroompercent'+ii).value) / 100;
+    ee += Number (v);
+    tt += Number (v);
+    document.getElementById('x'+jj+'dispvoucherprice').childNodes[0].nodeValue = humanNumber(v, decimalSeparator, thousandsSeparator);
+   	if (document.getElementById('xroomtax')) 
+			{
+			ttax+=Number(v)*Number(document.getElementById('xroomtax').value)/100;
+			}
+    }
+  else if (document.getElementById('voucherextrapercent'+ii))
+    {
+    v = (ee - r[ii]) * Number (document.getElementById('voucherextrapercent'+ii).value) / 100;
+    ee += Number (v);
+    tt += Number (v);
+    document.getElementById('x'+jj+'dispvoucherprice').childNodes[0].nodeValue = humanNumber(v, decimalSeparator, thousandsSeparator);
+   	if (document.getElementById('xroomtax')) 
+			{
+			ttax+=Number(v)*Number(document.getElementById('xroomtax').value)/100;
+			}
+    }
+  else if (document.getElementById('voucheramount'+ii))
+    {
+    ee += Number (document.getElementById('voucheramount'+ii).value);
+    tt += Number (document.getElementById('voucheramount'+ii).value);
+   	if (document.getElementById('xroomtax')) 
+			{
+			ttax+=Number (document.getElementById('voucheramount'+ii).value)*Number(document.getElementById('xroomtax').value)/100;
+			}
+    }
+  }
+ee+=Number(e[j]);
+tt+=Number(t);
+
+if (sm) 
+	{
+	$('#zupsellrow'+j).removeClass('hidden');
+	} 
+else 
+	{
+	$('#zupsellrow'+j).addClass('hidden');
+	}
+
+}
+tt+=ttax;
+
+document.getElementById('totaldispprice').childNodes[0].nodeValue = humanNumber(tt, decimalSeparator, thousandsSeparator);
+if (document.getElementById('totaldispprice2') !== null) {document.getElementById('totaldispprice2').childNodes[0].nodeValue = humanNumber(tt, decimalSeparator, thousandsSeparator);}
+document.getElementById('subtotalprice').value = humanNumber(tt, decimalSeparator, thousandsSeparator);
+document.getElementById('subtotaltax').value = humanNumber(ttax, decimalSeparator, thousandsSeparator);
+}
+jsshowprices ();
+function humanNumber (t, decimalSeparator, thousandsSeparator) {
+t = +t.toFixed(2);
+t += '';
+x = t.split('.');
+var x1 = x[0];
+var x2 = x[1];
+if (typeof x2 === 'undefined') {x2 = '00'}
+x2 += '0000000000';
+if (x1<0){
+if (2 < 1) {if (x2.substr(0,1)>=5) {x1=-1+Number(x1);x1=x1.toString()}}
+} else {
+if (2 < 1) {if (x2.substr(0,1)>=5) {x1=1+Number(x1);x1=x1.toString()}}
+}
+var rgx = /(\d+)(\d{3})/;
+if (thousandsSeparator.length>0){while (rgx.test(x1)) {x1=x1.replace(rgx,'$1'+thousandsSeparator+'$2')}}
+if (2 < 1) {return x1}
+return x1 + decimalSeparator + x2.substr(0, 2);
+}
+
+if ($('.booktexterrordiv').length > 0) {$('html, body').animate({scrollTop: $('.booktexterrordiv').offset().top - 20}, 'slow');}
+
+</script>
+</form><div class="book_poweredby"><a target="_blank" href="https://beds24.com">powered by Beds24.com</a></div><div class="clearboth"></div><script type="text/javascript">$(document).ready(function() {});</script></div></div>
+<div class="hide" data-businessId="0"></div>
+<!-- property custom body bottom -->
+<footer class="seda-bp-footer"><div class="seda-bp-footer__inner"><div class="seda-bp-footer__col"><p class="seda-bp-footer__brand">SEDA Private Homes</p><p class="seda-bp-footer__text"><span class="seda-t" data-l="es">SEDA Private Homes actúa en nombre y por cuenta del propietario.</span><span class="seda-t" data-l="en">SEDA Private Homes acts in the name and on behalf of the owner.</span><span class="seda-t" data-l="fr">SEDA Private Homes agit au nom et pour le compte du propriétaire.</span><span class="seda-t" data-l="de">SEDA Private Homes handelt im Namen und für Rechnung des Eigentümers.</span></p></div><div class="seda-bp-footer__col"><p class="seda-bp-footer__label"><span class="seda-t" data-l="es">Contacto</span><span class="seda-t" data-l="en">Contact</span><span class="seda-t" data-l="fr">Contact</span><span class="seda-t" data-l="de">Kontakt</span></p><a class="seda-bp-footer__link" href="mailto:info@sedaprivatehomes.com">info@sedaprivatehomes.com</a></div><div class="seda-bp-footer__col"><a class="seda-bp-footer__link seda-t" data-l="es" href="//sedaprivatehomes.com/privacidad">Privacidad</a><a class="seda-bp-footer__link seda-t" data-l="en" href="//sedaprivatehomes.com/en/privacidad">Privacy</a><a class="seda-bp-footer__link seda-t" data-l="fr" href="//sedaprivatehomes.com/fr/privacidad">Confidentialité</a><a class="seda-bp-footer__link seda-t" data-l="de" href="//sedaprivatehomes.com/de/privacidad">Datenschutz</a><a class="seda-bp-footer__link seda-t" data-l="es" href="//sedaprivatehomes.com/aviso-legal">Aviso legal y condiciones</a><a class="seda-bp-footer__link seda-t" data-l="en" href="//sedaprivatehomes.com/en/aviso-legal">Legal notice and terms</a><a class="seda-bp-footer__link seda-t" data-l="fr" href="//sedaprivatehomes.com/fr/aviso-legal">Mentions légales et conditions</a><a class="seda-bp-footer__link seda-t" data-l="de" href="//sedaprivatehomes.com/de/aviso-legal">Impressum und Bedingungen</a></div></div></footer>
+</body>
+</html>

@@ -28,3 +28,18 @@ Pegado por Cowork en Booking Engine → Property Booking Page → Developer.
     npx -y csso-cli beds24/booking-page/custom.css --no-restructure -o beds24/booking-page/pegado/custom.min.css
 
 Tiene que quedar por debajo de ~16 390 caracteres.
+
+## Cambios del 3-nov por la tarde (v2 a v4), en el panel
+
+- **Pictures:** las 8 fotos de la propiedad van en position 1-8, antes «not used». Así se activa el slider de portada (fullwidthjumbopropslider).
+- **Layout:**
+  - Property Map → not used;
+  - Offer Picture → not used;
+  - Offer Description → row 2, lg 12;
+  - Offer Select → lg 12;
+  - se añade Property Description 2 al pie de la propiedad.
+- **Content → Property Description 2:** el bloque «Lo que incluye SEDA» y «Antes de reservar», en es, en, de y fr. Va en propdescbot*.
+- **CSS** (custom.min.css, 16 478 caracteres): al final se añade `body.colorbody #topofthebookingpage,#b24scroller-container{position:static!important}`. Pone el idioma y la barra de fechas debajo de la foto, contra una regla de booking3.css con 2 ids y 2 clases.
+- **Upsell Items:** x1descES = «Limpieza final». EN se queda «Final cleaning». No se pone DE ni FR: `DESCRIPCION_LIMPIEZA_RE = /clean|limpiez/i` de seda_os no los reconocería y la limpieza se clasificaría como alojamiento.
+- **Booking Rules:** Same Day Booking Cut off pasa a 00:00; antes era none. No se puede reservar para el mismo día.
+- **Instantáneas nuevas:** preview/real/booking2-es-v2-2026-11-03.html, con el slider, y book3-formulario-es-2026-11-03.html, con el formulario del huésped.
