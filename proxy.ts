@@ -100,6 +100,13 @@ export function proxy(request: NextRequest) {
   ) {
     return NextResponse.next()
   }
+  // /tour/<slug>: visor 360 incrustable, FUERA de next-intl a propósito. Lleva
+  // sus cinco idiomas (es/en/de/fr/it) y el idioma lo da `?lang=`; pasarlo por
+  // intlMiddleware lo reescribiría a /es/tour/… y le pondría el layout de la web
+  // (navegación, pie) dentro de un iframe. Ver docs/TOUR-360.md.
+  if (pathname === "/tour" || pathname.startsWith("/tour/")) {
+    return NextResponse.next()
+  }
   const retired = RETIRED_VILLA_PATH.exec(pathname)
   if (retired) {
     return goneResponse(retired[1] ?? routing.defaultLocale)

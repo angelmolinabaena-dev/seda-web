@@ -20,8 +20,11 @@ type Regla = { source: string; headers: Cabecera[] }
 
 const vercel = JSON.parse(readFileSync(join(raiz, 'vercel.json'), 'utf8')) as { headers: Regla[] }
 
-// La regla que cubre todas las rutas.
-const reglaGlobal = vercel.headers.find((r) => r.source === '/(.*)')
+// La regla que cubre todas las rutas SALVO /tour/ (visor 360 incrustable, con su
+// propia CSP: se prueba en tests/tour360-cabeceras.test.ts). El `(?!tour/)` existe
+// para que la CSP global (`frame-ancestors 'none'`) y la del visor no se solapen:
+// dos CSP sobre una misma respuesta se INTERSECAN y el visor no podría incrustarse.
+const reglaGlobal = vercel.headers.find((r) => r.source === '/((?!tour/).*)')
 const csp = reglaGlobal?.headers.find((h) => h.key === 'Content-Security-Policy')?.value ?? ''
 
 function directivas(politica: string): Map<string, string[]> {
@@ -53,8 +56,9 @@ describe('Content-Security-Policy en vercel.json', () => {
     expect(d.get('frame-ancestors')).toEqual(["'none'"])
   })
 
-  it('permite el iframe de Calendly (/meet) y ningún otro origen de frame', () => {
-    expect(d.get('frame-src')).toEqual(['https://calendly.com'])
+  it("permite el iframe de Calendly (/meet), el del visor 360 propio ('self') y ningún otro origen de frame", () => {
+    // 'self' lo necesita «Ver en 360°» (components/tour360): la ficha enmarca /tour/<slug>.
+    expect(d.get('frame-src')).toEqual(["'self'", 'https://calendly.com'])
   })
 
   it("cierra base-uri, object-src y form-action", () => {

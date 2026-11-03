@@ -1557,5 +1557,10 @@
       "ctaBody": "Tell us about your property. If it's a fit, we'll send you the full proposal within 24 hours.",
       "ctaBtn": "Book a private call"
     }
+  },
+  "tour360": {
+    "ver": "View in 360°",
+    "titulo": "360° tour of {nombre}",
+    "cerrar": "Close the tour"
   }
 }

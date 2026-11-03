@@ -1557,5 +1557,10 @@
       "ctaBody": "Cuéntanos tu propiedad. Si vemos el encaje, te enviamos la propuesta completa en 24 horas.",
       "ctaBtn": "Reservar llamada privada"
     }
+  },
+  "tour360": {
+    "ver": "Ver en 360°",
+    "titulo": "Recorrido 360° de {nombre}",
+    "cerrar": "Cerrar el recorrido"
   }
 }

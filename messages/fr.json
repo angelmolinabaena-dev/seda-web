@@ -1557,5 +1557,10 @@
       "ctaBody": "Parlez-nous de votre propriété. Si c'est un bon match, nous vous enverrons la proposition complète sous 24 heures.",
       "ctaBtn": "Réserver un appel"
     }
+  },
+  "tour360": {
+    "ver": "Voir en 360°",
+    "titulo": "Visite 360° de {nombre}",
+    "cerrar": "Fermer la visite"
   }
 }
