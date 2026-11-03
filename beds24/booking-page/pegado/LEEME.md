@@ -68,3 +68,9 @@ Tiene que quedar en **14 500 caracteres o menos** (el panel deja de guardar sobr
 ## v5.3 (3-nov): móvil, toque fantasma
 - v5.2 centraba el calendario encima de los campos: al tocar Entrada o Salida, el mismo toque caía en un día del calendario y cambiaba la fecha sola. Ahora el calendario se abre debajo de la barra (fechas y personas), sin tapar ningún campo.
 - 14942 caracteres, guardado en Beds24.
+
+## v6 (3-nov): galería y botón fijo
+- Flechas de la galería: círculos claros de 44 px con sombra, visibles sobre cualquier foto.
+- Paso automático cada 6 s (pausa al pasar el ratón). Va en Custom HEAD (head.html): Beds24 sí acepta <script> en ese campo.
+- Móvil: el botón Reservar queda fijo abajo, solo cuando hay precio disponible; no aparece en el paso de datos del huésped.
+- CSS 16076 caracteres, cerca del límite medido (16478 sí, 18209 no).
