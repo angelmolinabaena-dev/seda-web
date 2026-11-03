@@ -11,7 +11,7 @@ import { TEXTOS_VISOR, rellenar } from "@/lib/tour360/textos"
 
   · Pannellum se sirve desde /vendor/pannellum (nuestro dominio, CSP 'self'): ni
     CDN ni terceros. Se carga aquí, al montar el visor, no antes.
-  · Sin analítica, sin cookies, sin localStorage. El idioma se lee de ?lang= o del
+  · Sin analítica, sin cookies, sin almacenamiento del navegador. El idioma se lee de ?lang= o del
     navegador y NO se guarda en ningún sitio (la URL lleva `?lang=` al cambiarlo).
   · Parámetros de URL: ?lang=es|en|de|fr|it · ?escena=<id> · ?debug=1 (coordenadas
     para colocar hotspots; ver docs/TOUR-360.md).
