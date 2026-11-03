@@ -1,221 +1,139 @@
 @import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Manrope:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap");
 
 /* ==========================================================================
-   SEDA Private Homes · custom.css de la booking page de Beds24
-   Pegar en: SETTINGS → BOOKING PAGE → Custom CSS. Ver COMO-PEGAR.md.
+   SEDA Private Homes · custom.css de la booking page de Beds24 (v5)
+   Pegar en: SETTINGS → BOOKING PAGE → Custom CSS. Ver COMO-PEGAR.md y pegado/LEEME.md.
+   LÍMITE: minificado (csso --no-restructure) tiene que medir ≤ 14 500 caracteres; el panel
+   no guarda nada y no avisa por encima de ~16 300.
 
-   Valores de TOKENS.md (que salen de app/globals.css, lib/fonts.ts y los
-   componentes de seda-web). Contrastes calculados: TOKENS.md §2.
+   Valores de TOKENS.md. Selectores de las INSTANTÁNEAS REALES (propid 348601, 3-nov-2026):
+   preview/real/booking2-es-v2-* (portada con slider) y book3-formulario-es-* (formulario).
+   v5 quitó toda regla que no casara con nada en esas dos instantáneas. Las que se
+   conservan SIN casar (las crea el JS de Beds24 y la instantánea las trae vacías) llevan
+   la marca [JS].
 
-   BASE REAL. Los selectores salen de la instantánea de la booking page real
-   (propid 348601, es/en, 3-nov-2026): preview/real/booking2-*-2026-11-03.html.
-   Beds24 carga Bootstrap 3.3.4, include/booking3.css y un <style> en línea con
-   selectores de clase (.colorbody, .atcolor, .button, .at_datenotavailable…).
+   POR QUÉ TODO LLEVA «.colorbody» (clase real del <body>): el <style> de Beds24 usa
+   selectores de una clase («.colorbody {background:#f4f4f4}», «.button {background:#008acc}»).
+   Con el prefijo cada regla pesa más y gana sin depender del orden.
 
-   POR QUÉ TODO LLEVA EL PREFIJO «.colorbody» (clase real del <body>):
-   el <style> de Beds24 usa selectores de clase —p. ej. «.colorbody { background:
-   #f4f4f4 }» y «.button { background: #008acc }»—, que ganan por especificidad
-   a un selector de elemento como «body» o «input». Con el prefijo, cada regla
-   de este fichero pesa más (clase + clase) y gana SIN depender del orden en que
-   Beds24 coloque este CSS ni usar la marca de prioridad forzada.
-
-   QUÉ NO SE HA PODIDO VER, y por tanto no está verificado:
-     · include/booking3.css y bootstrap-datetimepicker_4.7.14a.js no vienen en la
-       instantánea (solo se referencian). Si booking3.css tiene reglas con más
-       especificidad que «.colorbody .x», alguna no ganará: ver «PLAN B».
-     · El calendario desplegable de fechas lo crea JavaScript: la instantánea no lo
-       trae abierto. Sus reglas ([LIBRERÍA], §9) usan el marcado documentado de
-       bootstrap-datetimepicker, no el capturado.
-     · La instantánea cubre la página de fechas y alojamientos. El formulario del
-       huésped y el pago son otras pantallas y no se han capturado: sus reglas
-       ([BOOTSTRAP 3], §5-§7) usan solo clases estándar de Bootstrap 3, que la página
-       sí carga, pero no se han contrastado con el marcado de esas pantallas.
-
-   Sin la marca de prioridad forzada (la palabra con signo de exclamación): este
-   CSS no la usa en ninguna regla. Ver «PLAN B» al final.
+   NO SE HA PODIDO VER include/booking2.css ni include/booking3.css (la instantánea solo los
+   referencia). Si alguna regla suya gana a las de aquí, ver «PLAN B» al final.
    ========================================================================== */
 
-/* ---- 1 · Tokens ----------------------------------------------------------
-   TODO EN px, NO EN rem: Bootstrap 3 (que carga la página) fija «html { font-size: 10px }», así que
-   1rem mide 10 px en la booking page y no 16. Comprobado midiendo la preview. */
+/* ---- Tokens (TODO EN px: Bootstrap 3 fija html{font-size:10px}, 1rem = 10 px) ---- */
 :root {
-  /* Superficies (app/globals.css) */
   --seda-bg: #faf8f4;
   --seda-card: #f4f1eb;
   --seda-secondary: #ebe7e0;
   --seda-border: #e0dad2;
-  --seda-line: #d9d7d4; /* foreground al 15 %: el filete de las tarjetas de la web */
-  --seda-field-border: #85827d; /* ≥3:1 sobre bg, card, secondary y blanco (TOKENS.md §2) */
-
-  /* Texto */
+  --seda-line: #d9d7d4;
+  --seda-field-border: #85827d; /* ≥3:1 sobre bg, card y blanco */
   --seda-fg: #211f1c; /* 15,50:1 sobre bg */
-  --seda-fg-hover: #373532; /* foreground al 90 % */
-  --seda-muted: #6c6760; /* 5,28:1 sobre bg · 4,97 sobre card · 4,55 sobre secondary */
-
-  /* Marca */
-  --seda-olive: #536043; /* 6,34:1 sobre bg: enlaces y foco */
+  --seda-muted: #6c6760; /* 5,28:1 sobre bg · 4,97 sobre card */
+  --seda-olive: #536043; /* 6,34:1 sobre bg: enlaces, foco y botón principal */
   --seda-olive-deep: #39442c;
-  --seda-gold: #bf9040; /* SOLO decorativo: 2,72:1, nunca texto */
+  --seda-gold: #bf9040; /* SOLO decorativo (2,72:1): viñetas, nunca texto */
   --seda-danger: #994733; /* 5,99:1 sobre bg */
-
-  /* Tipografía */
   --seda-serif: "Cormorant Garamond", Georgia, serif;
   --seda-sans: "Manrope", system-ui, sans-serif;
   --seda-mono: "JetBrains Mono", ui-monospace, monospace;
-
-  /* Medidas */
-  --seda-gutter: 24px; /* px-6 */
-  --seda-max: 1280px; /* max-w-7xl: incluye el relleno, así que el contenido mide 1120 px con el gutter de 80 px */
-  --seda-target: 44px; /* tamaño táctil mínimo */
-
+  --seda-gutter: 24px;
+  --seda-pad: 20px;
+  --seda-max: 1280px;
+  --seda-target: 44px;
   color-scheme: light;
 }
-
 @media (min-width: 768px) {
   :root {
-    --seda-gutter: 48px; /* md:px-12 */
+    --seda-gutter: 48px;
+    --seda-pad: 32px;
   }
 }
 @media (min-width: 1280px) {
   :root {
-    --seda-gutter: 80px; /* lg:px-20 */
+    --seda-gutter: 80px;
   }
 }
 
-/* ---- 2 · Base ------------------------------------------------------------ */
+/* ---- Base ---- */
 html {
   -webkit-text-size-adjust: 100%;
-  text-size-adjust: 100%;
 }
-
-/* Real: <body class="colorbody colorbody-es layout1"> */
 body.colorbody {
   margin: 0;
-  background-color: var(--seda-bg);
+  background: var(--seda-bg);
   color: var(--seda-fg);
-  font-family: var(--seda-sans);
-  font-size: 16px; /* 16 px: Beds24 pone 14 px; es un formulario de pago en móvil */
-  font-weight: 400;
-  line-height: 1.6;
+  font: 400 16px/1.6 var(--seda-sans); /* Beds24: 14 px; es un formulario de pago en móvil */
   -webkit-font-smoothing: antialiased;
 }
-
-.colorbody ::selection {
-  background: var(--seda-olive);
-  color: var(--seda-bg);
+/* Regla ya PEGADA en el panel (v4): idioma y barra de fechas debajo de la foto, contra una
+   regla de booking3.css con 2 ids y 2 clases. Verbatim; no tocar. */
+body.colorbody #topofthebookingpage,
+#b24scroller-container {
+  position: static !important;
 }
-
 .colorbody a {
   color: var(--seda-olive);
   text-decoration: underline;
-  text-decoration-thickness: 1px;
   text-underline-offset: 3px;
-  transition: color 0.3s;
 }
 .colorbody a:hover {
   color: var(--seda-olive-deep);
 }
-
-/* Foco visible: contorno olivo de 2 px (6,34:1 sobre cal; WCAG pide ≥3:1). */
-.colorbody a:focus-visible,
-.colorbody button:focus-visible,
-.colorbody input:focus-visible,
-.colorbody select:focus-visible,
-.colorbody textarea:focus-visible,
-.colorbody [tabindex]:focus-visible {
+.colorbody :focus-visible {
   outline: 2px solid var(--seda-olive);
   outline-offset: 2px;
 }
-
-.colorbody h1,
-.colorbody h2,
 .colorbody h3 {
-  font-family: var(--seda-serif);
-  font-weight: 300;
+  margin: 0 0 12px;
+  font: 400 24px/1.2 var(--seda-serif);
+  letter-spacing: -0.01em;
   color: var(--seda-fg);
-  letter-spacing: -0.015em;
-  text-wrap: balance;
 }
-.colorbody h1 {
-  font-size: 30px;
-  line-height: 1.05;
-}
-.colorbody h2 {
-  font-size: 24px;
-  line-height: 1.18;
-}
-.colorbody h3 {
-  font-size: 22px; /* por debajo de 24 px el peso 300 se afina demasiado */
-  font-weight: 400;
-  line-height: 1.2;
-}
-@media (min-width: 768px) {
-  .colorbody h1 {
-    font-size: 36px;
-  }
-  .colorbody h2 {
-    font-size: 30px;
-  }
-}
-@media (min-width: 1280px) {
-  .colorbody h1 {
-    font-size: 40px;
-  }
-  .colorbody h2 {
-    font-size: 36px;
-  }
-}
-
 .colorbody hr {
+  margin: 12px 0;
   border: 0;
   border-top: 1px solid var(--seda-border);
 }
 
-.colorbody small,
-.colorbody .help-block,
-.colorbody .text-muted {
-  color: var(--seda-muted);
-  font-size: 14px;
-}
-
-/* ---- 3 · Marco de la página ----------------------------------------------
-   Real: .b24fullcontainer (franjas) > .container.atcolor (contenido).
-   Beds24 pinta .atcolor con fondo #f4f4f4 y texto #424242 desde su <style>. */
+/* ---- Marco: .b24fullcontainer > .container.atcolor ---- */
 .colorbody .atcolor {
-  background-color: transparent;
+  background: none;
   color: var(--seda-fg);
 }
 .colorbody .container {
-  width: auto; /* Bootstrap: 750 / 970 / 1170 px fijos */
+  width: auto;
   max-width: var(--seda-max);
-  padding-left: var(--seda-gutter);
-  padding-right: var(--seda-gutter);
+  padding: 0 var(--seda-gutter);
 }
-
-/* Franja superior (.b24fullcontainer-top): selector de idioma de Beds24 */
+.colorbody .b24-prop-slider {
+  padding: 0;
+}
+.colorbody .b24fullcontainer-proprow1 .row {
+  margin: 0; /* el slider mide lo mismo que la barra de fechas, sin el -15 px de Bootstrap */
+}
 .colorbody .b24fullcontainer-top {
   padding: 8px 0;
 }
+
+/* ---- Selector de idioma de Beds24 ---- */
 .colorbody .b24languagedropdown .dropdown-toggle {
   display: inline-flex;
   align-items: center;
   gap: 10px;
   min-height: var(--seda-target);
   padding: 8px 16px;
-  font-family: var(--seda-mono);
-  font-size: 11px;
-  font-weight: 500;
+  font: 500 11px/1.2 var(--seda-mono);
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--seda-fg);
-  background: transparent;
+  background: none;
   border: 1px solid var(--seda-fg);
   border-radius: 0;
   box-shadow: none;
 }
 .colorbody .b24languagedropdown .dropdown-toggle:hover {
   background: var(--seda-secondary);
-  color: var(--seda-fg);
 }
 .colorbody .dropdown-menu {
   min-width: 192px;
@@ -224,7 +142,7 @@ body.colorbody {
   background: var(--seda-bg);
   border: 1px solid var(--seda-line);
   border-radius: 0;
-  box-shadow: 0 20px 40px -20px rgba(33, 31, 28, 0.35); /* menú de la web: filete + sombra */
+  box-shadow: 0 20px 40px -20px rgba(33, 31, 28, 0.35);
 }
 .colorbody .dropdown-menu > li > a {
   display: flex;
@@ -234,13 +152,11 @@ body.colorbody {
   color: var(--seda-fg);
   text-decoration: none;
 }
-.colorbody .dropdown-menu > li > a:hover,
-.colorbody .dropdown-menu > li > a:focus {
-  color: var(--seda-fg);
+.colorbody .dropdown-menu > li > a:hover {
   background: var(--seda-secondary);
 }
 
-/* ---- 4 · Cabecera y pie de SEDA (header.html, footer.html: verificados) ---- */
+/* ---- Cabecera y pie de SEDA (header.pegado.html, footer.min.html) ---- */
 .colorbody .seda-bp-header {
   background: var(--seda-bg);
   border-bottom: 1px solid var(--seda-border);
@@ -263,15 +179,11 @@ body.colorbody {
   color: var(--seda-fg);
   text-decoration: none;
 }
-.colorbody .seda-bp-brand:hover {
-  color: var(--seda-fg);
-}
 .colorbody .seda-bp-brand__mark {
   display: block;
-  width: 45px; /* mismo tamaño que el isotipo de la navegación de la web */
+  width: 45px;
   height: 30px;
 }
-/* Nombre solo en pantallas anchas: en 375 px no cabe junto al enlace de vuelta. */
 .colorbody .seda-bp-brand__name {
   position: absolute;
   width: 1px;
@@ -281,7 +193,7 @@ body.colorbody {
   white-space: nowrap;
   font-size: 14px;
   font-weight: 600;
-  letter-spacing: 0.35em; /* footer de la web: text-sm font-semibold tracking-[0.35em] uppercase */
+  letter-spacing: 0.35em;
   text-transform: uppercase;
 }
 .colorbody .seda-bp-back {
@@ -289,18 +201,14 @@ body.colorbody {
   align-items: center;
   gap: 8px;
   min-height: var(--seda-target);
-  font-family: var(--seda-mono);
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.18em; /* navegación de la web */
+  font: 500 11px/1.2 var(--seda-mono);
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--seda-fg);
   text-decoration: none;
-  border-bottom: 1px solid transparent;
 }
 .colorbody .seda-bp-back:hover {
-  color: var(--seda-olive-deep);
-  border-bottom-color: currentColor;
+  text-decoration: underline;
 }
 @media (min-width: 768px) {
   .colorbody .seda-bp-brand__mark {
@@ -315,16 +223,13 @@ body.colorbody {
     clip-path: none;
   }
 }
-
 .colorbody .seda-bp-footer {
   margin-top: 64px;
   background: var(--seda-bg);
   border-top: 1px solid var(--seda-border);
-  color: var(--seda-fg);
 }
 .colorbody .seda-bp-footer__inner {
   display: grid;
-  grid-template-columns: 1fr;
   gap: 32px;
   max-width: var(--seda-max);
   margin: 0 auto;
@@ -346,9 +251,7 @@ body.colorbody {
 }
 .colorbody .seda-bp-footer__label {
   margin: 0 0 8px;
-  font-family: var(--seda-mono);
-  font-size: 11px;
-  font-weight: 500;
+  font: 500 11px/1.4 var(--seda-mono);
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: var(--seda-muted);
@@ -361,14 +264,8 @@ body.colorbody {
   color: var(--seda-fg);
   text-decoration: none;
 }
-.colorbody .seda-bp-footer__link--mono {
-  font-family: var(--seda-mono);
-  font-size: 13px;
-}
 .colorbody .seda-bp-footer__link:hover {
-  color: var(--seda-olive-deep);
   text-decoration: underline;
-  text-underline-offset: 3px;
 }
 @media (min-width: 768px) {
   .colorbody .seda-bp-footer__inner {
@@ -376,79 +273,46 @@ body.colorbody {
     gap: 48px;
   }
 }
-
-/* Idioma de header.html y footer.html: se ocultan las variantes que no son del idioma de
-   la página. Beds24 SÍ pone <html lang="es|en|…"> (comprobado en la instantánea), de modo
-   que el respaldo por :lang() funciona sin JavaScript. Sin idioma reconocido: inglés. */
-html[data-seda-lang="es"] .seda-t:not([data-l="es"]),
-html:not([data-seda-lang]):lang(es) .seda-t:not([data-l="es"]),
-html[data-seda-lang="de"] .seda-t:not([data-l="de"]),
-html:not([data-seda-lang]):lang(de) .seda-t:not([data-l="de"]),
-html[data-seda-lang="fr"] .seda-t:not([data-l="fr"]),
-html:not([data-seda-lang]):lang(fr) .seda-t:not([data-l="fr"]),
-html[data-seda-lang="it"] .seda-t:not([data-l="it"]),
-html:not([data-seda-lang]):lang(it) .seda-t:not([data-l="it"]),
-html[data-seda-lang="en"] .seda-t:not([data-l="en"]),
-html:not([data-seda-lang]):not(:lang(es)):not(:lang(de)):not(:lang(fr)):not(:lang(it)) .seda-t:not([data-l="en"]) {
+/* Idioma: Beds24 pone <html lang="es|en|de|fr"> (lo ofrece su selector; italiano no). Sin JavaScript. */
+html:lang(es) .seda-t:not([data-l="es"]),
+html:lang(en) .seda-t:not([data-l="en"]),
+html:lang(de) .seda-t:not([data-l="de"]),
+html:lang(fr) .seda-t:not([data-l="fr"]) {
   display: none;
 }
 
-/* ---- 5 · Formularios [BOOTSTRAP 3: .form-group, .control-label, .form-control] ----
-   Real en la página de fechas: #inputcheckin, #inputcheckout (readonly, abren el
-   calendario), #inputnumnight, #inputnumadult. */
-.colorbody label,
-.colorbody .control-label {
+/* ---- Campos: .form-control (fechas, noches, personas y todo el formulario del huésped) ---- */
+.colorbody .control-label,
+.colorbody .questionrow > :first-child {
   display: block;
-  margin-bottom: 8px;
-  font-family: var(--seda-mono);
-  font-size: 11px; /* 11: la web usa 10 */
-  font-weight: 500;
+  margin: 0 0 8px;
+  font: 500 11px/1.4 var(--seda-mono);
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--seda-muted);
 }
-
 .colorbody .form-control {
-  height: auto; /* Bootstrap: 34 px */
+  height: auto;
   min-height: var(--seda-target);
-  padding: 10px 12px; /* px-3 py-2.5 */
-  font-family: var(--seda-sans);
-  font-size: 16px; /* <16 px provoca zoom en iOS Safari al enfocar */
-  line-height: 1.4;
+  padding: 10px 12px;
+  font: 400 16px/1.4 var(--seda-sans); /* <16 px: iOS Safari hace zoom al enfocar */
   color: var(--seda-fg);
   background-color: transparent;
   border: 1px solid var(--seda-field-border);
   border-radius: 0;
   box-shadow: none;
-  transition: border-color 0.3s;
 }
 .colorbody textarea.form-control {
-  min-height: 120px;
+  min-height: 96px;
 }
-.colorbody .form-control::placeholder {
-  color: var(--seda-muted); /* 5,28:1 */
-  opacity: 1;
-}
-.colorbody .form-control:hover {
-  border-color: var(--seda-fg);
-}
+.colorbody .form-control:hover,
 .colorbody .form-control:focus {
   border-color: var(--seda-fg);
-  outline: 2px solid var(--seda-olive);
-  outline-offset: 2px;
   box-shadow: none;
 }
-/* Las fechas son «readonly» pero interactivas (abren el calendario): NO se pintan como
-   deshabilitadas. Bootstrap les pone fondo #eee. */
 .colorbody .form-control[readonly] {
-  background-color: transparent;
+  background-color: transparent; /* las fechas son readonly pero abren el calendario */
   cursor: pointer;
-}
-.colorbody .form-control:disabled,
-.colorbody .form-control[disabled] {
-  color: var(--seda-muted);
-  background-color: var(--seda-secondary);
-  cursor: not-allowed;
 }
 .colorbody select.form-control {
   appearance: none;
@@ -457,309 +321,150 @@ html:not([data-seda-lang]):not(:lang(es)):not(:lang(de)):not(:lang(fr)):not(:lan
   background-repeat: no-repeat;
   background-position: right 14px center;
 }
-
-/* Campo de fecha con icono: .input-group > .input-group-addon (glyphicon-calendar) + input */
 .colorbody .input-group-addon {
   min-width: var(--seda-target);
   color: var(--seda-fg);
-  background: transparent;
+  background: none;
   border: 1px solid var(--seda-field-border);
   border-right: 0;
   border-radius: 0;
 }
-.colorbody .input-group .form-control:first-child,
-.colorbody .input-group .form-control:last-child {
-  border-radius: 0;
-}
-
-/* En <480 px el icono del campo de fecha le quita ~44 px al texto y el año se corta («ma 3 nov 2»):
-   el icono es decorativo (cada campo lleva su etiqueta), se oculta. */
 @media (max-width: 479px) {
   .colorbody .input-group-addon {
-    display: none;
+    display: none; /* con él el año se corta («ma 3 nov 2»); es decorativo, cada campo lleva etiqueta */
   }
 }
 
-/* Errores: terracota + borde grueso + texto (no solo color, WCAG 1.4.1) */
-.colorbody .has-error .form-control,
-.colorbody .form-control[aria-invalid="true"] {
-  border-color: var(--seda-danger);
-  border-width: 2px;
-  box-shadow: none;
-}
-.colorbody .has-error .help-block,
-.colorbody .has-error .control-label,
-.colorbody .text-danger {
-  color: var(--seda-danger);
-}
-
-/* Casillas y radios [BOOTSTRAP 3: .checkbox / .radio > label > input]: el área de 44 px la da
-   la etiqueta, no el cuadrado. Bootstrap saca el input con margin-left:-20px. */
-.colorbody .checkbox label,
-.colorbody .radio label {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  min-height: var(--seda-target);
-  padding: 10px 0;
-  font-family: var(--seda-sans);
-  font-size: 16px;
-  letter-spacing: 0;
-  text-transform: none;
-  color: var(--seda-fg);
-}
-.colorbody .checkbox input[type="checkbox"],
-.colorbody .radio input[type="radio"] {
-  position: static;
-  flex: none;
-  width: 22px;
-  height: 22px;
-  margin: 0;
-  accent-color: var(--seda-olive);
-}
-
-/* ---- 6 · Botones ------------------------------------------------------------
-   Real: «Reservar» es <input type="submit" class="btn pull-right btn-lg button at_bookingbut">.
-   El <style> de Beds24 le pone «.button { background:#008acc; color:#fff; border:none }» y
-   «.button:hover { background:#00608e }». */
-.colorbody .btn,
+/* ---- Botones ---- Principal = olivo; secundario (Atrás, Up) = contorno. Ancho natural. */
 .colorbody .button,
-.colorbody input[type="submit"] {
+.colorbody .buttondis {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
   min-height: var(--seda-target);
-  padding: 12px 28px; /* px-7 */
-  font-family: var(--seda-mono);
-  font-size: 11px; /* 11 */
-  font-weight: 500;
-  line-height: 1.2;
+  padding: 12px 28px;
+  font: 500 11px/1.2 var(--seda-mono);
   letter-spacing: 0.22em;
   text-transform: uppercase;
   text-decoration: none;
   color: var(--seda-bg);
-  background-color: var(--seda-fg);
-  border: 1px solid var(--seda-fg);
+  background: var(--seda-olive);
+  border: 1px solid var(--seda-olive);
   border-radius: 0;
   box-shadow: none;
   cursor: pointer;
-  transition:
-    background-color 0.3s,
-    color 0.3s;
 }
-.colorbody .btn:hover,
-.colorbody .button:hover,
-.colorbody input[type="submit"]:hover {
+.colorbody .button:hover {
   color: var(--seda-bg);
-  background-color: var(--seda-fg-hover);
-  border-color: var(--seda-fg-hover);
+  background: var(--seda-olive-deep);
+  border-color: var(--seda-olive-deep);
 }
-.colorbody .btn:disabled,
-.colorbody .btn.disabled,
-.colorbody .buttondis {
-  color: var(--seda-bg);
-  background-color: var(--seda-fg);
+.colorbody .button.fakebutton,
+.colorbody .btn-default.button {
+  color: var(--seda-fg);
+  background: none;
+  border-color: var(--seda-fg);
+}
+.colorbody .button.fakebutton:hover,
+.colorbody .btn-default.button:hover {
+  color: var(--seda-fg);
+  background: var(--seda-secondary);
+  border-color: var(--seda-fg);
+}
+.colorbody .buttondis,
+.colorbody .button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
-/* Secundario: Bootstrap «.btn-default» sin la clase «.button» (el selector de idioma) */
-.colorbody .btn-default:not(.button) {
-  color: var(--seda-fg);
-  background-color: transparent;
-  border-color: var(--seda-fg);
-}
-.colorbody .btn-default:not(.button):hover {
-  color: var(--seda-fg);
-  background-color: var(--seda-secondary);
-  border-color: var(--seda-fg);
-}
-.colorbody .btn-sm {
-  min-height: var(--seda-target); /* «Up» del pie: Bootstrap lo deja en ~30 px */
-}
 
-/* ---- 7 · Tarjetas [BOOTSTRAP 3: .panel] ---------------------------------------
-   Real: .b24room > .panel.b24panel-room.atcolor.border > .panel-heading.b24-roompanel-heading
-   + .panel-body.b24panel. Beds24 les pone fondo blanco desde .colorbookingform/.b24panel. */
-.colorbody .panel,
-.colorbody .b24panel-room {
-  margin-bottom: 24px;
-  background-color: var(--seda-bg);
-  border: 1px solid var(--seda-line); /* border border-foreground/15 */
+/* ---- Tarjetas: .panel > .panel-heading + .panel-body.b24panel ---- */
+.colorbody .panel {
+  margin: 0 0 24px;
+  background: var(--seda-bg);
+  border: 1px solid var(--seda-line);
   border-radius: 0;
   box-shadow: none;
 }
 .colorbody .b24panel {
-  background-color: var(--seda-bg);
-  color: var(--seda-fg);
+  padding: var(--seda-pad);
+  background: none;
+  color: inherit;
 }
-.colorbody .panel-body {
-  padding: 24px; /* p-6 */
-}
-.colorbody .panel-heading,
 .colorbody .b24-roompanel-heading {
-  padding: 24px 24px 0;
-  background: transparent;
+  padding: var(--seda-pad) var(--seda-pad) 0;
+  background: none;
   border: 0;
 }
-@media (min-width: 768px) {
-  .colorbody .panel-body {
-    padding: 32px; /* md:p-8 */
-  }
-  .colorbody .panel-heading,
-  .colorbody .b24-roompanel-heading {
-    padding: 32px 32px 0;
-  }
-}
-/* Nombre del alojamiento */
 .colorbody .at_roomnametext {
-  font-family: var(--seda-serif);
-  font-size: 28px;
-  font-weight: 300;
-  line-height: 1.1;
+  font: 300 28px/1.1 var(--seda-serif);
   letter-spacing: -0.015em;
   color: var(--seda-fg);
 }
 
-/* ---- 8 · Búsqueda de fechas ---------------------------------------------------
-   Real: #b24scroller.colorbookingstrip.b24-bookingstrip.bt.bb.bl.br, con las columnas
-   .b24-selector-checkin / -checkout / -numnight / -numadult. La rejilla es la de Bootstrap. */
-.colorbody .colorbookingstrip,
-.colorbody .b24-bookingstrip {
-  background: var(--seda-card); /* Beds24: degradado blanco + filter progid */
-  filter: none;
-  color: var(--seda-fg);
-  border: 1px solid var(--seda-line);
-}
-.colorbody .b24-roompanel-heading.colorbookingstrip {
-  background: transparent;
-  border: 0;
-}
-.colorbody #b24scroller {
-  padding: 16px 0 0;
-}
-
-/* ---- 9 · Calendario desplegable [LIBRERÍA: bootstrap-datetimepicker 4.7.14a] ---
-   NO capturado: lo genera JavaScript al abrir #inputcheckin / #inputcheckout. Marcado de la
-   librería: .bootstrap-datetimepicker-widget.dropdown-menu > … table.table-condensed con
-   th.prev / th.picker-switch / th.next, th.dow y td.day (.old .new .today .active .disabled). */
-.colorbody .bootstrap-datetimepicker-widget.dropdown-menu {
-  width: min(368px, calc(100vw - 32px)); /* 7 celdas de 44 px + relleno: 343 px en 375 */
-  padding: 8px 8px 16px;
-  font-family: var(--seda-sans);
-}
-.colorbody .bootstrap-datetimepicker-widget table {
-  width: 100%;
-  table-layout: fixed;
-}
-.colorbody .bootstrap-datetimepicker-widget table th,
-.colorbody .bootstrap-datetimepicker-widget table td {
-  height: var(--seda-target);
-  line-height: var(--seda-target);
-  padding: 0;
-  text-align: center;
-  border-radius: 0;
-}
-.colorbody .bootstrap-datetimepicker-widget table th.picker-switch {
-  font-family: var(--seda-serif);
-  font-size: 22px;
-  font-weight: 400;
-}
-.colorbody .bootstrap-datetimepicker-widget table th.dow {
-  height: auto;
-  line-height: 1.5;
-  padding: 4px 0 8px;
-  font-family: var(--seda-mono);
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--seda-muted);
-}
-.colorbody .bootstrap-datetimepicker-widget table th.prev,
-.colorbody .bootstrap-datetimepicker-widget table th.next {
-  cursor: pointer;
-}
-.colorbody .bootstrap-datetimepicker-widget table td.day {
-  font-size: 15px;
-  color: var(--seda-fg);
-  border: 1px solid transparent;
-  cursor: pointer;
-}
-.colorbody .bootstrap-datetimepicker-widget table td.day:hover {
-  background: var(--seda-secondary);
-  border-color: var(--seda-fg);
-}
-.colorbody .bootstrap-datetimepicker-widget table td.day.old,
-.colorbody .bootstrap-datetimepicker-widget table td.day.new {
-  color: var(--seda-muted);
-}
-.colorbody .bootstrap-datetimepicker-widget table td.day.today {
-  border-color: var(--seda-olive);
-}
-.colorbody .bootstrap-datetimepicker-widget table td.day.active,
-.colorbody .bootstrap-datetimepicker-widget table td.day.active:hover {
-  color: var(--seda-bg);
-  background: var(--seda-olive); /* 6,34:1 */
-  border-color: var(--seda-olive);
-}
-.colorbody .bootstrap-datetimepicker-widget table td.day.disabled,
-.colorbody .bootstrap-datetimepicker-widget table td.day.disabled:hover {
-  color: var(--seda-muted);
-  background: transparent;
-  border-color: transparent;
-  text-decoration: line-through; /* no solo color: la tachadura marca «no disponible» */
-  cursor: not-allowed;
-}
-
-/* ---- 10 · Alojamiento, precio y disponibilidad -----------------------------------
-   Real: .offer > .row > .b24-offer-pic (foto) · .b24-offer-summary · .b24-offer-select
-   (.at_roomofferprice + .b24-roombuttondiv > input.button). */
-.colorbody .b24-offer-pic img {
-  width: 100%;
-  aspect-ratio: 3 / 2;
-  object-fit: cover;
-}
-.colorbody .at_roomofferprice {
-  font-family: var(--seda-serif);
-  font-size: 24px; /* «precio» de la ficha de la web: font-serif font-light text-2xl */
-  font-weight: 300;
-  color: var(--seda-fg);
-  text-align: left;
-}
-/* El botón llena su columna. En <992 px la columna .col-sm-2 (≈110 px) no cabe un «Reservar»
-   de 28 px de relleno: pasa a ocupar toda la fila. */
-.colorbody .b24-roombuttondiv .btn {
-  float: none;
-  width: 100%;
-}
-@media (max-width: 991px) {
-  .colorbody .b24-offer-select {
-    width: 100%;
-    margin-top: 16px;
+/* ---- PORTADA · slider (.carousel de Bootstrap con las 8 fotos) ----
+   La foto llena el marco con recorte (cover). Los tamaños llevan !important porque el JS de Beds24
+   (normalizeSizesOneCarousel…) puede fijar la altura en línea: NO verificado, la instantánea no trae ese JS. */
+@media (max-width: 767px) {
+  .colorbody .b24fullcontainer-proprow1 .container {
+    padding: 0; /* foto a sangre en móvil */
   }
 }
+.colorbody .carousel-inner {
+  height: clamp(300px, 56vw, 640px);
+}
+.colorbody .carousel-inner > .item,
+.colorbody .bootstrap-carousel-img {
+  width: 100%;
+  height: 100% !important;
+  object-fit: cover;
+}
 
-/* «Comprobar disponibilidad» es un <div class="fakelink" onclick>: Beds24 no lo hace enfocable
-   con el teclado y el CSS no puede arreglarlo. Se le da aspecto y tamaño de enlace. */
+/* ---- PORTADA · barra de fechas: #b24scroller (checkin, checkout, noches, personas) ---- */
+.colorbody #b24scroller {
+  margin-top: 16px;
+  padding: 16px 8px 0; /* sin él, en móvil las etiquetas tocan el borde (el .row de Bootstrap lleva -15 px) */
+  background: var(--seda-card);
+  border: 1px solid var(--seda-line);
+  color: var(--seda-fg);
+}
+
+/* ---- PORTADA · precio y «Reservar» ----
+   El precio lo inyecta el JS de Beds24 [JS] en #price-roomprice-1-*: precio a la izquierda, botón
+   a la derecha con su ancho natural; en móvil el botón baja y ocupa el 100 %. */
+.colorbody [id^="roomprice-"] {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.colorbody .at_roomofferprice {
+  font: 300 28px/1.1 var(--seda-serif);
+  text-align: left;
+  color: var(--seda-fg);
+}
+@media (max-width: 767px) {
+  .colorbody [id^="roomprice-"],
+  .colorbody .at_roomofferprice,
+  .colorbody .b24-roombuttondiv,
+  .colorbody .b24-roombuttondiv .button {
+    width: 100%;
+  }
+}
 .colorbody .fakelink {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   min-height: var(--seda-target);
   color: var(--seda-olive);
-  text-decoration: underline;
-  text-underline-offset: 3px;
   cursor: pointer;
 }
 .colorbody .fakelink:hover {
   color: var(--seda-olive-deep);
 }
 
-/* Calendarios mensuales: table.monthcalendar > td.monthcalendarhead (mes) · td.monthcalendarday
-   (lun…dom) · td.daymon…daysun (celdas). Disponibilidad (clases del <style> de Beds24):
-   .dateavail / .datenotavail / .daterequest. En móvil y tableta, un mes por fila (Beds24 mete tres
-   en col-sm-3: celdas de ~24 px en 768); en ≥1200 px, tres por fila (celdas de ~47 px). */
+/* Calendarios mensuales de «Comprobar Disponibilidad»: un mes por fila hasta 1199 px, tres por fila después.
+   Clases de disponibilidad [JS]: las pone el JS de Beds24 sobre celdas que en la instantánea vienen vacías. */
 .colorbody .roomoffercalendarmonth {
   width: 100%;
   margin-bottom: 24px;
@@ -769,47 +474,21 @@ html:not([data-seda-lang]):not(:lang(es)):not(:lang(de)):not(:lang(fr)):not(:lan
     width: 33.3333%;
   }
 }
-/* En <768 px las tres columnas de relleno (panel 24 + módulo 15 + mes 15) dejan celdas de ~40 px.
-   El bloque de calendarios sale hasta el borde de la tarjeta (≈50 px por celda a 375, medido). */
-@media (max-width: 767px) {
-  .colorbody .b24-offer-cal {
-    width: calc(100% + 48px);
-    margin-left: -24px;
-    padding-left: 0;
-    padding-right: 0;
-  }
-  .colorbody .b24-offer-cal .fakelink {
-    margin-left: 24px;
-  }
-  .colorbody .b24-offer-cal .ajaxroomcalendar {
-    margin-left: 0;
-    margin-right: 0;
-  }
-  .colorbody .b24-offer-cal .roomoffercalendarmonth {
-    padding-left: 0;
-    padding-right: 0;
-  }
-}
 .colorbody .monthcalendar {
   width: 100%;
   table-layout: fixed;
   border-collapse: collapse;
-  border-color: var(--seda-border);
 }
 .colorbody .monthcalendar td {
-  height: var(--seda-target); /* alto táctil; el ancho lo da la rejilla (≥44 px con los anchos de arriba) */
+  height: var(--seda-target);
   padding: 0;
   text-align: center;
   vertical-align: middle;
-  font-size: 15px;
   border-color: var(--seda-border);
 }
 .colorbody .monthcalendar td.monthcalendarhead {
-  font-family: var(--seda-serif);
-  font-size: 22px;
-  font-weight: 400;
+  font: 400 22px/1 var(--seda-serif);
 }
-/* Mes con inicial en mayúscula sin «Noviembre De 2026» (text-transform: capitalize pone «De» en mayúscula). */
 .colorbody .monthcalendar td.monthcalendarhead > span {
   display: inline-block;
 }
@@ -819,62 +498,232 @@ html:not([data-seda-lang]):not(:lang(es)):not(:lang(de)):not(:lang(fr)):not(:lan
 .colorbody .monthcalendar td.monthcalendarday {
   height: auto;
   padding: 8px 0;
-  font-family: var(--seda-mono);
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.1em;
+  font: 500 11px/1.4 var(--seda-mono);
   text-transform: uppercase;
   color: var(--seda-muted);
 }
-.colorbody .monthcalendar td.dateavail,
-.colorbody .monthcalendar td.at_dateavailable {
+.colorbody .monthcalendar td.dateavail {
   background: var(--seda-card);
-  color: var(--seda-fg); /* 14,58:1 */
+  color: var(--seda-fg);
 }
-.colorbody .monthcalendar td.datenotavail,
-.colorbody .monthcalendar td.at_datenotavailable {
+.colorbody .monthcalendar td.datenotavail {
   background: var(--seda-secondary);
-  color: var(--seda-muted); /* 4,55:1 */
+  color: var(--seda-muted);
   text-decoration: line-through; /* no solo color */
 }
-.colorbody .monthcalendar td.daterequest,
-.colorbody .monthcalendar td.at_daterequest {
+.colorbody .monthcalendar td.daterequest {
   background: var(--seda-bg);
   color: var(--seda-fg);
-  outline: 1px dashed var(--seda-field-border); /* no solo color */
+  outline: 1px dashed var(--seda-field-border);
   outline-offset: -3px;
 }
 
-/* ---- 11 · Avisos [BOOTSTRAP 3: .alert] ---------------------------------------------
-   Real: #notavailableforselection.alert.alert-danger, .at_offerwarndiv.alert.alert-danger. */
+/* Calendario desplegable de fechas [JS]: lo crea bootstrap-datetimepicker al abrir #inputcheckin;
+   marcado de la librería, no capturado. */
+.colorbody .bootstrap-datetimepicker-widget.dropdown-menu {
+  width: min(368px, calc(100vw - 32px));
+  padding: 8px 8px 16px;
+}
+.colorbody .bootstrap-datetimepicker-widget td,
+.colorbody .bootstrap-datetimepicker-widget th {
+  height: var(--seda-target);
+  padding: 0;
+  line-height: var(--seda-target);
+  text-align: center;
+  border-radius: 0;
+}
+.colorbody .bootstrap-datetimepicker-widget th.picker-switch {
+  font: 400 22px/44px var(--seda-serif);
+}
+.colorbody .bootstrap-datetimepicker-widget th.dow {
+  font: 500 11px/2 var(--seda-mono);
+  text-transform: uppercase;
+  color: var(--seda-muted);
+}
+.colorbody .bootstrap-datetimepicker-widget td.day:hover {
+  background: var(--seda-secondary);
+}
+.colorbody .bootstrap-datetimepicker-widget td.day.old,
+.colorbody .bootstrap-datetimepicker-widget td.day.new,
+.colorbody .bootstrap-datetimepicker-widget td.day.disabled {
+  color: var(--seda-muted);
+}
+.colorbody .bootstrap-datetimepicker-widget td.day.disabled {
+  background: none;
+  text-decoration: line-through;
+}
+.colorbody .bootstrap-datetimepicker-widget td.day.active {
+  color: var(--seda-bg);
+  background: var(--seda-olive);
+}
+
+/* ---- PORTADA · bloque «Lo que incluye SEDA / Antes de reservar» (.seda-info, de Property Description 2) ----
+   Dos columnas en escritorio (h3+ul | h3+ul) y una en móvil. Viñeta: filete dorado corto. */
+.colorbody .seda-info {
+  margin-top: 40px;
+  padding-top: 32px;
+  border-top: 1px solid var(--seda-border);
+}
+.colorbody .seda-info h3 {
+  font-size: 28px;
+  font-weight: 300;
+}
+.colorbody .seda-info ul {
+  margin: 0 0 32px;
+  padding: 0;
+  list-style: none;
+}
+.colorbody .seda-info li {
+  position: relative;
+  padding: 0 0 10px 28px;
+  color: var(--seda-muted);
+}
+.colorbody .seda-info li::before {
+  content: "";
+  position: absolute;
+  top: 0.85em;
+  left: 0;
+  width: 14px;
+  height: 1px;
+  background: var(--seda-gold);
+}
+@media (min-width: 768px) {
+  .colorbody .seda-info {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    column-gap: 64px;
+  }
+}
+
+/* ---- FORMULARIO DEL HUÉSPED (book3) ---- */
+.colorbody #bookingpage {
+  max-width: var(--seda-max); /* Beds24: 1200 px; igual que la cabecera de SEDA */
+}
+.colorbody .ssi_makeabooking {
+  margin: 32px 0 24px;
+  font: 300 36px/1.05 var(--seda-serif);
+  letter-spacing: -0.015em;
+}
+.colorbody .book_bookingbackright {
+  margin: 32px 0 24px;
+  text-align: right;
+}
+/* Resumen de precio: filas .row de etiqueta (col-xs-5) y valor (col-xs-7) */
+.colorbody .b24-bookingdetails .row {
+  margin: 0;
+  padding: 6px 0;
+  font-size: 14px;
+}
+.colorbody .b24-bookingdetails .row > div {
+  padding: 0;
+}
+.colorbody .b24-bookingdetails .strong {
+  font-weight: 600;
+}
+.colorbody [id^="zupsellrow"] {
+  padding: 6px 0;
+  font-size: 14px;
+}
+.colorbody .b24-bookingdetails .totalpricerow {
+  margin-top: 12px;
+  padding-top: 16px;
+  font: 400 24px/1.2 var(--seda-serif);
+  border-top: 1px solid var(--seda-fg);
+}
+.colorbody .b24-bookingdetails .totalpricerow .strong {
+  font-weight: 400;
+}
+/* Datos personales: etiqueta (col-sm-4) ENCIMA del campo (col-sm-8), a todo el ancho */
+.colorbody .questionrow {
+  margin: 0 0 20px;
+}
+.colorbody .questionrow > div {
+  float: none;
+  width: auto;
+  padding: 0;
+}
+.colorbody .requiredfield {
+  font-weight: 600;
+  color: var(--seda-danger);
+}
+.colorbody .bookcheckinput {
+  width: 24px;
+  height: 24px;
+  margin: 0;
+  accent-color: var(--seda-olive);
+}
+/* Casilla de condiciones: la casilla (2.º hijo) pasa a la izquierda del texto (1.er hijo) */
+.colorbody .questionrow-guestcustq1 {
+  position: relative;
+  padding-left: 40px;
+}
+.colorbody .questionrow-guestcustq1 > :first-child {
+  font: 400 15px/1.5 var(--seda-sans);
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--seda-fg);
+}
+.colorbody .questionrow-guestcustq1 > :last-child {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.colorbody .propconfirmbookmessage {
+  font-size: 14px;
+  color: var(--seda-muted);
+}
+.colorbody .propconfirmbookmessage summary {
+  padding: 10px 0;
+  color: var(--seda-olive);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+/* El bloque de condiciones y botones es un 3.er hijo col-sm-7 que Beds24 deja debajo, a la izquierda:
+   se alinea bajo «Datos Personales». */
+@media (min-width: 768px) {
+  .colorbody .b24-guest-details-left:not(.b24-guestdetails) {
+    margin-left: 41.6667%;
+  }
+}
+.colorbody .book_bookingback {
+  float: left;
+}
+.colorbody .book_confirmbooking {
+  float: right;
+}
+@media (max-width: 767px) {
+  .colorbody .col-sm-12:has(> .book_confirmbooking) {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 12px;
+  }
+  .colorbody .book_bookingback,
+  .colorbody .book_confirmbooking,
+  .colorbody .book_bookingback .button,
+  .colorbody .book_confirmbooking .button {
+    float: none;
+    width: 100%;
+  }
+  .colorbody .ssi_makeabooking {
+    font-size: 30px;
+  }
+}
+
+/* ---- Avisos: .alert.alert-danger (#notavailableforselection, .at_offerwarndiv) ---- */
 .colorbody .alert {
   margin-bottom: 16px;
   padding: 16px 20px;
   color: var(--seda-fg);
-  background: var(--seda-card); /* 14,58:1 */
+  background: var(--seda-card);
   border: 1px solid var(--seda-line);
-  border-left: 4px solid var(--seda-olive);
+  border-left: 4px solid var(--seda-danger);
   border-radius: 0;
 }
-.colorbody .alert-danger {
-  color: var(--seda-fg);
-  background: var(--seda-card);
-  border-color: var(--seda-line);
-  border-left-color: var(--seda-danger);
-}
-.colorbody .alert-warning {
-  color: var(--seda-fg);
-  background: var(--seda-card);
-  border-color: var(--seda-line);
-  border-left-color: var(--seda-gold); /* decorativo: el texto sigue siendo foreground */
-}
-.colorbody .alert a {
-  color: var(--seda-olive-deep);
-}
 
-/* ---- 12 · Pie de Beds24 ------------------------------------------------------------
-   Real: .b24fullcontainer-footer > footer > .book_poweredby («powered by Beds24.com») y,
-   solo en móvil, .btn.btn-default.btn-sm.button «Up». El enlace a Beds24 se conserva. */
+/* ---- Pie de Beds24 («powered by», enlace conservado) ---- */
 .colorbody .book_poweredby a {
   display: inline-flex;
   align-items: center;
@@ -883,35 +732,7 @@ html:not([data-seda-lang]):not(:lang(es)):not(:lang(de)):not(:lang(fr)):not(:lan
   color: var(--seda-muted);
 }
 
-/* ---- 13 · Tablas [BOOTSTRAP 3: .table] (resumen de precio; pantalla sin capturar) ---- */
-.colorbody .table > thead > tr > th,
-.colorbody .table > tbody > tr > td,
-.colorbody .table > tfoot > tr > td {
-  padding: 12px 8px;
-  border-top: 0;
-  border-bottom: 1px solid var(--seda-border);
-  overflow-wrap: anywhere; /* una tabla ancha no empuja la página fuera de 375 px */
-}
-.colorbody .table > thead > tr > th {
-  font-family: var(--seda-mono);
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--seda-muted);
-}
-
-/* ---- 14 · Movimiento ------------------------------------------------------------------ */
-@media (prefers-reduced-motion: reduce) {
-  .colorbody *,
-  .colorbody *::before,
-  .colorbody *::after {
-    transition: none;
-    scroll-behavior: auto;
-  }
-}
-
-/* ---- 15 · Impresión (el huésped imprime la confirmación) --------------------------------- */
+/* ---- Impresión (el huésped imprime la confirmación) ---- */
 @media print {
   .colorbody .seda-bp-header,
   .colorbody .seda-bp-footer {
@@ -923,9 +744,8 @@ html:not([data-seda-lang]):not(:lang(es)):not(:lang(de)):not(:lang(fr)):not(:lan
 }
 
 /* ==========================================================================
-   PLAN B — APAGADO.
-   Si al pegar el CSS alguna regla de Beds24 gana (include/booking3.css, que no se pudo ver,
-   o un estilo en línea style="…"), NO se fuerza todo: se localiza el selector en el inspector
-   y se añade solo esa regla, con la prioridad forzada y un comentario que diga qué se
-   comprobó y cuándo. Hoy hay cero reglas así: ningún caso comprobado.
+   PLAN B — APAGADO. Si al pegar alguna regla de Beds24 (booking2.css/booking3.css, que no se
+   pudieron ver, o un estilo en línea) gana a una de aquí, se localiza el selector en el
+   inspector y se añade SOLO esa regla con !important y un comentario de qué se comprobó y
+   cuándo. Hoy hay dos !important: la posición (ya pegada) y la altura de las fotos del slider.
    ========================================================================== */
