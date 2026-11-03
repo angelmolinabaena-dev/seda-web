@@ -189,5 +189,5 @@ No están en `messages/*.json`; son de este PR. Los de es/en/fr/de siguen los no
 «Condiciones de uso» de la web (`lib/legal/aviso-legal.ts`). Las condiciones de la estancia son §4–§6. Si Ángel quiere
 una página propia de condiciones de reserva, hay que crearla (texto legal) y cambiar el enlace.
 
-**El italiano no existe en la web** (`i18n/routing.ts`: `es`, `en`, `fr`, `de`). Los enlaces del pie en italiano
+**El italiano no existe en la web** (`i18n/routing.ts`: `es`, `en`, `fr`, `de`) **ni en el selector de idioma de la booking page real** (la instantánea ofrece en, de, es y fr): los textos en italiano solo valen si Ángel activa ese idioma en Beds24. Los enlaces del pie en italiano
 llevan a la versión inglesa. Mientras no haya `/it`, es lo menos malo; no se ha creado una ruta.

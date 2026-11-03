@@ -104,12 +104,15 @@ queda como está: no es objeto de este encargo, pero se anota en el PR.
 
 ## 3 · Espaciado
 
+> **En `px`, no en `rem`.** La booking page carga Bootstrap 3, que fija `html { font-size: 10px }`: allí `1rem` mide 10 px.
+> Todos los valores de `custom.css` están en `px`. Aquí se dan en px por lo mismo.
+
 Fuente: clases de los componentes. Escala de Tailwind (4 px).
 
 | Uso | Web | `custom.css` |
 |---|---|---|
 | Gutter de página | `px-6 md:px-12 lg:px-20` = 24 / 48 / 80 px | 24 / 48 / 80 px (mismos) |
-| Ancho máximo de contenido | `max-w-7xl` (1280), `max-w-5xl` (1024) | 1120 px (formulario: cabe entre ambos) |
+| Ancho máximo de contenido | `max-w-7xl` (1280, relleno incluido), `max-w-5xl` (1024) | 1280 px con relleno = **1120 px de contenido** a 1440 px |
 | Sección | `py-16 md:py-20` / `py-28 md:py-36` | 48 / 64 px (una booking page no es una portada) |
 | Tarjeta | `p-6 md:p-8` | 24 / 32 px |
 | Campo | `px-3 py-2.5` | 12 px laterales; altura mínima **44 px** |
