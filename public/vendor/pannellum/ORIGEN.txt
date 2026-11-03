@@ -1,0 +1,18 @@
+Pannellum 2.5.7 (MIT) — https://pannellum.org/ · https://github.com/mpetroff/pannellum
+Alojado aquí a propósito: el visor no carga nada de terceros (CSP: script-src 'self').
+
+Origen:  paquete npm «pannellum@2.5.7»
+         integrity sha512-AHMRYdLPxetwhBg4lO5EgoZ55C/e+wrJF2WaFQIQA18HSVcvLvsdXEjDL7WpD8MPIFwNnH9qoUDsUqP8cF4pgA==
+Ficheros, sin modificar (sha256):
+  pannellum.js     package/build/pannellum.js     51b8df674333612adbd807b6f47940d4d7aa07317d949d3f1314f84de965fc3c
+  pannellum.css    package/src/css/pannellum.css  fa954d77685a87bdd6d8fb64d0c455bb938fe8d32d903ad0f3c8129f917fe8e8
+  img/*.svg        package/src/css/img/*.svg      (los 5 que referencia pannellum.css)
+  LICENSE.txt      package/COPYING                e20b384f83f8f580d69e32d2419e093d777830689b3ab48cafbe4284b6ebc3c1
+
+Se usa el CSS de src/ y no el de build/: el de build/ incrusta los SVG como
+`data:` y obligaría a abrir `img-src data:` en la CSP del visor.
+
+Para actualizar: bajar el paquete nuevo, sustituir los ficheros, actualizar los sha256
+de arriba Y los de tests/tour360-vendor.test.ts, y repetir la comprobación contra
+Pannellum (docs/TOUR-360.md §Verificación del tiler). tests/tour360-vendor.test.ts
+falla si un fichero cambia sin que cambie esta nota.

@@ -11,6 +11,10 @@ export default defineConfig({
   },
   test: {
     environment: "node",
+    // next-intl/middleware importa "next/server" sin extensión, que Node ESM no
+    // resuelve. Vitest lo procesa con su propio resolver si se inlinea. Lo necesita
+    // tests/tour360-cabeceras.test.ts, que ejecuta proxy.ts de verdad.
+    server: { deps: { inline: ["next-intl"] } },
     include: ["tests/**/*.test.{ts,tsx}"],
     // Necesitan el build y un `next start`: van en `npm run test:integracion`
     // (vitest.integracion.config.mts), después de `npm run build`.

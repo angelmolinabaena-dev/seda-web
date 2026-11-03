@@ -30,6 +30,9 @@ const eslintConfig = defineConfig([
     '.worktrees/**',
     '.impeccable/**',
     '.tmp/**',
+    // Código de terceros alojado a propósito (Pannellum, minificado, sin modificar):
+    // su procedencia y huellas están en public/vendor/pannellum/ORIGEN.txt.
+    'public/vendor/**',
     'graphify-out/**',
   ]),
 ])
