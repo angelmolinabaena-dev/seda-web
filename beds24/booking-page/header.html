@@ -1,0 +1,42 @@
+<!--
+  SEDA Private Homes · cabecera de la booking page de Beds24
+  Pegar en: SETTINGS → BOOKING PAGE → (campo «Header HTML»). Ver COMO-PEGAR.md.
+
+  · Funciona con custom.css pegado (las clases .seda-bp-* y .seda-t viven allí).
+  · Logo: el isotipo que ya usa la navegación de la web (public/brand/svg/seda-isotipo-ink.svg,
+    45×30 px, mismo fichero y mismo tamaño). Se sirve desde sedaprivatehomes.com.
+  · Idioma: cada enlace lleva data-l="xx" y custom.css deja visible solo el del idioma de la página.
+    El idioma se toma de ?lang= (la web lo envía), si no del <html lang>, si no inglés.
+    El <script> es opcional: si Beds24 lo elimina, queda el atributo <html lang> y, sin él, inglés.
+  · it: la web no tiene versión en italiano; el enlace de vuelta va a /en.
+  · Textos nuevos (no están en messages/*.json): ver textos.md §8.
+-->
+<script>
+  (function () {
+    try {
+      var ok = ["es", "en", "fr", "de", "it"];
+      var q = new URLSearchParams(window.location.search).get("lang");
+      var l = (q || document.documentElement.lang || navigator.language || "en").slice(0, 2).toLowerCase();
+      document.documentElement.setAttribute("data-seda-lang", ok.indexOf(l) > -1 ? l : "en");
+    } catch (e) {}
+  })();
+</script>
+<header class="seda-bp-header">
+  <div class="seda-bp-header__inner">
+    <a class="seda-bp-brand" href="https://sedaprivatehomes.com/">
+      <img
+        class="seda-bp-brand__mark"
+        src="https://sedaprivatehomes.com/brand/svg/seda-isotipo-ink.svg"
+        alt=""
+        width="45"
+        height="30"
+      />
+      <span class="seda-bp-brand__name">SEDA Private Homes</span>
+    </a>
+    <a class="seda-bp-back seda-t" data-l="es" href="https://sedaprivatehomes.com/"><span aria-hidden="true">←</span> Volver a la web</a>
+    <a class="seda-bp-back seda-t" data-l="en" href="https://sedaprivatehomes.com/en"><span aria-hidden="true">←</span> Back to the website</a>
+    <a class="seda-bp-back seda-t" data-l="fr" href="https://sedaprivatehomes.com/fr"><span aria-hidden="true">←</span> Retour au site</a>
+    <a class="seda-bp-back seda-t" data-l="de" href="https://sedaprivatehomes.com/de"><span aria-hidden="true">←</span> Zurück zur Website</a>
+    <a class="seda-bp-back seda-t" data-l="it" href="https://sedaprivatehomes.com/en"><span aria-hidden="true">←</span> Torna al sito</a>
+  </div>
+</header>

@@ -1,0 +1,903 @@
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Manrope:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap");
+
+/* ==========================================================================
+   SEDA Private Homes · custom.css de la booking page de Beds24
+   Pegar en: SETTINGS → BOOKING PAGE → Custom CSS. Ver COMO-PEGAR.md.
+
+   Valores de TOKENS.md (que salen de app/globals.css, lib/fonts.ts y los
+   componentes de seda-web). Contrastes calculados, no copiados: TOKENS.md §2.
+
+   ESTADO DE LOS SELECTORES — leer antes de pegar
+   No se pudo abrir https://beds24.com/booking2.php?propid=348601 desde donde se
+   escribió (el proxy devuelve 403) ni el wiki de Beds24. Por eso:
+     · Lo que lleva .seda-bp-* y .seda-t son nuestros (header.html, footer.html):
+       verificados.
+     · La mayor parte del aspecto cuelga de selectores de ELEMENTO (input, select,
+       button, table, h1-h3, a, label): valen con cualquier marcado.
+     · Las clases tipo Bootstrap (.panel, .btn, .form-control, .alert, .table…) y
+       las de jQuery UI (.ui-datepicker*) son una SUPOSICIÓN no comprobada. Están
+       agrupadas en las secciones marcadas «[SUPUESTO]». Si una no existe en la
+       página real, esa regla simplemente no se aplica: no rompe nada.
+   COMO-PEGAR.md §5 trae la lista para comprobarlas con el inspector del navegador.
+
+   Sin la marca de prioridad forzada (la palabra con signo de exclamación): este
+   CSS no la usa en ninguna regla. Si Beds24 pone estilos en línea o prioridades
+   forzadas propias, ver el bloque comentado «PLAN B» al final: apagado a propósito.
+   ========================================================================== */
+
+/* ---- 1 · Tokens ---------------------------------------------------------- */
+:root {
+  /* Superficies (app/globals.css) */
+  --seda-bg: #faf8f4;
+  --seda-card: #f4f1eb;
+  --seda-secondary: #ebe7e0;
+  --seda-border: #e0dad2;
+  --seda-line: #d9d7d4; /* foreground al 15 %: el filete de las tarjetas de la web */
+  --seda-field-border: #85827d; /* ≥3:1 sobre bg, card, secondary y blanco (TOKENS.md §2) */
+
+  /* Texto */
+  --seda-fg: #211f1c; /* 15,50:1 sobre bg */
+  --seda-fg-hover: #373532; /* foreground al 90 % */
+  --seda-muted: #6c6760; /* 5,28:1 sobre bg · 4,97 sobre card · 4,55 sobre secondary */
+
+  /* Marca */
+  --seda-olive: #536043; /* 6,34:1 sobre bg: enlaces y foco */
+  --seda-olive-deep: #39442c;
+  --seda-gold: #bf9040; /* SOLO decorativo: 2,72:1, nunca texto */
+  --seda-danger: #994733; /* 5,99:1 sobre bg */
+
+  /* Tipografía */
+  --seda-serif: "Cormorant Garamond", Georgia, serif;
+  --seda-sans: "Manrope", system-ui, sans-serif;
+  --seda-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  /* Medidas */
+  --seda-gutter: 24px; /* px-6 */
+  --seda-max: 1120px;
+  --seda-target: 44px; /* tamaño táctil mínimo */
+  --seda-radius: 0; /* --radius: 0rem en la web */
+
+  color-scheme: light;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --seda-gutter: 48px; /* md:px-12 */
+  }
+}
+@media (min-width: 1280px) {
+  :root {
+    --seda-gutter: 80px; /* lg:px-20 */
+  }
+}
+
+/* ---- 2 · Base ------------------------------------------------------------ */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--seda-bg);
+  color: var(--seda-fg);
+  font-family: var(--seda-sans);
+  font-size: 1rem; /* 16 px: la web usa 14, pero esto es un formulario de pago en móvil */
+  font-weight: 400;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+::selection {
+  background: var(--seda-olive);
+  color: var(--seda-bg);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+p {
+  margin: 0 0 1em;
+}
+
+a {
+  color: var(--seda-olive);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: color 0.3s;
+}
+a:hover {
+  color: var(--seda-olive-deep);
+}
+
+/* Foco visible en todo lo que se puede accionar. El contorno es olivo (6,34:1 sobre
+   cal, ≥3:1 exigido a un indicador de foco) y se separa 2 px para no tapar el borde. */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+summary:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--seda-olive);
+  outline-offset: 2px;
+}
+
+/* Titulares: serif ligera, como la web */
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--seda-serif);
+  font-weight: 300;
+  color: var(--seda-fg);
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+  margin: 0 0 0.5em;
+}
+h1 {
+  font-size: 1.875rem; /* 30 */
+  line-height: 1.05;
+}
+h2 {
+  font-size: 1.5rem; /* 24 */
+  line-height: 1.18;
+}
+h3 {
+  font-size: 1.375rem; /* 22: por debajo de 24 px el peso 300 se afina demasiado */
+  font-weight: 400;
+  line-height: 1.2;
+}
+h4 {
+  font-family: var(--seda-mono);
+  font-size: 0.6875rem; /* 11 */
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--seda-muted);
+}
+
+@media (min-width: 768px) {
+  h1 {
+    font-size: 2.25rem;
+  } /* 36 */
+  h2 {
+    font-size: 1.875rem;
+  } /* 30 */
+}
+@media (min-width: 1280px) {
+  h1 {
+    font-size: 2.5rem;
+  } /* 40 */
+  h2 {
+    font-size: 2.25rem;
+  } /* 36 */
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--seda-border);
+  margin: 2rem 0;
+}
+
+small,
+.help-block,
+.text-muted {
+  color: var(--seda-muted);
+  font-size: 0.875rem;
+}
+
+/* ---- 3 · Cabecera y pie (header.html, footer.html: verificados) ------------ */
+.seda-bp-header {
+  background: var(--seda-bg);
+  border-bottom: 1px solid var(--seda-border);
+}
+.seda-bp-header__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0 16px;
+  max-width: var(--seda-max);
+  margin: 0 auto;
+  padding: 12px var(--seda-gutter);
+}
+.seda-bp-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  min-height: var(--seda-target);
+  color: var(--seda-fg);
+  text-decoration: none;
+}
+.seda-bp-brand:hover {
+  color: var(--seda-fg);
+}
+.seda-bp-brand__mark {
+  display: block;
+  width: 45px; /* mismo tamaño que el isotipo de la navegación de la web */
+  height: 30px;
+}
+/* Nombre solo en pantallas anchas: en 375 px no cabe junto al enlace de vuelta. */
+.seda-bp-brand__name {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.35em; /* footer de la web: text-sm font-semibold tracking-[0.35em] uppercase */
+  text-transform: uppercase;
+}
+.seda-bp-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: var(--seda-target);
+  font-family: var(--seda-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.18em; /* navegación de la web */
+  text-transform: uppercase;
+  color: var(--seda-fg);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+.seda-bp-back:hover {
+  color: var(--seda-olive-deep);
+  border-bottom-color: currentColor;
+}
+@media (min-width: 768px) {
+  .seda-bp-brand__mark {
+    width: 51px;
+    height: 34px;
+  }
+  .seda-bp-brand__name {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip-path: none;
+  }
+}
+
+.seda-bp-footer {
+  margin-top: 4rem;
+  background: var(--seda-bg);
+  border-top: 1px solid var(--seda-border);
+  color: var(--seda-fg);
+}
+.seda-bp-footer__inner {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  max-width: var(--seda-max);
+  margin: 0 auto;
+  padding: 3rem var(--seda-gutter);
+}
+.seda-bp-footer__brand {
+  margin: 0 0 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+}
+.seda-bp-footer__text {
+  max-width: 24rem;
+  margin: 0 0 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.75;
+  color: var(--seda-muted);
+}
+.seda-bp-footer__label {
+  margin: 0 0 0.5rem;
+  font-family: var(--seda-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--seda-muted);
+}
+.seda-bp-footer__link {
+  display: flex;
+  align-items: center;
+  min-height: var(--seda-target);
+  font-size: 0.875rem;
+  color: var(--seda-fg);
+  text-decoration: none;
+}
+.seda-bp-footer__link--mono {
+  font-family: var(--seda-mono);
+  font-size: 0.8125rem;
+}
+.seda-bp-footer__link:hover {
+  color: var(--seda-olive-deep);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+@media (min-width: 768px) {
+  .seda-bp-footer__inner {
+    grid-template-columns: 5fr 3fr 4fr;
+    gap: 3rem;
+  }
+}
+
+/* Idioma de header.html y footer.html: se ocultan las variantes que no son del idioma
+   de la página. Por defecto (sin ?lang= ni <html lang> reconocidos): inglés. */
+html[data-seda-lang="es"] .seda-t:not([data-l="es"]),
+html:not([data-seda-lang]):lang(es) .seda-t:not([data-l="es"]),
+html[data-seda-lang="de"] .seda-t:not([data-l="de"]),
+html:not([data-seda-lang]):lang(de) .seda-t:not([data-l="de"]),
+html[data-seda-lang="fr"] .seda-t:not([data-l="fr"]),
+html:not([data-seda-lang]):lang(fr) .seda-t:not([data-l="fr"]),
+html[data-seda-lang="it"] .seda-t:not([data-l="it"]),
+html:not([data-seda-lang]):lang(it) .seda-t:not([data-l="it"]),
+html[data-seda-lang="en"] .seda-t:not([data-l="en"]),
+html:not([data-seda-lang]):not(:lang(es)):not(:lang(de)):not(:lang(fr)):not(:lang(it)) .seda-t:not([data-l="en"]) {
+  display: none;
+}
+
+/* ---- 4 · Contenedor [SUPUESTO: .container, #bookingpage] ----------------- */
+.container,
+#bookingpage {
+  width: 100%;
+  max-width: var(--seda-max);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--seda-gutter);
+  padding-right: var(--seda-gutter);
+}
+
+/* ---- 5 · Formularios (selectores de elemento) ---------------------------- */
+label,
+.control-label {
+  display: block;
+  margin: 0 0 8px;
+  font-family: var(--seda-mono);
+  font-size: 0.6875rem; /* 11: la web usa 10 */
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--seda-muted);
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="number"],
+input[type="date"],
+input[type="password"],
+input[type="search"],
+input[type="url"],
+input:not([type]),
+select,
+textarea,
+.form-control {
+  display: block;
+  width: 100%;
+  min-height: var(--seda-target);
+  padding: 10px 12px; /* px-3 py-2.5 */
+  font-family: var(--seda-sans);
+  font-size: 1rem; /* <16 px provoca zoom en iOS Safari al enfocar */
+  line-height: 1.4;
+  color: var(--seda-fg);
+  background-color: transparent;
+  border: 1px solid var(--seda-field-border);
+  border-radius: var(--seda-radius);
+  box-shadow: none;
+  transition: border-color 0.3s;
+}
+textarea {
+  min-height: 7.5rem;
+  resize: vertical;
+}
+input::placeholder,
+textarea::placeholder {
+  color: var(--seda-muted); /* 5,28:1 */
+  opacity: 1;
+}
+input:hover,
+select:hover,
+textarea:hover {
+  border-color: var(--seda-fg);
+}
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--seda-fg);
+  outline: 2px solid var(--seda-olive);
+  outline-offset: 2px;
+}
+input:disabled,
+select:disabled,
+textarea:disabled,
+input[readonly] {
+  color: var(--seda-muted);
+  background-color: var(--seda-secondary);
+  cursor: not-allowed;
+}
+
+select {
+  appearance: none;
+  padding-right: 40px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5l5-5' fill='none' stroke='%23211f1c' stroke-width='1.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+}
+
+/* Errores: texto terracota + borde + icono de texto (no solo color, WCAG 1.4.1) */
+.has-error input,
+.has-error select,
+.has-error textarea,
+input[aria-invalid="true"],
+select[aria-invalid="true"],
+textarea[aria-invalid="true"] {
+  border-color: var(--seda-danger);
+  border-width: 2px;
+}
+.has-error .help-block,
+.has-error .control-label,
+.error,
+.text-danger {
+  color: var(--seda-danger);
+}
+
+/* Casillas y radios: el área táctil de 44 px la da la etiqueta, no el cuadrado */
+input[type="checkbox"],
+input[type="radio"] {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  min-height: 22px;
+  margin: 0;
+  accent-color: var(--seda-olive);
+}
+.checkbox label,
+.radio label,
+label:has(> input[type="checkbox"]),
+label:has(> input[type="radio"]) {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-height: var(--seda-target);
+  padding: 10px 0;
+  font-family: var(--seda-sans);
+  font-size: 1rem;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--seda-fg);
+}
+
+fieldset {
+  min-width: 0;
+  margin: 0 0 1.5rem;
+  padding: 0;
+  border: 0;
+}
+legend {
+  margin: 0 0 8px;
+  padding: 0;
+  font-family: var(--seda-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--seda-muted);
+}
+
+.form-group {
+  margin-bottom: 16px; /* gap-3 de la web (12) + aire para el dedo */
+}
+
+/* ---- 6 · Botones ---------------------------------------------------------- */
+button,
+input[type="submit"],
+input[type="button"],
+.btn,
+a.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: var(--seda-target);
+  padding: 12px 28px; /* px-7 */
+  font-family: var(--seda-mono);
+  font-size: 0.6875rem; /* 11 */
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--seda-bg);
+  background-color: var(--seda-fg);
+  border: 1px solid var(--seda-fg);
+  border-radius: var(--seda-radius);
+  box-shadow: none;
+  cursor: pointer;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+}
+button:hover,
+input[type="submit"]:hover,
+input[type="button"]:hover,
+.btn:hover,
+a.btn:hover {
+  color: var(--seda-bg);
+  background-color: var(--seda-fg-hover);
+  border-color: var(--seda-fg-hover);
+}
+button:disabled,
+input[type="submit"]:disabled,
+.btn.disabled,
+.btn[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Secundario [SUPUESTO: .btn-default, .btn-secondary, .btn-link] */
+.btn-default,
+.btn-secondary,
+.btn-outline {
+  color: var(--seda-fg);
+  background-color: transparent;
+  border-color: var(--seda-fg);
+}
+.btn-default:hover,
+.btn-secondary:hover,
+.btn-outline:hover {
+  color: var(--seda-fg);
+  background-color: var(--seda-secondary);
+  border-color: var(--seda-fg);
+}
+.btn-link {
+  min-height: var(--seda-target);
+  padding-left: 0;
+  padding-right: 0;
+  color: var(--seda-olive);
+  background: none;
+  border-color: transparent;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.btn-link:hover {
+  color: var(--seda-olive-deep);
+  background: none;
+  border-color: transparent;
+}
+
+/* En móvil la acción principal ocupa todo el ancho: un dedo la alcanza sin apuntar. */
+.btn-primary,
+.btn-lg,
+input[type="submit"] {
+  width: 100%;
+}
+@media (min-width: 768px) {
+  .btn-primary,
+  .btn-lg,
+  input[type="submit"] {
+    width: auto;
+    min-width: 14rem;
+  }
+}
+
+/* ---- 7 · Tarjetas y bloques [SUPUESTO: .panel*, .well, .card*] ------------ */
+.panel,
+.well,
+.card {
+  margin: 0 0 24px;
+  background: var(--seda-bg);
+  border: 1px solid var(--seda-line); /* border border-foreground/15 */
+  border-radius: var(--seda-radius);
+  box-shadow: none;
+}
+.panel-body,
+.well,
+.card-body {
+  padding: 24px; /* p-6 */
+}
+.panel-heading,
+.card-header {
+  padding: 24px 24px 0;
+  background: transparent;
+  border: 0;
+}
+.panel-title,
+.card-title {
+  margin: 0;
+  font-family: var(--seda-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.3em; /* etiqueta de sección de la web */
+  text-transform: uppercase;
+  color: var(--seda-muted);
+}
+.panel-footer,
+.card-footer {
+  padding: 0 24px 24px;
+  background: transparent;
+  border: 0;
+}
+@media (min-width: 768px) {
+  .panel-body,
+  .well,
+  .card-body {
+    padding: 32px; /* md:p-8 */
+  }
+  .panel-heading,
+  .card-header {
+    padding: 32px 32px 0;
+  }
+  .panel-footer,
+  .card-footer {
+    padding: 0 32px 32px;
+  }
+}
+
+/* ---- 8 · Búsqueda de fechas en columna (móvil) y en fila (≥768 px) -------- */
+#searchbox form,
+.booking-search,
+.searchform {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  align-items: end;
+}
+#searchbox form .form-group,
+.booking-search .form-group,
+.searchform .form-group {
+  margin-bottom: 0; /* el hueco ya lo da el gap de la rejilla; si no, el botón queda más bajo que los campos */
+}
+@media (min-width: 768px) {
+  #searchbox form,
+  .booking-search,
+  .searchform {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) auto;
+  }
+}
+
+/* ---- 9 · Calendario desplegable [SUPUESTO: jQuery UI datepicker] ---------- */
+.ui-datepicker {
+  z-index: 1000;
+  width: min(23rem, calc(100vw - 32px)); /* 7 celdas de 44 px + relleno caben en 343 px (375 − 32) */
+  padding: 8px 8px 16px;
+  background: var(--seda-bg);
+  border: 1px solid var(--seda-line);
+  border-radius: var(--seda-radius);
+  box-shadow: 0 20px 40px -20px rgba(33, 31, 28, 0.35); /* el desplegable de la web: filete + sombra */
+  font-family: var(--seda-sans);
+}
+.ui-datepicker-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--seda-target);
+  margin-bottom: 8px;
+}
+.ui-datepicker-title {
+  font-family: var(--seda-serif);
+  font-size: 1.375rem;
+  font-weight: 400;
+}
+.ui-datepicker-prev,
+.ui-datepicker-next {
+  position: absolute;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--seda-target);
+  height: var(--seda-target);
+  color: var(--seda-fg);
+  cursor: pointer;
+}
+.ui-datepicker-prev span,
+.ui-datepicker-next span {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+.ui-datepicker-prev {
+  left: 0;
+}
+.ui-datepicker-next {
+  right: 0;
+}
+.ui-datepicker table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+.ui-datepicker table th {
+  padding: 4px 0 8px;
+  font-family: var(--seda-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--seda-muted);
+  text-align: center;
+  border: 0;
+}
+.ui-datepicker table td {
+  padding: 0;
+  text-align: center;
+  border: 0;
+}
+.ui-datepicker table td a,
+.ui-datepicker table td span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--seda-target);
+  min-height: var(--seda-target);
+  font-size: 0.9375rem;
+  color: var(--seda-fg);
+  text-decoration: none;
+  border: 1px solid transparent;
+}
+.ui-datepicker td a:hover {
+  background: var(--seda-secondary);
+  border-color: var(--seda-fg);
+}
+.ui-datepicker td .ui-state-active,
+.ui-datepicker td a.ui-state-active {
+  color: var(--seda-bg);
+  background: var(--seda-olive); /* 6,34:1 */
+  border-color: var(--seda-olive);
+}
+.ui-datepicker td.ui-datepicker-today a {
+  border-color: var(--seda-olive);
+}
+.ui-datepicker td.ui-state-disabled span,
+.ui-datepicker td.ui-datepicker-unselectable span {
+  color: var(--seda-muted);
+  text-decoration: line-through; /* no solo color: la tachadura marca «no disponible» */
+}
+.ui-datepicker td.ui-datepicker-other-month span,
+.ui-datepicker td.ui-datepicker-other-month a {
+  color: var(--seda-muted);
+}
+
+/* ---- 10 · Habitaciones y precios [SUPUESTO: .room*, .roomprice] ------------ */
+.room,
+.roomcontainer {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin: 0 0 24px;
+  padding: 24px;
+  background: var(--seda-bg);
+  border: 1px solid var(--seda-line);
+}
+.room img,
+.roomcontainer img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+}
+.roomname {
+  font-family: var(--seda-serif);
+  font-size: 1.5rem;
+  font-weight: 300;
+}
+.roomprice,
+.price,
+.total {
+  font-family: var(--seda-serif);
+  font-size: 1.5rem; /* «precio» de la ficha de la web: font-serif font-light text-2xl */
+  font-weight: 300;
+  color: var(--seda-fg);
+}
+@media (min-width: 768px) {
+  .room,
+  .roomcontainer {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: 32px;
+    padding: 32px;
+  }
+}
+
+/* ---- 11 · Tablas (resumen de precio) -------------------------------------- */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+}
+th,
+td {
+  padding: 12px 8px;
+  text-align: left;
+  vertical-align: top;
+  border: 0;
+  border-bottom: 1px solid var(--seda-border);
+  overflow-wrap: anywhere; /* una tabla ancha no empuja la página fuera de 375 px */
+}
+th {
+  font-family: var(--seda-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--seda-muted);
+}
+td:last-child,
+th:last-child {
+  text-align: right;
+  white-space: nowrap;
+}
+tfoot td,
+tr.total td,
+tr.total th {
+  border-bottom: 0;
+  font-family: var(--seda-serif);
+  font-size: 1.375rem;
+  color: var(--seda-fg);
+}
+.table-responsive {
+  overflow-x: auto;
+}
+
+/* ---- 12 · Avisos [SUPUESTO: .alert*] -------------------------------------- */
+.alert,
+.message,
+.notice {
+  margin: 0 0 16px;
+  padding: 16px 20px;
+  color: var(--seda-fg);
+  background: var(--seda-card); /* 14,58:1 */
+  border: 1px solid var(--seda-line);
+  border-left: 4px solid var(--seda-olive);
+  border-radius: var(--seda-radius);
+}
+.alert-danger,
+.alert-error {
+  border-left-color: var(--seda-danger);
+}
+.alert-warning {
+  border-left-color: var(--seda-gold); /* decorativo: el texto sigue siendo foreground */
+}
+.alert a {
+  color: var(--seda-olive-deep);
+}
+
+/* ---- 13 · Movimiento ------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none;
+    scroll-behavior: auto;
+  }
+}
+
+/* ---- 14 · Impresión (el huésped imprime la confirmación) ------------------- */
+@media print {
+  .seda-bp-header,
+  .seda-bp-footer {
+    display: none;
+  }
+  body {
+    background: #fff;
+  }
+}
+
+/* ==========================================================================
+   PLAN B — APAGADO.
+   Si al pegar el CSS algún estilo de Beds24 gana por ir en línea (style="…") o por
+   llevar prioridad forzada, NO se fuerza todo: se localiza el selector en el
+   inspector y se añade solo esa regla, con la prioridad forzada y un comentario que
+   diga qué se comprobó y cuándo. Hoy hay cero reglas así: ningún caso comprobado,
+   porque la página real no se ha podido abrir (ver el aviso de arriba).
+   ========================================================================== */
