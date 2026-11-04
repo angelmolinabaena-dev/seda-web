@@ -58,35 +58,23 @@ La ruta: solo POST del propio sitio (`Origin`), `application/json`, ≤ 4 KB, 5 
 (el límite que dura es una regla en el Firewall de Vercel), honeypot `website`, consentimiento `true` obligatorio,
 timeout de 8 s al portal. Si el portal no responde 2xx, el visitante ve un error. No se registra ningún dato personal.
 
-### Cuerpo enviado (PROVISIONAL: confirmar con CRM-PROPIETARIOS)
+### Cuerpo enviado (contrato de seda_os, `leadPropietarioSchema` en lib/leads-publico.ts, alineado el 4-nov)
 
 ```jsonc
 {
-  "origen": "seda-web/calculadora-propietarios",
-  "idioma": "es",                         // es | en | fr | de
   "nombre": "María García",
-  "email": "maria@example.com",
-  "telefono": null,                       // opcional
-  "consentimiento": {
-    "aceptado": true,
-    "politica_privacidad_actualizada": "2026-10-15",   // PRIVACIDAD.actualizado
-    "recogido_en": "2026-11-03T10:00:00.000Z"
-  },
-  "propiedad": { "municipio": "Estepona", "dormitorios": 3 },   // ambos opcionales (null)
-  "estimacion": {                         // recalculada en el servidor con lib/tarifa
-    "tarifa": "v6",
-    "precio_noche_eur": 200,
-    "ocupacion_pct": 50,
-    "ingresos_brutos_anuales_eur": 36500,
-    "canal_pct_ejemplo": 15,
-    "reserva_directa": { "comision_seda_eur": 7300, "iva_comision_eur": 1533, "neto_antes_de_impuestos_eur": 29200 },
-    "por_canal": { "comision_canal_eur": 5475, "comision_seda_eur": 6515, "iva_comision_eur": 1368, "neto_antes_de_impuestos_eur": 24510 }
-  }
+  "correo": "maria@example.com",          // en minúsculas
+  "telefono": null,                       // opcional; el portal lo normaliza a E.164
+  "municipio": "Estepona",                // opcional, hasta 80
+  "dormitorios": 3,                       // opcional, 1-30
+  "consentimiento": true,
+  "consentimiento_version": "2026-10-15"  // PRIVACIDAD.actualizado
 }
 ```
 
-No se envía ninguna cabecera de autenticación: no consta que el endpoint la pida. Si la pide, hay que añadirla
-en `app/api/leads/propietario/route.ts` con una variable de entorno, nunca en el cliente.
+El portal es `.strict()`: cualquier otro campo da 400. `origen` (`web-calculadora`) y `base_juridica` (`consentimiento`) los pone el portal. La estimación no viaja ni se guarda en el CRM.
+
+Sin autenticación: el portal acepta llamadas sin `Origin` (servidor a servidor), detrás de su límite de 5 por minuto e IP y del honeypot. Como todas las llamadas salen de las IPs de Vercel de seda-web, ese límite es compartido: con el volumen actual basta; si crece, hay que darle a seda-web una clave propia en el portal.
 
 ## Antes de encender el flag
 
@@ -95,7 +83,7 @@ en `app/api/leads/propietario/route.ts` con una variable de entorno, nunca en el
    (nombre, correo, teléfono, datos de la propiedad y la estimación), una nueva finalidad y un nuevo destinatario (el CRM de
    SEDA en el portal). Hay que actualizar `datos`, `finalidad`, `destinatarios` y `conservacion` en los cuatro idiomas.
    No se ha tocado `lib/legal/`: es texto legal y lo decide Ángel.
-2. **Endpoint real de CRM-PROPIETARIOS**: confirmar URL, cuerpo (arriba), respuesta (cualquier 2xx es éxito) y si exige autenticación.
+2. **Endpoint de CRM-PROPIETARIOS**: contrato alineado (arriba). Falta aplicar su PROPUESTA en producción; hasta entonces el portal responde 503.
 3. **Revisión de los textos nuevos** (`calculadora.*` en `messages/*.json`, los cuatro idiomas). Marcados como TEXTO NUEVO.
 4. **Firewall de Vercel**: regla de frecuencia para `/api/leads/propietario` (el límite en código es por instancia).
 5. Poner la variable en Vercel y **redesplegar**.

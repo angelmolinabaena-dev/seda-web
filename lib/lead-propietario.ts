@@ -22,7 +22,7 @@ import { PRIVACIDAD } from "@/lib/legal/privacidad"
 export const ENDPOINT_PORTAL_LEADS_PROPIETARIO = "https://portal.sedaprivatehomes.com/api/leads/propietario"
 export const ORIGEN_LEAD = "seda-web/calculadora-propietarios"
 
-export const LEAD_MAX = { nombre: 120, telefono: 40, municipio: 120 } as const
+export const LEAD_MAX = { nombre: 120, telefono: 40, municipio: 80 } as const
 const TELEFONO = /^[\d\s+()-]{6,}$/
 // Un campo de una línea no admite ningún carácter de control (ni U+2028/2029).
 const CONTROL = /[\x00-\x1f\x7f\u2028\u2029]/
@@ -102,7 +102,7 @@ export function validarLead(body: unknown): ResultadoLead {
 
   let dormitorios: number | undefined
   if (b.dormitorios !== undefined && b.dormitorios !== null) {
-    if (typeof b.dormitorios !== "number" || !Number.isInteger(b.dormitorios) || b.dormitorios < 1 || b.dormitorios > 50) {
+    if (typeof b.dormitorios !== "number" || !Number.isInteger(b.dormitorios) || b.dormitorios < 1 || b.dormitorios > 30) {
       return fallo("invalid_dormitorios")
     }
     dormitorios = b.dormitorios
@@ -122,42 +122,21 @@ export function validarLead(body: unknown): ResultadoLead {
 }
 
 /**
- * Cuerpo del POST al portal. Lleva la prueba del consentimiento (qué versión de
- * la política de privacidad estaba vigente y cuándo se aceptó) y la estimación
- * recalculada en el servidor con la tarifa vigente.
+ * Cuerpo del POST al portal: el contrato de `leadPropietarioSchema` de seda_os
+ * (lib/leads-publico.ts, `.strict()`). Solo esos campos: cualquier otro da 400.
+ * `origen` y `base_juridica` los fija el portal (web-calculadora / consentimiento).
+ * `consentimiento_version` es la fecha de la política de privacidad que vio la
+ * persona. La estimación NO viaja: el CRM no la guarda y se recalcula con la
+ * tarifa cuando haga falta.
  */
-export function cuerpoPortal(lead: Lead, ahora: Date = new Date()) {
-  const est = estimar(lead.precioNoche, lead.ocupacionPct)
-  if (!est) throw new Error("lead-propietario: cuerpoPortal sobre un lead sin estimación válida")
+export function cuerpoPortal(lead: Lead) {
   return {
-    origen: ORIGEN_LEAD,
-    idioma: lead.locale,
     nombre: lead.nombre,
-    email: lead.email,
+    correo: lead.email.toLowerCase(),
     telefono: lead.telefono ?? null,
-    consentimiento: {
-      aceptado: true,
-      politica_privacidad_actualizada: PRIVACIDAD.actualizado,
-      recogido_en: ahora.toISOString(),
-    },
-    propiedad: { municipio: lead.municipio ?? null, dormitorios: lead.dormitorios ?? null },
-    estimacion: {
-      tarifa: est.tarifa,
-      precio_noche_eur: lead.precioNoche,
-      ocupacion_pct: lead.ocupacionPct,
-      ingresos_brutos_anuales_eur: est.alojamientoAnual,
-      canal_pct_ejemplo: est.canalPct,
-      reserva_directa: {
-        comision_seda_eur: est.directa.comision,
-        iva_comision_eur: est.directa.iva,
-        neto_antes_de_impuestos_eur: est.directa.neto,
-      },
-      por_canal: {
-        comision_canal_eur: est.conCanal.canal,
-        comision_seda_eur: est.conCanal.comision,
-        iva_comision_eur: est.conCanal.iva,
-        neto_antes_de_impuestos_eur: est.conCanal.neto,
-      },
-    },
+    municipio: lead.municipio ?? null,
+    dormitorios: lead.dormitorios ?? null,
+    consentimiento: true as const,
+    consentimiento_version: PRIVACIDAD.actualizado,
   }
 }

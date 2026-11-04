@@ -117,16 +117,24 @@ describe("consentimiento RGPD obligatorio", () => {
     if (r.ok) expect(r.lead).toMatchObject({ nombre: "María García", telefono: "+34 600 123 456", municipio: "Estepona", dormitorios: 3 })
   })
 
-  it("el cuerpo para el portal lleva la prueba del consentimiento y la estimación recalculada en el servidor", () => {
-    const r = validarLead({ ...BASE, consentimiento: true })
+  it("el cuerpo para el portal es EXACTAMENTE el contrato de seda_os (leadPropietarioSchema, .strict())", () => {
+    const r = validarLead({ ...BASE, consentimiento: true, telefono: "+34 600 123 456", municipio: "Estepona", dormitorios: 3 })
     if (!r.ok) throw new Error("debía aceptarse")
-    const c = cuerpoPortal(r.lead, new Date("2026-11-03T10:00:00Z"))
-    expect(c.consentimiento).toMatchObject({ aceptado: true, recogido_en: "2026-11-03T10:00:00.000Z" })
-    expect(c.consentimiento.politica_privacidad_actualizada).toMatch(/^\d{4}-\d{2}-\d{2}$/)
-    expect(c.estimacion.ingresos_brutos_anuales_eur).toBe(36500)
-    expect(c.estimacion.reserva_directa.neto_antes_de_impuestos_eur).toBe(29200)
-    expect(c.estimacion.por_canal.neto_antes_de_impuestos_eur).toBe(24510)
-    expect(c.estimacion.tarifa).toBe("v6")
+    const c = cuerpoPortal(r.lead)
+    expect(Object.keys(c).sort()).toEqual(
+      ["consentimiento", "consentimiento_version", "correo", "dormitorios", "municipio", "nombre", "telefono"],
+    )
+    expect(c.consentimiento).toBe(true)
+    expect(c.consentimiento_version).toMatch(/^[A-Za-z0-9._-]{1,40}$/)
+    expect(c.correo).toBe(c.correo.toLowerCase())
+    // CONTROL NEGATIVO: nada de lo que el portal rechazaría por .strict()
+    for (const k of ["email", "origen", "idioma", "estimacion", "propiedad", "website"]) expect(c).not.toHaveProperty(k)
+  })
+
+  it("los topes coinciden con los del portal: municipio 80 y dormitorios 30", () => {
+    expect(validarLead({ ...BASE, consentimiento: true, municipio: "x".repeat(81) })).toEqual({ ok: false, error: "invalid_municipio" })
+    expect(validarLead({ ...BASE, consentimiento: true, dormitorios: 31 })).toEqual({ ok: false, error: "invalid_dormitorios" })
+    expect(validarLead({ ...BASE, consentimiento: true, dormitorios: 30 }).ok).toBe(true)
   })
 
   it("el formulario no deja enviar sin la casilla: required, sin marcar de antemano y con enlace a la privacidad", async () => {
@@ -257,7 +265,7 @@ describe("POST /api/leads/propietario", () => {
   describe("con el flag encendido", () => {
     beforeEach(() => vi.stubEnv("SEDA_FLAG_CALCULADORA_PROPIETARIOS", "1"))
 
-    it("un envío bueno hace UN POST al portal, con la estimación recalculada y sin el honeypot", async () => {
+    it("un envío bueno hace UN POST al portal, con el contrato de seda_os y sin el honeypot", async () => {
       const { POST } = await cargarRuta()
       const r = await POST(peticion())
       expect(r.status).toBe(200)
@@ -269,22 +277,14 @@ describe("POST /api/leads/propietario", () => {
       expect(url).toBe(ENDPOINT_PORTAL_LEADS_PROPIETARIO)
       expect(init.method).toBe("POST")
       const cuerpo = JSON.parse(String(init.body))
-      expect(cuerpo).toMatchObject({
-        origen: "seda-web/calculadora-propietarios",
-        idioma: "es",
+      expect(cuerpo).toEqual({
         nombre: "María García",
-        email: "maria@example.com",
+        correo: "maria@example.com",
         telefono: "+34 600 123 456",
-        consentimiento: { aceptado: true },
-        propiedad: { municipio: "Estepona", dormitorios: 3 },
-        estimacion: {
-          tarifa: "v6",
-          precio_noche_eur: 200,
-          ocupacion_pct: 50,
-          ingresos_brutos_anuales_eur: 36500, // hecho a mano, caso A
-          reserva_directa: { comision_seda_eur: 7300, neto_antes_de_impuestos_eur: 29200 },
-          por_canal: { comision_canal_eur: 5475, comision_seda_eur: 6515, neto_antes_de_impuestos_eur: 24510 },
-        },
+        municipio: "Estepona",
+        dormitorios: 3,
+        consentimiento: true,
+        consentimiento_version: expect.stringMatching(/^[A-Za-z0-9._-]{1,40}$/),
       })
       expect(JSON.stringify(cuerpo)).not.toContain("website")
     })
