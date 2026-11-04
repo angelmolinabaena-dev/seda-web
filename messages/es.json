@@ -1562,5 +1562,85 @@
     "ver": "Ver en 360°",
     "titulo": "Recorrido 360° de {nombre}",
     "cerrar": "Cerrar el recorrido"
+  },
+  "calculadora": {
+    "meta": {
+      "title": "¿Cuánto ganaría su casa con SEDA? Calculadora para propietarios",
+      "description": "Calcule una estimación anual de ingresos brutos, comisión de SEDA y neto antes de impuestos con el precio por noche y la ocupación que espera. Estimación, no oferta."
+    },
+    "hero": {
+      "eyebrow": "— Calculadora para propietarios",
+      "h1": {
+        "line1": "¿Cuánto ganaría su casa",
+        "italic": "con SEDA?"
+      },
+      "body": "Indique el precio por noche que espera y la ocupación anual. Calculamos la estimación con la tarifa vigente y le enseñamos cada paso. Es una estimación, no una oferta."
+    },
+    "inputs": {
+      "heading": "Su propiedad",
+      "context_note": "Municipio y dormitorios no entran en el cálculo: los guardamos para preparar la conversación si pide que le llamemos.",
+      "municipio": {
+        "label": "Municipio",
+        "placeholder": "Ejemplo: Estepona"
+      },
+      "dormitorios": {
+        "label": "Dormitorios",
+        "placeholder": "Ejemplo: 3"
+      },
+      "precio": {
+        "label": "Precio medio por noche que espera",
+        "placeholder": "Ejemplo: 250",
+        "hint": "Tarifa de alojamiento, sin limpieza. Es la cifra que usted espera, no una media de mercado: no tenemos ninguna con fuente que podamos citar."
+      },
+      "ocupacion": {
+        "label": "Ocupación anual esperada",
+        "hint": "Porcentaje de noches del año con huésped.",
+        "sin_elegir": "Sin elegir"
+      }
+    },
+    "results": {
+      "heading": "Su estimación anual",
+      "empty": "Escriba el precio por noche y elija la ocupación para ver su estimación.",
+      "example_label": "Ejemplo, no es su caso",
+      "example_body": "Con [[tarifa.ejAlojamiento]] de alojamiento, la comisión de SEDA serían [[tarifa.ejDirecta]] en reserva directa y [[tarifa.ejAirbnb]] con un canal que cobra el [[tarifa.ejCanalPct]]. El IVA va aparte.",
+      "table": {
+        "caption": "Estimación anual con la tarifa vigente, en euros",
+        "directa": "Reserva directa",
+        "canal": "Por un canal (ejemplo: [[tarifa.ejCanalPct]])",
+        "bruto": "Ingresos brutos (alojamiento)",
+        "canal_row": "Comisión del canal",
+        "seda": "Comisión de SEDA",
+        "limpieza": "Limpieza",
+        "limpieza_value": "Fuera del cálculo: la paga el huésped y es íntegramente suya.",
+        "neto": "Neto antes de impuestos",
+        "iva": "IVA de la comisión, aparte"
+      },
+      "como": "Cómo se calcula",
+      "como_body": "Ingresos brutos = ocupación × 365 noches × precio por noche. La comisión de SEDA es la menor entre el [[tarifa.comision]] del alojamiento una vez descontada la comisión del canal y el [[tarifa.tope]] del alojamiento; no se calcula sobre la limpieza. El IVA del [[tarifa.iva]] sobre la comisión se suma aparte y no está restado del neto."
+    },
+    "aviso": {
+      "label": "Importante",
+      "body": "Es una estimación, no una oferta. Se calcula solo con el precio y la ocupación que usted introduce, y no es una previsión de resultados ni una promesa de rentabilidad. El IVA y el IRPF o el IRNR dependen de cada caso y no están incluidos; tampoco los suministros ni los gastos de la propiedad. Una propuesta concreta solo existe después de valorar su casa."
+    },
+    "form": {
+      "eyebrow": "— Hable con SEDA",
+      "h2": "Reciba su estimación y que le llame SEDA",
+      "body": "Déjenos sus datos: junto a ellos enviamos la estimación que ve en pantalla y nuestro equipo se pondrá en contacto con usted para valorar su casa.",
+      "nombre": "Nombre",
+      "email": "Correo electrónico",
+      "telefono": "Teléfono (opcional)",
+      "consent": "He leído la <privacidad>política de privacidad</privacidad> y acepto que SEDA trate mis datos y los de esta estimación para ponerse en contacto conmigo sobre la gestión de mi propiedad.",
+      "submit": "Enviar mi estimación",
+      "sending": "Enviando…",
+      "needs_estimate": "Para enviar, complete primero el precio por noche y la ocupación: la estimación viaja con sus datos.",
+      "error": "No hemos podido enviar su solicitud. Inténtelo de nuevo en unos minutos o escríbanos desde la página de contacto.",
+      "error_rate": "Demasiados intentos seguidos. Espere unos minutos e inténtelo de nuevo.",
+      "error_contact": "Ir a contacto"
+    },
+    "gracias": {
+      "title": "Gracias. Hemos recibido su solicitud.",
+      "body": "El equipo de SEDA revisará su estimación y se pondrá en contacto con usted."
+    },
+    "link": "Calcule la estimación de su casa"
   }
 }

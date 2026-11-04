@@ -1562,5 +1562,85 @@
     "ver": "Voir en 360°",
     "titulo": "Visite 360° de {nombre}",
     "cerrar": "Fermer la visite"
+  },
+  "calculadora": {
+    "meta": {
+      "title": "Combien rapporterait votre maison avec SEDA ? Calculateur pour propriétaires",
+      "description": "Estimez vos revenus bruts annuels, la commission de SEDA et votre net avant impôts à partir du prix par nuit et du taux d'occupation que vous attendez. Une estimation, pas une offre."
+    },
+    "hero": {
+      "eyebrow": "— Calculateur pour propriétaires",
+      "h1": {
+        "line1": "Combien rapporterait votre maison",
+        "italic": "avec SEDA ?"
+      },
+      "body": "Indiquez le prix par nuit que vous attendez et votre taux d'occupation annuel. Nous calculons l'estimation avec le barème en vigueur et vous montrons chaque étape. C'est une estimation, pas une offre."
+    },
+    "inputs": {
+      "heading": "Votre bien",
+      "context_note": "La commune et le nombre de chambres n'entrent pas dans le calcul : nous les conservons pour préparer l'échange si vous demandez à être rappelé.",
+      "municipio": {
+        "label": "Commune",
+        "placeholder": "Exemple : Estepona"
+      },
+      "dormitorios": {
+        "label": "Chambres",
+        "placeholder": "Exemple : 3"
+      },
+      "precio": {
+        "label": "Prix moyen par nuit que vous attendez",
+        "placeholder": "Exemple : 250",
+        "hint": "Tarif d'hébergement, ménage exclu. C'est le chiffre que vous attendez, pas une moyenne du marché : nous n'en avons aucune, sourcée, que nous puissions citer."
+      },
+      "ocupacion": {
+        "label": "Taux d'occupation annuel attendu",
+        "hint": "Part des nuits de l'année avec un voyageur.",
+        "sin_elegir": "Non choisi"
+      }
+    },
+    "results": {
+      "heading": "Votre estimation annuelle",
+      "empty": "Saisissez le prix par nuit et choisissez le taux d'occupation pour voir votre estimation.",
+      "example_label": "Exemple, pas votre cas",
+      "example_body": "Avec [[tarifa.ejAlojamiento]] d'hébergement, la commission de SEDA serait de [[tarifa.ejDirecta]] en réservation directe et de [[tarifa.ejAirbnb]] via un canal qui prélève [[tarifa.ejCanalPct]]. La TVA s'ajoute.",
+      "table": {
+        "caption": "Estimation annuelle avec le barème en vigueur, en euros",
+        "directa": "Réservation directe",
+        "canal": "Via un canal (exemple : [[tarifa.ejCanalPct]])",
+        "bruto": "Revenus bruts (hébergement)",
+        "canal_row": "Commission du canal",
+        "seda": "Commission de SEDA",
+        "limpieza": "Ménage",
+        "limpieza_value": "Hors calcul : il est payé par le voyageur et vous revient intégralement.",
+        "neto": "Net avant impôts",
+        "iva": "TVA sur la commission, en sus"
+      },
+      "como": "Comment c'est calculé",
+      "como_body": "Revenus bruts = taux d'occupation × 365 nuits × prix par nuit. La commission de SEDA est la plus faible entre [[tarifa.comision]] de l'hébergement une fois déduite la commission du canal et [[tarifa.tope]] de l'hébergement ; elle n'est jamais calculée sur le ménage. La TVA de [[tarifa.iva]] sur la commission s'ajoute en sus et n'est pas déduite du net."
+    },
+    "aviso": {
+      "label": "Important",
+      "body": "Il s'agit d'une estimation, pas d'une offre. Elle est calculée uniquement à partir du prix et du taux d'occupation que vous saisissez ; ce n'est ni une prévision de résultats ni une promesse de rentabilité. La TVA et l'impôt sur le revenu (IRPF ou IRNR) dépendent de chaque cas et ne sont pas inclus ; les charges et les frais du bien non plus. Une proposition concrète n'existe qu'après l'évaluation de votre bien."
+    },
+    "form": {
+      "eyebrow": "— Parlez à SEDA",
+      "h2": "Recevez votre estimation et soyez rappelé par SEDA",
+      "body": "Laissez-nous vos coordonnées : nous y joignons l'estimation affichée à l'écran et notre équipe vous contactera pour évaluer votre bien.",
+      "nombre": "Nom",
+      "email": "E-mail",
+      "telefono": "Téléphone (facultatif)",
+      "consent": "J'ai lu la <privacidad>politique de confidentialité</privacidad> et j'accepte que SEDA traite mes données et celles de cette estimation pour me contacter au sujet de la gestion de mon bien.",
+      "submit": "Envoyer mon estimation",
+      "sending": "Envoi…",
+      "needs_estimate": "Pour envoyer, renseignez d'abord le prix par nuit et le taux d'occupation : l'estimation accompagne vos coordonnées.",
+      "error": "Nous n'avons pas pu envoyer votre demande. Réessayez dans quelques minutes ou écrivez-nous depuis la page de contact.",
+      "error_rate": "Trop de tentatives d'affilée. Patientez quelques minutes et réessayez.",
+      "error_contact": "Aller à la page de contact"
+    },
+    "gracias": {
+      "title": "Merci. Nous avons bien reçu votre demande.",
+      "body": "L'équipe SEDA examinera votre estimation et vous contactera."
+    },
+    "link": "Calculez l'estimation de votre maison"
   }
 }

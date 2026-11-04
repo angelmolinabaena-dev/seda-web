@@ -1562,5 +1562,85 @@
     "ver": "View in 360°",
     "titulo": "360° tour of {nombre}",
     "cerrar": "Close the tour"
+  },
+  "calculadora": {
+    "meta": {
+      "title": "How much would your home earn with SEDA? Owner calculator",
+      "description": "Estimate your annual gross income, SEDA's commission and your net before taxes from the nightly rate and occupancy you expect. An estimate, not an offer."
+    },
+    "hero": {
+      "eyebrow": "— Owner calculator",
+      "h1": {
+        "line1": "How much would your home earn",
+        "italic": "with SEDA?"
+      },
+      "body": "Enter the nightly rate you expect and your annual occupancy. We calculate the estimate with the current rate card and show every step. It is an estimate, not an offer."
+    },
+    "inputs": {
+      "heading": "Your property",
+      "context_note": "Municipality and bedrooms do not enter the calculation: we keep them to prepare the conversation if you ask us to call you.",
+      "municipio": {
+        "label": "Municipality",
+        "placeholder": "Example: Estepona"
+      },
+      "dormitorios": {
+        "label": "Bedrooms",
+        "placeholder": "Example: 3"
+      },
+      "precio": {
+        "label": "Average nightly rate you expect",
+        "placeholder": "Example: 250",
+        "hint": "Accommodation rate, without cleaning. It is the figure you expect, not a market average: we have no sourced one that we could cite."
+      },
+      "ocupacion": {
+        "label": "Expected annual occupancy",
+        "hint": "Share of the nights in the year with a guest.",
+        "sin_elegir": "Not chosen"
+      }
+    },
+    "results": {
+      "heading": "Your annual estimate",
+      "empty": "Enter the nightly rate and choose the occupancy to see your estimate.",
+      "example_label": "Example, not your case",
+      "example_body": "With [[tarifa.ejAlojamiento]] of accommodation, SEDA's commission would be [[tarifa.ejDirecta]] on a direct booking and [[tarifa.ejAirbnb]] through a channel that charges [[tarifa.ejCanalPct]]. VAT is on top.",
+      "table": {
+        "caption": "Annual estimate with the current rate card, in euros",
+        "directa": "Direct booking",
+        "canal": "Through a channel (example: [[tarifa.ejCanalPct]])",
+        "bruto": "Gross income (accommodation)",
+        "canal_row": "Channel commission",
+        "seda": "SEDA commission",
+        "limpieza": "Cleaning",
+        "limpieza_value": "Outside the calculation: the guest pays it and it is entirely yours.",
+        "neto": "Net before taxes",
+        "iva": "VAT on the commission, on top"
+      },
+      "como": "How it is calculated",
+      "como_body": "Gross income = occupancy × 365 nights × nightly rate. SEDA's commission is the lower of [[tarifa.comision]] of the accommodation once the channel's commission is deducted and [[tarifa.tope]] of the accommodation; it is never calculated on cleaning. The [[tarifa.iva]] VAT on the commission is added on top and is not deducted from the net."
+    },
+    "aviso": {
+      "label": "Important",
+      "body": "This is an estimate, not an offer. It is calculated only from the rate and occupancy you enter, and it is neither a forecast of results nor a promise of returns. VAT and personal income tax (IRPF or IRNR) depend on each case and are not included; neither are utilities or the costs of the property. A specific proposal exists only after we have assessed your home."
+    },
+    "form": {
+      "eyebrow": "— Talk to SEDA",
+      "h2": "Get your estimate and let SEDA call you",
+      "body": "Leave your details: we send the estimate you see on screen along with them, and our team will get in touch to assess your home.",
+      "nombre": "Name",
+      "email": "Email",
+      "telefono": "Phone (optional)",
+      "consent": "I have read the <privacidad>privacy policy</privacidad> and agree that SEDA may process my data and the data of this estimate to contact me about managing my property.",
+      "submit": "Send my estimate",
+      "sending": "Sending…",
+      "needs_estimate": "To send, first fill in the nightly rate and the occupancy: the estimate travels with your details.",
+      "error": "We could not send your request. Please try again in a few minutes or write to us from the contact page.",
+      "error_rate": "Too many attempts in a row. Wait a few minutes and try again.",
+      "error_contact": "Go to contact"
+    },
+    "gracias": {
+      "title": "Thank you. We have received your request.",
+      "body": "The SEDA team will review your estimate and get in touch with you."
+    },
+    "link": "Calculate the estimate for your home"
   }
 }

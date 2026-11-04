@@ -1562,5 +1562,85 @@
     "ver": "In 360° ansehen",
     "titulo": "360°-Rundgang durch {nombre}",
     "cerrar": "Rundgang schließen"
+  },
+  "calculadora": {
+    "meta": {
+      "title": "Wie viel würde Ihr Haus mit SEDA verdienen? Rechner für Eigentümer",
+      "description": "Schätzen Sie Ihre jährlichen Bruttoeinnahmen, die Provision von SEDA und Ihren Nettobetrag vor Steuern anhand des erwarteten Preises pro Nacht und der Auslastung. Eine Schätzung, kein Angebot."
+    },
+    "hero": {
+      "eyebrow": "— Rechner für Eigentümer",
+      "h1": {
+        "line1": "Wie viel würde Ihr Haus",
+        "italic": "mit SEDA verdienen?"
+      },
+      "body": "Geben Sie den Preis pro Nacht an, den Sie erwarten, und Ihre jährliche Auslastung. Wir berechnen die Schätzung mit dem aktuellen Tarif und zeigen jeden Schritt. Es ist eine Schätzung, kein Angebot."
+    },
+    "inputs": {
+      "heading": "Ihre Immobilie",
+      "context_note": "Gemeinde und Schlafzimmer fließen nicht in die Berechnung ein: Wir speichern sie, um das Gespräch vorzubereiten, falls Sie einen Rückruf wünschen.",
+      "municipio": {
+        "label": "Gemeinde",
+        "placeholder": "Beispiel: Estepona"
+      },
+      "dormitorios": {
+        "label": "Schlafzimmer",
+        "placeholder": "Beispiel: 3"
+      },
+      "precio": {
+        "label": "Durchschnittlicher Preis pro Nacht, den Sie erwarten",
+        "placeholder": "Beispiel: 250",
+        "hint": "Übernachtungspreis ohne Reinigung. Es ist Ihre erwartete Zahl, kein Marktdurchschnitt: Wir haben keinen belegten, den wir nennen könnten."
+      },
+      "ocupacion": {
+        "label": "Erwartete jährliche Auslastung",
+        "hint": "Anteil der Nächte im Jahr mit Gast.",
+        "sin_elegir": "Nicht gewählt"
+      }
+    },
+    "results": {
+      "heading": "Ihre Jahresschätzung",
+      "empty": "Geben Sie den Preis pro Nacht ein und wählen Sie die Auslastung, um Ihre Schätzung zu sehen.",
+      "example_label": "Beispiel, nicht Ihr Fall",
+      "example_body": "Bei [[tarifa.ejAlojamiento]] Übernachtungsumsatz betrüge die Provision von SEDA [[tarifa.ejDirecta]] bei Direktbuchung und [[tarifa.ejAirbnb]] über einen Kanal, der [[tarifa.ejCanalPct]] verlangt. Die MwSt. kommt hinzu.",
+      "table": {
+        "caption": "Jahresschätzung mit dem aktuellen Tarif, in Euro",
+        "directa": "Direktbuchung",
+        "canal": "Über einen Kanal (Beispiel: [[tarifa.ejCanalPct]])",
+        "bruto": "Bruttoeinnahmen (Übernachtung)",
+        "canal_row": "Provision des Kanals",
+        "seda": "Provision von SEDA",
+        "limpieza": "Reinigung",
+        "limpieza_value": "Nicht in der Berechnung: Sie zahlt der Gast und sie gehört vollständig Ihnen.",
+        "neto": "Netto vor Steuern",
+        "iva": "MwSt. auf die Provision, zusätzlich"
+      },
+      "como": "So wird gerechnet",
+      "como_body": "Bruttoeinnahmen = Auslastung × 365 Nächte × Preis pro Nacht. Die Provision von SEDA ist der niedrigere Betrag aus [[tarifa.comision]] des Übernachtungsumsatzes nach Abzug der Kanalprovision und [[tarifa.tope]] des Übernachtungsumsatzes; auf die Reinigung wird sie nie berechnet. Die MwSt. von [[tarifa.iva]] auf die Provision kommt zusätzlich hinzu und ist nicht vom Nettobetrag abgezogen."
+    },
+    "aviso": {
+      "label": "Wichtig",
+      "body": "Dies ist eine Schätzung, kein Angebot. Sie wird nur aus dem Preis und der Auslastung berechnet, die Sie eingeben, und ist weder eine Ergebnisprognose noch ein Renditeversprechen. MwSt. und Einkommensteuer (IRPF oder IRNR) hängen vom Einzelfall ab und sind nicht enthalten; ebenso wenig Nebenkosten und Kosten der Immobilie. Ein konkretes Angebot gibt es erst nach der Bewertung Ihres Hauses."
+    },
+    "form": {
+      "eyebrow": "— Sprechen Sie mit SEDA",
+      "h2": "Erhalten Sie Ihre Schätzung und lassen Sie sich von SEDA anrufen",
+      "body": "Hinterlassen Sie Ihre Daten: Wir senden die Schätzung, die Sie auf dem Bildschirm sehen, mit, und unser Team nimmt Kontakt mit Ihnen auf, um Ihr Haus zu bewerten.",
+      "nombre": "Name",
+      "email": "E-Mail",
+      "telefono": "Telefon (optional)",
+      "consent": "Ich habe die <privacidad>Datenschutzerklärung</privacidad> gelesen und bin damit einverstanden, dass SEDA meine Daten und die dieser Schätzung verarbeitet, um mich zur Verwaltung meiner Immobilie zu kontaktieren.",
+      "submit": "Meine Schätzung senden",
+      "sending": "Wird gesendet …",
+      "needs_estimate": "Zum Senden tragen Sie zuerst den Preis pro Nacht und die Auslastung ein: Die Schätzung wird mit Ihren Daten übermittelt.",
+      "error": "Wir konnten Ihre Anfrage nicht senden. Versuchen Sie es in einigen Minuten erneut oder schreiben Sie uns über die Kontaktseite.",
+      "error_rate": "Zu viele Versuche hintereinander. Warten Sie einige Minuten und versuchen Sie es erneut.",
+      "error_contact": "Zur Kontaktseite"
+    },
+    "gracias": {
+      "title": "Danke. Wir haben Ihre Anfrage erhalten.",
+      "body": "Das SEDA-Team prüft Ihre Schätzung und nimmt Kontakt mit Ihnen auf."
+    },
+    "link": "Schätzung für Ihr Haus berechnen"
   }
 }
