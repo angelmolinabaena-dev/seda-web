@@ -54,3 +54,23 @@ Tiene que quedar en **14 500 caracteres o menos** (el panel deja de guardar sobr
 - **«por N noches» junto al precio: NO hecho.** El precio lo escribe el JS de Beds24 en `#price-roomprice-1-*` (vacío en la instantánea) y N está en `#inputnumnight`, otro elemento: CSS no puede leer un valor de un `<select>`. Hacerlo exige `<script>`, que el panel no admite en estos bloques.
 - **No hay HTML nuevo:** header y footer no cambian (1 127 y 1 978 caracteres), sin `<script>` ni apóstrofo recto.
 - **Capturas:** `node beds24/booking-page/preview/capturar.mjs` → `preview/capturas/{portada,formulario}-{375,1440}.png`, sobre las instantáneas reales. Las fotos son de prueba (media.xmlcal.com no es accesible desde el entorno) y falta `include/booking2.css`/`booking3.css`.
+
+## v5.1 (3-nov): móvil
+- Carrusel con height:auto (Beds24 fijaba 520 px en línea y dejaba un hueco de ~220 px bajo la foto).
+- En móvil (<768 px), las fechas y Personas van como campos blancos iguales, con la etiqueta a la izquierda. Sin desbordamiento horizontal a 390 px.
+- 14018 caracteres, guardado en Beds24.
+
+## v5.2 (3-nov): móvil, calendario
+- El calendario se abría desplazado y cortado por la izquierda (Beds24 le pone left negativo en línea). En móvil ahora es una ventana fija centrada, con 16 px de margen a cada lado.
+- Entrada, Salida y Personas alineados a los mismos bordes.
+- 14712 caracteres, guardado en Beds24.
+
+## v5.3 (3-nov): móvil, toque fantasma
+- v5.2 centraba el calendario encima de los campos: al tocar Entrada o Salida, el mismo toque caía en un día del calendario y cambiaba la fecha sola. Ahora el calendario se abre debajo de la barra (fechas y personas), sin tapar ningún campo.
+- 14942 caracteres, guardado en Beds24.
+
+## v6 (3-nov): galería y botón fijo
+- Flechas de la galería: círculos claros de 44 px con sombra, visibles sobre cualquier foto.
+- Paso automático cada 6 s (pausa al pasar el ratón). Va en Custom HEAD (head.html): Beds24 sí acepta <script> en ese campo.
+- Móvil: el botón Reservar queda fijo abajo, solo cuando hay precio disponible; no aparece en el paso de datos del huésped.
+- CSS 16076 caracteres, cerca del límite medido (16478 sí, 18209 no).
