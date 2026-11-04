@@ -5,21 +5,48 @@ import type { DocumentoLegalMultilingue } from "./types"
 
   NO es una copia de la de `guest-app`. Aquella describe el tratamiento de
   datos de HUÉSPEDES alojados (documento de identidad, registro de viajeros
-  del RD 933/2021, obligación legal). Aquí no hay nada de eso: la única
-  entrada de datos de este sitio es un formulario de contacto que produce un
-  correo electrónico — mayoritariamente de propietarios potenciales y de
-  huéspedes que aún no han reservado — cuya base jurídica es precontractual
-  o de interés legítimo, nunca una obligación legal de registro.
+  del RD 933/2021, obligación legal). Aquí no hay nada de eso: este sitio
+  tiene dos entradas de datos.
+
+    1. El formulario de contacto, que produce un correo electrónico —
+       mayoritariamente de propietarios potenciales y de huéspedes que aún no
+       han reservado— cuya base jurídica es precontractual o de interés
+       legítimo, nunca una obligación legal de registro.
+    2. El formulario de la calculadora para propietarios
+       (`/propietarios/calculadora`, detrás de `SEDA_FLAG_CALCULADORA_PROPIETARIOS`),
+       cuya base jurídica es el consentimiento (art. 6.1.a) y que SÍ acaba en
+       una base de datos: el CRM interno de SEDA, en el portal (seda_os).
+
+  Este sitio sigue sin base de datos propia: `package.json` no tiene ningún
+  cliente de base de datos. Lo que hay detrás de UN formulario —el de la
+  calculadora— es la base de datos del portal, a la que seda-web solo
+  reenvía; por eso la política dice «sin base de datos propia» y no «sin base
+  de datos».
 
   Los datos de cada tabla salen del código, no de una plantilla:
 
-    · Campos de cada variante del formulario:
+    · Campos de cada variante del formulario de contacto:
       `app/[locale]/contacto/ContactoContent.tsx` — GuestForm, OwnerForm,
       OtherForm.
-    · Destino de lo enviado: `app/api/contact/route.ts` — se compone un
-      correo y se entrega con la API de Resend al buzón `info@`. No hay
-      escritura en base de datos: `package.json` no tiene ningún cliente de
-      base de datos.
+    · Destino de lo enviado por contacto: `app/api/contact/route.ts` — se
+      compone un correo y se entrega con la API de Resend al buzón `info@`.
+      No hay escritura en base de datos.
+    · Calculadora (4-nov-2026): campos en
+      `app/[locale]/propietarios/calculadora/CalculadoraContent.tsx`;
+      validación en `lib/lead-propietario.ts` (`validarLead`) y reenvío en
+      `app/api/leads/propietario/route.ts`. `cuerpoPortal` es el contrato con
+      seda_os: nombre, correo, teléfono, municipio, dormitorios, consentimiento
+      y su versión (= `PRIVACIDAD.actualizado`). El precio por noche y la
+      ocupación llegan a la función de este sitio para recalcular la
+      estimación, pero NO viajan al portal ni se guardan. El portal los
+      guarda en `leads_propietarios` (solo accesible por el servidor del
+      admin) con base jurídica «consentimiento» y avisa a `info@` con un
+      correo sin datos personales. Plazo, encargados y región, de
+      portal-propietarios: `docs/CONSERVACION-DATOS.md`,
+      `docs/privacidad/RAT-CRM-CAPTACION.md` (1 año desde el último contacto
+      si no hay contrato; Vercel y Supabase como encargados),
+      `docs/DPA_Annex_Art28_v4.md` (Supabase `eu-central-1`, Fráncfort) y su
+      `vercel.json` (`regions: ["fra1"]`, como este repo).
     · IP: `rateLimit()` en esa misma ruta la guarda en un `Map` en memoria
       con ventana de 10 minutos (`RATE_LIMIT_WINDOW_MS`). No se persiste.
     · Ausencia de analítica y de píxeles: comprobado por búsqueda en todo el
@@ -41,7 +68,7 @@ import type { DocumentoLegalMultilingue } from "./types"
 export const PRIVACIDAD: DocumentoLegalMultilingue = {
   id: "privacidad",
   ruta: "/privacidad",
-  actualizado: "2026-10-15",
+  actualizado: "2026-11-04",
   traducciones: {
     es: {
       titulo: "Política de privacidad",
@@ -84,6 +111,10 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                 [
                   "Formulario de contacto, opción «Otros»",
                   "Nombre, organización (opcional), correo electrónico, asunto y mensaje.",
+                ],
+                [
+                  "Calculadora para propietarios (página /propietarios/calculadora)",
+                  "Nombre y correo electrónico (obligatorios); si lo indicas, teléfono, municipio y número de dormitorios de tu propiedad; y la casilla de consentimiento, que debe marcarse expresamente. El precio por noche y la ocupación que introduces solo sirven para calcular la estimación en pantalla: no se reenvían a nuestro registro de contactos ni se guardan.",
                 ],
                 [
                   "Reserva de una llamada con Calendly (páginas /meet y /founding-owners)",
@@ -135,7 +166,16 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                   "Organizar y celebrar la videollamada que reservas con Calendly.",
                   "Artículo 6.1.b del RGPD: aplicación de medidas precontractuales adoptadas a tu petición.",
                 ],
+                [
+                  "Contactarte para valorar la gestión de tu propiedad, cuando dejas tus datos en la calculadora para propietarios.",
+                  "Artículo 6.1.a del RGPD: tu consentimiento, que das marcando la casilla del formulario. Guardamos la versión de esta política que viste al darlo.",
+                ],
               ],
+            },
+            {
+              tipo: "parrafo",
+              texto:
+                "Puedes retirar el consentimiento que das en la calculadora cuando quieras, escribiendo a {email}. Retirarlo no afecta a la licitud del tratamiento realizado antes de la retirada.",
             },
             {
               tipo: "parrafo",
@@ -154,8 +194,13 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
               filas: [
                 [
                   "Vercel Inc.",
-                  "Aloja el sitio y ejecuta la función que procesa el formulario. Registra datos técnicos de cada petición, incluida la IP.",
-                  "Estados Unidos. La función del formulario se ejecuta en Fráncfort (UE).",
+                  "Aloja el sitio y el portal de SEDA (portal.sedaprivatehomes.com) y ejecuta las funciones que procesan los formularios y reenvían al portal lo que dejas en la calculadora. Registra datos técnicos de cada petición, incluida la IP.",
+                  "Estados Unidos. Las funciones del sitio y del portal se ejecutan en Fráncfort (UE).",
+                ],
+                [
+                  "Supabase Inc.",
+                  "Aloja la base de datos del registro interno de contactos de SEDA (CRM), donde se guardan los datos que dejas en la calculadora para propietarios. Solo accede a ella el servidor de administración de SEDA.",
+                  "Estados Unidos. La base de datos está en Fráncfort (UE).",
                 ],
                 [
                   "Resend, Inc.",
@@ -172,12 +217,17 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
+                "Si dejas tus datos en la calculadora para propietarios, el servidor de este sitio los reenvía al portal de SEDA, que los guarda en su registro interno de contactos (alojado en Supabase y Vercel, ver arriba). Cuando llegan, el portal avisa al buzón {email} con un correo, entregado también por Resend, que no contiene datos personales.",
+            },
+            {
+              tipo: "parrafo",
+              texto:
                 "Si reservas una llamada, tus datos los tratan además Calendly y Google Ireland Limited, como se explica en «Reserva de una llamada con Calendly». No hay más destinatarios. No vendemos ni cedemos datos a terceros con fines comerciales. Solo se comunicarían a autoridades u organismos públicos si una norma lo exigiera.",
             },
             {
               tipo: "parrafo",
               texto:
-                "Vercel, Resend y Calendly son sociedades estadounidenses: el tratamiento implica una transferencia internacional de datos fuera del Espacio Económico Europeo. Puedes pedirnos información sobre las garantías aplicables a esa transferencia escribiendo a {email}.",
+                "Vercel, Resend, Supabase y Calendly son sociedades estadounidenses: el tratamiento implica una transferencia internacional de datos fuera del Espacio Económico Europeo. Puedes pedirnos información sobre las garantías aplicables a esa transferencia escribiendo a {email}.",
             },
           ],
         },
@@ -249,7 +299,12 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "El control de frecuencia del formulario guarda tu dirección IP en memoria durante diez minutos como máximo: no se escribe en ninguna base de datos y no sobrevive al reinicio del servicio. Los registros técnicos del proveedor de alojamiento se conservan según sus propios plazos, que no decidimos nosotros.",
+                "Los datos que dejas en la calculadora para propietarios se conservan en el registro interno de contactos de SEDA durante 1 año desde nuestro último contacto contigo (llamada, correo o visita), si no llegas a firmar un contrato de gestión; al vencer ese plazo se suprimen. Si firmas, pasan al expediente del propietario y se conservan según ese contrato. Si pides su supresión, los borramos antes.",
+            },
+            {
+              tipo: "parrafo",
+              texto:
+                "El control de frecuencia de los formularios guarda tu dirección IP en memoria durante diez minutos como máximo: no se escribe en ninguna base de datos y no sobrevive al reinicio del servicio. Los registros técnicos del proveedor de alojamiento se conservan según sus propios plazos, que no decidimos nosotros.",
             },
           ],
         },
@@ -260,7 +315,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Esta web no tiene base de datos propia. No existe registro de usuarios, ni CRM conectado, ni almacén de formularios: lo que envías se convierte en un correo electrónico y vive en un buzón. Es una limitación deliberada — cuantos menos sitios guarden tus datos, menos sitios pueden perderlos.",
+                "Esta web no tiene base de datos propia ni registro de usuarios: lo que envías por el formulario de contacto se convierte en un correo electrónico y vive en un buzón. La única excepción es la calculadora para propietarios: lo que dejas en ella, y solo eso, lo reenvía el servidor de esta web al registro interno de contactos de SEDA, que está en el portal y no en esta web. Es una limitación deliberada — cuantos menos sitios guarden tus datos, menos sitios pueden perderlos.",
             },
           ],
         },
@@ -388,6 +443,10 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                   "Name, organisation (optional), email address, subject and message.",
                 ],
                 [
+                  "Owner calculator (/propietarios/calculadora page)",
+                  "Name and email address (required); if you provide them, phone number, municipality and number of bedrooms of your property; and the consent checkbox, which you must tick yourself. The nightly price and the occupancy you enter are only used to work out the estimate on screen: they are not forwarded to our contacts register and are not stored.",
+                ],
+                [
                   "Booking a call with Calendly (/meet and /founding-owners pages)",
                   "Name, email address, chosen day and time, your time zone and, if you write it, anything you want to tell us to prepare the meeting. Details under “Booking a call with Calendly”.",
                 ],
@@ -437,7 +496,16 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                   "Organise and hold the video call you book with Calendly.",
                   "Article 6(1)(b) GDPR: pre-contractual steps taken at your request.",
                 ],
+                [
+                  "Contact you to assess the management of your property, when you leave your details in the owner calculator.",
+                  "Article 6(1)(a) GDPR: your consent, which you give by ticking the checkbox on the form. We record the version of this policy you saw when you gave it.",
+                ],
               ],
+            },
+            {
+              tipo: "parrafo",
+              texto:
+                "You can withdraw the consent you give in the calculator at any time by writing to {email}. Withdrawing it does not affect the lawfulness of processing carried out before the withdrawal.",
             },
             {
               tipo: "parrafo",
@@ -456,8 +524,13 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
               filas: [
                 [
                   "Vercel Inc.",
-                  "Hosts the site and runs the function that processes the form. Logs technical data of each request, including the IP address.",
-                  "United States. The form function runs in Frankfurt (EU).",
+                  "Hosts the site and SEDA's portal (portal.sedaprivatehomes.com) and runs the functions that process the forms and forward to the portal what you leave in the calculator. Logs technical data of each request, including the IP address.",
+                  "United States. The site and portal functions run in Frankfurt (EU).",
+                ],
+                [
+                  "Supabase Inc.",
+                  "Hosts the database of SEDA's internal contacts register (CRM), where the details you leave in the owner calculator are stored. Only SEDA's administration server can access it.",
+                  "United States. The database is in Frankfurt (EU).",
                 ],
                 [
                   "Resend, Inc.",
@@ -474,12 +547,17 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
+                "If you leave your details in the owner calculator, this site's server forwards them to SEDA's portal, which stores them in its internal contacts register (hosted on Supabase and Vercel, see above). When they arrive, the portal notifies the {email} mailbox with an email, also delivered by Resend, that contains no personal data.",
+            },
+            {
+              tipo: "parrafo",
+              texto:
                 "If you book a call, your data is also processed by Calendly and Google Ireland Limited, as explained under “Booking a call with Calendly”. There are no other recipients. We do not sell or transfer data to third parties for commercial purposes. Data would only be disclosed to authorities or public bodies if a legal rule required it.",
             },
             {
               tipo: "parrafo",
               texto:
-                "Vercel, Resend and Calendly are US companies, so the processing involves an international transfer of data outside the European Economic Area. You can ask us about the safeguards applicable to that transfer by writing to {email}.",
+                "Vercel, Resend, Supabase and Calendly are US companies, so the processing involves an international transfer of data outside the European Economic Area. You can ask us about the safeguards applicable to that transfer by writing to {email}.",
             },
           ],
         },
@@ -551,7 +629,12 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "The form's rate limiter holds your IP address in memory for ten minutes at most: it is never written to a database and does not survive a restart of the service. The hosting provider's technical logs are kept for its own periods, which we do not decide.",
+                "The details you leave in the owner calculator are kept in SEDA's internal contacts register for 1 year from our last contact with you (call, email or visit), if you do not end up signing a management contract; when that period ends they are deleted. If you sign, they pass to the owner's file and are kept in line with that contract. If you ask for them to be deleted, we delete them sooner.",
+            },
+            {
+              tipo: "parrafo",
+              texto:
+                "The forms' rate limiter holds your IP address in memory for ten minutes at most: it is never written to a database and does not survive a restart of the service. The hosting provider's technical logs are kept for its own periods, which we do not decide.",
             },
           ],
         },
@@ -562,7 +645,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "This website has no database of its own. There is no user registry, no connected CRM and no form storage: what you send becomes an email and lives in a mailbox. That is a deliberate limitation — the fewer places that hold your data, the fewer places can lose it.",
+                "This website has no database of its own and no user registry: what you send through the contact form becomes an email and lives in a mailbox. The only exception is the owner calculator: what you leave in it, and only that, is forwarded by this website's server to SEDA's internal contacts register, which is in the portal and not on this website. That is a deliberate limitation — the fewer places that hold your data, the fewer places can lose it.",
             },
           ],
         },
@@ -687,6 +770,10 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                   "Nom, organisation (facultatif), courriel, objet et message.",
                 ],
                 [
+                  "Calculateur pour propriétaires (page /propietarios/calculadora)",
+                  "Nom et courriel (obligatoires) ; si vous les indiquez, téléphone, commune et nombre de chambres de votre bien ; et la case de consentement, que vous devez cocher vous-même. Le prix par nuit et le taux d'occupation que vous saisissez servent uniquement à calculer l'estimation à l'écran : ils ne sont pas transmis à notre registre de contacts et ne sont pas conservés.",
+                ],
+                [
                   "Réservation d'un appel avec Calendly (pages /meet et /founding-owners)",
                   "Nom, courriel, jour et heure choisis, votre fuseau horaire et, si vous l'écrivez, ce que vous souhaitez nous dire pour préparer la réunion. Détails sous « Réservation d'un appel avec Calendly ».",
                 ],
@@ -736,7 +823,16 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                   "Organiser et tenir l'appel vidéo que vous réservez avec Calendly.",
                   "Article 6.1.b du RGPD : mesures précontractuelles prises à votre demande.",
                 ],
+                [
+                  "Vous contacter pour évaluer la gestion de votre bien, lorsque vous laissez vos coordonnées dans le calculateur pour propriétaires.",
+                  "Article 6.1.a du RGPD : votre consentement, que vous donnez en cochant la case du formulaire. Nous conservons la version de la présente politique que vous avez vue en le donnant.",
+                ],
               ],
+            },
+            {
+              tipo: "parrafo",
+              texto:
+                "Vous pouvez retirer à tout moment le consentement donné dans le calculateur en écrivant à {email}. Le retrait ne porte pas atteinte à la licéité du traitement effectué avant ce retrait.",
             },
             {
               tipo: "parrafo",
@@ -755,8 +851,13 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
               filas: [
                 [
                   "Vercel Inc.",
-                  "Héberge le site et exécute la fonction qui traite le formulaire. Journalise les données techniques de chaque requête, y compris l'adresse IP.",
-                  "États-Unis. La fonction du formulaire s'exécute à Francfort (UE).",
+                  "Héberge le site et le portail de SEDA (portal.sedaprivatehomes.com) et exécute les fonctions qui traitent les formulaires et transmettent au portail ce que vous laissez dans le calculateur. Journalise les données techniques de chaque requête, y compris l'adresse IP.",
+                  "États-Unis. Les fonctions du site et du portail s'exécutent à Francfort (UE).",
+                ],
+                [
+                  "Supabase Inc.",
+                  "Héberge la base de données du registre interne de contacts de SEDA (CRM), où sont conservées les coordonnées que vous laissez dans le calculateur pour propriétaires. Seul le serveur d'administration de SEDA y accède.",
+                  "États-Unis. La base de données se trouve à Francfort (UE).",
                 ],
                 [
                   "Resend, Inc.",
@@ -773,12 +874,17 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
+                "Si vous laissez vos coordonnées dans le calculateur pour propriétaires, le serveur de ce site les transmet au portail de SEDA, qui les conserve dans son registre interne de contacts (hébergé chez Supabase et Vercel, voir ci-dessus). À leur arrivée, le portail avertit la boîte {email} par un courriel, également acheminé par Resend, qui ne contient aucune donnée personnelle.",
+            },
+            {
+              tipo: "parrafo",
+              texto:
                 "Si vous réservez un appel, vos données sont aussi traitées par Calendly et Google Ireland Limited, comme expliqué sous « Réservation d'un appel avec Calendly ». Il n'y a pas d'autres destinataires. Nous ne vendons ni ne cédons de données à des tiers à des fins commerciales. Elles ne seraient communiquées aux autorités ou organismes publics que si une norme l'exigeait.",
             },
             {
               tipo: "parrafo",
               texto:
-                "Vercel, Resend et Calendly sont des sociétés américaines : le traitement implique un transfert international de données hors de l'Espace économique européen. Vous pouvez nous demander des informations sur les garanties applicables à ce transfert en écrivant à {email}.",
+                "Vercel, Resend, Supabase et Calendly sont des sociétés américaines : le traitement implique un transfert international de données hors de l'Espace économique européen. Vous pouvez nous demander des informations sur les garanties applicables à ce transfert en écrivant à {email}.",
             },
           ],
         },
@@ -850,7 +956,12 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Le contrôle de fréquence du formulaire conserve votre adresse IP en mémoire pendant dix minutes au maximum : elle n'est écrite dans aucune base de données et ne survit pas au redémarrage du service. Les journaux techniques de l'hébergeur suivent ses propres délais, que nous ne décidons pas.",
+                "Les coordonnées que vous laissez dans le calculateur pour propriétaires sont conservées dans le registre interne de contacts de SEDA pendant 1 an à compter de notre dernier contact avec vous (appel, courriel ou visite), si vous ne signez pas de contrat de gestion ; à l'expiration de ce délai, elles sont supprimées. Si vous signez, elles rejoignent le dossier du propriétaire et sont conservées selon ce contrat. Si vous demandez leur suppression, nous les effaçons plus tôt.",
+            },
+            {
+              tipo: "parrafo",
+              texto:
+                "Le contrôle de fréquence des formulaires conserve votre adresse IP en mémoire pendant dix minutes au maximum : elle n'est écrite dans aucune base de données et ne survit pas au redémarrage du service. Les journaux techniques de l'hébergeur suivent ses propres délais, que nous ne décidons pas.",
             },
           ],
         },
@@ -861,7 +972,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Ce site n'a pas de base de données propre. Il n'y a ni registre d'utilisateurs, ni CRM connecté, ni stockage de formulaires : ce que vous envoyez devient un courriel et vit dans une boîte. C'est une limitation délibérée — moins d'endroits conservent vos données, moins d'endroits peuvent les perdre.",
+                "Ce site n'a pas de base de données propre ni de registre d'utilisateurs : ce que vous envoyez par le formulaire de contact devient un courriel et vit dans une boîte. La seule exception est le calculateur pour propriétaires : ce que vous y laissez, et seulement cela, est transmis par le serveur de ce site au registre interne de contacts de SEDA, qui se trouve dans le portail et non sur ce site. C'est une limitation délibérée — moins d'endroits conservent vos données, moins d'endroits peuvent les perdre.",
             },
           ],
         },
@@ -986,6 +1097,10 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                   "Name, Organisation (freiwillig), E-Mail-Adresse, Betreff und Nachricht.",
                 ],
                 [
+                  "Rechner für Eigentümer (Seite /propietarios/calculadora)",
+                  "Name und E-Mail-Adresse (Pflichtangaben); auf Wunsch Telefonnummer, Gemeinde und Zahl der Schlafzimmer Ihrer Immobilie; sowie das Einwilligungskästchen, das Sie selbst anklicken müssen. Der Preis pro Nacht und die Auslastung, die Sie eingeben, dienen nur der Berechnung der Schätzung auf dem Bildschirm: Sie werden nicht an unser Kontaktregister weitergeleitet und nicht gespeichert.",
+                ],
+                [
                   "Buchung eines Gesprächs über Calendly (Seiten /meet und /founding-owners)",
                   "Name, E-Mail-Adresse, gewählter Tag und Uhrzeit, Ihre Zeitzone und, sofern Sie es schreiben, was Sie uns zur Vorbereitung des Gesprächs mitteilen möchten. Einzelheiten unter „Buchung eines Gesprächs über Calendly“.",
                 ],
@@ -1035,7 +1150,16 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                   "Das Videogespräch organisieren und führen, das Sie über Calendly buchen.",
                   "Art. 6 Abs. 1 lit. b DSGVO: vorvertragliche Maßnahmen auf Ihre Anfrage hin.",
                 ],
+                [
+                  "Sie kontaktieren, um die Verwaltung Ihrer Immobilie zu prüfen, wenn Sie Ihre Daten im Rechner für Eigentümer hinterlassen.",
+                  "Art. 6 Abs. 1 lit. a DSGVO: Ihre Einwilligung, die Sie durch Anklicken des Kästchens im Formular erteilen. Wir speichern die Fassung dieser Erklärung, die Sie bei der Einwilligung gesehen haben.",
+                ],
               ],
+            },
+            {
+              tipo: "parrafo",
+              texto:
+                "Die im Rechner erteilte Einwilligung können Sie jederzeit widerrufen, indem Sie an {email} schreiben. Der Widerruf berührt nicht die Rechtmäßigkeit der bis zum Widerruf erfolgten Verarbeitung.",
             },
             {
               tipo: "parrafo",
@@ -1054,8 +1178,13 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
               filas: [
                 [
                   "Vercel Inc.",
-                  "Hostet die Website und führt die Funktion aus, die das Formular verarbeitet. Protokolliert technische Daten jeder Anfrage, einschließlich der IP-Adresse.",
-                  "Vereinigte Staaten. Die Formularfunktion läuft in Frankfurt (EU).",
+                  "Hostet die Website und das Portal von SEDA (portal.sedaprivatehomes.com) und führt die Funktionen aus, die die Formulare verarbeiten und das, was Sie im Rechner hinterlassen, an das Portal weiterleiten. Protokolliert technische Daten jeder Anfrage, einschließlich der IP-Adresse.",
+                  "Vereinigte Staaten. Die Funktionen der Website und des Portals laufen in Frankfurt (EU).",
+                ],
+                [
+                  "Supabase Inc.",
+                  "Hostet die Datenbank des internen Kontaktregisters von SEDA (CRM), in dem die Daten gespeichert werden, die Sie im Rechner für Eigentümer hinterlassen. Nur der Verwaltungsserver von SEDA greift darauf zu.",
+                  "Vereinigte Staaten. Die Datenbank befindet sich in Frankfurt (EU).",
                 ],
                 [
                   "Resend, Inc.",
@@ -1072,12 +1201,17 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
+                "Wenn Sie Ihre Daten im Rechner für Eigentümer hinterlassen, leitet der Server dieser Website sie an das Portal von SEDA weiter, das sie in seinem internen Kontaktregister speichert (gehostet bei Supabase und Vercel, siehe oben). Bei Eingang benachrichtigt das Portal das Postfach {email} mit einer E-Mail, die ebenfalls über Resend zugestellt wird und keine personenbezogenen Daten enthält.",
+            },
+            {
+              tipo: "parrafo",
+              texto:
                 "Wenn Sie ein Gespräch buchen, verarbeiten auch Calendly und Google Ireland Limited Ihre Daten, wie unter „Buchung eines Gesprächs über Calendly“ erläutert. Weitere Empfänger gibt es nicht. Wir verkaufen oder übermitteln keine Daten zu kommerziellen Zwecken an Dritte. An Behörden oder öffentliche Stellen würden sie nur übermittelt, wenn eine Rechtsvorschrift das verlangt.",
             },
             {
               tipo: "parrafo",
               texto:
-                "Vercel, Resend und Calendly sind US-amerikanische Unternehmen: Die Verarbeitung umfasst eine internationale Datenübermittlung außerhalb des Europäischen Wirtschaftsraums. Informationen zu den für diese Übermittlung geltenden Garantien erhalten Sie auf Anfrage unter {email}.",
+                "Vercel, Resend, Supabase und Calendly sind US-amerikanische Unternehmen: Die Verarbeitung umfasst eine internationale Datenübermittlung außerhalb des Europäischen Wirtschaftsraums. Informationen zu den für diese Übermittlung geltenden Garantien erhalten Sie auf Anfrage unter {email}.",
             },
           ],
         },
@@ -1149,7 +1283,12 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Die Frequenzbegrenzung des Formulars hält Ihre IP-Adresse höchstens zehn Minuten im Arbeitsspeicher: Sie wird in keine Datenbank geschrieben und überlebt keinen Neustart des Dienstes. Die technischen Protokolle des Hosting-Anbieters folgen dessen eigenen Fristen, über die wir nicht entscheiden.",
+                "Die Daten, die Sie im Rechner für Eigentümer hinterlassen, werden im internen Kontaktregister von SEDA 1 Jahr ab unserem letzten Kontakt mit Ihnen (Anruf, E-Mail oder Besuch) aufbewahrt, wenn Sie keinen Verwaltungsvertrag abschließen; nach Ablauf dieser Frist werden sie gelöscht. Schließen Sie einen Vertrag ab, gehen sie in die Akte des Eigentümers über und werden entsprechend diesem Vertrag aufbewahrt. Wenn Sie ihre Löschung verlangen, löschen wir sie früher.",
+            },
+            {
+              tipo: "parrafo",
+              texto:
+                "Die Frequenzbegrenzung der Formulare hält Ihre IP-Adresse höchstens zehn Minuten im Arbeitsspeicher: Sie wird in keine Datenbank geschrieben und überlebt keinen Neustart des Dienstes. Die technischen Protokolle des Hosting-Anbieters folgen dessen eigenen Fristen, über die wir nicht entscheiden.",
             },
           ],
         },
@@ -1160,7 +1299,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Diese Website hat keine eigene Datenbank. Es gibt kein Nutzerregister, kein angebundenes CRM und keinen Formularspeicher: Was Sie senden, wird zu einer E-Mail und liegt in einem Postfach. Das ist eine bewusste Beschränkung — je weniger Orte Ihre Daten halten, desto weniger Orte können sie verlieren.",
+                "Diese Website hat keine eigene Datenbank und kein Nutzerregister: Was Sie über das Kontaktformular senden, wird zu einer E-Mail und liegt in einem Postfach. Die einzige Ausnahme ist der Rechner für Eigentümer: Was Sie dort hinterlassen, und nur das, leitet der Server dieser Website an das interne Kontaktregister von SEDA weiter, das im Portal liegt und nicht auf dieser Website. Das ist eine bewusste Beschränkung — je weniger Orte Ihre Daten halten, desto weniger Orte können sie verlieren.",
             },
           ],
         },

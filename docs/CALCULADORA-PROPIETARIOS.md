@@ -68,7 +68,7 @@ timeout de 8 s al portal. Si el portal no responde 2xx, el visitante ve un error
   "municipio": "Estepona",                // opcional, hasta 80
   "dormitorios": 3,                       // opcional, 1-30
   "consentimiento": true,
-  "consentimiento_version": "2026-10-15"  // PRIVACIDAD.actualizado
+  "consentimiento_version": "2026-11-04"  // PRIVACIDAD.actualizado
 }
 ```
 
@@ -78,11 +78,11 @@ Sin autenticación: el portal acepta llamadas sin `Origin` (servidor a servidor)
 
 ## Antes de encender el flag
 
-1. **Política de privacidad.** `lib/legal/privacidad.ts` dice hoy que la única entrada de datos del sitio es el formulario
-   de contacto (un correo vía Resend, sin base de datos). Con este formulario deja de ser verdad: hay un nuevo tratamiento
-   (nombre, correo, teléfono, datos de la propiedad y la estimación), una nueva finalidad y un nuevo destinatario (el CRM de
-   SEDA en el portal). Hay que actualizar `datos`, `finalidad`, `destinatarios` y `conservacion` en los cuatro idiomas.
-   No se ha tocado `lib/legal/`: es texto legal y lo decide Ángel.
+1. **Política de privacidad.** Redactada el 4-nov-2026 (`lib/legal/privacidad.ts`, es/en/fr/de, `actualizado: "2026-11-04"`):
+   `datos`, `finalidad` (art. 6.1.a, retirada del consentimiento), `destinatarios` (Vercel, Supabase, aviso a `info@` sin datos
+   personales), `conservacion` (1 año desde el último contacto si no hay contrato) y `donde-no-estan`.
+   `tests/privacidad-calculadora.test.ts` falla si algún idioma deja de mencionar la calculadora. **Texto legal pendiente de
+   que lo revise Ángel o la asesora** antes de encender el flag; los puntos sin verificar están en el PR #104.
 2. **Endpoint de CRM-PROPIETARIOS**: contrato alineado (arriba). Falta aplicar su PROPUESTA en producción; hasta entonces el portal responde 503.
 3. **Revisión de los textos nuevos** (`calculadora.*` en `messages/*.json`, los cuatro idiomas). Marcados como TEXTO NUEVO.
 4. **Firewall de Vercel**: regla de frecuencia para `/api/leads/propietario` (el límite en código es por instancia).
