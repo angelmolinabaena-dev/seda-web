@@ -1636,6 +1636,7 @@
       "needs_estimate": "Para enviar, complete primero el precio por noche y la ocupación.",
       "error": "No hemos podido enviar su solicitud. Inténtelo de nuevo en unos minutos o escríbanos desde la página de contacto.",
       "error_rate": "Demasiados intentos seguidos. Espere unos minutos e inténtelo de nuevo.",
+      "error_rate_minuto": "Hay demasiadas solicitudes ahora mismo. Espere un minuto y vuelva a intentarlo.",
       "error_contact": "Ir a contacto",
       "telefono_hint": "Si no es un número español, escríbalo con el prefijo de su país, por ejemplo +44 para el Reino Unido.",
       "telefono_prefijo": "Escriba el teléfono con el prefijo internacional de su país, por ejemplo +44 7700 900123. Sin prefijo solo podemos reconocer un número español de 9 cifras.",

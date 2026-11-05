@@ -170,19 +170,20 @@ export function estimar(precioNoche: number, ocupacionPct: number, hoy: string =
 
 /* ── El formulario: qué hace con la respuesta de la ruta (V4-04) ─────────── */
 
-export type EstadoFormulario = "reposo" | "enviando" | "ok" | "error" | "limite" | "datos"
+export type EstadoFormulario = "reposo" | "enviando" | "ok" | "error" | "limite" | "limite_minuto" | "datos"
 
 /**
  * Lo que el formulario hace con la respuesta de /api/leads/propietario.
  * Un dato que el portal no aceptaría NO es «inténtelo en unos minutos»:
  *   · 400 `phone_needs_prefix` → «telefono»: el campo pide el prefijo internacional;
  *   · 422 `rejected_data` (el portal dijo 400) → «datos»: revise sus datos;
- *   · 429 → límite; cualquier otro fallo (5xx, 502, red) → error genérico.
+ *   · 429 `demasiadas_solicitudes` (límite por visitante del portal) → «limite_minuto»: espere un minuto;
+ *   · otro 429 → límite; cualquier otro fallo (5xx, 502, red) → error genérico.
  */
 export function estadoTrasRespuesta(status: number, error: string | undefined): EstadoFormulario | "telefono" {
   if (status >= 200 && status < 300) return "ok"
   if (status === 400 && error === "phone_needs_prefix") return "telefono"
   if (status === 422) return "datos"
-  if (status === 429) return "limite"
+  if (status === 429) return error === "demasiadas_solicitudes" ? "limite_minuto" : "limite"
   return "error"
 }

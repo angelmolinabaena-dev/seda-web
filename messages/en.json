@@ -1636,6 +1636,7 @@
       "needs_estimate": "To send, first fill in the nightly rate and the occupancy.",
       "error": "We could not send your request. Please try again in a few minutes or write to us from the contact page.",
       "error_rate": "Too many attempts in a row. Wait a few minutes and try again.",
+      "error_rate_minuto": "Too many requests right now. Wait a minute and try again.",
       "error_contact": "Go to contact",
       "telefono_hint": "If it is not a Spanish number, write it with your country code, for example +44 for the United Kingdom.",
       "telefono_prefijo": "Please write the phone number with your international country code, for example +44 7700 900123. Without a code we can only recognise a 9-digit Spanish number.",

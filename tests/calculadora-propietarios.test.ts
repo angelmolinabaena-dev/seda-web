@@ -443,6 +443,73 @@ describe("POST /api/leads/propietario", () => {
       expect(r.headers.get("retry-after")).toBeTruthy()
     })
 
+    describe("V4-M06: límite por visitante en el portal", () => {
+      const cabecerasEnviadas = () => new Headers((enviado.mock.calls[0] as [string, RequestInit])[1].headers as HeadersInit)
+      const sinIp = () =>
+        new Request("http://localhost/api/leads/propietario", {
+          method: "POST",
+          headers: { "content-type": "application/json", origin: "http://localhost" },
+          body: JSON.stringify(LEAD),
+        })
+
+      it("manda X-Visitor-Ip con la primera IP de x-forwarded-for", async () => {
+        const { POST } = await cargarRuta()
+        const r = await POST(peticion(LEAD, { "x-forwarded-for": "198.51.100.20, 10.0.0.1" }))
+        expect(r.status).toBe(200)
+        expect(cabecerasEnviadas().get("x-visitor-ip")).toBe("198.51.100.20")
+      })
+
+      it("sin x-forwarded-for usa x-real-ip", async () => {
+        const { POST } = await cargarRuta()
+        const req = new Request("http://localhost/api/leads/propietario", {
+          method: "POST",
+          headers: { "content-type": "application/json", origin: "http://localhost", "x-real-ip": "198.51.100.21" },
+          body: JSON.stringify(LEAD),
+        })
+        await POST(req)
+        expect(cabecerasEnviadas().get("x-visitor-ip")).toBe("198.51.100.21")
+      })
+
+      it("sin IP del visitante NO manda la cabecera", async () => {
+        const { POST } = await cargarRuta()
+        expect((await POST(sinIp())).status).toBe(200)
+        expect(cabecerasEnviadas().has("x-visitor-ip")).toBe(false)
+      })
+
+      it("la IP no va en el cuerpo, ni en la firma, ni en los logs", async () => {
+        enviado.mockResolvedValueOnce(new Response("boom", { status: 500 }))
+        const { POST } = await cargarRuta()
+        await POST(peticion(LEAD, { "x-forwarded-for": "198.51.100.22" }))
+        const [, init] = enviado.mock.calls[0] as [string, RequestInit]
+        expect(String(init.body)).not.toContain("198.51.100.22")
+        cabecerasEnviadas().forEach((valor, nombre) => {
+          if (nombre !== "x-visitor-ip") expect(valor).not.toContain("198.51.100.22")
+        })
+        const log = JSON.stringify([...(console.error as ReturnType<typeof vi.fn>).mock.calls, ...(console.warn as ReturnType<typeof vi.fn>).mock.calls])
+        expect(log).not.toContain("198.51.100.22")
+      })
+
+      it("429 demasiadas_solicitudes del portal → 429 con ese código y el formulario dice «espere un minuto»", async () => {
+        enviado.mockResolvedValueOnce(new Response('{"error":"demasiadas_solicitudes"}', { status: 429 }))
+        const { POST } = await cargarRuta()
+        const r = await POST(peticion())
+        expect(r.status).toBe(429)
+        const cuerpo = (await r.json()) as { error: string }
+        expect(cuerpo).toEqual({ ok: false, error: "demasiadas_solicitudes" })
+        expect(estadoTrasRespuesta(r.status, cuerpo.error)).toBe("limite_minuto")
+        expect(estadoTrasRespuesta(429, "rate_limited")).toBe("limite")
+      })
+
+      it("el texto «espere un minuto» existe en los cuatro idiomas y es distinto del genérico", async () => {
+        for (const l of ["es", "en", "fr", "de"]) {
+          const m = (await import(`@/messages/${l}.json`)).default.calculadora.form
+          expect(m.error_rate_minuto).toBeTruthy()
+          expect(m.error_rate_minuto).not.toBe(m.error)
+          expect(m.error_rate_minuto).not.toBe(m.error_rate)
+        }
+      })
+    })
+
     it("la página existe y el sitemap la lista en los cuatro idiomas", async () => {
       const sitemap = (await import("@/app/sitemap")).default
       const urls = sitemap().map((e) => e.url).filter((u) => u.includes("/propietarios/calculadora"))
