@@ -1636,6 +1636,7 @@
       "needs_estimate": "Zum Senden tragen Sie zuerst den Preis pro Nacht und die Auslastung ein.",
       "error": "Wir konnten Ihre Anfrage nicht senden. Versuchen Sie es in einigen Minuten erneut oder schreiben Sie uns über die Kontaktseite.",
       "error_rate": "Zu viele Versuche hintereinander. Warten Sie einige Minuten und versuchen Sie es erneut.",
+      "error_rate_minuto": "Im Moment gehen zu viele Anfragen ein. Warten Sie eine Minute und versuchen Sie es erneut.",
       "error_contact": "Zur Kontaktseite",
       "telefono_hint": "Wenn es keine spanische Nummer ist, schreiben Sie sie mit der Vorwahl Ihres Landes, zum Beispiel +49 für Deutschland.",
       "telefono_prefijo": "Bitte schreiben Sie die Telefonnummer mit der internationalen Vorwahl Ihres Landes, zum Beispiel +49 151 23456789. Ohne Vorwahl können wir nur eine 9-stellige spanische Nummer erkennen.",

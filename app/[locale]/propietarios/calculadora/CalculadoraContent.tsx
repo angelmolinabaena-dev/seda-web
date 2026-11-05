@@ -434,9 +434,11 @@ export function CalculadoraContent() {
                 </span>
               </label>
 
-              {(estado === "error" || estado === "limite" || estado === "datos") && (
+              {(estado === "error" || estado === "limite" || estado === "limite_minuto" || estado === "datos") && (
                 <div role="alert" className="border-l-2 border-[#b85432] bg-[#b85432]/8 px-4 py-3 text-[0.9rem] text-foreground/85">
-                  {estado === "limite"
+                  {estado === "limite_minuto"
+                    ? t("calculadora.form.error_rate_minuto")
+                    : estado === "limite"
                     ? t("calculadora.form.error_rate")
                     : estado === "datos"
                       ? t("calculadora.form.error_datos")

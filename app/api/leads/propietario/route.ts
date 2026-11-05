@@ -27,6 +27,13 @@ import { cabecerasFirmaPortal, secretoLead } from "@/lib/lead-firma"
     se puede llevar a E.164, 400 `phone_needs_prefix` y el formulario pide el
     prefijo internacional, sin llamar al portal.
   · No se escribe en los logs ningún dato personal: solo el estado de la respuesta.
+  · V4-M06: el portal limita por VISITANTE (5/min) leyendo `X-Visitor-Ip`, que
+    solo mira tras comprobar la firma HMAC. Se manda la IP del visitante (primera
+    de x-forwarded-for, o x-real-ip); si no hay, no se manda la cabecera (el
+    portal cae a la IP de este servidor). Va SOLO como cabecera: ni en la firma,
+    ni en el cuerpo, ni en los logs. Si el portal contesta 429
+    `demasiadas_solicitudes`, se devuelve 429 con ese mismo código y el
+    formulario dice «espere un minuto».
   · LEADS-RUTA-FIRMADA (V4-01): el POST al portal va FIRMADO con
     `SEDA_LEADS_HMAC_SECRET` (`Authorization: HMAC-Lead …` + `X-Timestamp`,
     lib/lead-firma.ts). Sin secreto (o con menos de 32 caracteres) no se llama
@@ -37,6 +44,12 @@ import { cabecerasFirmaPortal, secretoLead } from "@/lib/lead-firma"
 const MAX_BODY_BYTES = 4 * 1024
 const TIMEOUT_PORTAL_MS = 8_000
 const limitar = crearLimitador(5, 10 * 60 * 1000)
+
+/** IP del visitante para el límite del portal; undefined si no la hay (no se manda). */
+function ipVisitante(req: Request): string | undefined {
+  const ip = clientKey(req)
+  return ip && ip !== "unknown" ? ip : undefined
+}
 
 const json = (body: Record<string, unknown>, init?: ResponseInit) => NextResponse.json(body, init)
 
@@ -91,12 +104,14 @@ export async function POST(req: Request) {
 
   // UNA serialización: el mismo texto va a la firma y al body.
   const cuerpo = JSON.stringify(cuerpoPortal(v.lead))
+  const visitante = ipVisitante(req)
   try {
     const resp = await fetch(ENDPOINT_PORTAL_LEADS_PROPIETARIO, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         ...cabecerasFirmaPortal({ secreto, url: ENDPOINT_PORTAL_LEADS_PROPIETARIO, cuerpo, ahora: new Date() }),
+        ...(visitante ? { "X-Visitor-Ip": visitante } : {}),
       },
       body: cuerpo,
       signal: AbortSignal.timeout(TIMEOUT_PORTAL_MS),
@@ -107,6 +122,13 @@ export async function POST(req: Request) {
       // CHECK), no una avería: reintentar «en unos minutos» daría lo mismo.
       // Se dice como dato (422) y el formulario pide revisar los datos.
       if (resp.status === 400) return json({ ok: false, error: "rejected_data" }, { status: 422 })
+      // V4-M06: límite por visitante del portal (5/min). Ventana de un minuto.
+      if (resp.status === 429) {
+        const rc = (await resp.json().catch(() => ({}))) as { error?: string }
+        if (rc.error === "demasiadas_solicitudes") {
+          return json({ ok: false, error: "demasiadas_solicitudes" }, { status: 429, headers: { "Retry-After": "60" } })
+        }
+      }
       return json({ ok: false, error: "send_failed" }, { status: 502 })
     }
     return json({ ok: true })
