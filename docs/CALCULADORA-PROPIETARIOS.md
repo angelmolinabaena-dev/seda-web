@@ -22,11 +22,23 @@ en Vercel exige un redeploy**. Se verificó con `next build` + `next start`, fla
 Todo sale de `lib/tarifa` (tarifa v6, `lib/tarifa/tarifa.json`); la calculadora no escribe ninguna cifra.
 
 ```
-alojamiento anual = ocupación × 365 × precio medio por noche
-comisión SEDA     = la menor de  21 % × (alojamiento − comisión del canal)  y  20 % × alojamiento
-neto              = alojamiento − comisión del canal − comisión SEDA      (antes de impuestos)
+pagado por los huéspedes = ocupación × 365 × precio medio por noche
+cuota IVA alojamiento    = pagado × 10 / 110      (desde el 1-dic-2026; 0 antes)
+alojamiento anual        = pagado − cuota
+comisión del canal       = % del canal × pagado   (el canal cobra sobre el precio)
+comisión SEDA            = la menor de  21 % × (alojamiento − comisión del canal)  y  20 % × alojamiento
+neto                     = alojamiento − comisión del canal − comisión SEDA      (antes de impuestos)
 IVA del 21 % de la comisión: aparte, no está restado del neto
 ```
+
+**El IVA del alojamiento (V4-04, 5-nov-2026).** Desde el 1-dic-2026 (RDL 29/2026), una estancia de 30 noches o menos
+tributa al 10 % y el precio al huésped es IVA incluido. seda_os quita esa cuota de la base de la comisión (D-3, #1129).
+seda_os la saca con `ivaAlojamientoPorCobro`, que reparte por cobros; la web no tiene cobros ni estancias, así que usa
+la regla del precio: **todo el precio por noche es IVA incluido, como si todas las estancias fueran de ≤ 30 noches**.
+110 €/noche ⇒ 100 € de alojamiento. La ayuda del precio lo dice, en los cuatro idiomas, y el resultado enseña la cuota
+quitada. La fecha se compara como texto `YYYY-MM-DD` en hora de Madrid. **Si el RDL no se convalida**, la fecha de
+`FECHA_CORTE_IVA_ALOJAMIENTO` (lib/calculadora-propietarios.ts) y los textos hay que retirarlos: la calculadora no lee
+`IVA_ALOJAMIENTO_RDL29` de seda_os.
 
 - Se enseñan **dos extremos**, como el simulador de `/propietarios`: reserva directa (0 % de canal)
   y un canal que cobra el 15 % (`TARIFA.ejemplos.canalPct`, el ejemplo de la tarifa; no es una media de mercado).
@@ -64,13 +76,20 @@ timeout de 8 s al portal. Si el portal no responde 2xx, el visitante ve un error
 {
   "nombre": "María García",
   "correo": "maria@example.com",          // en minúsculas
-  "telefono": null,                       // opcional; el portal lo normaliza a E.164
+  "telefono": null,                       // opcional; ya en E.164 (+447700900123), la regla de seda_os
   "municipio": "Estepona",                // opcional, hasta 80
   "dormitorios": 3,                       // opcional, 1-30
   "consentimiento": true,
   "consentimiento_version": "2026-11-04"  // PRIVACIDAD.actualizado
 }
 ```
+
+**El teléfono (V4-04).** Una sola regla: `normalizarTelefonoE164` de seda_os, copiada en `lib/telefono-e164.ts` y atada
+por el fixture `tests/fixtures/telefono-e164-contrato.json`, byte a byte en los dos repos, con la misma huella sha256 en
+los dos tests (`tests/telefono-e164-contrato.test.ts` aquí y allí). Lo que no se puede llevar a E.164 sin adivinar (p. ej.
+`07700 900123`, un móvil británico sin prefijo) se para en seda-web con 400 `phone_needs_prefix` y el formulario pide el
+prefijo internacional junto al campo. Lo que pasa viaja ya en E.164. Si aun así el portal responde 400 (un dato que no
+acepta), seda-web devuelve 422 `rejected_data` y el formulario pide revisar los datos; solo un 5xx o la red caída son 502.
 
 El portal es `.strict()`: cualquier otro campo da 400. `origen` (`web-calculadora`) y `base_juridica` (`consentimiento`) los pone el portal. La estimación no viaja ni se guarda en el CRM.
 

@@ -3,6 +3,7 @@ import { MAX_EMAIL_LENGTH, esEmailValido } from "@/lib/api-guards"
 import { HONEYPOT_FIELD, HONEYPOT_MAX } from "@/lib/contact-fields"
 import { OCUPACION_MAX, OCUPACION_MIN, estimar } from "@/lib/calculadora-propietarios"
 import { PRIVACIDAD } from "@/lib/legal/privacidad"
+import { normalizarTelefonoE164 } from "@/lib/telefono-e164"
 
 /*
   Lead de propietario — lo que `/api/leads/propietario` de seda-web valida y
@@ -23,7 +24,6 @@ export const ENDPOINT_PORTAL_LEADS_PROPIETARIO = "https://portal.sedaprivatehome
 export const ORIGEN_LEAD = "seda-web/calculadora-propietarios"
 
 export const LEAD_MAX = { nombre: 120, telefono: 40, municipio: 80 } as const
-const TELEFONO = /^[\d\s+()-]{6,}$/
 // Un campo de una línea no admite ningún carácter de control (ni U+2028/2029).
 const CONTROL = /[\x00-\x1f\x7f\u2028\u2029]/
 
@@ -82,11 +82,19 @@ export function validarLead(body: unknown): ResultadoLead {
   const email = typeof b.email === "string" ? b.email.trim() : ""
   if (email.length > MAX_EMAIL_LENGTH || !esEmailValido(email)) return fallo("invalid_email")
 
+  // V4-04: la regla del teléfono es la de seda_os (lib/telefono-e164.ts, copia
+  // atada por contrato). Lo que seda_os rechazaría se para AQUÍ, con un error
+  // que el formulario entiende («escriba el prefijo»), y no allí con un 502.
+  // Viaja ya en E.164: el portal lo normaliza otra vez y le da lo mismo.
   let telefono: string | undefined
   if (b.telefono !== undefined && b.telefono !== "") {
     const t = textoUnaLinea(b.telefono, LEAD_MAX.telefono)
-    if (t === null || (t.length > 0 && !TELEFONO.test(t))) return fallo("invalid_phone")
-    if (t.length > 0) telefono = t
+    if (t === null) return fallo("invalid_phone")
+    if (t.length > 0) {
+      const e164 = normalizarTelefonoE164(t)
+      if (e164 === null) return fallo("phone_needs_prefix")
+      telefono = e164
+    }
   }
 
   if (typeof b.locale !== "string" || !(routing.locales as readonly string[]).includes(b.locale)) {

@@ -5,7 +5,15 @@ import { ArrowRight, Check } from "lucide-react"
 import { useLocale, useTranslations } from "next-intl"
 import { Link } from "@/i18n/navigation"
 import { HONEYPOT_FIELD } from "@/lib/contact-fields"
-import { OCUPACION_MAX, OCUPACION_MIN, PRECIO_NOCHE_MAX, estimar } from "@/lib/calculadora-propietarios"
+import {
+  OCUPACION_MAX,
+  OCUPACION_MIN,
+  PRECIO_NOCHE_MAX,
+  estadoTrasRespuesta,
+  estimar,
+  type EstadoFormulario,
+} from "@/lib/calculadora-propietarios"
+import { normalizarTelefonoE164 } from "@/lib/telefono-e164"
 import { euros, type Idioma } from "@/lib/tarifa"
 import { ZONAS } from "@/lib/zonas"
 
@@ -25,7 +33,7 @@ import { ZONAS } from "@/lib/zonas"
   tarifa v6 de lib/tarifa. Aquí no hay ningún porcentaje escrito.
 */
 
-type Estado = "reposo" | "enviando" | "ok" | "error" | "limite"
+type Estado = EstadoFormulario
 
 const CLASE_CAMPO =
   "bg-transparent border-b border-border py-2 text-base text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:border-foreground transition-colors [&:user-invalid]:border-[#b85432] [&:user-invalid]:text-[#b85432]"
@@ -79,6 +87,11 @@ export function CalculadoraContent() {
   // Formulario.
   const [consentimiento, setConsentimiento] = useState(false)
   const [estado, setEstado] = useState<Estado>("reposo")
+  // Teléfono: la misma regla que seda_os. Si no se puede llevar a E.164, se pide
+  // el prefijo AQUÍ, junto al campo, antes de enviar nada.
+  const [telefono, setTelefono] = useState("")
+  const [pedirPrefijo, setPedirPrefijo] = useState(false)
+  const telefonoSinPrefijo = telefono.trim() !== "" && normalizarTelefonoE164(telefono) === null
 
   const precio = Number(precioTxt.replace(",", "."))
   const est = ocupacion === null ? null : estimar(precio, ocupacion)
@@ -86,6 +99,11 @@ export function CalculadoraContent() {
   async function enviar(ev: FormEvent<HTMLFormElement>) {
     ev.preventDefault()
     if (!est || ocupacion === null || estado === "enviando") return
+    if (telefonoSinPrefijo) {
+      setPedirPrefijo(true)
+      ev.currentTarget.querySelector<HTMLInputElement>('input[name="telefono"]')?.focus()
+      return
+    }
     const datos = new FormData(ev.currentTarget)
     const dorm = Number(dormitorios)
     setEstado("enviando")
@@ -96,7 +114,7 @@ export function CalculadoraContent() {
         body: JSON.stringify({
           nombre: String(datos.get("nombre") ?? ""),
           email: String(datos.get("email") ?? ""),
-          telefono: String(datos.get("telefono") ?? ""),
+          telefono: telefono.trim(),
           consentimiento,
           locale,
           municipio: municipio.trim(),
@@ -106,7 +124,12 @@ export function CalculadoraContent() {
           [HONEYPOT_FIELD]: String(datos.get(HONEYPOT_FIELD) ?? ""),
         }),
       })
-      setEstado(resp.ok ? "ok" : resp.status === 429 ? "limite" : "error")
+      const cuerpo = (await resp.json().catch(() => ({}))) as { error?: string }
+      const siguiente = estadoTrasRespuesta(resp.status, cuerpo.error)
+      if (siguiente === "telefono") {
+        setPedirPrefijo(true)
+        setEstado("reposo")
+      } else setEstado(siguiente)
     } catch {
       setEstado("error")
     }
@@ -282,6 +305,12 @@ export function CalculadoraContent() {
                   <p className="font-mono text-[10px] tracking-[0.18em] uppercase text-muted-foreground mt-8">
                     {t("calculadora.results.como")}
                   </p>
+                  {est.ivaAlojamientoIncluido && (
+                    <p className="text-[0.85rem] leading-relaxed text-foreground/85 mt-6">
+                      {t("calculadora.results.iva_alojamiento", { pagado: e(est.pagadoHuespedes), cuota: e(est.cuotaIvaAlojamiento) })}
+                    </p>
+                  )}
+
                   <p className="text-[0.85rem] leading-relaxed text-muted-foreground mt-2">{t("calculadora.results.como_body")}</p>
                 </>
               ) : (
@@ -339,18 +368,33 @@ export function CalculadoraContent() {
                   {(p) => <input {...p} name="email" type="email" required maxLength={254} autoComplete="email" className={CLASE_CAMPO} />}
                 </Campo>
               </div>
-              <Campo label={t("calculadora.form.telefono")}>
-                {(p) => (
-                  <input
-                    {...p}
-                    name="telefono"
-                    type="tel"
-                    maxLength={40}
-                    pattern={"[\\d\\s+\\(\\)\\-]{6,}"}
-                    autoComplete="tel"
-                    className={CLASE_CAMPO}
-                  />
-                )}
+              <Campo label={t("calculadora.form.telefono")} hint={t("calculadora.form.telefono_hint")}>
+                {(p) => {
+                  const avisar = pedirPrefijo && telefonoSinPrefijo
+                  const errorId = `${p.id}-prefijo`
+                  return (
+                    <>
+                      <input
+                        {...p}
+                        aria-describedby={[p["aria-describedby"], avisar ? errorId : undefined].filter(Boolean).join(" ") || undefined}
+                        aria-invalid={avisar || undefined}
+                        name="telefono"
+                        type="tel"
+                        maxLength={40}
+                        autoComplete="tel"
+                        value={telefono}
+                        onChange={(ev) => setTelefono(ev.target.value)}
+                        onBlur={() => setPedirPrefijo(telefonoSinPrefijo)}
+                        className={`${CLASE_CAMPO} ${avisar ? "border-[#b85432]" : ""}`}
+                      />
+                      {avisar && (
+                        <p id={errorId} role="alert" className="text-[0.85rem] leading-relaxed text-[#b85432]">
+                          {t("calculadora.form.telefono_prefijo")}
+                        </p>
+                      )}
+                    </>
+                  )
+                }}
               </Campo>
 
               {/* Trampa para bots: fuera de pantalla, fuera del orden de tabulación, invisible a lectores de pantalla. */}
@@ -390,9 +434,13 @@ export function CalculadoraContent() {
                 </span>
               </label>
 
-              {(estado === "error" || estado === "limite") && (
+              {(estado === "error" || estado === "limite" || estado === "datos") && (
                 <div role="alert" className="border-l-2 border-[#b85432] bg-[#b85432]/8 px-4 py-3 text-[0.9rem] text-foreground/85">
-                  {estado === "limite" ? t("calculadora.form.error_rate") : t("calculadora.form.error")}{" "}
+                  {estado === "limite"
+                    ? t("calculadora.form.error_rate")
+                    : estado === "datos"
+                      ? t("calculadora.form.error_datos")
+                      : t("calculadora.form.error")}{" "}
                   {estado === "error" && (
                     <Link href="/contacto?type=owner" className="underline underline-offset-4">
                       {t("calculadora.form.error_contact")}

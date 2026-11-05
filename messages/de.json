@@ -1590,7 +1590,7 @@
       "precio": {
         "label": "Durchschnittlicher Preis pro Nacht, den Sie erwarten",
         "placeholder": "Beispiel: 250",
-        "hint": "Übernachtungspreis ohne Reinigung. Es ist Ihre erwartete Zahl, kein Marktdurchschnitt: Wir haben keinen belegten, den wir nennen könnten."
+        "hint": "Was der Gast pro Nacht für die Unterkunft zahlt, ohne Reinigung. Bis zum 30. November 2026 ist sie von der MwSt. befreit. Ab dem 1. Dezember enthält der Preis bei Aufenthalten von 30 Nächten oder weniger 10 % MwSt., und der Rechner zieht sie vor der Berechnung ab: 110 € pro Nacht sind 100 € Übernachtung. Es ist Ihre erwartete Zahl, kein Marktdurchschnitt: Wir haben keinen belegten, den wir nennen könnten."
       },
       "ocupacion": {
         "label": "Erwartete jährliche Auslastung",
@@ -1616,30 +1616,34 @@
         "iva": "MwSt. auf die Provision, zusätzlich"
       },
       "como": "So wird gerechnet",
-      "como_body": "Bruttoeinnahmen = Auslastung × 365 Nächte × Preis pro Nacht. Die Provision von SEDA ist der niedrigere Betrag aus [[tarifa.comision]] des Übernachtungsumsatzes nach Abzug der Kanalprovision und [[tarifa.tope]] des Übernachtungsumsatzes; auf die Reinigung wird sie nie berechnet. Die MwSt. von [[tarifa.iva]] auf die Provision kommt zusätzlich hinzu und ist nicht vom Nettobetrag abgezogen."
+      "como_body": "Bruttoeinnahmen = Auslastung × 365 Nächte × Preis pro Nacht; ab dem 1. Dezember 2026 ohne die im Preis enthaltenen 10 % MwSt. auf die Unterkunft (Preis ÷ 1,10), wie bei Aufenthalten von 30 Nächten oder weniger. Die Kanalprovision wird auf das berechnet, was der Gast zahlt. Die Provision von SEDA ist der niedrigere Betrag aus [[tarifa.comision]] des Übernachtungsumsatzes nach Abzug der Kanalprovision und [[tarifa.tope]] des Übernachtungsumsatzes; auf die Reinigung und auf die MwSt. der Unterkunft wird sie nie berechnet. Die MwSt. von [[tarifa.iva]] auf die Provision kommt zusätzlich hinzu und ist nicht vom Nettobetrag abgezogen.",
+      "iva_alojamiento": "Ab dem 1. Dezember 2026 enthält der Preis pro Nacht 10 % MwSt. auf die Unterkunft. Von den {pagado}, die die Gäste zahlen würden, sind {cuota} diese MwSt., die an das spanische Finanzamt abgeführt wird: Sie ist weder Ihre Einnahme noch Teil der Provisionsbasis und bereits aus den Bruttoeinnahmen herausgerechnet."
     },
     "aviso": {
       "label": "Wichtig",
-      "body": "Dies ist eine Schätzung, kein Angebot. Sie wird nur aus dem Preis und der Auslastung berechnet, die Sie eingeben, und ist weder eine Ergebnisprognose noch ein Renditeversprechen. MwSt. und Einkommensteuer (IRPF oder IRNR) hängen vom Einzelfall ab und sind nicht enthalten; ebenso wenig Nebenkosten und Kosten der Immobilie. Ein konkretes Angebot gibt es erst nach der Bewertung Ihres Hauses."
+      "body": "Dies ist eine Schätzung, kein Angebot. Sie wird nur aus dem Preis und der Auslastung berechnet, die Sie eingeben, und ist weder eine Ergebnisprognose noch ein Renditeversprechen. Die Einkommensteuer (IRPF oder IRNR) hängt vom Einzelfall ab und ist nicht enthalten; ebenso wenig Nebenkosten und Kosten der Immobilie. Ein konkretes Angebot gibt es erst nach der Bewertung Ihres Hauses."
     },
     "form": {
       "eyebrow": "— Sprechen Sie mit SEDA",
-      "h2": "Erhalten Sie Ihre Schätzung und lassen Sie sich von SEDA anrufen",
-      "body": "Hinterlassen Sie Ihre Daten: Wir senden die Schätzung, die Sie auf dem Bildschirm sehen, mit, und unser Team nimmt Kontakt mit Ihnen auf, um Ihr Haus zu bewerten.",
+      "h2": "Lassen Sie sich von SEDA anrufen, um Ihr Haus zu bewerten",
+      "body": "Hinterlassen Sie Ihren Namen und Ihre E-Mail und, wenn Sie möchten, Telefon, Ort und Anzahl der Schlafzimmer: Nur das erreicht uns, und unser Team nimmt Kontakt mit Ihnen auf, um Ihr Haus zu bewerten. Preis pro Nacht und Auslastung dienen nur der Berechnung auf dieser Seite: Sie werden weder an unser Kontaktregister gesendet noch gespeichert.",
       "nombre": "Name",
       "email": "E-Mail",
       "telefono": "Telefon (optional)",
-      "consent": "Ich habe die <privacidad>Datenschutzerklärung</privacidad> gelesen und bin damit einverstanden, dass SEDA meine Daten und die dieser Schätzung verarbeitet, um mich zur Verwaltung meiner Immobilie zu kontaktieren.",
-      "submit": "Meine Schätzung senden",
+      "consent": "Ich habe die <privacidad>Datenschutzerklärung</privacidad> gelesen und bin damit einverstanden, dass SEDA meine Kontaktdaten verarbeitet, um mich zur Verwaltung meiner Immobilie zu kontaktieren.",
+      "submit": "Meine Daten senden",
       "sending": "Wird gesendet …",
-      "needs_estimate": "Zum Senden tragen Sie zuerst den Preis pro Nacht und die Auslastung ein: Die Schätzung wird mit Ihren Daten übermittelt.",
+      "needs_estimate": "Zum Senden tragen Sie zuerst den Preis pro Nacht und die Auslastung ein.",
       "error": "Wir konnten Ihre Anfrage nicht senden. Versuchen Sie es in einigen Minuten erneut oder schreiben Sie uns über die Kontaktseite.",
       "error_rate": "Zu viele Versuche hintereinander. Warten Sie einige Minuten und versuchen Sie es erneut.",
-      "error_contact": "Zur Kontaktseite"
+      "error_contact": "Zur Kontaktseite",
+      "telefono_hint": "Wenn es keine spanische Nummer ist, schreiben Sie sie mit der Vorwahl Ihres Landes, zum Beispiel +49 für Deutschland.",
+      "telefono_prefijo": "Bitte schreiben Sie die Telefonnummer mit der internationalen Vorwahl Ihres Landes, zum Beispiel +49 151 23456789. Ohne Vorwahl können wir nur eine 9-stellige spanische Nummer erkennen.",
+      "error_datos": "Unser Register hat einige Ihrer Daten nicht angenommen. Bitte prüfen Sie sie, vor allem die Telefonnummer mit internationaler Vorwahl, und senden Sie erneut."
     },
     "gracias": {
       "title": "Danke. Wir haben Ihre Anfrage erhalten.",
-      "body": "Das SEDA-Team prüft Ihre Schätzung und nimmt Kontakt mit Ihnen auf."
+      "body": "Das SEDA-Team nimmt Kontakt mit Ihnen auf, um Ihr Haus zu bewerten."
     },
     "link": "Schätzung für Ihr Haus berechnen"
   }

@@ -20,7 +20,12 @@ import { cabecerasFirmaPortal, secretoLead } from "@/lib/lead-firma"
   · Consentimiento RGPD obligatorio (`consentimiento: true`).
   · Honeypot (`website`): relleno → misma respuesta que un envío bueno, sin enviar.
   · Sin fallback silencioso: si el portal no responde 2xx, el visitante ve un
-    error. Nunca se le dice «recibido» de algo que no ha llegado.
+    error. Nunca se le dice «recibido» de algo que no ha llegado. Un 400 del
+    portal (dato rechazado) sale como 422 `rejected_data`; un 5xx o la red
+    caída, como 502 (V4-04).
+  · El teléfono se valida con la regla de seda_os (lib/telefono-e164.ts): si no
+    se puede llevar a E.164, 400 `phone_needs_prefix` y el formulario pide el
+    prefijo internacional, sin llamar al portal.
   · No se escribe en los logs ningún dato personal: solo el estado de la respuesta.
   · LEADS-RUTA-FIRMADA (V4-01): el POST al portal va FIRMADO con
     `SEDA_LEADS_HMAC_SECRET` (`Authorization: HMAC-Lead …` + `X-Timestamp`,
@@ -98,6 +103,10 @@ export async function POST(req: Request) {
     })
     if (!resp.ok) {
       console.error("[/api/leads/propietario] el portal respondió", resp.status)
+      // V4-04: un 400 del portal es un DATO que no acepta (su .strict() o su
+      // CHECK), no una avería: reintentar «en unos minutos» daría lo mismo.
+      // Se dice como dato (422) y el formulario pide revisar los datos.
+      if (resp.status === 400) return json({ ok: false, error: "rejected_data" }, { status: 422 })
       return json({ ok: false, error: "send_failed" }, { status: 502 })
     }
     return json({ ok: true })
