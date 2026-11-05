@@ -1,3 +1,4 @@
+import { createHash, createHmac } from "node:crypto"
 import { readFileSync } from "node:fs"
 import { join } from "node:path"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
@@ -263,7 +264,47 @@ describe("POST /api/leads/propietario", () => {
   })
 
   describe("con el flag encendido", () => {
-    beforeEach(() => vi.stubEnv("SEDA_FLAG_CALCULADORA_PROPIETARIOS", "1"))
+    // Secreto de PRUEBA (lo dice su texto); no es el de ningún entorno.
+    const SECRETO = "secreto-de-prueba-de-seda-web-no-es-real-0123456789"
+    beforeEach(() => {
+      vi.stubEnv("SEDA_FLAG_CALCULADORA_PROPIETARIOS", "1")
+      vi.stubEnv("SEDA_LEADS_HMAC_SECRET", SECRETO)
+    })
+
+    it("V4-01: el POST al portal va firmado (HMAC-Lead + X-Timestamp) sobre el texto EXACTO que se envía", async () => {
+      const antes = Date.now()
+      const { POST } = await cargarRuta()
+      expect((await POST(peticion())).status).toBe(200)
+      const [, init] = enviado.mock.calls[0] as [string, RequestInit]
+      const cabeceras = new Headers(init.headers)
+      const ts = cabeceras.get("x-timestamp") ?? ""
+      expect(ts).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/)
+      expect(Math.abs(Date.parse(ts) - antes)).toBeLessThan(5_000)
+      // Recalculada aquí con node:crypto a pelo, no con lib/lead-firma.ts.
+      const hash = createHash("sha256").update(String(init.body), "utf8").digest("hex")
+      const firma = createHmac("sha256", SECRETO).update(`POST|/api/leads/propietario|${ts}|${hash}`).digest("hex")
+      expect(cabeceras.get("authorization")).toBe(`HMAC-Lead ${firma}`)
+    })
+
+    it.each([[undefined], [""], ["corto-de-menos-de-32"]])(
+      "V4-01: sin SEDA_LEADS_HMAC_SECRET válido (%j) → 503 not_configured y NO se llama al portal",
+      async (secreto) => {
+        vi.stubEnv("SEDA_LEADS_HMAC_SECRET", secreto as unknown as string)
+        const { POST } = await cargarRuta()
+        const r = await POST(peticion())
+        expect(r.status).toBe(503)
+        expect(await r.json()).toEqual({ ok: false, error: "not_configured" })
+        expect(enviado).not.toHaveBeenCalled()
+      },
+    )
+
+    it("V4-01: el secreto no se escribe en los logs", async () => {
+      enviado.mockResolvedValueOnce(new Response("{}", { status: 401 }))
+      const { POST } = await cargarRuta()
+      await POST(peticion())
+      const log = JSON.stringify([...(console.error as ReturnType<typeof vi.fn>).mock.calls, ...(console.warn as ReturnType<typeof vi.fn>).mock.calls])
+      expect(log).not.toContain(SECRETO)
+    })
 
     it("un envío bueno hace UN POST al portal, con el contrato de seda_os y sin el honeypot", async () => {
       const { POST } = await cargarRuta()

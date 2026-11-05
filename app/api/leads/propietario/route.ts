@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { clientKey, crearLimitador, esMismoOrigen } from "@/lib/api-guards"
 import { calculadoraPropietariosActiva } from "@/lib/calculadora-propietarios"
 import { ENDPOINT_PORTAL_LEADS_PROPIETARIO, cuerpoPortal, validarLead } from "@/lib/lead-propietario"
+import { cabecerasFirmaPortal, secretoLead } from "@/lib/lead-firma"
 
 /*
   Lead de la calculadora de propietarios (/propietarios/calculadora).
@@ -21,6 +22,11 @@ import { ENDPOINT_PORTAL_LEADS_PROPIETARIO, cuerpoPortal, validarLead } from "@/
   · Sin fallback silencioso: si el portal no responde 2xx, el visitante ve un
     error. Nunca se le dice «recibido» de algo que no ha llegado.
   · No se escribe en los logs ningún dato personal: solo el estado de la respuesta.
+  · LEADS-RUTA-FIRMADA (V4-01): el POST al portal va FIRMADO con
+    `SEDA_LEADS_HMAC_SECRET` (`Authorization: HMAC-Lead …` + `X-Timestamp`,
+    lib/lead-firma.ts). Sin secreto (o con menos de 32 caracteres) no se llama
+    al portal: 503 `not_configured` y un console.error. El portal rechaza sin
+    firma con 401, así que llamar sin ella solo serviría para perder el lead.
 */
 
 const MAX_BODY_BYTES = 4 * 1024
@@ -72,11 +78,22 @@ export async function POST(req: Request) {
     return json({ ok: true })
   }
 
+  const secreto = secretoLead()
+  if (!secreto) {
+    console.error("[/api/leads/propietario] falta SEDA_LEADS_HMAC_SECRET (o tiene menos de 32 caracteres): no se envía al portal")
+    return json({ ok: false, error: "not_configured" }, { status: 503 })
+  }
+
+  // UNA serialización: el mismo texto va a la firma y al body.
+  const cuerpo = JSON.stringify(cuerpoPortal(v.lead))
   try {
     const resp = await fetch(ENDPOINT_PORTAL_LEADS_PROPIETARIO, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(cuerpoPortal(v.lead)),
+      headers: {
+        "Content-Type": "application/json",
+        ...cabecerasFirmaPortal({ secreto, url: ENDPOINT_PORTAL_LEADS_PROPIETARIO, cuerpo, ahora: new Date() }),
+      },
+      body: cuerpo,
       signal: AbortSignal.timeout(TIMEOUT_PORTAL_MS),
     })
     if (!resp.ok) {
