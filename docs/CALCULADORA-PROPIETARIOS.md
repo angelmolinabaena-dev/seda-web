@@ -74,7 +74,24 @@ timeout de 8 s al portal. Si el portal no responde 2xx, el visitante ve un error
 
 El portal es `.strict()`: cualquier otro campo da 400. `origen` (`web-calculadora`) y `base_juridica` (`consentimiento`) los pone el portal. La estimación no viaja ni se guarda en el CRM.
 
-Sin autenticación: el portal acepta llamadas sin `Origin` (servidor a servidor), detrás de su límite de 5 por minuto e IP y del honeypot. Como todas las llamadas salen de las IPs de Vercel de seda-web, ese límite es compartido: con el volumen actual basta; si crece, hay que darle a seda-web una clave propia en el portal.
+**Firmado (LEADS-RUTA-FIRMADA, V4-01, 5-nov-2026).** Hasta esa fecha el portal aceptaba cualquier llamada sin `Origin`:
+un `curl` daba de alta un lead con un consentimiento que nadie había dado. Ahora el servidor de seda-web firma cada POST
+(`lib/lead-firma.ts`) y el portal lo verifica:
+
+```
+Authorization: HMAC-Lead <hex de 64>
+X-Timestamp:   2026-11-05T10:00:00.000Z            (toISOString(); el portal admite ±5 min)
+firma = HMAC-SHA256(SEDA_LEADS_HMAC_SECRET, "POST|/api/leads/propietario|<X-Timestamp>|<sha256 hex del cuerpo>")
+```
+
+El cuerpo firmado es el texto exacto que se envía (una sola serialización). Sin `SEDA_LEADS_HMAC_SECRET` (o con menos de
+32 caracteres) seda-web no llama al portal: 503 `not_configured`, y el visitante ve el error. En el portal, sin firma o con
+firma caducada o cuerpo alterado, 401; y la ruta del portal está además detrás de `SEDA_FLAG_LEADS_PUBLICOS` (404 apagado).
+El vector de contrato, idéntico en los dos repos y calculado con `openssl`: `tests/lead-firma-contrato.test.ts` aquí y
+`tests/leads-firma-contrato.test.ts` en seda_os.
+
+El límite del portal (5 por minuto e IP) sigue siendo compartido: todas las llamadas salen de las IPs de Vercel de seda-web
+(V4-M06, aparte).
 
 ## Antes de encender el flag
 
@@ -86,4 +103,6 @@ Sin autenticación: el portal acepta llamadas sin `Origin` (servidor a servidor)
 2. **Endpoint de CRM-PROPIETARIOS**: contrato alineado (arriba). Falta aplicar su PROPUESTA en producción; hasta entonces el portal responde 503.
 3. **Revisión de los textos nuevos** (`calculadora.*` en `messages/*.json`, los cuatro idiomas). Marcados como TEXTO NUEVO.
 4. **Firewall de Vercel**: regla de frecuencia para `/api/leads/propietario` (el límite en código es por instancia).
-5. Poner la variable en Vercel y **redesplegar**.
+5. **El secreto de la firma**: `SEDA_LEADS_HMAC_SECRET`, el MISMO valor en este proyecto de Vercel (seda-web) y en el del
+   portal (`portal-propietarios`), solo servidor, nunca `NEXT_PUBLIC_`. Luego `SEDA_FLAG_LEADS_PUBLICOS=1` en el portal.
+6. Poner la variable en Vercel y **redesplegar**.
