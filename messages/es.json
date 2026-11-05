@@ -1590,7 +1590,7 @@
       "precio": {
         "label": "Precio medio por noche que espera",
         "placeholder": "Ejemplo: 250",
-        "hint": "Tarifa de alojamiento, sin limpieza. Es la cifra que usted espera, no una media de mercado: no tenemos ninguna con fuente que podamos citar."
+        "hint": "Lo que paga el huésped por noche por el alojamiento, sin limpieza. Hasta el 30 de noviembre de 2026 está exento de IVA. Desde el 1 de diciembre, en estancias de 30 noches o menos, el precio lleva dentro un 10 % de IVA y la calculadora lo quita antes de calcular: 110 € por noche son 100 € de alojamiento. Es la cifra que usted espera, no una media de mercado: no tenemos ninguna con fuente que podamos citar."
       },
       "ocupacion": {
         "label": "Ocupación anual esperada",
@@ -1616,30 +1616,34 @@
         "iva": "IVA de la comisión, aparte"
       },
       "como": "Cómo se calcula",
-      "como_body": "Ingresos brutos = ocupación × 365 noches × precio por noche. La comisión de SEDA es la menor entre el [[tarifa.comision]] del alojamiento una vez descontada la comisión del canal y el [[tarifa.tope]] del alojamiento; no se calcula sobre la limpieza. El IVA del [[tarifa.iva]] sobre la comisión se suma aparte y no está restado del neto."
+      "como_body": "Ingresos brutos = ocupación × 365 noches × precio por noche; desde el 1 de diciembre de 2026, sin el 10 % de IVA del alojamiento que lleva dentro el precio (precio ÷ 1,10), como en estancias de 30 noches o menos. La comisión del canal se calcula sobre lo que paga el huésped. La comisión de SEDA es la menor entre el [[tarifa.comision]] del alojamiento una vez descontada la comisión del canal y el [[tarifa.tope]] del alojamiento; no se calcula sobre la limpieza ni sobre el IVA del alojamiento. El IVA del [[tarifa.iva]] sobre la comisión se suma aparte y no está restado del neto.",
+      "iva_alojamiento": "Desde el 1 de diciembre de 2026 el precio por noche lleva dentro un 10 % de IVA del alojamiento. De {pagado} que pagarían los huéspedes, {cuota} son ese IVA, que se ingresa a Hacienda: no es ingreso suyo ni base de la comisión, y ya está fuera de los ingresos brutos."
     },
     "aviso": {
       "label": "Importante",
-      "body": "Es una estimación, no una oferta. Se calcula solo con el precio y la ocupación que usted introduce, y no es una previsión de resultados ni una promesa de rentabilidad. El IVA y el IRPF o el IRNR dependen de cada caso y no están incluidos; tampoco los suministros ni los gastos de la propiedad. Una propuesta concreta solo existe después de valorar su casa."
+      "body": "Es una estimación, no una oferta. Se calcula solo con el precio y la ocupación que usted introduce, y no es una previsión de resultados ni una promesa de rentabilidad. El IRPF o el IRNR dependen de cada caso y no están incluidos; tampoco los suministros ni los gastos de la propiedad. Una propuesta concreta solo existe después de valorar su casa."
     },
     "form": {
       "eyebrow": "— Hable con SEDA",
-      "h2": "Reciba su estimación y que le llame SEDA",
-      "body": "Déjenos sus datos: junto a ellos enviamos la estimación que ve en pantalla y nuestro equipo se pondrá en contacto con usted para valorar su casa.",
+      "h2": "Que SEDA le llame para valorar su casa",
+      "body": "Déjenos su nombre y su correo y, si quiere, su teléfono, el municipio y los dormitorios: es lo único que nos llega, y nuestro equipo se pondrá en contacto con usted para valorar su casa. El precio por noche y la ocupación solo sirven para el cálculo de esta pantalla: no se envían a nuestro registro de contactos ni se guardan.",
       "nombre": "Nombre",
       "email": "Correo electrónico",
       "telefono": "Teléfono (opcional)",
-      "consent": "He leído la <privacidad>política de privacidad</privacidad> y acepto que SEDA trate mis datos y los de esta estimación para ponerse en contacto conmigo sobre la gestión de mi propiedad.",
-      "submit": "Enviar mi estimación",
+      "consent": "He leído la <privacidad>política de privacidad</privacidad> y acepto que SEDA trate mis datos de contacto para ponerse en contacto conmigo sobre la gestión de mi propiedad.",
+      "submit": "Enviar mis datos",
       "sending": "Enviando…",
-      "needs_estimate": "Para enviar, complete primero el precio por noche y la ocupación: la estimación viaja con sus datos.",
+      "needs_estimate": "Para enviar, complete primero el precio por noche y la ocupación.",
       "error": "No hemos podido enviar su solicitud. Inténtelo de nuevo en unos minutos o escríbanos desde la página de contacto.",
       "error_rate": "Demasiados intentos seguidos. Espere unos minutos e inténtelo de nuevo.",
-      "error_contact": "Ir a contacto"
+      "error_contact": "Ir a contacto",
+      "telefono_hint": "Si no es un número español, escríbalo con el prefijo de su país, por ejemplo +44 para el Reino Unido.",
+      "telefono_prefijo": "Escriba el teléfono con el prefijo internacional de su país, por ejemplo +44 7700 900123. Sin prefijo solo podemos reconocer un número español de 9 cifras.",
+      "error_datos": "Nuestro registro no ha aceptado alguno de los datos. Revíselos, sobre todo el teléfono con su prefijo internacional, y vuelva a enviar."
     },
     "gracias": {
       "title": "Gracias. Hemos recibido su solicitud.",
-      "body": "El equipo de SEDA revisará su estimación y se pondrá en contacto con usted."
+      "body": "El equipo de SEDA se pondrá en contacto con usted para valorar su casa."
     },
     "link": "Calcule la estimación de su casa"
   }

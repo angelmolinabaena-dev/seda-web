@@ -2,7 +2,14 @@ import { createHash, createHmac } from "node:crypto"
 import { readFileSync } from "node:fs"
 import { join } from "node:path"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
-import { calculadoraPropietariosActiva, estimar } from "@/lib/calculadora-propietarios"
+import {
+  calculadoraPropietariosActiva,
+  estadoTrasRespuesta,
+  estimar,
+  hoyMadrid,
+  precioConIvaAlojamiento,
+  precioNocheSinIva,
+} from "@/lib/calculadora-propietarios"
 import { cuerpoPortal, validarLead, ENDPOINT_PORTAL_LEADS_PROPIETARIO } from "@/lib/lead-propietario"
 import { faqCalculadora } from "@/lib/faq"
 import { faqPageJsonLd } from "@/lib/jsonld"
@@ -33,9 +40,13 @@ import { netoAnual, resolverMensajes, type Idioma } from "@/lib/tarifa"
              (exacto 232.842,625; en pantalla el neto es bruto − canal − comisión ya redondeados)
 */
 
+// Estas cifras son las de ANTES del 1-dic-2026 (alojamiento exento): la fecha va
+// fijada para que el test no cambie de significado solo por pasar el día.
+const ANTES = "2026-11-30"
+
 describe("cálculo, contra cifras hechas a mano", () => {
   it("A · 200 € × 50 %: directa 7.300 € de comisión y neto 29.200 €; por canal 6.515 € y 24.510 €", () => {
-    const e = estimar(200, 50)!
+    const e = estimar(200, 50, ANTES)!
     expect(e.alojamientoAnual).toBe(36500)
     expect(e.directa).toEqual({ canal: 0, comision: 7300, iva: 1533, neto: 29200 })
     expect(e.conCanal).toEqual({ canal: 5475, comision: 6515, iva: 1368, neto: 24510 })
@@ -44,14 +55,14 @@ describe("cálculo, contra cifras hechas a mano", () => {
   })
 
   it("B · 1.450 € × 72 %: 381.060 € brutos, neto 304.848 € directa y 255.882 € por canal", () => {
-    const e = estimar(1450, 72)!
+    const e = estimar(1450, 72, ANTES)!
     expect(e.alojamientoAnual).toBe(381060)
     expect(e.directa).toEqual({ canal: 0, comision: 76212, iva: 16005, neto: 304848 })
     expect(e.conCanal).toEqual({ canal: 57159, comision: 68019, iva: 14284, neto: 255882 })
   })
 
   it("C · 1.000 € × 95 %: los medios euros se redondean hacia arriba y la cuenta visible cuadra", () => {
-    const e = estimar(1000, 95)!
+    const e = estimar(1000, 95, ANTES)!
     expect(e.alojamientoAnual).toBe(346750)
     expect(e.directa).toEqual({ canal: 0, comision: 69350, iva: 14564, neto: 277400 })
     expect(e.conCanal).toEqual({ canal: 52013, comision: 61895, iva: 12998, neto: 232842 })
@@ -59,14 +70,14 @@ describe("cálculo, contra cifras hechas a mano", () => {
 
   it("en reserva directa manda el tope del 20 %, no el 21 %: la comisión es el 20 % del alojamiento", () => {
     for (const [precio, ocu] of [[200, 50], [1450, 72], [1000, 95], [333, 41]] as const) {
-      const e = estimar(precio, ocu)!
+      const e = estimar(precio, ocu, ANTES)!
       expect(e.directa.comision).toBe(Math.round(e.alojamientoAnual * 0.2))
     }
   })
 
   it("lo que se ve suma: bruto − canal − comisión = neto, en los dos escenarios", () => {
     for (const [precio, ocu] of [[200, 50], [1450, 72], [1000, 95], [333, 41], [87.5, 63]] as const) {
-      const e = estimar(precio, ocu)!
+      const e = estimar(precio, ocu, ANTES)!
       expect(e.alojamientoAnual - e.directa.canal - e.directa.comision).toBe(e.directa.neto)
       expect(e.alojamientoAnual - e.conCanal.canal - e.conCanal.comision).toBe(e.conCanal.neto)
     }
@@ -74,7 +85,7 @@ describe("cálculo, contra cifras hechas a mano", () => {
 
   it("no se aleja más de 1 € del neto de /propietarios (`netoAnual`), que redondea solo al final", () => {
     for (const [precio, ocu] of [[200, 50], [1450, 72], [1000, 95], [333, 41]] as const) {
-      const e = estimar(precio, ocu)!
+      const e = estimar(precio, ocu, ANTES)!
       const ref = netoAnual(e.alojamientoAnual)
       expect(Math.abs(e.directa.neto - ref.directa)).toBeLessThanOrEqual(1)
       expect(Math.abs(e.conCanal.neto - ref.ota)).toBeLessThanOrEqual(1)
@@ -83,16 +94,16 @@ describe("cálculo, contra cifras hechas a mano", () => {
 
   it("control negativo: con la v3 (24 % plano) el neto directo del caso B sería 289.606 €, que NO es el de la v6", () => {
     expect(Math.round(381060 * (1 - 0.24))).toBe(289606)
-    expect(estimar(1450, 72)!.directa.neto).not.toBe(289606)
+    expect(estimar(1450, 72, ANTES)!.directa.neto).not.toBe(289606)
   })
 
   it("sin precio o sin ocupación utilizables no hay estimación", () => {
-    expect(estimar(0, 50)).toBeNull()
-    expect(estimar(-10, 50)).toBeNull()
-    expect(estimar(Number.NaN, 50)).toBeNull()
-    expect(estimar(200, 0)).toBeNull()
-    expect(estimar(200, 101)).toBeNull()
-    expect(estimar(200_001, 50)).toBeNull()
+    expect(estimar(0, 50, ANTES)).toBeNull()
+    expect(estimar(-10, 50, ANTES)).toBeNull()
+    expect(estimar(Number.NaN, 50, ANTES)).toBeNull()
+    expect(estimar(200, 0, ANTES)).toBeNull()
+    expect(estimar(200, 101, ANTES)).toBeNull()
+    expect(estimar(200_001, 50, ANTES)).toBeNull()
   })
 })
 
@@ -115,7 +126,7 @@ describe("consentimiento RGPD obligatorio", () => {
   it("con consentimiento: true y todo lo demás en orden, se acepta", () => {
     const r = validarLead({ ...BASE, consentimiento: true, telefono: "+34 600 123 456", municipio: "Estepona", dormitorios: 3 })
     expect(r.ok).toBe(true)
-    if (r.ok) expect(r.lead).toMatchObject({ nombre: "María García", telefono: "+34 600 123 456", municipio: "Estepona", dormitorios: 3 })
+    if (r.ok) expect(r.lead).toMatchObject({ nombre: "María García", telefono: "+34600123456", municipio: "Estepona", dormitorios: 3 })
   })
 
   it("el cuerpo para el portal es EXACTAMENTE el contrato de seda_os (leadPropietarioSchema, .strict())", () => {
@@ -159,7 +170,9 @@ describe("validación del resto de campos", () => {
     [{ nombre: "" }, "missing_field"],
     [{ nombre: "Ana\nEMAIL: x@y.com" }, "invalid_name"],
     [{ nombre: "x".repeat(121) }, "invalid_name"],
-    [{ telefono: "abc" }, "invalid_phone"],
+    [{ telefono: "abc" }, "phone_needs_prefix"],
+    [{ telefono: "07700 900123" }, "phone_needs_prefix"],
+    [{ telefono: "+34 600\n123" }, "invalid_phone"],
     [{ locale: "it" }, "invalid_locale"],
     [{ dormitorios: 0 }, "invalid_dormitorios"],
     [{ dormitorios: "3" }, "invalid_dormitorios"],
@@ -321,7 +334,7 @@ describe("POST /api/leads/propietario", () => {
       expect(cuerpo).toEqual({
         nombre: "María García",
         correo: "maria@example.com",
-        telefono: "+34 600 123 456",
+        telefono: "+34600123456", // ya en E.164: la regla de seda_os (V4-04)
         municipio: "Estepona",
         dormitorios: 3,
         consentimiento: true,
@@ -370,6 +383,37 @@ describe("POST /api/leads/propietario", () => {
       const r = await POST(peticion())
       expect(r.status).toBe(502)
       expect(await r.json()).toEqual({ ok: false, error: "send_failed" })
+    })
+
+    it("V4-04: un móvil británico sin prefijo (07700 900123) → 400 phone_needs_prefix, sin llamar al portal; el formulario pide el prefijo", async () => {
+      // Hoy (antes de V4-04) seda-web lo aceptaba, seda_os respondía 400 y el
+      // visitante veía un 502 «inténtelo en unos minutos». Se simula ese portal.
+      enviado.mockResolvedValue(new Response('{"ok":false,"error":"solicitud_invalida"}', { status: 400 }))
+      const { POST } = await cargarRuta()
+      const r = await POST(peticion({ ...LEAD, telefono: "07700 900123" }))
+      expect(r.status).toBe(400)
+      const cuerpo = (await r.json()) as { error: string }
+      expect(cuerpo).toEqual({ ok: false, error: "phone_needs_prefix" })
+      expect(enviado).not.toHaveBeenCalled()
+      expect(estadoTrasRespuesta(r.status, cuerpo.error)).toBe("telefono")
+    })
+
+    it("V4-04: el mismo móvil con su prefijo (+44 7700 900123) pasa y viaja en E.164", async () => {
+      const { POST } = await cargarRuta()
+      const r = await POST(peticion({ ...LEAD, telefono: "+44 7700 900123" }))
+      expect(r.status).toBe(200)
+      const [, init] = enviado.mock.calls[0] as [string, RequestInit]
+      expect(JSON.parse(String(init.body)).telefono).toBe("+447700900123")
+    })
+
+    it("V4-04: un 400 del portal es un dato, no una avería → 422 rejected_data (y el formulario pide revisar los datos)", async () => {
+      enviado.mockResolvedValueOnce(new Response('{"ok":false,"error":"solicitud_invalida"}', { status: 400 }))
+      const { POST } = await cargarRuta()
+      const r = await POST(peticion())
+      expect(r.status).toBe(422)
+      const cuerpo = (await r.json()) as { error: string }
+      expect(cuerpo).toEqual({ ok: false, error: "rejected_data" })
+      expect(estadoTrasRespuesta(r.status, cuerpo.error)).toBe("datos")
     })
 
     it("si el portal no contesta (red caída o tiempo agotado) → 502 network_error", async () => {
@@ -431,4 +475,144 @@ describe("FAQPage de la calculadora", () => {
       expect(ld.mainEntity.map((m) => m.name)).toEqual(faq.map((f) => f.q))
     })
   }
+})
+
+/* ── V4-04 · El IVA del alojamiento desde el 1-dic-2026 ─────────────────── */
+
+describe("V4-04: desde el 1-dic-2026 se quita la cuota del 10 % antes de calcular", () => {
+  /*
+    Cifras A MANO con la regla de la estancia de 30 noches o menos (RDL 29/2026;
+    docs/REGLAS-NEGOCIO.md de seda_os, D-3): el precio es IVA incluido y la
+    cuota es precio × 10 / 110.
+
+      110 €/noche IVA incluido → 110 × 100 / 110 = 100 € de alojamiento, 10 € de cuota.
+
+    Caso D · 110 € × 50 %, el 1-dic-2026:
+      pagado por los huéspedes = 0,5 × 365 × 110 = 20.075 €
+      cuota = 20.075 × 10 / 110 = 1.825 €   →  alojamiento = 18.250 € (= 0,5 × 365 × 100)
+      directa: 21 % × 18.250 = 3.832,50 · tope 20 % = 3.650 → 3.650 · IVA 766,50 → 767 · neto 14.600
+      canal:   15 % × 20.075 (sobre lo que paga el huésped) = 3.011,25 → 3.011
+               base 18.250 − 3.011,25 = 15.238,75 · 21 % = 3.200,14 → 3.200 (tope 3.650 no actúa)
+               IVA 21 % × 3.200,14 = 672,03 → 672 · neto 18.250 − 3.011 − 3.200 = 12.039
+    El mismo caso el 30-nov: exento, alojamiento = 20.075 € (todo el precio).
+  */
+  const DESDE = "2026-12-01"
+
+  it("110 €/noche IVA incluido ⇒ 100 € de alojamiento desde el 1-dic; 110 € el 30-nov", () => {
+    expect(precioNocheSinIva(110, DESDE)).toBe(100)
+    expect(precioNocheSinIva(110, "2026-11-30")).toBe(110)
+  })
+
+  it("la fecha de corte es el 1-dic-2026, comparada como texto", () => {
+    expect(precioConIvaAlojamiento("2026-11-30")).toBe(false)
+    expect(precioConIvaAlojamiento("2026-12-01")).toBe(true)
+    expect(precioConIvaAlojamiento("2027-03-15")).toBe(true)
+  })
+
+  it("D · 110 € × 50 % el 1-dic: 20.075 € pagados, 1.825 € de cuota y 18.250 € de alojamiento", () => {
+    const e = estimar(110, 50, DESDE)!
+    expect(e.ivaAlojamientoIncluido).toBe(true)
+    expect(e.pagadoHuespedes).toBe(20075)
+    expect(e.cuotaIvaAlojamiento).toBe(1825)
+    expect(e.alojamientoAnual).toBe(18250)
+    expect(e.directa).toEqual({ canal: 0, comision: 3650, iva: 767, neto: 14600 })
+    expect(e.conCanal).toEqual({ canal: 3011, comision: 3200, iva: 672, neto: 12039 })
+  })
+
+  it("el mismo caso el 30-nov: sin cuota, el alojamiento es todo lo pagado", () => {
+    const e = estimar(110, 50, "2026-11-30")!
+    expect(e.ivaAlojamientoIncluido).toBe(false)
+    expect(e.cuotaIvaAlojamiento).toBe(0)
+    expect(e.alojamientoAnual).toBe(20075)
+    expect(e.pagadoHuespedes).toBe(20075)
+  })
+
+  it("control negativo: sin quitar la cuota, la comisión directa del caso D saldría 4.015 € (20 % de 20.075), un 10 % más", () => {
+    expect(Math.round(20075 * 0.2)).toBe(4015)
+    expect(estimar(110, 50, DESDE)!.directa.comision).not.toBe(4015)
+  })
+
+  it("lo que se ve sigue sumando con la cuota fuera: alojamiento − canal − comisión = neto", () => {
+    for (const [precio, ocu] of [[110, 50], [200, 50], [1450, 72], [87.5, 63]] as const) {
+      const e = estimar(precio, ocu, DESDE)!
+      expect(e.pagadoHuespedes - e.cuotaIvaAlojamiento).toBe(e.alojamientoAnual)
+      expect(e.alojamientoAnual - e.directa.canal - e.directa.comision).toBe(e.directa.neto)
+      expect(e.alojamientoAnual - e.conCanal.canal - e.conCanal.comision).toBe(e.conCanal.neto)
+    }
+  })
+
+  it("sin fecha, toma hoy en Madrid (YYYY-MM-DD)", () => {
+    expect(hoyMadrid(new Date("2026-11-30T23:30:00Z"))).toBe("2026-12-01") // 00:30 en Madrid
+    expect(hoyMadrid(new Date("2026-11-30T22:30:00Z"))).toBe("2026-11-30")
+    expect(estimar(110, 50)).toEqual(estimar(110, 50, hoyMadrid()))
+  })
+})
+
+/* ── V4-04 · Los textos del formulario y de la ayuda del precio ─────────── */
+
+describe("V4-04: el formulario no promete enviar la estimación", () => {
+  const LOCALES: Idioma[] = ["es", "en", "fr", "de"]
+  // La palabra «estimación» en cada idioma, tal como la usan sus textos.
+  const ESTIMACION: Record<Idioma, RegExp> = { es: /estimaci/i, en: /estimate/i, fr: /estimation/i, de: /schätzung/i }
+  const IVA: Record<Idioma, RegExp> = { es: /IVA/, en: /VAT/, fr: /TVA/, de: /MwSt/ }
+
+  const calc = (l: Idioma) =>
+    (JSON.parse(readFileSync(join(process.cwd(), `messages/${l}.json`), "utf8")) as {
+      calculadora: {
+        form: Record<string, string>
+        gracias: Record<string, string>
+        inputs: { precio: { hint: string } }
+        results: Record<string, unknown>
+      }
+    }).calculadora
+
+  for (const l of LOCALES) {
+    it(`${l}: el consentimiento no contiene «estimación» (ni los de esta estimación)`, () => {
+      expect(calc(l).form.consent).not.toMatch(ESTIMACION[l])
+      expect(calc(l).form.consent).toContain("<privacidad>")
+    })
+
+    it(`${l}: ni el título, ni el texto, ni el botón, ni el aviso, ni el «gracias» dicen que se envía la estimación`, () => {
+      const c = calc(l)
+      for (const texto of [c.form.h2, c.form.body, c.form.submit, c.form.needs_estimate, c.gracias.body]) {
+        expect(texto).not.toMatch(ESTIMACION[l])
+      }
+    })
+
+    it(`${l}: la ayuda del precio dice cómo va el IVA (exento hasta el 30-nov, 10 % dentro desde el 1-dic, 30 noches, 110 → 100)`, () => {
+      const hint = calc(l).inputs.precio.hint
+      expect(hint).toMatch(IVA[l])
+      expect(hint).toMatch(/10 ?%/)
+      expect(hint).toContain("30")
+      expect(hint).toMatch(/110/)
+      expect(hint).toMatch(/100/)
+    })
+
+    it(`${l}: hay texto para pedir el prefijo, para el dato rechazado y para la cuota en el resultado`, () => {
+      const c = calc(l)
+      expect(c.form.telefono_prefijo).toMatch(/\+\d/)
+      expect(c.form.telefono_hint).toMatch(/\+\d/)
+      expect(c.form.error_datos.length).toBeGreaterThan(20)
+      expect(c.results.iva_alojamiento).toMatch(/\{pagado\}[\s\S]*\{cuota\}/)
+    })
+  }
+
+  it("el campo del teléfono ya no lleva su propia regex: manda la de seda_os", () => {
+    const src = readFileSync(join(process.cwd(), "app/[locale]/propietarios/calculadora/CalculadoraContent.tsx"), "utf8")
+    expect(src).not.toMatch(/pattern=/)
+    expect(src).toContain("normalizarTelefonoE164")
+    const lib = readFileSync(join(process.cwd(), "lib/lead-propietario.ts"), "utf8")
+    expect(lib).toContain("normalizarTelefonoE164")
+    expect(lib).not.toMatch(/\[\\d\\s\+\(\)-\]\{6,\}/)
+  })
+
+  it("estadoTrasRespuesta: 2xx ok · 400 phone_needs_prefix → teléfono · 422 → datos · 429 → límite · 5xx/502 → error", () => {
+    expect(estadoTrasRespuesta(200, undefined)).toBe("ok")
+    expect(estadoTrasRespuesta(400, "phone_needs_prefix")).toBe("telefono")
+    expect(estadoTrasRespuesta(400, "invalid_email")).toBe("error")
+    expect(estadoTrasRespuesta(422, "rejected_data")).toBe("datos")
+    expect(estadoTrasRespuesta(429, "rate_limited")).toBe("limite")
+    expect(estadoTrasRespuesta(502, "send_failed")).toBe("error")
+    expect(estadoTrasRespuesta(503, "not_configured")).toBe("error")
+  })
 })

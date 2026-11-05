@@ -1,0 +1,35 @@
+{
+  "_comentario": [
+    "Contrato del telefono del lead de propietario entre seda-web y seda_os (REA-GLOBAL-V4, V4-04).",
+    "Este fichero es byte a byte el mismo en seda-web y en seda_os, en tests/fixtures/telefono-e164-contrato.json.",
+    "Cada repo pasa cada entrada por SU normalizarTelefonoE164 y espera la salida de aqui; los dos tests fijan ademas su sha256.",
+    "Las salidas estan hechas a mano con la regla, no copiadas de la funcion: quitar espacios, puntos, guiones y parentesis;",
+    "'00' delante pasa a '+'; 9 cifras que empiezan por 6, 7, 8 o 9 reciben '+34'; cualquier otro sin '+' es null;",
+    "y el resultado tiene que ser '+', una cifra de 1 a 9 y de 6 a 14 cifras mas (7 a 15 en total).",
+    "Si se cambia, se cambia en los dos repos a la vez y se actualiza la huella en los dos tests."
+  ],
+  "casos": [
+    { "entrada": "07700 900123", "e164": null, "porQue": "movil britanico sin prefijo: no se adivina el pais (el caso de V4-04)" },
+    { "entrada": "+44 7700 900123", "e164": "+447700900123", "porQue": "el mismo movil con su prefijo" },
+    { "entrada": "0044 7700 900123", "e164": "+447700900123", "porQue": "00 delante es +" },
+    { "entrada": "+44 (0) 7700 900123", "e164": "+4407700900123", "porQue": "el (0) britanico no se quita: queda dentro, 13 cifras, forma valida" },
+    { "entrada": "600 123 456", "e164": "+34600123456", "porQue": "movil espanol de 9 cifras" },
+    { "entrada": "+34 600 123 456", "e164": "+34600123456", "porQue": "con prefijo y espacios" },
+    { "entrada": "(+34) 600-123-456", "e164": "+34600123456", "porQue": "parentesis y guiones fuera" },
+    { "entrada": "952.123.456", "e164": "+34952123456", "porQue": "fijo de Malaga con puntos" },
+    { "entrada": "  912 345 678  ", "e164": "+34912345678", "porQue": "espacios alrededor" },
+    { "entrada": "512 345 678", "e164": null, "porQue": "9 cifras que no empiezan por 6-9: no es espanol" },
+    { "entrada": "60012345", "e164": null, "porQue": "8 cifras sin prefijo" },
+    { "entrada": "6001234567", "e164": null, "porQue": "10 cifras sin prefijo" },
+    { "entrada": "00 33 1 23 45 67 89", "e164": "+33123456789", "porQue": "fijo frances con 00" },
+    { "entrada": "+49 30 1234567", "e164": "+49301234567", "porQue": "fijo aleman" },
+    { "entrada": "+1234567", "e164": "+1234567", "porQue": "7 cifras: el minimo" },
+    { "entrada": "+123456", "e164": null, "porQue": "6 cifras: una menos del minimo" },
+    { "entrada": "+123456789012345", "e164": "+123456789012345", "porQue": "15 cifras: el maximo" },
+    { "entrada": "+1234567890123456", "e164": null, "porQue": "16 cifras: una mas del maximo" },
+    { "entrada": "+0 600 123 456", "e164": null, "porQue": "el prefijo no puede empezar por 0" },
+    { "entrada": "+34 600 123 456 ext 2", "e164": null, "porQue": "letras dentro" },
+    { "entrada": "abc", "e164": null, "porQue": "no es un telefono" },
+    { "entrada": "", "e164": null, "porQue": "vacio" }
+  ]
+}

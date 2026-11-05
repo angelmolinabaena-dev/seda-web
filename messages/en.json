@@ -1590,7 +1590,7 @@
       "precio": {
         "label": "Average nightly rate you expect",
         "placeholder": "Example: 250",
-        "hint": "Accommodation rate, without cleaning. It is the figure you expect, not a market average: we have no sourced one that we could cite."
+        "hint": "What the guest pays per night for the accommodation, without cleaning. Until 30 November 2026 it is exempt from VAT. From 1 December, for stays of 30 nights or fewer, the rate includes 10% VAT and the calculator removes it before calculating: €110 a night is €100 of accommodation. It is the figure you expect, not a market average: we have no sourced one that we could cite."
       },
       "ocupacion": {
         "label": "Expected annual occupancy",
@@ -1616,30 +1616,34 @@
         "iva": "VAT on the commission, on top"
       },
       "como": "How it is calculated",
-      "como_body": "Gross income = occupancy × 365 nights × nightly rate. SEDA's commission is the lower of [[tarifa.comision]] of the accommodation once the channel's commission is deducted and [[tarifa.tope]] of the accommodation; it is never calculated on cleaning. The [[tarifa.iva]] VAT on the commission is added on top and is not deducted from the net."
+      "como_body": "Gross income = occupancy × 365 nights × nightly rate; from 1 December 2026, without the 10% accommodation VAT included in the rate (rate ÷ 1.10), as for stays of 30 nights or fewer. The channel commission is calculated on what the guest pays. SEDA's commission is the lower of [[tarifa.comision]] of the accommodation once the channel's commission is deducted and [[tarifa.tope]] of the accommodation; it is never calculated on cleaning or on the accommodation VAT. The [[tarifa.iva]] VAT on the commission is added on top and is not deducted from the net.",
+      "iva_alojamiento": "From 1 December 2026 the nightly rate includes 10% VAT on the accommodation. Of the {pagado} guests would pay, {cuota} is that VAT, which is paid to the Spanish tax authority: it is not your income or part of the commission base, and it is already left out of the gross income."
     },
     "aviso": {
       "label": "Important",
-      "body": "This is an estimate, not an offer. It is calculated only from the rate and occupancy you enter, and it is neither a forecast of results nor a promise of returns. VAT and personal income tax (IRPF or IRNR) depend on each case and are not included; neither are utilities or the costs of the property. A specific proposal exists only after we have assessed your home."
+      "body": "This is an estimate, not an offer. It is calculated only from the rate and occupancy you enter, and it is neither a forecast of results nor a promise of returns. Personal income tax (IRPF or IRNR) depends on each case and is not included; neither are utilities or the costs of the property. A specific proposal exists only after we have assessed your home."
     },
     "form": {
       "eyebrow": "— Talk to SEDA",
-      "h2": "Get your estimate and let SEDA call you",
-      "body": "Leave your details: we send the estimate you see on screen along with them, and our team will get in touch to assess your home.",
+      "h2": "Let SEDA call you to assess your home",
+      "body": "Leave your name and email and, if you wish, your phone, town and number of bedrooms: that is all we receive, and our team will get in touch to assess your home. The nightly rate and the occupancy are only used for the calculation on this screen: they are not sent to our contact records or stored.",
       "nombre": "Name",
       "email": "Email",
       "telefono": "Phone (optional)",
-      "consent": "I have read the <privacidad>privacy policy</privacidad> and agree that SEDA may process my data and the data of this estimate to contact me about managing my property.",
-      "submit": "Send my estimate",
+      "consent": "I have read the <privacidad>privacy policy</privacidad> and agree that SEDA may process my contact details to get in touch with me about managing my property.",
+      "submit": "Send my details",
       "sending": "Sending…",
-      "needs_estimate": "To send, first fill in the nightly rate and the occupancy: the estimate travels with your details.",
+      "needs_estimate": "To send, first fill in the nightly rate and the occupancy.",
       "error": "We could not send your request. Please try again in a few minutes or write to us from the contact page.",
       "error_rate": "Too many attempts in a row. Wait a few minutes and try again.",
-      "error_contact": "Go to contact"
+      "error_contact": "Go to contact",
+      "telefono_hint": "If it is not a Spanish number, write it with your country code, for example +44 for the United Kingdom.",
+      "telefono_prefijo": "Please write the phone number with your international country code, for example +44 7700 900123. Without a code we can only recognise a 9-digit Spanish number.",
+      "error_datos": "Our records did not accept some of the details. Please check them, especially the phone number with its international code, and send again."
     },
     "gracias": {
       "title": "Thank you. We have received your request.",
-      "body": "The SEDA team will review your estimate and get in touch with you."
+      "body": "The SEDA team will get in touch with you to assess your home."
     },
     "link": "Calculate the estimate for your home"
   }

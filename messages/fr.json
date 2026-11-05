@@ -1590,7 +1590,7 @@
       "precio": {
         "label": "Prix moyen par nuit que vous attendez",
         "placeholder": "Exemple : 250",
-        "hint": "Tarif d'hébergement, ménage exclu. C'est le chiffre que vous attendez, pas une moyenne du marché : nous n'en avons aucune, sourcée, que nous puissions citer."
+        "hint": "Ce que paie le voyageur par nuit pour l'hébergement, ménage exclu. Jusqu'au 30 novembre 2026, il est exonéré de TVA. À partir du 1er décembre, pour les séjours de 30 nuits ou moins, le prix inclut 10 % de TVA et le calculateur la retire avant de calculer : 110 € par nuit font 100 € d'hébergement. C'est le chiffre que vous attendez, pas une moyenne du marché : nous n'en avons aucune, sourcée, que nous puissions citer."
       },
       "ocupacion": {
         "label": "Taux d'occupation annuel attendu",
@@ -1616,30 +1616,34 @@
         "iva": "TVA sur la commission, en sus"
       },
       "como": "Comment c'est calculé",
-      "como_body": "Revenus bruts = taux d'occupation × 365 nuits × prix par nuit. La commission de SEDA est la plus faible entre [[tarifa.comision]] de l'hébergement une fois déduite la commission du canal et [[tarifa.tope]] de l'hébergement ; elle n'est jamais calculée sur le ménage. La TVA de [[tarifa.iva]] sur la commission s'ajoute en sus et n'est pas déduite du net."
+      "como_body": "Revenus bruts = taux d'occupation × 365 nuits × prix par nuit ; à partir du 1er décembre 2026, sans les 10 % de TVA d'hébergement inclus dans le prix (prix ÷ 1,10), comme pour les séjours de 30 nuits ou moins. La commission du canal est calculée sur ce que paie le voyageur. La commission de SEDA est la plus faible entre [[tarifa.comision]] de l'hébergement une fois déduite la commission du canal et [[tarifa.tope]] de l'hébergement ; elle n'est jamais calculée sur le ménage ni sur la TVA de l'hébergement. La TVA de [[tarifa.iva]] sur la commission s'ajoute en sus et n'est pas déduite du net.",
+      "iva_alojamiento": "À partir du 1er décembre 2026, le prix par nuit inclut 10 % de TVA sur l'hébergement. Sur les {pagado} que paieraient les voyageurs, {cuota} correspondent à cette TVA, reversée au fisc espagnol : ce n'est ni un revenu pour vous ni une base de la commission, et elle est déjà exclue des revenus bruts."
     },
     "aviso": {
       "label": "Important",
-      "body": "Il s'agit d'une estimation, pas d'une offre. Elle est calculée uniquement à partir du prix et du taux d'occupation que vous saisissez ; ce n'est ni une prévision de résultats ni une promesse de rentabilité. La TVA et l'impôt sur le revenu (IRPF ou IRNR) dépendent de chaque cas et ne sont pas inclus ; les charges et les frais du bien non plus. Une proposition concrète n'existe qu'après l'évaluation de votre bien."
+      "body": "Il s'agit d'une estimation, pas d'une offre. Elle est calculée uniquement à partir du prix et du taux d'occupation que vous saisissez ; ce n'est ni une prévision de résultats ni une promesse de rentabilité. L'impôt sur le revenu (IRPF ou IRNR) dépend de chaque cas et n'est pas inclus ; les charges et les frais du bien non plus. Une proposition concrète n'existe qu'après l'évaluation de votre bien."
     },
     "form": {
       "eyebrow": "— Parlez à SEDA",
-      "h2": "Recevez votre estimation et soyez rappelé par SEDA",
-      "body": "Laissez-nous vos coordonnées : nous y joignons l'estimation affichée à l'écran et notre équipe vous contactera pour évaluer votre bien.",
+      "h2": "Laissez SEDA vous rappeler pour évaluer votre bien",
+      "body": "Laissez-nous votre nom et votre e-mail et, si vous le souhaitez, votre téléphone, la commune et le nombre de chambres : c'est tout ce qui nous parvient, et notre équipe vous contactera pour évaluer votre bien. Le prix par nuit et le taux d'occupation servent uniquement au calcul affiché à l'écran : ils ne sont ni envoyés à notre registre de contacts ni conservés.",
       "nombre": "Nom",
       "email": "E-mail",
       "telefono": "Téléphone (facultatif)",
-      "consent": "J'ai lu la <privacidad>politique de confidentialité</privacidad> et j'accepte que SEDA traite mes données et celles de cette estimation pour me contacter au sujet de la gestion de mon bien.",
-      "submit": "Envoyer mon estimation",
+      "consent": "J'ai lu la <privacidad>politique de confidentialité</privacidad> et j'accepte que SEDA traite mes coordonnées pour me contacter au sujet de la gestion de mon bien.",
+      "submit": "Envoyer mes coordonnées",
       "sending": "Envoi…",
-      "needs_estimate": "Pour envoyer, renseignez d'abord le prix par nuit et le taux d'occupation : l'estimation accompagne vos coordonnées.",
+      "needs_estimate": "Pour envoyer, renseignez d'abord le prix par nuit et le taux d'occupation.",
       "error": "Nous n'avons pas pu envoyer votre demande. Réessayez dans quelques minutes ou écrivez-nous depuis la page de contact.",
       "error_rate": "Trop de tentatives d'affilée. Patientez quelques minutes et réessayez.",
-      "error_contact": "Aller à la page de contact"
+      "error_contact": "Aller à la page de contact",
+      "telefono_hint": "S'il ne s'agit pas d'un numéro espagnol, indiquez-le avec l'indicatif de votre pays, par exemple +33 pour la France.",
+      "telefono_prefijo": "Indiquez le téléphone avec l'indicatif international de votre pays, par exemple +33 6 12 34 56 78. Sans indicatif, nous ne pouvons reconnaître qu'un numéro espagnol à 9 chiffres.",
+      "error_datos": "Notre registre n'a pas accepté certaines de vos coordonnées. Vérifiez-les, en particulier le téléphone avec son indicatif international, puis renvoyez."
     },
     "gracias": {
       "title": "Merci. Nous avons bien reçu votre demande.",
-      "body": "L'équipe SEDA examinera votre estimation et vous contactera."
+      "body": "L'équipe SEDA vous contactera pour évaluer votre bien."
     },
     "link": "Calculez l'estimation de votre maison"
   }
