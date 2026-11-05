@@ -1636,6 +1636,7 @@
       "needs_estimate": "Pour envoyer, renseignez d'abord le prix par nuit et le taux d'occupation.",
       "error": "Nous n'avons pas pu envoyer votre demande. Réessayez dans quelques minutes ou écrivez-nous depuis la page de contact.",
       "error_rate": "Trop de tentatives d'affilée. Patientez quelques minutes et réessayez.",
+      "error_rate_minuto": "Trop de demandes en ce moment. Patientez une minute et réessayez.",
       "error_contact": "Aller à la page de contact",
       "telefono_hint": "S'il ne s'agit pas d'un numéro espagnol, indiquez-le avec l'indicatif de votre pays, par exemple +33 pour la France.",
       "telefono_prefijo": "Indiquez le téléphone avec l'indicatif international de votre pays, par exemple +33 6 12 34 56 78. Sans indicatif, nous ne pouvons reconnaître qu'un numéro espagnol à 9 chiffres.",
