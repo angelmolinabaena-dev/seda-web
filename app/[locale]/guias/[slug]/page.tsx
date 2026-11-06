@@ -8,6 +8,9 @@ import { esPublicable, getGuiaBySlug, guias } from "@/lib/guias"
 import { getAutor } from "@/lib/autores"
 import type { Locale } from "@/i18n/routing"
 import { jsonLdString } from "@/lib/jsonld"
+import { formatearRef } from "@/lib/guias-contenido/vut-andalucia"
+import { RUTA_CALCULADORA, calculadoraPropietariosActiva } from "@/lib/calculadora-propietarios"
+import { BotonImprimir } from "@/components/boton-imprimir"
 
 /*
   Ficha individual de guía. Puerta de indexación fail-closed:
@@ -63,6 +66,12 @@ export default async function GuiaPage({
   const t = await getTranslations("guias.ficha")
   const publicable = esPublicable(guia)
   const autor = guia.autorId ? getAutor(guia.autorId) : undefined
+  // Guías con lista de requisitos: versión imprimible (CSS de impresión en
+  // globals.css, que esconde cabecera y pie solo cuando existe este marcador).
+  const imprimible = Boolean(trad.requisitos?.length)
+  // La calculadora está detrás de un flag (fail closed): sin él, la ruta es 404
+  // y no se enlaza.
+  const mostrarCalculadora = Boolean(guia.calculadora) && calculadoraPropietariosActiva()
 
   // Article JSON-LD — solo se emite para guías publicables. Una guía en
   // borrador no debe declarar datePublished/dateModified inventados.
@@ -90,7 +99,16 @@ export default async function GuiaPage({
     : null
 
   return (
-    <main id="main-content" className="px-6 pt-32 pb-24 md:px-12 lg:px-20 max-w-2xl mx-auto">
+    <main
+      id="main-content"
+      {...(imprimible ? { "data-guia-imprimible": "" } : {})}
+      className="px-6 pt-32 pb-24 md:px-12 lg:px-20 max-w-2xl mx-auto print:max-w-none print:px-0 print:pt-0 print:pb-0"
+    >
+      {imprimible && (
+        <p className="hidden print:block mb-6 border-b border-foreground/40 pb-2 font-mono text-[10px] tracking-[0.2em] uppercase">
+          SEDA Private Homes · {localeUrl(loc, `/guias/${slug}`)}
+        </p>
+      )}
       {articleJsonLd && (
         <script
           type="application/ld+json"
@@ -133,6 +151,70 @@ export default async function GuiaPage({
         ))}
       </div>
 
+      {imprimible && guia.fechaRevision && (
+        <p className="mb-10 border-l-2 border-foreground/40 pl-4 text-sm text-foreground/80">
+          {t("revision_aviso", { fecha: guia.fechaRevision })}
+        </p>
+      )}
+
+      {imprimible && (
+        <div className="mb-10 flex flex-wrap items-center gap-4 print:hidden">
+          <BotonImprimir etiqueta={t("imprimir")} />
+          <span className="text-sm text-muted-foreground">{t("imprimir_ayuda")}</span>
+        </div>
+      )}
+
+      {trad.requisitos && trad.requisitos.length > 0 && (
+        <>
+          <p className="mb-8 text-sm text-muted-foreground">{t("requisitos_leyenda")}</p>
+          {trad.requisitos.map((grupo) => (
+            <section key={grupo.id} className="mb-10 break-inside-avoid-page">
+              <h2 className="font-serif text-2xl text-foreground mb-4 border-b border-border pb-2">
+                {grupo.titulo}
+              </h2>
+              <ul className="space-y-3">
+                {grupo.items.map((item) => (
+                  <li key={item.id} className="flex gap-3 break-inside-avoid">
+                    <span
+                      aria-hidden="true"
+                      className="mt-[0.35rem] h-3.5 w-3.5 shrink-0 border border-foreground/60"
+                    />
+                    <span className="text-foreground/90 leading-relaxed">
+                      {item.texto}{" "}
+                      <span className="whitespace-nowrap font-mono text-[11px] tracking-[0.05em] text-muted-foreground">
+                        ({formatearRef(item.ref, loc)})
+                      </span>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))}
+        </>
+      )}
+
+      {trad.notas && trad.notas.length > 0 && (
+        <div className="mb-12 space-y-4 text-sm text-muted-foreground leading-relaxed">
+          {trad.notas.map((nota, idx) => (
+            <p key={idx}>{nota}</p>
+          ))}
+        </div>
+      )}
+
+      {mostrarCalculadora && (
+        <aside className="mb-12 border border-border p-6 break-inside-avoid">
+          <h2 className="font-serif text-xl text-foreground mb-2">{t("cta_titulo")}</h2>
+          <p className="text-sm text-muted-foreground mb-4">{t("cta_texto")}</p>
+          <Link
+            href={RUTA_CALCULADORA}
+            className="inline-flex items-center border border-foreground/30 px-4 py-2 font-mono text-[11px] tracking-[0.15em] uppercase text-foreground hover:bg-foreground hover:text-background transition-colors print:hidden"
+          >
+            {t("cta_boton")}
+          </Link>
+          <p className="hidden print:block text-sm">{localeUrl(loc, RUTA_CALCULADORA)}</p>
+        </aside>
+      )}
+
       {guia.fuentes.length > 0 && (
         <div className="mb-12">
           <p className="font-mono text-[11px] tracking-[0.2em] uppercase text-muted-foreground/60 mb-3">
@@ -155,9 +237,15 @@ export default async function GuiaPage({
         </div>
       )}
 
+      {imprimible && guia.fechaRevision && (
+        <p className="hidden print:block mt-8 border-t border-foreground/40 pt-2 text-[11px]">
+          {t("impresion_pie", { fecha: guia.fechaRevision })}
+        </p>
+      )}
+
       <Link
         href="/guias"
-        className="font-mono text-[11px] tracking-[0.15em] uppercase text-muted-foreground hover:text-foreground transition-colors"
+        className="font-mono text-[11px] tracking-[0.15em] uppercase text-muted-foreground hover:text-foreground transition-colors print:hidden"
       >
         ← {t("volver")}
       </Link>

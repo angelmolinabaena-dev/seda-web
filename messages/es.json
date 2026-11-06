@@ -1392,7 +1392,15 @@
       "fuentes_titulo": "Fuentes",
       "borrador_badge": "Borrador — no publicado",
       "pendiente": "Pendiente",
-      "volver": "Volver a Guías"
+      "volver": "Volver a Guías",
+      "imprimir": "Imprimir esta guía",
+      "imprimir_ayuda": "Versión para imprimir: solo la lista, sin menús.",
+      "revision_aviso": "Contrastada con el texto oficial vigente el {fecha}. Compruebe en el BOJA que no haya cambios posteriores.",
+      "requisitos_leyenda": "Cada casilla es un requisito; a su derecha, el artículo del Decreto 28/2016 que lo exige.",
+      "cta_titulo": "Si está valorando alquilar su casa",
+      "cta_texto": "La calculadora de SEDA le da una estimación orientativa con los datos que usted introduce. No es una promesa de ingresos ni sustituye comprobar los requisitos de esta guía.",
+      "cta_boton": "Abrir la calculadora",
+      "impresion_pie": "Guía de SEDA Private Homes. Información general: no sustituye al asesoramiento jurídico. Revisada el {fecha}."
     },
     "autor": {
       "eyebrow": "— Autor",

@@ -1392,7 +1392,15 @@
       "fuentes_titulo": "Sources",
       "borrador_badge": "Brouillon — non publié",
       "pendiente": "En attente",
-      "volver": "Retour aux guides"
+      "volver": "Retour aux guides",
+      "imprimir": "Imprimer ce guide",
+      "imprimir_ayuda": "Version imprimable : seulement la liste, sans menus.",
+      "revision_aviso": "Vérifié sur le texte officiel en vigueur le {fecha}. Consultez le BOJA pour vérifier qu'il n'y a pas de changements ultérieurs.",
+      "requisitos_leyenda": "Chaque case est une exigence ; à sa droite, l'article du décret 28/2016 qui la prévoit.",
+      "cta_titulo": "Si vous envisagez de louer votre bien",
+      "cta_texto": "Le calculateur de SEDA vous donne une estimation indicative à partir des données que vous saisissez. Ce n'est pas une promesse de revenus et il ne remplace pas la vérification des exigences de ce guide.",
+      "cta_boton": "Ouvrir le calculateur",
+      "impresion_pie": "Un guide de SEDA Private Homes. Information générale : ne remplace pas un conseil juridique. Vérifié le {fecha}."
     },
     "autor": {
       "eyebrow": "— Auteur",

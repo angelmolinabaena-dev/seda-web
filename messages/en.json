@@ -1392,7 +1392,15 @@
       "fuentes_titulo": "Sources",
       "borrador_badge": "Draft — not published",
       "pendiente": "Pending",
-      "volver": "Back to Guides"
+      "volver": "Back to Guides",
+      "imprimir": "Print this guide",
+      "imprimir_ayuda": "Print version: just the list, no menus.",
+      "revision_aviso": "Checked against the official text in force on {fecha}. Check the BOJA for any later changes.",
+      "requisitos_leyenda": "Each box is a requirement; to its right, the article of Decree 28/2016 that sets it.",
+      "cta_titulo": "If you are weighing up letting your home",
+      "cta_texto": "SEDA's calculator gives you an indicative estimate from the figures you enter. It is not a promise of income and does not replace checking the requirements in this guide.",
+      "cta_boton": "Open the calculator",
+      "impresion_pie": "A guide from SEDA Private Homes. General information: not a substitute for legal advice. Reviewed on {fecha}."
     },
     "autor": {
       "eyebrow": "— Author",
