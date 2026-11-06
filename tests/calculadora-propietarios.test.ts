@@ -134,13 +134,21 @@ describe("consentimiento RGPD obligatorio", () => {
     if (!r.ok) throw new Error("debía aceptarse")
     const c = cuerpoPortal(r.lead)
     expect(Object.keys(c).sort()).toEqual(
-      ["consentimiento", "consentimiento_version", "correo", "dormitorios", "municipio", "nombre", "telefono"],
+      ["consentimiento", "consentimiento_version", "correo", "dormitorios", "idioma", "municipio", "nombre", "telefono"],
     )
     expect(c.consentimiento).toBe(true)
     expect(c.consentimiento_version).toMatch(/^[A-Za-z0-9._-]{1,40}$/)
     expect(c.correo).toBe(c.correo.toLowerCase())
     // CONTROL NEGATIVO: nada de lo que el portal rechazaría por .strict()
-    for (const k of ["email", "origen", "idioma", "estimacion", "propiedad", "website"]) expect(c).not.toHaveProperty(k)
+    for (const k of ["email", "origen", "estimacion", "propiedad", "website"]) expect(c).not.toHaveProperty(k)
+  })
+
+  it("idioma: el cuerpo lleva el locale de la página, con cada uno de los cuatro", () => {
+    for (const locale of ["es", "en", "de", "fr"]) {
+      const r = validarLead({ ...BASE, consentimiento: true, locale })
+      if (!r.ok) throw new Error("debía aceptarse")
+      expect(cuerpoPortal(r.lead).idioma).toBe(locale)
+    }
   })
 
   it("los topes coinciden con los del portal: municipio 80 y dormitorios 30", () => {
@@ -339,6 +347,7 @@ describe("POST /api/leads/propietario", () => {
         dormitorios: 3,
         consentimiento: true,
         consentimiento_version: expect.stringMatching(/^[A-Za-z0-9._-]{1,40}$/),
+        idioma: "es", // locale de la página (LEAD usa "es")
       })
       expect(JSON.stringify(cuerpo)).not.toContain("website")
     })
