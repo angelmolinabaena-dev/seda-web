@@ -38,6 +38,10 @@ import type { DocumentoLegalMultilingue } from "./types"
 
   Si cualquiera de estos hechos cambia, este texto cambia con él, y si
   aparece analítica hay que añadir además un banner de consentimiento.
+
+  Este es el texto de «todo apagado» (hoy en producción). Con
+  SEDA_FLAG_META_PIXEL encendido hay aviso de cookies y píxel de Meta, y la
+  página sirve la variante de `lib/legal/meta.ts` (docs/META-PIXEL.md).
 */
 
 export const COOKIES: DocumentoLegalMultilingue = {

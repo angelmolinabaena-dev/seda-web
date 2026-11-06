@@ -2,7 +2,7 @@ import { routing } from "@/i18n/routing"
 import { MAX_EMAIL_LENGTH, esEmailValido } from "@/lib/api-guards"
 import { HONEYPOT_FIELD, HONEYPOT_MAX } from "@/lib/contact-fields"
 import { OCUPACION_MAX, OCUPACION_MIN, estimar } from "@/lib/calculadora-propietarios"
-import { PRIVACIDAD } from "@/lib/legal/privacidad"
+import { privacidadVigente } from "@/lib/legal/meta"
 import { normalizarTelefonoE164 } from "@/lib/telefono-e164"
 
 /*
@@ -145,7 +145,7 @@ export function cuerpoPortal(lead: Lead) {
     municipio: lead.municipio ?? null,
     dormitorios: lead.dormitorios ?? null,
     consentimiento: true as const,
-    consentimiento_version: PRIVACIDAD.actualizado,
+    consentimiento_version: privacidadVigente().actualizado,
     // Locale de la página desde la que se envió el formulario (es|en|de|fr):
     // seda_os lo usa para contestar en ese idioma. Única clave añadida.
     idioma: lead.locale,

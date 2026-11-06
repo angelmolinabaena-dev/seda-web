@@ -1,3 +1,4 @@
+import type { ReactNode } from "react"
 import { notFound } from "next/navigation"
 import { NextIntlClientProvider, hasLocale } from "next-intl"
 import { setRequestLocale } from "next-intl/server"
@@ -9,6 +10,8 @@ import { JsonLdScript } from "@/components/page-json-ld"
 import { routing } from "@/i18n/routing"
 import { businessJsonLd } from "@/lib/jsonld"
 import { fontVariables } from "@/lib/fonts"
+import { TEXTOS_CONSENTIMIENTO } from "@/lib/consentimiento-textos"
+import { metaPixelActivo, metaPixelId } from "@/lib/meta-config.mjs"
 
 import "../globals.css"
 
@@ -58,6 +61,29 @@ export default async function LocaleLayout({
   // Enables static rendering of all messages on this locale segment.
   setRequestLocale(locale)
 
+  // Píxel de Meta con consentimiento (SEDA_FLAG_META_PIXEL + NEXT_PUBLIC_META_PIXEL_ID).
+  // Apagado: nada de nada — sin aviso, sin enlace en el pie, sin script, el mismo
+  // HTML que antes (comprobado byte a byte contra `main`; ver el PR). Se lee al
+  // hacer el build, como los demás flags.
+  //
+  // Dos detalles que hacen falta para que «apagado» sea de verdad idéntico:
+  //  · `process.env.SEDA_FLAG_META_PIXEL` va escrito literal, y next.config.mjs
+  //    lo inlina (`env`): con el flag apagado el bundler elimina el `import()` y
+  //    el código del aviso ni siquiera se compila a un chunk. Con un import
+  //    estático (o dinámico sin esta guarda) cada página pediría un .js más.
+  //  · El aviso y el enlace viajan por el pie (props opcionales que solo se
+  //    pasan si hay algo): un `{cond && <Aviso/>}` entre los hijos del layout
+  //    dejaría un `null` serializado en el HTML aunque no se pinte nada.
+  const pixelId = metaPixelActivo() ? metaPixelId() : null
+  const textosCookies = TEXTOS_CONSENTIMIENTO[locale]
+  const propsPie: { enlaceCookies?: ReactNode; avisoCookies?: ReactNode } = {}
+  if (process.env.SEDA_FLAG_META_PIXEL === "1" && pixelId) {
+    const { ConsentimientoCookies } = await import("@/components/consentimiento/consentimiento-cookies")
+    const { EnlaceConfigurarCookies } = await import("@/components/consentimiento/enlace-configurar-cookies")
+    propsPie.enlaceCookies = <EnlaceConfigurarCookies etiqueta={textosCookies.enlacePie} />
+    propsPie.avisoCookies = <ConsentimientoCookies pixelId={pixelId} textos={textosCookies} />
+  }
+
   // `<html lang>` matches the rendered language: drives screen-reader
   // language switching and gives Google a strong locale signal at first paint.
   return (
@@ -68,7 +94,7 @@ export default async function LocaleLayout({
           <SkipLink />
           <Navigation />
           {children}
-          <Footer />
+          <Footer {...propsPie} />
           {/* Global power-user shortcuts (g+c, g+p, ?, Esc). Mounted once
               per locale so it's available on every page without bloating
               individual route bundles. */}

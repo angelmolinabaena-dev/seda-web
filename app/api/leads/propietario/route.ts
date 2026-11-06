@@ -1,8 +1,11 @@
-import { NextResponse } from "next/server"
+import { randomUUID } from "node:crypto"
+import { NextResponse, after } from "next/server"
 import { clientKey, crearLimitador, esMismoOrigen } from "@/lib/api-guards"
 import { calculadoraPropietariosActiva } from "@/lib/calculadora-propietarios"
 import { ENDPOINT_PORTAL_LEADS_PROPIETARIO, cuerpoPortal, validarLead } from "@/lib/lead-propietario"
 import { cabecerasFirmaPortal, secretoLead } from "@/lib/lead-firma"
+import { enviarLeadCapi, identificadoresDeCookie } from "@/lib/meta-capi"
+import { metaCapiActivo, metaPixelActivo } from "@/lib/meta-config.mjs"
 
 /*
   Lead de la calculadora de propietarios (/propietarios/calculadora).
@@ -39,6 +42,16 @@ import { cabecerasFirmaPortal, secretoLead } from "@/lib/lead-firma"
     lib/lead-firma.ts). Sin secreto (o con menos de 32 caracteres) no se llama
     al portal: 503 `not_configured` y un console.error. El portal rechaza sin
     firma con 401, así que llamar sin ella solo serviría para perder el lead.
+  · MEDICIÓN DE META (SEDA_FLAG_META_PIXEL, apagado por defecto). Con el flag
+    apagado esta ruta responde exactamente `{ ok: true }`, como siempre. Con el
+    flag encendido y SOLO si se cumplen las dos cosas —el navegador mandó
+    `X-Consent-Marketing: 1` (el visitante aceptó las cookies de marketing) y el
+    portal de seda_os respondió exactamente 201— la respuesta añade
+    `lead: { event_id }`: el navegador lo usa para el `Lead` del píxel y, si
+    SEDA_FLAG_META_CAPI está encendido, el servidor manda el mismo `Lead` a la
+    API de conversiones con ESE mismo `event_id` (deduplicación). Sin
+    consentimiento o con otro estado 2xx: no hay `event_id`, ni evento, ni
+    llamada a Meta. Ni el correo ni el teléfono salen de aquí hacia Meta.
 */
 
 const MAX_BODY_BYTES = 4 * 1024
@@ -52,6 +65,50 @@ function ipVisitante(req: Request): string | undefined {
 }
 
 const json = (body: Record<string, unknown>, init?: ResponseInit) => NextResponse.json(body, init)
+
+/** Cabecera con la que el navegador declara el consentimiento de marketing (solo la manda con una elección vigente). */
+const CABECERA_CONSENTIMIENTO_MARKETING = "x-consent-marketing"
+
+/** Para que el envío a Meta no retrase la respuesta: `after` en producción; directo si no hay petición en curso (tests). */
+function trasResponder(tarea: () => Promise<unknown>): void {
+  try {
+    after(tarea)
+  } catch {
+    void tarea()
+  }
+}
+
+/** URL de la página que envió el formulario, sin query ni hash: el `Referer` solo si es del mismo origen. */
+function urlOrigenEvento(req: Request): string {
+  const origen = req.headers.get("origin") ?? ""
+  try {
+    const ref = new URL(req.headers.get("referer") ?? "")
+    if (origen && ref.origin === origen) return `${ref.origin}${ref.pathname}`
+  } catch {
+    // sin Referer válido
+  }
+  return `${origen}/propietarios/calculadora`
+}
+
+/**
+ * Medición de Meta del lead recién creado. Devuelve el `event_id` compartido
+ * con el píxel, o null si no hay nada que medir. Se llama SOLO tras un 2xx del portal.
+ */
+function medirLead(req: Request, estadoPortal: number): string | null {
+  if (!metaPixelActivo()) return null
+  if (req.headers.get(CABECERA_CONSENTIMIENTO_MARKETING) !== "1") return null
+  if (estadoPortal !== 201) {
+    console.warn("[/api/leads/propietario] el portal respondió", estadoPortal, "y no 201: no se emite Lead")
+    return null
+  }
+  const eventId = randomUUID()
+  if (metaCapiActivo()) {
+    const { fbp, fbc } = identificadoresDeCookie(req.headers.get("cookie"))
+    const evento = { eventId, urlOrigen: urlOrigenEvento(req), ip: ipVisitante(req), userAgent: req.headers.get("user-agent") ?? undefined, fbp, fbc }
+    trasResponder(() => enviarLeadCapi(evento))
+  }
+  return eventId
+}
 
 export async function POST(req: Request) {
   if (!calculadoraPropietariosActiva()) {
@@ -131,7 +188,14 @@ export async function POST(req: Request) {
       }
       return json({ ok: false, error: "send_failed" }, { status: 502 })
     }
-    return json({ ok: true })
+    // La medición NUNCA puede estropear un lead ya creado: pase lo que pase aquí, el visitante ve el éxito.
+    let eventId: string | null = null
+    try {
+      eventId = medirLead(req, resp.status)
+    } catch {
+      console.error("[/api/leads/propietario] fallo en la medición de Meta; el lead ya está creado")
+    }
+    return json(eventId ? { ok: true, lead: { event_id: eventId } } : { ok: true })
   } catch (err) {
     console.error("[/api/leads/propietario] error de red hacia el portal", err instanceof Error ? err.name : "unknown")
     return json({ ok: false, error: "network_error" }, { status: 502 })

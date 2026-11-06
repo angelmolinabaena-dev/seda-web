@@ -817,11 +817,14 @@ describe("control — lo que salió limpio", () => {
     expect(r).not.toMatch(/CCBot/)
   })
 
-  it("la CSP, HSTS y X-Frame-Options están en vercel.json y no hay unsafe-eval", () => {
+  it("la CSP (lib/csp.mjs, publicada por next.config.mjs), HSTS y X-Frame-Options (vercel.json) están y no hay unsafe-eval", () => {
     const v = JSON.parse(leer("vercel.json"))
     const h = Object.fromEntries(v.headers[0].headers.map((x: { key: string; value: string }) => [x.key, x.value]))
-    expect(h["Content-Security-Policy"]).toMatch(/frame-ancestors 'none'/)
-    expect(h["Content-Security-Policy"]).not.toMatch(/unsafe-eval/)
+    // La CSP global ya no vive en vercel.json (dos CSP se intersecan): ver tests/csp-headers.test.ts.
+    expect(h["Content-Security-Policy"]).toBeUndefined()
+    const csp = leer("lib/csp.mjs")
+    expect(csp).toMatch(/\["frame-ancestors", \["'none'"\]\]/)
+    expect(csp).not.toMatch(/unsafe-eval/)
     expect(h["Strict-Transport-Security"]).toMatch(/max-age=63072000/)
     expect(h["X-Frame-Options"]).toBe("SAMEORIGIN")
   })
