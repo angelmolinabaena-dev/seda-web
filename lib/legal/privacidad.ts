@@ -68,7 +68,7 @@ import type { DocumentoLegalMultilingue } from "./types"
 export const PRIVACIDAD: DocumentoLegalMultilingue = {
   id: "privacidad",
   ruta: "/privacidad",
-  actualizado: "2026-11-04",
+  actualizado: "2026-11-06",
   traducciones: {
     es: {
       titulo: "Política de privacidad",
