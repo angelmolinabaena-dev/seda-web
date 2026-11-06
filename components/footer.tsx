@@ -2,6 +2,7 @@
 
 import { Link } from "@/i18n/navigation"
 import { useTranslations } from "next-intl"
+import type { ReactNode } from "react"
 import { generalContact } from "@/lib/site-contact"
 import { haySeccionGuias } from "@/lib/guias"
 
@@ -14,7 +15,15 @@ import { haySeccionGuias } from "@/lib/guias"
     from a UX & SEO standpoint). Will be re-introduced when real handles exist.
 */
 
-export function Footer() {
+export function Footer({
+  enlaceCookies,
+  avisoCookies,
+}: {
+  /** «Configurar cookies», en el menú legal. */
+  enlaceCookies?: ReactNode
+  /** El aviso de cookies (position: fixed). Se monta aquí, y no en el layout, para que apagado no deje ni un `null` en el HTML. */
+  avisoCookies?: ReactNode
+} = {}) {
   const t = useTranslations()
   const year = new Date().getFullYear()
   const footerLinks = [
@@ -39,6 +48,7 @@ export function Footer() {
     { label: t("legal.links.cookies"),    href: "/cookies" },
   ]
   return (
+    <>
     <footer className="px-6 py-16 md:px-12 lg:px-20 border-t border-border">
       <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8 mb-20">
         <div className="md:col-span-5">
@@ -113,6 +123,9 @@ export function Footer() {
               {link.label}
             </Link>
           ))}
+          {/* «Configurar cookies»: solo existe con SEDA_FLAG_META_PIXEL encendido
+              (el layout pasa `null` si no). Apagado, el pie es el de siempre. */}
+          {enlaceCookies}
         </nav>
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <p className="font-mono text-[11px] tracking-[0.15em] text-muted-foreground">
@@ -124,5 +137,7 @@ export function Footer() {
         </div>
       </div>
     </footer>
+    {avisoCookies}
+    </>
   )
 }

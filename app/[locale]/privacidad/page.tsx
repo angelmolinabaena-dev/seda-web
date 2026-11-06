@@ -4,12 +4,12 @@ import { LegalDocument } from "@/components/legal-document"
 import { PageJsonLd } from "@/components/page-json-ld"
 import type { Locale, LocaleParams } from "@/i18n/routing"
 import { exigirIdentidad } from "@/lib/legal/entity"
-import { PRIVACIDAD } from "@/lib/legal/privacidad"
+import { privacidadVigente } from "@/lib/legal/meta"
 import { pageMetadata } from "@/lib/site-pages"
 
 export async function generateMetadata({ params }: LocaleParams): Promise<Metadata> {
   const { locale } = await params
-  return pageMetadata(locale, PRIVACIDAD.ruta, await getTranslations({ locale }))
+  return pageMetadata(locale, privacidadVigente().ruta, await getTranslations({ locale }))
 }
 
 export default async function PrivacidadPage({ params }: LocaleParams) {
@@ -23,9 +23,9 @@ export default async function PrivacidadPage({ params }: LocaleParams) {
 
   return (
     <>
-      <PageJsonLd locale={locale} path={PRIVACIDAD.ruta} />
+      <PageJsonLd locale={locale} path={privacidadVigente().ruta} />
       <LegalDocument
-        documento={PRIVACIDAD}
+        documento={privacidadVigente()}
         locale={locale}
         pendientes={pendientes}
         etiquetaActualizado={t("actualizado")}

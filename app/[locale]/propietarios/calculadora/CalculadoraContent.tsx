@@ -13,6 +13,7 @@ import {
   estimar,
   type EstadoFormulario,
 } from "@/lib/calculadora-propietarios"
+import { cabecerasConsentimiento, rastrearLead } from "@/lib/meta-pixel-cliente"
 import { normalizarTelefonoE164 } from "@/lib/telefono-e164"
 import { euros, type Idioma } from "@/lib/tarifa"
 import { ZONAS } from "@/lib/zonas"
@@ -110,7 +111,9 @@ export function CalculadoraContent() {
     try {
       const resp = await fetch("/api/leads/propietario", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        // `cabecerasConsentimiento()` está vacía salvo con SEDA_FLAG_META_PIXEL encendido Y
+        // consentimiento de marketing vigente: apagado, la petición es la de siempre.
+        headers: { "Content-Type": "application/json", ...cabecerasConsentimiento() },
         body: JSON.stringify({
           nombre: String(datos.get("nombre") ?? ""),
           email: String(datos.get("email") ?? ""),
@@ -124,7 +127,11 @@ export function CalculadoraContent() {
           [HONEYPOT_FIELD]: String(datos.get(HONEYPOT_FIELD) ?? ""),
         }),
       })
-      const cuerpo = (await resp.json().catch(() => ({}))) as { error?: string }
+      const cuerpo = (await resp.json().catch(() => ({}))) as { error?: string; lead?: { event_id?: unknown } }
+      // `Lead` del píxel: solo si el servidor devuelve un event_id, y lo hace solo cuando
+      // seda_os respondió 201 y hay consentimiento de marketing. `rastrearLead` además
+      // se calla si el consentimiento se retiró entre tanto.
+      if (resp.ok && typeof cuerpo.lead?.event_id === "string") rastrearLead(cuerpo.lead.event_id)
       const siguiente = estadoTrasRespuesta(resp.status, cuerpo.error)
       if (siguiente === "telefono") {
         setPedirPrefijo(true)
