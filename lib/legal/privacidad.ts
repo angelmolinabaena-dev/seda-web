@@ -94,7 +94,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Solo tratamos los datos que nos das tú. No los compramos, no los obtenemos de terceros y no los completamos con fuentes externas.",
+                "Solo tratamos los datos que nos das tú. No los compramos, no los obtenemos de terceros y no los completamos con fuentes externas. La única excepción son las cartas postales a titulares de viviendas turísticas, cuyos datos proceden de un registro público (ver «Cartas postales a titulares de viviendas turísticas»).",
             },
             {
               tipo: "tabla",
@@ -180,7 +180,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "No usamos tus datos para enviarte comunicaciones comerciales. Si algún día existe un boletín, requerirá tu consentimiento expreso y separado, y podrás retirarlo cuando quieras.",
+                "No usamos los datos que nos das para enviarte comunicaciones comerciales (las cartas postales a titulares de viviendas turísticas, descritas aparte, no parten de datos que hayas facilitado). Si algún día existe un boletín, requerirá tu consentimiento expreso y separado, y podrás retirarlo cuando quieras.",
             },
           ],
         },
@@ -222,7 +222,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Si reservas una llamada, tus datos los tratan además Calendly y Google Ireland Limited, como se explica en «Reserva de una llamada con Calendly». No hay más destinatarios. No vendemos ni cedemos datos a terceros con fines comerciales. Solo se comunicarían a autoridades u organismos públicos si una norma lo exigiera.",
+                "Si reservas una llamada, tus datos los tratan además Calendly y Google Ireland Limited, como se explica en «Reserva de una llamada con Calendly». No hay más destinatarios. No vendemos ni cedemos datos a terceros con fines comerciales. Solo se comunicarían a autoridades u organismos públicos si una norma lo exigiera. Las cartas postales tienen sus propios destinatarios, indicados en su sección.",
             },
             {
               tipo: "parrafo",
@@ -274,6 +274,61 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
               tipo: "parrafo",
               texto:
                 "Abrir la página /meet no conecta con Calendly. Al pulsar «Ver calendario», tu navegador carga el calendario directamente desde calendly.com: Calendly recibe tu dirección IP y fija sus propias cookies (detalle en la política de cookies), aunque no llegues a reservar. Si prefieres evitarlo, no abras el calendario: escríbenos a {email} y te proponemos día y hora por correo.",
+            },
+          ],
+        },
+        {
+          id: "cartas",
+          titulo: "Cartas postales a titulares de viviendas turísticas",
+          bloques: [
+            {
+              tipo: "parrafo",
+              texto:
+                "Si eres titular de una vivienda turística en Torremolinos, Benalmádena, Málaga o Fuengirola, podemos escribirte una carta postal. No nos has dado tú tus datos: esta sección es la información del artículo 14 del RGPD y es a la que remite la carta.",
+            },
+            {
+              tipo: "tabla",
+              cabeceras: ["Aspecto", "Cartas postales"],
+              filas: [
+                [
+                  "Datos",
+                  "Tu nombre o razón social, la dirección de la vivienda, su número de registro y su número de plazas. Nunca tu correo electrónico ni tu teléfono.",
+                ],
+                [
+                  "Origen",
+                  "El Registro de Turismo de Andalucía, que la Junta de Andalucía publica como datos abiertos (OpenRTA, licencia CC BY 4.0). No los completamos con otras fuentes.",
+                ],
+                [
+                  "Finalidad",
+                  "Enviarte por correo postal, como mucho dos veces al año, información sobre nuestro servicio de gestión de viviendas turísticas.",
+                ],
+                [
+                  "Base jurídica",
+                  "Artículo 6.1.f del RGPD: interés legítimo en dar a conocer nuestro servicio a quien, por figurar en un registro público, lo ejerce como actividad. Hemos hecho una evaluación documentada de ese interés frente a tus derechos; puedes pedírnosla escribiendo a {email}.",
+                ],
+                [
+                  "Destinatarios",
+                  "La imprenta que imprime y prepara la carta (encargada del tratamiento) y el operador postal que la entrega. El sistema en el que se gestionan los envíos lo alojan Vercel y Supabase, con servidores en Fráncfort (UE).",
+                ],
+                [
+                  "Conservación",
+                  "Hasta 12 meses después de la última carta que te enviemos, si no respondes. Los datos importados de los que no sale una carta en el plazo de un mes se suprimen.",
+                ],
+                [
+                  "Tus derechos",
+                  "Acceso, rectificación, supresión, limitación y oposición, y reclamar ante la Agencia Española de Protección de Datos (ver «Tus derechos»).",
+                ],
+              ],
+            },
+            {
+              tipo: "parrafo",
+              texto:
+                "Vercel y Supabase son sociedades estadounidenses: el tratamiento implica una transferencia internacional de datos fuera del Espacio Económico Europeo, con las garantías adecuadas. Puedes pedirnos información sobre ellas escribiendo a {email}.",
+            },
+            {
+              tipo: "parrafo",
+              texto:
+                "Puedes oponerte (artículo 21 del RGPD) en cualquier momento y sin dar motivos: escaneando el código QR de baja de la carta, o escribiendo a {email} con el código que figura en la carta. No te pediremos ningún dato más. Tras una oposición no volveremos a escribirte, y para ello solo conservamos una huella criptográfica de tus datos, a partir de la cual no se pueden recuperar.",
             },
           ],
         },
@@ -424,7 +479,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "We only process the data you give us. We do not buy it, do not obtain it from third parties and do not enrich it from external sources.",
+                "We only process the data you give us. We do not buy it, do not obtain it from third parties and do not enrich it from external sources. The only exception is postal letters to holiday-rental owners, whose data comes from a public register (see “Postal letters to holiday-rental owners”).",
             },
             {
               tipo: "tabla",
@@ -510,7 +565,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "We do not use your data to send you marketing. If a newsletter ever exists, it will require your express, separate consent, which you can withdraw at any time.",
+                "We do not use the data you give us to send you marketing (the postal letters to holiday-rental owners, described separately, do not start from data you provided). If a newsletter ever exists, it will require your express, separate consent, which you can withdraw at any time.",
             },
           ],
         },
@@ -552,7 +607,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "If you book a call, your data is also processed by Calendly and Google Ireland Limited, as explained under “Booking a call with Calendly”. There are no other recipients. We do not sell or transfer data to third parties for commercial purposes. Data would only be disclosed to authorities or public bodies if a legal rule required it.",
+                "If you book a call, your data is also processed by Calendly and Google Ireland Limited, as explained under “Booking a call with Calendly”. There are no other recipients. We do not sell or transfer data to third parties for commercial purposes. Data would only be disclosed to authorities or public bodies if a legal rule required it. Postal letters have their own recipients, given in their section.",
             },
             {
               tipo: "parrafo",
@@ -604,6 +659,61 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
               tipo: "parrafo",
               texto:
                 "Opening the /meet page does not connect to Calendly. When you press “View calendar”, your browser loads the calendar directly from calendly.com: Calendly receives your IP address and sets its own cookies (details in the cookie policy), even if you do not book. If you would rather avoid that, do not open the calendar: write to {email} and we will suggest a day and time by email.",
+            },
+          ],
+        },
+        {
+          id: "cartas",
+          titulo: "Postal letters to holiday-rental owners",
+          bloques: [
+            {
+              tipo: "parrafo",
+              texto:
+                "If you are the holder of a holiday rental in Torremolinos, Benalmádena, Málaga or Fuengirola, we may send you a letter by post. You did not give us your details yourself: this section is the information required by article 14 GDPR, and it is the one the letter refers to.",
+            },
+            {
+              tipo: "tabla",
+              cabeceras: ["Aspect", "Postal letters"],
+              filas: [
+                [
+                  "Data",
+                  "Your name or company name, the address of the property, its registration number and its number of places. Never your email address or telephone number.",
+                ],
+                [
+                  "Source",
+                  "The Andalusian Tourism Register, which the Junta de Andalucía publishes as open data (OpenRTA, CC BY 4.0 licence). We do not supplement it with other sources.",
+                ],
+                [
+                  "Purpose",
+                  "To send you by post, at most twice a year, information about our holiday-rental management service.",
+                ],
+                [
+                  "Legal basis",
+                  "Article 6(1)(f) GDPR: our legitimate interest in making our service known to those who, by appearing in a public register, run a holiday rental as an activity. We have carried out a documented assessment of that interest against your rights; you can ask for it by writing to {email}.",
+                ],
+                [
+                  "Recipients",
+                  "The printer that prints and prepares the letter (a processor) and the postal operator that delivers it. The system in which the mailings are managed is hosted by Vercel and Supabase, with servers in Frankfurt (EU).",
+                ],
+                [
+                  "Retention",
+                  "Up to 12 months after the last letter we send you, if you do not reply. Imported data for which no letter is produced within one month is deleted.",
+                ],
+                [
+                  "Your rights",
+                  "Access, rectification, erasure, restriction and objection, and the right to lodge a complaint with the Spanish Data Protection Agency (see “Your rights”).",
+                ],
+              ],
+            },
+            {
+              tipo: "parrafo",
+              texto:
+                "Vercel and Supabase are US companies, so the processing involves an international transfer of data outside the European Economic Area, with appropriate safeguards. You can ask us about them by writing to {email}.",
+            },
+            {
+              tipo: "parrafo",
+              texto:
+                "You can object (article 21 GDPR) at any time and without giving reasons: by scanning the opt-out QR code on the letter, or by writing to {email} with the code printed on the letter. We will not ask you for any further data. After an objection we will not write to you again, and for that purpose we keep only a cryptographic fingerprint of your data, from which the data cannot be recovered.",
             },
           ],
         },
@@ -751,7 +861,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Nous ne traitons que les données que vous nous donnez. Nous ne les achetons pas, ne les obtenons pas auprès de tiers et ne les enrichissons pas depuis des sources externes.",
+                "Nous ne traitons que les données que vous nous donnez. Nous ne les achetons pas, ne les obtenons pas auprès de tiers et ne les enrichissons pas depuis des sources externes. La seule exception concerne les courriers postaux aux titulaires de logements touristiques, dont les données proviennent d'un registre public (voir « Courriers postaux aux titulaires de logements touristiques »).",
             },
             {
               tipo: "tabla",
@@ -837,7 +947,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Nous n'utilisons pas vos données pour vous envoyer des communications commerciales. Si une lettre d'information voit le jour, elle exigera votre consentement exprès et distinct, révocable à tout moment.",
+                "Nous n'utilisons pas les données que vous nous donnez pour vous envoyer des communications commerciales (les courriers postaux aux titulaires de logements touristiques, décrits à part, ne partent pas de données que vous avez fournies). Si une lettre d'information voit le jour, elle exigera votre consentement exprès et distinct, révocable à tout moment.",
             },
           ],
         },
@@ -879,7 +989,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Si vous réservez un appel, vos données sont aussi traitées par Calendly et Google Ireland Limited, comme expliqué sous « Réservation d'un appel avec Calendly ». Il n'y a pas d'autres destinataires. Nous ne vendons ni ne cédons de données à des tiers à des fins commerciales. Elles ne seraient communiquées aux autorités ou organismes publics que si une norme l'exigeait.",
+                "Si vous réservez un appel, vos données sont aussi traitées par Calendly et Google Ireland Limited, comme expliqué sous « Réservation d'un appel avec Calendly ». Il n'y a pas d'autres destinataires. Nous ne vendons ni ne cédons de données à des tiers à des fins commerciales. Elles ne seraient communiquées aux autorités ou organismes publics que si une norme l'exigeait. Les courriers postaux ont leurs propres destinataires, indiqués dans leur section.",
             },
             {
               tipo: "parrafo",
@@ -931,6 +1041,61 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
               tipo: "parrafo",
               texto:
                 "Ouvrir la page /meet ne vous connecte pas à Calendly. Lorsque vous appuyez sur « Voir le calendrier », votre navigateur charge le calendrier directement depuis calendly.com : Calendly reçoit votre adresse IP et dépose ses propres cookies (détails dans la politique de cookies), même si vous ne réservez pas. Si vous préférez l'éviter, n'ouvrez pas le calendrier : écrivez-nous à {email} et nous vous proposerons un jour et une heure par courriel.",
+            },
+          ],
+        },
+        {
+          id: "cartas",
+          titulo: "Courriers postaux aux titulaires de logements touristiques",
+          bloques: [
+            {
+              tipo: "parrafo",
+              texto:
+                "Si vous êtes titulaire d'un logement touristique à Torremolinos, Benalmádena, Málaga ou Fuengirola, nous pouvons vous écrire par courrier postal. Ce n'est pas vous qui nous avez donné vos données : cette section est l'information prévue à l'article 14 du RGPD, celle à laquelle renvoie le courrier.",
+            },
+            {
+              tipo: "tabla",
+              cabeceras: ["Aspect", "Courriers postaux"],
+              filas: [
+                [
+                  "Données",
+                  "Votre nom ou raison sociale, l'adresse du logement, son numéro d'enregistrement et son nombre de places. Jamais votre courriel ni votre téléphone.",
+                ],
+                [
+                  "Origine",
+                  "Le Registre du tourisme d'Andalousie, que la Junta de Andalucía publie en données ouvertes (OpenRTA, licence CC BY 4.0). Nous ne les complétons pas avec d'autres sources.",
+                ],
+                [
+                  "Finalité",
+                  "Vous envoyer par courrier postal, au plus deux fois par an, des informations sur notre service de gestion de logements touristiques.",
+                ],
+                [
+                  "Base juridique",
+                  "Article 6.1.f du RGPD : intérêt légitime à faire connaître notre service à ceux qui, figurant dans un registre public, exercent cette activité. Nous avons réalisé une évaluation documentée de cet intérêt au regard de vos droits ; vous pouvez la demander en écrivant à {email}.",
+                ],
+                [
+                  "Destinataires",
+                  "L'imprimerie qui imprime et prépare le courrier (sous-traitant) et l'opérateur postal qui le distribue. Le système dans lequel les envois sont gérés est hébergé par Vercel et Supabase, avec des serveurs à Francfort (UE).",
+                ],
+                [
+                  "Conservation",
+                  "Jusqu'à 12 mois après le dernier courrier que nous vous envoyons, si vous ne répondez pas. Les données importées dont il ne résulte aucun courrier dans un délai d'un mois sont supprimées.",
+                ],
+                [
+                  "Vos droits",
+                  "Accès, rectification, effacement, limitation et opposition, et réclamation auprès de l'Agence espagnole de protection des données (voir « Vos droits »).",
+                ],
+              ],
+            },
+            {
+              tipo: "parrafo",
+              texto:
+                "Vercel et Supabase sont des sociétés américaines : le traitement implique un transfert international de données hors de l'Espace économique européen, avec les garanties appropriées. Vous pouvez nous en demander le détail en écrivant à {email}.",
+            },
+            {
+              tipo: "parrafo",
+              texto:
+                "Vous pouvez vous opposer (article 21 du RGPD) à tout moment et sans motif : en scannant le code QR de désinscription du courrier, ou en écrivant à {email} avec le code figurant sur le courrier. Nous ne vous demanderons aucune autre donnée. Après une opposition, nous ne vous écrirons plus, et pour cela nous ne conservons qu'une empreinte cryptographique de vos données, dont elles ne peuvent pas être retrouvées.",
             },
           ],
         },
@@ -1078,7 +1243,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Wir verarbeiten nur die Daten, die Sie uns geben. Wir kaufen sie nicht, beziehen sie nicht von Dritten und reichern sie nicht aus externen Quellen an.",
+                "Wir verarbeiten nur die Daten, die Sie uns geben. Wir kaufen sie nicht, beziehen sie nicht von Dritten und reichern sie nicht aus externen Quellen an. Die einzige Ausnahme ist die Briefpost an Inhaber von Ferienwohnungen, deren Daten aus einem öffentlichen Register stammen (siehe „Briefpost an Inhaber von Ferienwohnungen“).",
             },
             {
               tipo: "tabla",
@@ -1164,7 +1329,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Wir nutzen Ihre Daten nicht für Werbung. Sollte es je einen Newsletter geben, verlangt er Ihre ausdrückliche, gesonderte Einwilligung, die Sie jederzeit widerrufen können.",
+                "Wir nutzen die Daten, die Sie uns geben, nicht für Werbung (die Briefpost an Inhaber von Ferienwohnungen, gesondert beschrieben, geht nicht von Daten aus, die Sie angegeben haben). Sollte es je einen Newsletter geben, verlangt er Ihre ausdrückliche, gesonderte Einwilligung, die Sie jederzeit widerrufen können.",
             },
           ],
         },
@@ -1206,7 +1371,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Wenn Sie ein Gespräch buchen, verarbeiten auch Calendly und Google Ireland Limited Ihre Daten, wie unter „Buchung eines Gesprächs über Calendly“ erläutert. Weitere Empfänger gibt es nicht. Wir verkaufen oder übermitteln keine Daten zu kommerziellen Zwecken an Dritte. An Behörden oder öffentliche Stellen würden sie nur übermittelt, wenn eine Rechtsvorschrift das verlangt.",
+                "Wenn Sie ein Gespräch buchen, verarbeiten auch Calendly und Google Ireland Limited Ihre Daten, wie unter „Buchung eines Gesprächs über Calendly“ erläutert. Weitere Empfänger gibt es nicht. Wir verkaufen oder übermitteln keine Daten zu kommerziellen Zwecken an Dritte. An Behörden oder öffentliche Stellen würden sie nur übermittelt, wenn eine Rechtsvorschrift das verlangt. Die Briefpost hat eigene Empfänger, die in ihrem Abschnitt genannt sind.",
             },
             {
               tipo: "parrafo",
@@ -1258,6 +1423,61 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
               tipo: "parrafo",
               texto:
                 "Das Öffnen der Seite /meet verbindet nicht mit Calendly. Wenn Sie auf „Kalender anzeigen“ klicken, lädt Ihr Browser den Kalender direkt von calendly.com: Calendly erhält Ihre IP-Adresse und setzt eigene Cookies (Einzelheiten in der Cookie-Richtlinie), auch wenn Sie nicht buchen. Möchten Sie das vermeiden, öffnen Sie den Kalender nicht: Schreiben Sie an {email}, und wir schlagen Ihnen Tag und Uhrzeit per E-Mail vor.",
+            },
+          ],
+        },
+        {
+          id: "cartas",
+          titulo: "Briefpost an Inhaber von Ferienwohnungen",
+          bloques: [
+            {
+              tipo: "parrafo",
+              texto:
+                "Wenn Sie Inhaber einer Ferienwohnung in Torremolinos, Benalmádena, Málaga oder Fuengirola sind, können wir Ihnen einen Brief schicken. Ihre Daten haben nicht Sie uns gegeben: Dieser Abschnitt enthält die Information nach Art. 14 DSGVO, auf die der Brief verweist.",
+            },
+            {
+              tipo: "tabla",
+              cabeceras: ["Aspekt", "Briefpost"],
+              filas: [
+                [
+                  "Daten",
+                  "Ihr Name oder Ihre Firma, die Adresse der Wohnung, ihre Registernummer und die Zahl der Plätze. Niemals Ihre E-Mail-Adresse oder Telefonnummer.",
+                ],
+                [
+                  "Herkunft",
+                  "Das Tourismusregister Andalusiens, das die Junta de Andalucía als offene Daten veröffentlicht (OpenRTA, Lizenz CC BY 4.0). Wir ergänzen sie nicht aus anderen Quellen.",
+                ],
+                [
+                  "Zweck",
+                  "Ihnen per Post, höchstens zweimal im Jahr, Informationen über unseren Verwaltungsservice für Ferienwohnungen zu schicken.",
+                ],
+                [
+                  "Rechtsgrundlage",
+                  "Art. 6 Abs. 1 lit. f DSGVO: berechtigtes Interesse, unseren Service denen bekannt zu machen, die als Eintragung in einem öffentlichen Register eine Ferienwohnung betreiben. Wir haben dieses Interesse gegenüber Ihren Rechten dokumentiert abgewogen; die Abwägung können Sie unter {email} anfordern.",
+                ],
+                [
+                  "Empfänger",
+                  "Die Druckerei, die den Brief druckt und vorbereitet (Auftragsverarbeiter), und der Postdienstleister, der ihn zustellt. Das System, in dem die Sendungen verwaltet werden, wird von Vercel und Supabase gehostet, mit Servern in Frankfurt (EU).",
+                ],
+                [
+                  "Speicherdauer",
+                  "Bis zu 12 Monate nach dem letzten Brief, den wir Ihnen schicken, wenn Sie nicht antworten. Importierte Daten, aus denen binnen eines Monats kein Brief entsteht, werden gelöscht.",
+                ],
+                [
+                  "Ihre Rechte",
+                  "Auskunft, Berichtigung, Löschung, Einschränkung und Widerspruch sowie Beschwerde bei der spanischen Datenschutzbehörde (siehe „Ihre Rechte“).",
+                ],
+              ],
+            },
+            {
+              tipo: "parrafo",
+              texto:
+                "Vercel und Supabase sind US-amerikanische Unternehmen: Die Verarbeitung bringt eine internationale Übermittlung von Daten außerhalb des Europäischen Wirtschaftsraums mit sich, mit geeigneten Garantien. Informationen dazu erhalten Sie unter {email}.",
+            },
+            {
+              tipo: "parrafo",
+              texto:
+                "Sie können jederzeit und ohne Begründung widersprechen (Art. 21 DSGVO): mit dem Abmelde-QR-Code auf dem Brief oder per E-Mail an {email} mit dem Code, der auf dem Brief steht. Weitere Daten verlangen wir nicht. Nach einem Widerspruch schreiben wir Ihnen nicht mehr; dafür speichern wir nur einen kryptografischen Fingerabdruck Ihrer Daten, aus dem sich die Daten nicht wiederherstellen lassen.",
             },
           ],
         },
