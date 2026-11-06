@@ -1,0 +1,641 @@
+FUENTE OFICIAL — Decreto 28/2016, de 2 de febrero, por el que se regulan las viviendas de uso turístico (Junta de Andalucía). TEXTO CONSOLIDADO.
+
+Origen: https://www.juntadeandalucia.es/sites/default/files/inline-files/2025/04/Decreto%2028-2016%20de%202%20de%20febrero%20de%20las%20viviendas%20de%20uso%20turistico.pdf
+        (enlazado como «Texto consolidado del Decreto 28/2016» desde la página oficial del Registro de Turismo:
+         https://www.juntadeandalucia.es/organismos/turismoyandaluciaexterior/areas/registro-turismo/establecimientos-servicios/paginas/viviendas-turisticas.html)
+Descargado: 2026-11-06 · SHA-256 del PDF: 0a6538a01525e8a8226905e6c5f30f45c4829571f8105b067c7e71651c2083f7
+Extracción: pdftotext -layout, sin edición. Es copia de trabajo para que tests/guia-vut-andalucia.test.ts compruebe cada cita de la guía
+contra el texto oficial. No sustituye al BOJA: ante cualquier duda manda la fuente enlazada arriba.
+Contraste: la redacción del art. 6.1.a) y del art. 9 coincide con la disposición final sexta del Decreto-ley 1/2025
+(https://www.boe.es/buscar/pdf/2025/BOJA-b-2025-90042-consolidado.pdf).
+
+================================================================================
+
+DECRETO 28/2016, DE 2 DE FEBRERO, POR EL QUE SE REGULAN LAS VIVIENDAS DE USO TURÍSTICO.
+
+
+
+Modificado por Sentencia del Tribunal Supremo de 21 de octubre de 2019.
+
+Modificado por el Decreto 31/2024, de 29 de enero, por el que se modifican diversas disposiciones en materia
+de viviendas de uso turístico, establecimientos de apartamentos turísticos y hoteleros de la Comunidad
+Autónoma de Andalucía.(BOJA número 24, de 2 de febrero de 2024)
+
+Modificado por el Decreto-ley 7/2024, de 25 de junio, para racionalización y el uso eficiente del agua en el
+sector turístico, de mitigación y adaptación al cambio climático de los destinos turísticos de Andalucía, por el
+que se modifican determinadas disposiciones normativas y se adoptan medidas urgentes de apoyo en el
+marco del Plan de Recuperación, Transformación y Resiliencia, Componente 14, Inversión 4, Submedida 2
+(Proyectos de Eficiencia Energética y Economía Circular de Empresas Turísticas).
+
+Modificado por el Decreto-ley 1/2025, de 24 de febrero, de medidas urgentes en materia de vivienda.
+
+
+
+
+El presente texto está consolidado, incluyéndose las modificaciones citadas
+
+
+
+
+         La Comunidad Autónoma de Andalucía tiene atribuida la competencia exclusiva en materia de turismo en
+el artículo 71 del Estatuto de Autonomía, y en el artículo 37.1.14 se considera un principio rector de las políticas
+públicas de la Comunidad Autónoma el fomento del sector turístico como elemento económico estratégico de
+Andalucía. Conforme al artículo 28.1 a) de la Ley 13/2011, de 23 de diciembre, del Turismo de Andalucía, tiene la
+consideración de servicio turístico el alojamiento cuando se facilite hospedaje o estancia a las personas usuarias de
+servicios turísticos.
+
+         Con la última modificación realizada a la Ley 29/1994, de 24 de noviembre, de Arrendamientos Urbanos (en
+adelante LAU), donde encontraban acomodo los alquileres de vivienda por temporada por la Ley 4/2013, de 4 de
+junio, de medidas de flexibilización y fomento del mercado de alquiler de viviendas, queda excluido de su ámbito de
+aplicación “la cesión temporal de uso de la totalidad de una vivienda amueblada y equipada en condiciones de uso
+inmediato, comercializada o promocionada en canales de oferta turística y realizada con finalidad lucrativa, cuando
+esté sometida a un régimen específico, derivando de su normativa sectorial”. Esta modificación se argumenta en el
+propio preámbulo en el sentido que “ en los últimos años se vienen produciendo un aumento cada vez significativo
+del uso del alojamiento privado para el turismo, que podría estar dando cobertura a situaciones de intrusismo y
+competencia desleal, que van en contra de los destinos turísticos; de ahí que la reforma de la Ley propuesta los
+excluya específicamente para que queden regulados por la normativa sectorial específica o, en su defecto, se les
+aplique el régimen de los arrendamientos de temporada, que no sufren modificación”. La causa de esta
+modificación fue recogida en el Plan Nacional Integral de Turismo 2012-2015, donde indicaba que “se viene
+produciendo un aumento cada vez mayor del uso del alojamiento privado en el turismo”.
+
+         Este aumento se vincula a las nuevas formas de viajar, el deseo de las personas turistas de tener una
+relación más directa con las personas residentes del destino que eligen, la irrupción de las nuevas y rápidas formas
+de comercialización, directas y sin intermediarios, en especial numerosos portales de Internet, la oferta en este
+canal es muy amplia y no siempre va acompañada, como sería deseable, de un excelente servicio, ni de una mínima
+garantía para las personas usuarias.
+
+
+         Constituye el objeto de este Decreto regular las viviendas que ofertan el servicio de alojamiento turístico a
+fin de establecer unas mínimas garantías de calidad y seguridad para las personas usuarias turísticas, servicio que,
+al igual que en las viviendas turísticas de alojamiento rural, previstas en el artículo 48 de la Ley 13/2011, de 23
+diciembre y a diferencia de los establecimientos de alojamiento turístico, recogidos en el artículo 40 de la misma, no
+supone, con carácter general, la actividad principal de la persona propietaria.
+
+        Además de lo señalado en el segundo párrafo, la necesidad de esta regulación viene dada por otras causas.
+Una de estas causas es la de seguridad pública. Así, la Ley Orgánica 4/2015, de 30 de marzo, de protección de la
+seguridad ciudadana, contempla las actividades de hospedaje como relevantes para la seguridad ciudadana,
+imponiendo en su artículo 25 obligaciones de registro documental e información sobre los viajeros que utilicen
+establecimientos de hospedaje. De conformidad con lo anterior, constituye una obligación de los titulares de los
+mismos la cumplimentación del libro-registro, así como la presentación de los partes de entrada de viajeros, según
+establece la ORDEN INT/1922/2003, de 3 de julio, sobre libros-registro y partes de entrada de viajeros en
+establecimientos de hostelería y otros análogos.
+
+         Otra de las causas es la de protección de personas usuarias de servicios turísticos. No cabe interpretar esta
+protección como meramente física, sino como una protección de sus derechos como usuarios de unos servicios
+específicos, de manera que el disfrute por un lado, y la tranquilidad por otro, puedan ser garantizados, lo que se
+realiza mediante la exigencia de una serie de requisitos que se consideran mínimos para lograr el confort y la
+seguridad necesaria para los turistas.
+
+          La protección del medio ambiente y del entorno urbano, constituye otra de las razones que justifica la
+necesidad de regulación de la materia. En este sentido, no se puede obviar la importancia del impacto y la
+incidencia que este tipo de actividad y, en concreto, este tipo de alojamiento produce sobre el territorio, la
+comunidad donde se integra y su repercusión directa sobre la convivencia vecinal. Uno de lo ejes en lo que se basa
+la política turística es el desarrollo sostenible, y así se determina en la propia exposición de motivos de la Ley
+13/2011, de 23 de diciembre, en la que se señala la necesidad de “una nueva cultura basada en la sostenibilidad”,
+prosigue que “la ordenación del turismo tiene una significativa dimensión territorial, ambiental y paisajística” y
+añade que “la oferta turística presenta otros componentes relacionados con el entorno donde se desenvuelve la
+vivencia de la persona usuaria de servicios turísticos, mereciendo especial atención aspectos como la correcta
+conservación de los recursos y la apropiada configuración de los espacios del destino turístico”. Finalmente, se
+establece como finalidad de la ley “la protección de los recursos turísticos de acuerdo con el principio de
+sostenibilidad”.
+
+         Además, se precisa tener un censo de viviendas de uso turístico en Andalucía, implementado a través del
+Registro de Turismo de Andalucía, para eliminar su clandestinidad y la competencia desleal en la actividad turística,
+como instrumento eficaz en garantía de la mencionada seguridad ciudadana e, igualmente, en la lucha contra el
+fraude, así como para velar por el cumplimiento de unos requisitos mínimos básicos de infraestructura y de calidad,
+cuya exigencia supone un criterio irrenunciable de la acción de la Administración turística andaluza que, en todo
+caso, dispone de potestades de inspección y sancionadora como posibles medios con los que perseguir una
+situación irregular.
+
+        En virtud de lo expuesto, se definen por tanto las razones de interés general que sustentan la necesidad de
+regulación de las viviendas de uso turístico y del medio de intervención, previstos en el presente Decreto como son
+la seguridad pública, la protección de las personas usuarias de servicios turísticos y la protección del
+medioambiente y entorno urbano.
+
+         Por su parte, y dada la singularidad de este tipo de alojamiento, existe una proporcionalidad en la exigencia
+de requisitos. Así, los requisitos requeridos son más reducidos que los que se imponen a otros alojamientos
+turísticos, tratándose de requisitos relacionados más directamente con la prestación del servicio, la dotación de una
+calidad básica en la oferta, así como la atención y el derecho de información de las personas usuarias.
+
+        El presente Decreto está estructurado en cuatro capítulos. Se han diferenciado en él dos tipos de viviendas,
+las que se cedan en su totalidad y las viviendas por habitaciones, en este último caso, se permite utilizar las
+denominaciones reconocidas internacionalmente para este tipo de alojamiento. Se establece la obligatoriedad de
+comunicar a la Administración turística la existencia de dicha vivienda y de inscribirse de oficio en el Registro de
+Turismo de Andalucía.
+
+       Por otra parte, se procede a la modificación del Decreto 194/2010, de 20 de abril, de establecimientos de
+apartamentos turísticos, figura diferente de las viviendas de uso turístico. Con esta modificación, en aras de
+garantizar la coherencia regulatoria de la normativa, a través de una correcta interpretación sistemática de la
+misma, se pretenden aclarar los supuestos en los que se permite que los establecimientos de apartamentos
+turísticos se constituyan en régimen de propiedad horizontal o figuras afines. En este sentido, se pretende
+compatibilizar lo establecido en el artículo 42.1 de la Ley 13/2011, de 23 de diciembre, que exige una categoría
+mínima de tres llaves, con lo señalado en el artículo 44.3.b) de la misma, que permite la existencia de
+establecimientos que ocupen partes no independientes de edificios, por lo que en su practica totalidad están
+divididos horizontalmente de manera necesaria. Por ello, se puntualiza que los establecimientos de apartamentos
+turísticos del grupo conjuntos podrán constituirse en este régimen, mientras que los establecimientos de
+apartamentos turísticos del grupo edificios/complejos, al ocupar todo el inmueble o parte independiente del
+mismo, sólo podrán hacerlo cuando ostenten una categoría mínima de tres llaves.
+
+       Igualmente, se permite que los establecimientos de apartamentos turísticos del grupo de conjuntos
+puedan situarse sobre suelos calificados como de uso característico turístico y terciario, toda vez que sobre los
+mismos no está permitido el uso residencial.
+
+        De igual forma, se precisa y se adecua a la Ley 13/2011, de 23 de diciembre, la definición de los
+establecimientos de apartamentos turísticos del grupo de conjuntos, se flexibilizan distintos requisitos relativos a la
+acreditación de la unidad de explotación y a la exhibición de las placas identificativas y se incorpora la especialidad
+casas-cueva vinculada a la modalidad ciudad.
+
+         Finalmente, se recogen los requisitos relativos a la clasificación cuyo cumplimiento puede ser objeto de
+exención para los establecimientos de apartamentos turísticos del grupo conjuntos, lo que obedece a dos razones
+fundamentales. Una de ellas es facilitar la explotación turística, y por ende el desarrollo de una actividad
+económica, por parte de aquellas personas que, disponiendo de tres o más unidades de alojamiento, no pueden
+acogerse a la figura de viviendas de uso turístico y no cumplan con los requisitos de carácter estructural que exige la
+normativa sobre establecimientos de apartamentos turísticos, pudiendo acogerse a este tipo alojativo
+compensando mediante la oferta de determinados servicios complementarios o condiciones adicionales según lo
+contenido en el Anexo VI del Decreto 194/2010, de 20 de abril. La segunda de las razones se centra en dar un trato
+similar a los establecimientos de apartamentos turísticos del grupo conjunto respecto al de los establecimientos de
+apartamentos turísticos del grupo edificios/complejos, para los que ya se preveía este régimen de exención.
+Asimismo se destaca que se ha graduado el régimen de exención en función del numero de unidades de
+alojamiento atendiendo a los elementos considerados característicos de las diferentes empresas explotadoras.
+
+
+         Por todo ello, a propuesta del Consejero de Turismo y Deporte, de conformidad con lo dispuesto en los
+artículos 21.3 y 27.9 de la Ley 6/2006, de 24 de octubre, del Gobierno de la Comunidad Autónoma de Andalucía, de
+acuerdo con el Consejo Consultivo de Andalucía y previa deliberación del Consejo de Gobierno en su reunión del día
+2 de febrero de 2016,
+
+
+
+
+                                                     DISPONGO
+
+                                                     CAPITULO I
+
+                                              Disposiciones Generales
+
+Artículo 1. Objeto y ámbito de aplicación.
+
+1. El presente Decreto tiene por objeto la ordenación de las viviendas de uso turístico como un servicio de
+alojamiento turístico, de conformidad con lo dispuesto en el apartado 1.a) del artículo 28 de la Ley 13/2011, de 23 de
+diciembre, del Turismo de Andalucía.
+
+2. Quedan excluidas del ámbito de aplicación de la presente norma:
+
+a) Las viviendas que, por motivos vacacionales o turísticos, se cedan, sin contraprestación económica.
+b) Las viviendas arrendadas por tiempo superior a dos meses computados de forma continuada a un mismo
+arrendatario.
+
+c) Las viviendas situadas en el medio rural que, en caso de que se destinen a alojamiento turístico, se regularán por
+lo establecido en el artículo 48 de la Ley 13/ 2011, de 23 de diciembre y por el Decreto 20/ 2002, de 29 de enero , de
+Turismo en el Medio Rural y Turismo Activo, sin perjuicio de lo establecido en su artículo 9.3.
+
+d) Los establecimientos de apartamentos turísticos del grupo conjunto, regulados por el Decreto 194/2010, de 20 de
+abril, de establecimientos de apartamentos turísticos.
+
+3. No podrán ser viviendas de uso turístico:
+
+a) Las viviendas sometidas a régimen de protección pública, no pudiendo destinarse a tal fin ni completas ni por
+habitaciones, de conformidad con lo dispuesto en su normativa específica.
+
+b) Las viviendas ubicadas en inmuebles cuyos títulos constitutivos o estatutos de la comunidad de propietarios
+contengan prohibición expresa para la actividad de alojamiento turístico, de conformidad con lo establecido en la
+Ley 49/1960, de 21 de julio, sobre propiedad horizontal.
+
+c) Las unidades de alojamiento situadas en los establecimientos de alojamiento turístico que deban ocupar la
+totalidad o parte independiente del edificio.
+
+d) Las viviendas reconocidas en situación de «asimilado a fuera de ordenación», salvo autorización previa expresa
+por parte del órgano competente municipal para el cambio de actividad, conforme a la legislación urbanística y
+ambiental.
+
+
+Artículo 2. Régimen Jurídico.
+
+1. El alojamiento en viviendas de uso turístico será considerado como un servicio turístico y deberá cumplir con las
+prescripciones de la Ley 13/2011, de 23 de diciembre y con lo establecido en el presente Decreto.
+
+2. Asimismo, las viviendas de uso turístico estarán sometidas a los requerimientos de la normativa turística, civil,
+mercantil y urbanística emanados de la Unión Europea, Administración del Estado, de la Comunidad Autónoma de
+Andalucía y de los entes locales en el marco de sus respectivas competencias.
+
+En particular, los Ayuntamientos, por razón imperiosa de interés general, podrán establecer limitaciones
+proporcionadas a dicha razón, en lo que respecta al número máximo de viviendas de uso turístico por edificio,
+sector, ámbito, periodos, área o zona. Dichas limitaciones deberán obedecer a criterios claros, inequívocos y
+objetivos, a los que se haya dado debida publicidad con anterioridad a su aplicación.
+
+3. El acceso a las viviendas de uso turístico no podrá restringirse por razones de nacimiento, raza, sexo, religión,
+opinión u otra circunstancia personal o social.
+
+4. Los derechos y obligaciones de las personas usuarias y explotadoras serán los contemplados en la Ley 13/2011,
+de 23 de diciembre.
+
+5. Cuando las personas usuarias incumplan alguna de las obligaciones que establece la Ley 13/2011, de 23 de
+diciembre, especialmente las relativas a las reglas de convivencia, las personas o entidades explotadoras podrán
+denegar la permanencia de las personas usuarias y requerir el abandono de la vivienda en el plazo de veinticuatro
+horas.
+
+Las personas o entidades explotadoras de estas viviendas podrán recabar el auxilio de las Fuerzas y Cuerpos de
+Seguridad para desalojar de las mismas a quienes incumplan las reglas usuales de convivencia social o pretendan
+acceder o permanecer en ellas con una finalidad diferente al normal uso del servicio.
+6. La persona o entidad explotadora de la vivienda de uso turístico no podrá contratar plazas que no pueda atender
+en las condiciones pactadas.
+
+
+
+
+Articulo 3. Definiciones.
+
+1. Se entiende por viviendas de uso turístico aquellas viviendas equipadas en condiciones de uso inmediato,
+ubicadas en inmuebles donde se vaya a ofrecer mediante precio el servicio de alojamiento en el ámbito de la
+Comunidad Autónoma de Andalucía, de forma habitual y con fines turísticos.
+
+El servicio turístico deberá prestarse durante todo el año o durante periodos concretos dentro del mismo año,
+debiendo hacerlo constar en la declaración responsable prevista en el artículo 9. Sólo podrá ser comercializada en
+los periodos indicados, considerándose actividad clandestina la comercialización fuera de los mismos.
+
+Se presumirá que existe finalidad turística cuando la vivienda sea comercializada o promocionada en canales de
+oferta turística. En este sentido, se considerarán canales de oferta turística las agencias de viaje, las empresas que
+medien u organicen servicios turísticos y los canales en los que se incluya la posibilidad de reserva del alojamiento.
+
+La prestación del servicio supone la efectiva oferta de la vivienda en canales de oferta turística durante los periodos
+declarados.
+
+2. A los efectos de este Decreto, se entienden por empresas explotadoras de viviendas de uso turístico las personas
+físicas o jurídicas que sean cesionarias de la administración y gestión de una o más viviendas de uso turístico con
+independencia del título habilitante para ello, debiendo figurar como titulares de la explotación en la declaración
+responsable a que se refiere el artículo 9 del presente Decreto.
+
+En todo caso, se presumirá la administración y gestión del alojamiento cuando se desarrollen los principales
+servicios inherentes al hospedaje y, en particular, cuando se realicen las tareas de entrega de llaves, recepción de
+huéspedes, atención durante la estancia, conservación y mantenimiento de las instalaciones y enseres de la unidad
+de alojamiento, limpieza a la entrada y salida o facturación.
+
+La administración y gestión corresponderá a un único titular cuando se oferten servicios complementarios cuya
+prestación se lleve a cabo por empresas distintas a la entidad explotadora de aquél, debiéndose informar a la
+persona usuaria de dicha circunstancia. A tal efecto, se pondrá a disposición de las personas usuarias la información
+con la relación de estos servicios y la identificación de las empresas prestatarias, todo ello sin perjuicio de la
+responsabilidad de la empresa explotadora.
+
+En los supuestos de separación entre titularidad y explotación y cuando la titularidad del inmueble se encuentre en
+régimen de copropiedad, comunidad o similar, la empresa explotadora deberá obtener de todas las personas
+propietarias el título jurídico válido en Derecho que habilite para la explotación.
+
+
+Artículo 4. Responsabilidad ante la Administración turística y las personas usuarias.
+
+1. La persona física o jurídica que conste como titular de la explotación de la vivienda en la declaración responsable
+a la que se refiere el artículo 9 será la responsable ante la Administración y ante las personas usuarias de la correcta
+prestación del servicio. La persona titular de la explotación deberá disponer de título jurídico habilitante para el
+ejercicio de la actividad.
+
+2. Los titulares de la explotación de viviendas de uso turístico serán responsables de mantener una relación
+actualizada de las viviendas, debiendo comunicar al Registro de Turismo de Andalucía cualquier modificación que
+les afecte, ya sea en el vínculo jurídico que les habilita para la explotación o en las condiciones propias de cada una
+de las viviendas explotadas.
+Artículo 5. Clasificación.
+
+1. Las viviendas de uso turístico se clasifican en dos grupos:
+
+a) Completa.
+b) Por habitaciones.
+2. Pertenece al grupo completa la vivienda que se cede en su totalidad.
+
+3. Pertenece al grupo por habitaciones la vivienda que no se cede en su totalidad, debiendo residir en ella la
+persona física titular de la explotación o la persona física propietaria o usufructuaria de la vivienda. En estos
+supuestos la persona que resida deberá estar empadronada en la vivienda.
+
+4. La capacidad máxima de las viviendas vendrá limitada por lo previsto en el artículo 6. En todo caso, cuando el uso
+de la vivienda sea completo no podrá ser superior a quince plazas y cuando el uso sea por habitaciones no podrá
+superar las seis plazas, no pudiendo exceder en ambos tipos de cuatro plazas por habitación, de las cuales dos
+deberán ser en camas que no sean literas. Se permitirán dos plazas convertibles en el salón de las viviendas en el
+grupo completa, que computarán para la capacidad máxima de la vivienda.
+
+
+Articulo 6. Requisitos y servicios comunes.
+
+1. Las viviendas de uso turístico deberán cumplir con los siguientes requisitos sustantivos y de habitabilidad:
+
+a) Cumplir con la normativa urbanística municipal y disponer, cuando resulte aplicable de conformidad con lo
+previsto en el artículo 6 del Decreto-ley de medidas urgentes en materia de vivienda, de la licencia o declaración
+responsable que posibilita el destino turístico del inmueble, conforme a lo previsto en legislación urbanística.
+
+b) Tener una dimensión mínima construida de 14 m² por plaza, conforme a la superficie construida de uso principal
+que conste en la Sede Electrónica del Catastro. En todo caso, la superficie mínima construida de uso principal será
+de 25 m² o, en su defecto, la que determine el planeamiento urbanístico.
+
+c) Disponer de dos baños si el número de plazas es superior a cinco y de tres baños si el número de plazas es
+superior a ocho.
+
+d) Los dormitorios y salones tendrán ventilación directa al exterior o a patios ventilados y algún sistema de
+oscurecimiento de las ventanas. Este requisito no será exigible cuando la Administración local o autonómica por
+razones de competencia exima de su cumplimiento por motivos de protección arquitectónica.
+
+Las cocinas y cuartos de baños tendrán ventilación directa o forzada para la renovación de aire.
+
+Las construcciones tipo cueva se ajustarán a lo previsto en la normativa territorial y urbanística.
+
+e) Disponer de refrigeración centralizada o no centralizada por elementos fijos o portátiles en las habitaciones y
+salones, cuando el período de funcionamiento comprenda los meses de mayo, junio, julio y agosto. Se exceptúa del
+cumplimiento de este requisito a las construcciones tipo cueva.
+
+ f) Disponer de calefacción centralizada o no centralizada por elementos fijos o portátiles en las habitaciones y
+salones, si el periodo de funcionamiento comprende los meses de diciembre, enero, febrero y marzo, sin que en
+ningún caso sean admisibles los elementos incandescentes ni de combustión de líquidos o gases inflamables.
+
+g) Los demás previstos en el anexo de este Decreto.
+
+
+2. Asimismo, las personas titulares de la explotación estarán obligadas a:
+a) Facilitar a las personas usuarias un número de atención telefónica durante las 24 horas del día para atender y
+resolver de forma inmediata cualquier consulta o incidencia relativa a la vivienda.
+
+b) Realizar la limpieza de la vivienda a la entrada y salida de nuevas personas usuarias.
+
+c) Disponer de Hojas de Quejas y Reclamaciones oficiales de la Junta de Andalucía a disposición de las personas
+usuarias y de cartel anunciador de las mismas en un lugar visible dentro de la vivienda.
+
+d) Informar a las personas usuarias de las normas de convivencia de la comunidad de propietarios, las zonas de uso
+restringido, las relativas al uso de las instalaciones, dependencias y equipos de la vivienda, así como la admisión y
+existencia de mascotas en la vivienda, restricciones para personas fumadoras, las zonas del depósito de basuras en
+la vía pública, las pautas de respeto por el entorno urbano y de la normativa municipal en materia de protección del
+medio ambiente contra ruidos y vibraciones. Deberá colocarse en la puerta de la vivienda un plano de evacuación,
+en caso de existir para la comunidad de vecinos del inmueble.
+
+e) Entregar justificante de pago de los servicios y de los anticipos efectuados, en su caso, con el siguiente contenido,
+sin perjuicio del cumplimiento de las disposiciones vigentes a efectos fiscales:
+
+1.º Identificación de la persona titular de la explotación de la vivienda.
+2.º Identificación de la vivienda y su código de inscripción en el Registro de Turismo de Andalucía.
+3.º Identificación de la persona usuaria.
+4.º Número de personas alojadas.
+5.º Fecha de entrada y de salida.
+6.º Precio del servicio contratado y fecha de pago.
+
+Las personas titulares de la explotación que, de acuerdo con la normativa fiscal, tengan la obligación de emitir
+factura, deberán cumplir con los requisitos que les resulte de aplicación.
+
+f) Informar a las personas usuarias si se encuentra adherida al Sistema Arbitral de Consumo.
+
+
+                                                         CAPÍTULO II
+                                                     Régimen del contrato
+
+Artículo 7. Formalización del contrato y acceso a la vivienda.
+
+ 1.   A toda persona usuaria, en el momento de su recepción, le será entregado un documento, a modo de
+      contrato, en el que conste, al menos, el nombre de la persona o entidad explotadora de la vivienda, el código
+      alfanumérico de inscripción en el Registro de Turismo de Andalucía, el número de personas que la van a
+      ocupar, las fechas de entrada y salida, el precio total de la estancia y número de teléfono previsto en el artículo
+      6.j)
+
+ 2.   Las personas usuarias, para hacer uso de la vivienda, deberán presentar su documento de identificación a los
+      efectos de cumplimentar el correspondiente parte de entrada conforme a la normativa vigente sobre libros-
+      registro y partes de entrada de personas viajeras en establecimientos de hostelería y otros análogos.
+
+ 3.   La copia del documento previsto en el apartado 1, una vez cumplimentado y firmado por la persona usuaria,
+      deberá conservarse por la persona o entidad explotadora estando a disposición de los órganos competentes
+      de la Administración de la Junta de Andalucía durante un año, teniendo valor de prueba a efectos
+      administrativos y la consideración de contrato.
+
+ 4.   La persona usuaria de la vivienda tendrá derecho a su ocupación desde las 15 horas del primer día del periodo
+      contratado hasta las 11:00 horas del día señalado como fecha de salida, pudiendo acordarse individualmente
+      un régimen diferente. En caso de que la persona explotadora no se encontrase en la vivienda a la hora de
+      llegada o salida de los clientes, se deberá concertar previamente la entrega de llaves.
+
+      En el caso de que la entrega de llaves se realice a través de su depósito en candados, cajetines de seguridad o
+      análogos, los mismos no podrán ubicarse en elementos del mobiliario urbano de las vías públicas.
+
+
+Artículo 8. Precio y reserva.
+
+ 1.   El precio ofertado será por noche de estancia y conforme al artículo 32 de la Ley 13/2011, de 23 de diciembre.
+      En todo caso estará incluido el suministro de agua, energía eléctrica, calefacción, refrigeración, limpieza a la
+      entrada de nuevas personas usuarias y el uso de ropa de cama y baño y de menaje.
+
+      La persona o entidad explotadora de la vivienda estará obligada a entregar justificante del pago de los
+      servicios y de los anticipos, en su caso, efectuados.
+
+ 2.   Las condiciones de precio, reserva, anticipos y, en su caso, cancelación se regirán según lo expresamente
+      pactado entre ambas partes, que en todo caso, deberán ser detalladas y publicitadas con carácter previo a la
+      contratación. En el momento de efectuar la reserva se facilitará a las personas usuarias un justificante de
+      haber realizado la misma, en el cual, se informará del precio total de la reserva, de los anticipos efectuados y
+      penalizaciones aplicables en su caso.
+
+ 3.   Cuando no se haya pactado expresamente entre las partes los términos previstos en el apartado anterior, las
+      personas o entidades explotadoras de las viviendas podrán exigir a las personas usuarias que efectúen una
+      reserva, un anticipo del precio en concepto de señal, que se entiende a cuenta del importe resultante de los
+      servicios reservados hasta un máximo del 30% del total de la estancia.
+
+      Igualmente, en caso de producirse cancelación de la reserva por la persona usuaria, la persona o entidad
+      explotadora de la vivienda podrá retenerle hasta el 50% del anticipo efectuado si la cancelación se efectúa
+      antes de diez días de la fecha prevista para la ocupación. Si se cancela la reserva con menos de diez días de la
+      fecha prevista para la ocupación, se podrá retener el importe total del anticipo.
+
+      Cuando la cancelación se efectúe por parte de la persona o entidad explotadora, deberá devolver el anticipo
+      efectuado por la persona usuaria y si la reserva se cancela con menos de 10 días de antelación además deberá
+      indemnizarle con el 30% del precio de la estancia contratada.
+
+ 4.   De producirse una cancelación de la reserva, tanto por parte de persona usuaria como por parte de la persona
+      o entidad explotadora, por motivos de fuerza mayor, debidamente justificada, no se podrá aplicar
+      penalización alguna. Se entenderán motivos de fuerza mayor las circunstancias ajenas a quien las invoca,
+      anormales e imprevisibles cuyas consecuencias no habrían podido evitarse, a pesar de haber actuado con la
+      diligencia debida.
+
+
+                                                        CAPÍTULO III
+                                    Inscripción en el Registro de Turismo de Andalucía
+
+Artículo 9. Inscripción.
+
+1. Para el inicio de la prestación del servicio de alojamiento en la vivienda, la persona o entidad que explota este
+servicio tendrá que presentar la correspondiente declaración responsable de forma electrónica ante la Consejería
+competente en materia de turismo, en la que manifieste el cumplimiento de los requisitos establecidos en el
+presente Decreto, pudiendo publicitarse a partir de este momento como vivienda de uso turístico.
+
+Sin perjuicio de lo que con arreglo a la normativa comunitaria pudiera resultar exigible, el contenido mínimo de la
+declaración responsable será el siguiente:
+
+a) Identificación de la vivienda, incluida su referencia catastral, y su capacidad máxima de alojamiento.
+
+Solo será admisible una vivienda por cada referencia catastral, salvo en los casos en los que, de conformidad con la
+normativa vigente, se pueda acreditar la existencia de dos o más viviendas con una misma referencia catastral.
+b) Identificación de la persona o entidad explotadora y título que la habilite, incluyendo número de teléfono y
+correo electrónico a efectos de los avisos de disponibilidad de las notificaciones electrónicas.
+
+c) Identificación de la persona propietaria o titular del inmueble, en caso de ser distinta de la persona o entidad
+explotadora.
+
+d) Manifestación de que la vivienda no está sometida a ningún régimen de protección pública o que se encuentra
+descalificada.
+
+e) Manifestación de que la vivienda resulta compatible para el uso como vivienda de uso turístico de conformidad
+con la ordenación urbanística aplicable y de que cuenta, cuando resulte exigible de conformidad con la legislación
+urbanística, con la licencia o declaración responsable de cambio de uso que posibilita su destino turístico.
+
+f) Autorización expresa para la cesión e intercambio de datos por parte de las Administraciones públicas a efectos
+del necesario ejercicio de sus respectivas competencias, incluidas las fuerzas y cuerpos de seguridad y las
+autoridades tributarias.
+
+g) Manifestación de que la vivienda no tiene prohibida la actividad de vivienda de uso turístico de acuerdo con el
+título constitutivo o estatutos de la comunidad de propietarios y que ha sido expresamente autorizada por la
+comunidad de propietarios en los términos exigidos por la legislación estatal.
+
+h) El período o períodos de prestación del servicio turístico.
+
+Los datos introducidos en el apartado de datos de la vivienda de la declaración responsable serán de acceso público
+a través de buscadores abiertos de esta Consejería, salvo los relativos al número de teléfono y correo electrónico.
+
+2. La comprobación por parte de la Consejería competente en materia de turismo de la existencia de alguna
+incorrección, inexactitud o falsedad de carácter esencial en cualquier dato, manifestación o documento
+incorporado a la declaración responsable que determine que la vivienda de uso turístico no reúne las condiciones
+para su inscripción como tal, o que se han dejado de reunir dichas condiciones, así como la falta de prestación
+efectiva del servicio en los términos del artículo 3.1 o la inexistencia de declaraciones responsables, licencias o
+autorizaciones exigibles por la normativa sectorial específica, especialmente en materia urbanística o reguladora
+del régimen del suelo, dará lugar, previa audiencia de las personas interesadas, a la cancelación de la inscripción de
+la vivienda en el Registro de Turismo de Andalucía.
+
+3. La Consejería competente en materia de turismo comunicará la inscripción en el registro al ayuntamiento en cuyo
+término municipal esté ubicada la vivienda de uso turístico. En caso de que la vivienda de uso turístico no resulte
+acorde con su normativa urbanística, el Ayuntamiento lo pondrá en conocimiento de la Consejería competente en
+materia de turismo para que proceda a la cancelación de la inscripción.
+
+4. Las Administraciones competentes en materia de disciplina territorial y urbanística pondrán en conocimiento de
+la Consejería competente en materia de turismo las actuaciones de protección de la legalidad que impliquen el cese
+provisional o definitivo del uso turístico del inmueble inscrito.
+
+
+                                                         CAPÍTULO IV
+                                              Inspección y régimen sancionador
+
+Artículo 10. Inspección y Régimen sancionador.
+
+ 1.   Los servicios de inspección de la Consejería competente en materia de turismo, ejercerán las funciones de
+      comprobación y control del cumplimiento de lo establecido en la presente norma, de acuerdo con la Ley
+      13/2011, de 23 de diciembre y con el Decreto 144/2003, de 3 de junio, de la Inspección de Turismo, sin perjuicio
+      de las competencias de inspección y control que tengan atribuidas otras Consejerías o Administraciones
+      públicas.
+ 2.   Quienes cometan infracciones por incumplimiento de lo señalado en el presente Decreto, incurrirán en
+      responsabilidad administrativa. Su régimen sancionador será el previsto en el Título VIII de la Ley 13/2011, de
+      23 de diciembre.
+
+ 3.   La persona explotadora del servicio deberá facilitar a los servicios de inspección turística el ejercicio de sus
+      funciones.
+
+
+Artículo 11. Actividad clandestinas.
+
+        Se considerará actividad clandestina la prestación del servicio de alojamiento, definido en el artículo 3 de
+este Decreto, cuando el titular haya iniciado la actividad turística sin presentar declaración responsable en los
+términos del artículo 9, estando tipificada dicha prestación como infracción grave por el artículo 71.1 de la Ley
+13/2011, de 23 de diciembre.
+
+
+Disposición adicional primera. Convenios.
+
+
+          A fin de garantizar el cumplimiento de las exigencias contenidas en la normativa vigente y, en su caso,
+facilitar la labor inspectora de la Junta de Andalucía o de otras autoridades públicas, la Consejería con
+competencias en materia de turismo podrá celebrar convenios de colaboración con otras Administraciones o con
+entidades privadas para facilitar el intercambio de información.
+
+
+Disposición adicional segunda. Modificación de la denominación viviendas con fines turísticos.
+
+         Todas las referencias hechas en este Decreto a las «viviendas con fines turísticos» deben entenderse
+sustituidas a las «viviendas de uso turístico».
+
+
+
+
+Disposición transitoria única. Régimen transitorio.
+
+        1. Los artículos 7 y 8 no serán de aplicación a las viviendas ubicadas en inmuebles situados en suelo de uso
+residencial, contratadas o reservadas con anterioridad a la entrada en vigor del presente Decreto, en las que se
+ofrezca mediante precio el servicio de alojamiento en el ámbito de la Comunidad Autónoma de Andalucía, de forma
+habitual y con fines turísticos.
+
+       2. Se establece un plazo de un año desde la entrada en vigor del presente Decreto, para que las viviendas se
+adapten a la previsión contenida en el apartado d del artículo 6.
+
+Disposición final primera. Modificación del Decreto 194/2010, de 20 de abril, de establecimientos de apartamentos
+turísticos.
+(Modificado por el Decreto 31/2024, de 29 de enero.)
+
+
+
+Disposición final segunda. Reclasificación de apartamentos turísticos del grupo edificios/complejos al grupo
+conjuntos.
+(Modificado por el Decreto 31/2024, de 29 de enero.)
+
+
+
+Disposición final tercera. Habilitación normativa.
+
+        Se autoriza a la persona titular de la Consejería competente en materia de turismo para aprobar cuantas
+disposiciones sean necesarias para el desarrollo y ejecución del presente Decreto, así como para actualizar o
+adecuar los parámetros establecidos en su anexo.
+
+Disposición final cuarta. Entrada en vigor.
+
+        El presente Decreto entrará en vigor a los tres meses de su publicación en el Boletín Oficial de la Junta de
+Andalucía, salvo las disposiciones finales primera y segunda que entrarán en vigor al día siguiente de dicha
+publicación.
+
+
+                                                                 Sevilla, a 2 de febrero de 2016
+
+
+
+
+                                                                           SUSANA DÍAZ PACHECO
+                                                               Presidenta de la Junta de Andalucía
+
+
+
+
+     FRANCISCO JAVIER FERNÁNDEZ HERNÁNDEZ
+        Consejero de Turismo y Deporte
+                         Anexo. Requisitos adicionales de las viviendas de uso turístico.
+
+Con carácter adicional, las viviendas de uso turístico deberán, asimismo, cumplir los siguientes requisitos:
+
+a) Estar suficientemente amuebladas y dotadas de los aparatos y enseres necesarios para su uso inmediato y acorde
+al número de plazas de que dispongan, contar con televisor e información de canales, tomas de corriente en todas
+las estancias y con los suministros básicos que permitan su habitabilidad, tales como electricidad y agua corriente
+caliente y fría.
+
+La cocina deberá estar provista de un mínimo de dos fuegos, horno o microondas y frigorífico; de utensilios
+adecuados a la capacidad de alojamiento (al menos vajilla, cubertería, cristalería, sartenes, ollas, cubiertos para
+servir, sacacorchos, abridor, tijeras, abrelatas y escurridor); de pequeños electrodomésticos (al menos batidora,
+tostadora o grill, exprimidor y cafetera); de mobiliario de almacenaje; de utensilios y kit de productos de limpieza
+con contenido mínimo de estropajo, bayeta, paño y gel limpiador; bolsas de basura; tendedero, plancha y tabla de
+planchar; y separación selectiva de residuos con el correspondiente detalle informativo.
+
+b) El baño estará dotado al menos de inodoro, lavabo, bañera o plato de ducha, jabón de mano, gel, champú, una
+toalla de mano por persona, una toalla de baño por persona, suelos antideslizantes en duchas y bañeras, alfombra
+de baño lavable, luz apropiada para el baño, espejo, colgadores de toallas, rollo de papel higiénico adicional,
+escobilla para el inodoro, enchufe de corriente junto al espejo, estantería, secador y cubo higiénico.
+
+En todo caso, el inodoro deberá estar independizado y cerrado, bien de manera individual bien con el resto de
+elementos sanitarios.
+
+c) Ropa de cama, lencería, mantas o nórdicos y almohadas bien conservados en función a la ocupación de la
+vivienda y un juego de reposición de la ropa de cama.
+
+Las camas deberán medir al menos 80* 190 cm si es individual y 135* 190 cm si es doble. La vivienda deberá
+disponer de un armario o espacio destinado a la ropa para cada cuatro plazas, con un número de perchas
+adecuado, que se puede ubicar en cualquiera de los dormitorios y de punto de luz próximo a la cama.
+
+Los canapés, y colchones con un grosor mínimo de 18 cm, deben estar en buenas condiciones y presentar un nivel
+homogéneo de resistencia en toda la superficie.
+
+d) Botiquín de primeros auxilios, así como la instalación de algún tipo de detectores de humo en zona próxima a la
+cocina y un extintor.
+
+e) Disponer de información turística, en soporte físico o electrónico, de la zona, zonas de ocio, restaurantes y
+cafeterías, comercios y tiendas de alimentos, aparcamientos más próximos a la vivienda, servicios médicos
+existentes en la zona, medios de transporte urbano y un plano de la localidad.
+
+f) Tener a disposición de las personas usuarias información e instrucciones de funcionamiento de electrodomésticos u
+otros dispositivos que lo requieran para su correcto uso.
+

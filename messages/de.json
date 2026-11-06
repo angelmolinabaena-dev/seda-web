@@ -1392,7 +1392,15 @@
       "fuentes_titulo": "Quellen",
       "borrador_badge": "Entwurf — nicht veröffentlicht",
       "pendiente": "Ausstehend",
-      "volver": "Zurück zu Leitfäden"
+      "volver": "Zurück zu Leitfäden",
+      "imprimir": "Diesen Leitfaden drucken",
+      "imprimir_ayuda": "Druckversion: nur die Liste, ohne Menüs.",
+      "revision_aviso": "Am {fecha} mit dem geltenden offiziellen Text abgeglichen. Prüfen Sie im BOJA, ob es spätere Änderungen gibt.",
+      "requisitos_leyenda": "Jedes Kästchen ist eine Anforderung; rechts daneben steht der Artikel des Dekrets 28/2016, der sie vorschreibt.",
+      "cta_titulo": "Wenn Sie die Vermietung Ihrer Wohnung abwägen",
+      "cta_texto": "Der Rechner von SEDA liefert Ihnen anhand Ihrer Eingaben eine Richtschätzung. Er ist kein Einnahmeversprechen und ersetzt nicht die Prüfung der Anforderungen in diesem Leitfaden.",
+      "cta_boton": "Rechner öffnen",
+      "impresion_pie": "Ein Leitfaden von SEDA Private Homes. Allgemeine Information: kein Ersatz für Rechtsberatung. Geprüft am {fecha}."
     },
     "autor": {
       "eyebrow": "— Autor",
