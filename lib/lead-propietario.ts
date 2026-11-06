@@ -146,5 +146,8 @@ export function cuerpoPortal(lead: Lead) {
     dormitorios: lead.dormitorios ?? null,
     consentimiento: true as const,
     consentimiento_version: PRIVACIDAD.actualizado,
+    // Locale de la página desde la que se envió el formulario (es|en|de|fr):
+    // seda_os lo usa para contestar en ese idioma. Única clave añadida.
+    idioma: lead.locale,
   }
 }

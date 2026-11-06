@@ -68,7 +68,7 @@ import type { DocumentoLegalMultilingue } from "./types"
 export const PRIVACIDAD: DocumentoLegalMultilingue = {
   id: "privacidad",
   ruta: "/privacidad",
-  actualizado: "2026-11-04",
+  actualizado: "2026-11-06",
   traducciones: {
     es: {
       titulo: "Política de privacidad",
@@ -168,7 +168,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                 ],
                 [
                   "Contactarte para valorar la gestión de tu propiedad, cuando dejas tus datos en la calculadora para propietarios.",
-                  "Artículo 6.1.a del RGPD: tu consentimiento, que das marcando la casilla del formulario. Guardamos la versión de esta política que viste al darlo.",
+                  "Artículo 6.1.a del RGPD: tu consentimiento, que das marcando la casilla del formulario. Guardamos la versión de esta política que viste al darlo. Guardamos también el idioma de la página desde la que envías el formulario, para contestarte en ese idioma.",
                 ],
               ],
             },
@@ -498,7 +498,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                 ],
                 [
                   "Contact you to assess the management of your property, when you leave your details in the owner calculator.",
-                  "Article 6(1)(a) GDPR: your consent, which you give by ticking the checkbox on the form. We record the version of this policy you saw when you gave it.",
+                  "Article 6(1)(a) GDPR: your consent, which you give by ticking the checkbox on the form. We record the version of this policy you saw when you gave it. We also record the language of the page you submit the form from, so that we reply in that language.",
                 ],
               ],
             },
@@ -825,7 +825,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                 ],
                 [
                   "Vous contacter pour évaluer la gestion de votre bien, lorsque vous laissez vos coordonnées dans le calculateur pour propriétaires.",
-                  "Article 6.1.a du RGPD : votre consentement, que vous donnez en cochant la case du formulaire. Nous conservons la version de la présente politique que vous avez vue en le donnant.",
+                  "Article 6.1.a du RGPD : votre consentement, que vous donnez en cochant la case du formulaire. Nous conservons la version de la présente politique que vous avez vue en le donnant. Nous conservons aussi la langue de la page depuis laquelle vous envoyez le formulaire, afin de vous répondre dans cette langue.",
                 ],
               ],
             },
@@ -1152,7 +1152,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                 ],
                 [
                   "Sie kontaktieren, um die Verwaltung Ihrer Immobilie zu prüfen, wenn Sie Ihre Daten im Rechner für Eigentümer hinterlassen.",
-                  "Art. 6 Abs. 1 lit. a DSGVO: Ihre Einwilligung, die Sie durch Anklicken des Kästchens im Formular erteilen. Wir speichern die Fassung dieser Erklärung, die Sie bei der Einwilligung gesehen haben.",
+                  "Art. 6 Abs. 1 lit. a DSGVO: Ihre Einwilligung, die Sie durch Anklicken des Kästchens im Formular erteilen. Wir speichern die Fassung dieser Erklärung, die Sie bei der Einwilligung gesehen haben. Wir speichern außerdem die Sprache der Seite, von der aus Sie das Formular senden, um Ihnen in dieser Sprache zu antworten.",
                 ],
               ],
             },
