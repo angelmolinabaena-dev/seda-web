@@ -208,3 +208,17 @@
     color: hsl(var(--background));
   }
 }
+
+/* Guías imprimibles (app/[locale]/guias/[slug]): al imprimir se esconden la
+   cabecera, el pie y lo marcado como no imprimible, solo en las páginas que
+   llevan el marcador `data-guia-imprimible`. El resto del sitio no cambia. */
+@media print {
+  body:has([data-guia-imprimible]) header,
+  body:has([data-guia-imprimible]) footer {
+    display: none !important;
+  }
+  body:has([data-guia-imprimible]) {
+    background: #fff !important;
+    color: #000 !important;
+  }
+}
