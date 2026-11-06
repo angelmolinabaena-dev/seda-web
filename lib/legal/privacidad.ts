@@ -284,7 +284,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Si eres titular de una vivienda turística en Torremolinos, Benalmádena, Málaga o Fuengirola, podemos escribirte una carta postal. No nos has dado tú tus datos: esta sección es la información del artículo 14 del RGPD y es a la que remite la carta.",
+                "Si eres titular de una vivienda turística en Torremolinos, Benalmádena, Málaga, Fuengirola, Mijas, Marbella, Estepona, Sotogrande (San Roque) o en el litoral de Nerja y de Torrox, podemos escribirte una carta postal. No nos has dado tú tus datos: esta sección es la información del artículo 14 del RGPD y es a la que remite la carta.",
             },
             {
               tipo: "tabla",
@@ -669,7 +669,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "If you are the holder of a holiday rental in Torremolinos, Benalmádena, Málaga or Fuengirola, we may send you a letter by post. You did not give us your details yourself: this section is the information required by article 14 GDPR, and it is the one the letter refers to.",
+                "If you are the holder of a holiday rental in Torremolinos, Benalmádena, Málaga, Fuengirola, Mijas, Marbella, Estepona, Sotogrande (San Roque) or the coast of Nerja and Torrox, we may send you a letter by post. You did not give us your details yourself: this section is the information required by article 14 GDPR, and it is the one the letter refers to.",
             },
             {
               tipo: "tabla",
@@ -1051,7 +1051,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Si vous êtes titulaire d'un logement touristique à Torremolinos, Benalmádena, Málaga ou Fuengirola, nous pouvons vous écrire par courrier postal. Ce n'est pas vous qui nous avez donné vos données : cette section est l'information prévue à l'article 14 du RGPD, celle à laquelle renvoie le courrier.",
+                "Si vous êtes titulaire d'un logement touristique à Torremolinos, Benalmádena, Málaga, Fuengirola, Mijas, Marbella, Estepona, Sotogrande (San Roque) ou sur le littoral de Nerja et de Torrox, nous pouvons vous écrire par courrier postal. Ce n'est pas vous qui nous avez donné vos données : cette section est l'information prévue à l'article 14 du RGPD, celle à laquelle renvoie le courrier.",
             },
             {
               tipo: "tabla",
@@ -1433,7 +1433,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Wenn Sie Inhaber einer Ferienwohnung in Torremolinos, Benalmádena, Málaga oder Fuengirola sind, können wir Ihnen einen Brief schicken. Ihre Daten haben nicht Sie uns gegeben: Dieser Abschnitt enthält die Information nach Art. 14 DSGVO, auf die der Brief verweist.",
+                "Wenn Sie Inhaber einer Ferienwohnung in Torremolinos, Benalmádena, Málaga, Fuengirola, Mijas, Marbella, Estepona, Sotogrande (San Roque) oder an der Küste von Nerja und Torrox sind, können wir Ihnen einen Brief schicken. Ihre Daten haben nicht Sie uns gegeben: Dieser Abschnitt enthält die Information nach Art. 14 DSGVO, auf die der Brief verweist.",
             },
             {
               tipo: "tabla",
