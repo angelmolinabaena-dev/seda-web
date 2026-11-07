@@ -1,9 +1,10 @@
 "use client"
 
-import { useId, useState, type FormEvent, type ReactNode } from "react"
+import { useEffect, useId, useRef, useState, type FormEvent, type ReactNode } from "react"
 import { ArrowRight, Check } from "lucide-react"
 import { useLocale, useTranslations } from "next-intl"
 import { Link } from "@/i18n/navigation"
+import { capturarCarta, cartaParaEnviar, tomarCarta } from "@/lib/carta-qr"
 import { HONEYPOT_FIELD } from "@/lib/contact-fields"
 import {
   OCUPACION_MAX,
@@ -94,6 +95,15 @@ export function CalculadoraContent() {
   const [pedirPrefijo, setPedirPrefijo] = useState(false)
   const telefonoSinPrefijo = telefono.trim() !== "" && normalizarTelefonoE164(telefono) === null
 
+  // Cartas-QR: código de ?carta=, solo en memoria de la página (ni cookie ni almacenamiento).
+  // Se lee al entrar y se quita de la URL en el acto (lib/carta-qr.ts).
+  const cartaRef = useRef<string | null>(null)
+  useEffect(() => {
+    capturarCarta()
+    const c = tomarCarta()
+    if (c !== null) cartaRef.current = c
+  }, [])
+
   const precio = Number(precioTxt.replace(",", "."))
   const est = ocupacion === null ? null : estimar(precio, ocupacion)
 
@@ -107,6 +117,7 @@ export function CalculadoraContent() {
     }
     const datos = new FormData(ev.currentTarget)
     const dorm = Number(dormitorios)
+    const carta = cartaParaEnviar(cartaRef.current)
     setEstado("enviando")
     try {
       const resp = await fetch("/api/leads/propietario", {
@@ -124,6 +135,7 @@ export function CalculadoraContent() {
           ...(dormitorios !== "" && Number.isInteger(dorm) ? { dormitorios: dorm } : {}),
           precioNoche: precio,
           ocupacionPct: ocupacion,
+          ...(carta !== undefined ? { carta } : {}),
           [HONEYPOT_FIELD]: String(datos.get(HONEYPOT_FIELD) ?? ""),
         }),
       })

@@ -68,7 +68,7 @@ import type { DocumentoLegalMultilingue } from "./types"
 export const PRIVACIDAD: DocumentoLegalMultilingue = {
   id: "privacidad",
   ruta: "/privacidad",
-  actualizado: "2026-11-06",
+  actualizado: "2026-11-07",
   traducciones: {
     es: {
       titulo: "Política de privacidad",
@@ -329,6 +329,11 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
               tipo: "parrafo",
               texto:
                 "Puedes oponerte (artículo 21 del RGPD) en cualquier momento y sin dar motivos: escaneando el código QR de baja de la carta, o escribiendo a {email} con el código que figura en la carta. No te pediremos ningún dato más. Tras una oposición no volveremos a escribirte, y para ello solo conservamos una huella criptográfica de tus datos, a partir de la cual no se pueden recuperar.",
+            },
+            {
+              tipo: "parrafo",
+              texto:
+                "Si entras en la calculadora desde el código QR de la carta y nos dejas tus datos, anotamos que la carta tuvo respuesta y vinculamos tu solicitud a esa carta mientras exista el envío, para medir el resultado. El código de la carta es aleatorio y no contiene ningún dato tuyo; no lo guardamos en tu navegador ni lo enviamos a ninguna herramienta de medición o publicidad.",
             },
           ],
         },
@@ -715,6 +720,11 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
               texto:
                 "You can object (article 21 GDPR) at any time and without giving reasons: by scanning the opt-out QR code on the letter, or by writing to {email} with the code printed on the letter. We will not ask you for any further data. After an objection we will not write to you again, and for that purpose we keep only a cryptographic fingerprint of your data, from which the data cannot be recovered.",
             },
+            {
+              tipo: "parrafo",
+              texto:
+                "If you enter the calculator from the QR code on the letter and leave us your details, we record that the letter received a reply and link your request to that letter for as long as the mailing exists, in order to measure the result. The letter’s code is random and contains no data about you; we do not store it in your browser or send it to any measurement or advertising tool.",
+            },
           ],
         },
         {
@@ -1097,6 +1107,11 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
               texto:
                 "Vous pouvez vous opposer (article 21 du RGPD) à tout moment et sans motif : en scannant le code QR de désinscription du courrier, ou en écrivant à {email} avec le code figurant sur le courrier. Nous ne vous demanderons aucune autre donnée. Après une opposition, nous ne vous écrirons plus, et pour cela nous ne conservons qu'une empreinte cryptographique de vos données, dont elles ne peuvent pas être retrouvées.",
             },
+            {
+              tipo: "parrafo",
+              texto:
+                "Si vous accédez au calculateur depuis le code QR du courrier et nous laissez vos coordonnées, nous notons que le courrier a reçu une réponse et nous rattachons votre demande à ce courrier tant que l'envoi existe, afin de mesurer le résultat. Le code du courrier est aléatoire et ne contient aucune donnée vous concernant ; nous ne le conservons pas dans votre navigateur et ne l'envoyons à aucun outil de mesure ou de publicité.",
+            },
           ],
         },
         {
@@ -1478,6 +1493,11 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
               tipo: "parrafo",
               texto:
                 "Sie können jederzeit und ohne Begründung widersprechen (Art. 21 DSGVO): mit dem Abmelde-QR-Code auf dem Brief oder per E-Mail an {email} mit dem Code, der auf dem Brief steht. Weitere Daten verlangen wir nicht. Nach einem Widerspruch schreiben wir Ihnen nicht mehr; dafür speichern wir nur einen kryptografischen Fingerabdruck Ihrer Daten, aus dem sich die Daten nicht wiederherstellen lassen.",
+            },
+            {
+              tipo: "parrafo",
+              texto:
+                "Wenn Sie über den QR-Code auf dem Brief in den Rechner gelangen und uns Ihre Daten hinterlassen, vermerken wir, dass der Brief eine Antwort erhalten hat, und verknüpfen Ihre Anfrage mit diesem Brief, solange die Sendung besteht, um das Ergebnis zu messen. Der Code des Briefs ist zufällig und enthält keine Angaben zu Ihnen; wir speichern ihn nicht in Ihrem Browser und übermitteln ihn an kein Mess- oder Werbewerkzeug.",
             },
           ],
         },

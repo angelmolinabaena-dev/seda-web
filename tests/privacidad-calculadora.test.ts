@@ -127,7 +127,7 @@ describe("política de privacidad: formulario de la calculadora de propietarios"
       ocupacionPct: 50,
     })
     expect(Object.keys(cuerpo).sort()).toEqual(
-      ["consentimiento", "consentimiento_version", "correo", "dormitorios", "idioma", "municipio", "nombre", "telefono"].sort(),
+      ["canal", "consentimiento", "consentimiento_version", "correo", "dormitorios", "idioma", "municipio", "nombre", "telefono"].sort(),
     )
   })
 })

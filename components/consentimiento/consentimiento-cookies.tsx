@@ -3,6 +3,7 @@
 import { useEffect, useId, useRef, useState } from "react"
 import { usePathname } from "next/navigation"
 import { Link } from "@/i18n/navigation"
+import { capturarCarta } from "@/lib/carta-qr"
 import {
   ControladorConsentimiento,
   ESTADO_INICIAL,
@@ -75,6 +76,8 @@ export function ConsentimientoCookies({ pixelId, textos }: { pixelId: string; te
   const ultimaRuta = useRef<string | null>(null)
 
   useEffect(() => {
+    // El código de la carta (?carta=) sale de la URL ANTES de que el píxel cargue o haga PageView.
+    capturarCarta()
     const { controlador, pixel } = obtenerInstancia(pixelId)
     registrarPixelActual({ pixel, marketing: () => controlador.marketingConcedido() })
     const baja = controlador.suscribir(() => setEstado(controlador.instantanea()))
@@ -93,6 +96,7 @@ export function ConsentimientoCookies({ pixelId, textos }: { pixelId: string; te
     }
     if (ultimaRuta.current === pathname) return
     ultimaRuta.current = pathname
+    capturarCarta()
     instancia?.pixel.pageView()
   }, [estado.marketing, pathname])
 

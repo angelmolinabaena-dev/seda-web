@@ -134,7 +134,7 @@ describe("consentimiento RGPD obligatorio", () => {
     if (!r.ok) throw new Error("debía aceptarse")
     const c = cuerpoPortal(r.lead)
     expect(Object.keys(c).sort()).toEqual(
-      ["consentimiento", "consentimiento_version", "correo", "dormitorios", "idioma", "municipio", "nombre", "telefono"],
+      ["canal", "consentimiento", "consentimiento_version", "correo", "dormitorios", "idioma", "municipio", "nombre", "telefono"],
     )
     expect(c.consentimiento).toBe(true)
     expect(c.consentimiento_version).toMatch(/^[A-Za-z0-9._-]{1,40}$/)
@@ -348,6 +348,7 @@ describe("POST /api/leads/propietario", () => {
         consentimiento: true,
         consentimiento_version: expect.stringMatching(/^[A-Za-z0-9._-]{1,40}$/),
         idioma: "es", // locale de la página (LEAD usa "es")
+        canal: "calculadora", // cartas-QR: siempre
       })
       expect(JSON.stringify(cuerpo)).not.toContain("website")
     })
