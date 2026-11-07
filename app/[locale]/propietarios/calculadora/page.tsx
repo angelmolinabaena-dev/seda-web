@@ -3,7 +3,9 @@ import { notFound } from "next/navigation"
 import { getTranslations, setRequestLocale } from "next-intl/server"
 import type { LocaleParams } from "@/i18n/routing"
 import { Link } from "@/i18n/navigation"
+import { AsistentePropietarios } from "@/components/asistente/asistente-propietarios"
 import { JsonLdScript } from "@/components/page-json-ld"
+import { asistentePropietariosActivo } from "@/lib/asistente/config"
 import { RUTA_CALCULADORA, calculadoraPropietariosActiva } from "@/lib/calculadora-propietarios"
 import { faqCalculadora } from "@/lib/faq"
 import { breadcrumbJsonLd, faqPageJsonLd } from "@/lib/jsonld"
@@ -66,6 +68,8 @@ export default async function CalculadoraPropietariosPage({ params }: LocalePara
       </header>
 
       <CalculadoraContent />
+      {/* Asistente de propietarios: solo con SEDA_FLAG_ASISTENTE_PROPIETARIOS=1 (lib/asistente/config.ts). */}
+      {asistentePropietariosActivo() && <AsistentePropietarios />}
 
       <section className="px-6 md:px-12 lg:px-20 py-20 md:py-28 bg-secondary/40">
         <div className="max-w-3xl mx-auto">

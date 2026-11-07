@@ -49,6 +49,10 @@ type Pantalla = {
 // Código leído y aún no recogido por la calculadora. Una sola lectura: al
 // recogerlo se vacía, para que no se pegue a otra visita de la misma sesión.
 let pendiente: string | null = null
+// La misma lectura, para el asistente de la calculadora (su mini formulario
+// también manda la carta). Un hueco aparte para que ninguno de los dos le quite
+// el código al otro; misma regla: se vacía al recogerlo, solo en memoria.
+let pendienteAsistente: string | null = null
 
 /**
  * Si la URL es la de la calculadora y trae ?carta=, lo guarda en memoria y lo
@@ -59,7 +63,10 @@ export function capturarCarta(win: Pantalla = window): void {
   if (!RUTA_CALCULADORA.test(pathname)) return
   const { carta, searchSinCarta } = separarCarta(search)
   if (searchSinCarta === null) return
-  if (carta !== null) pendiente = carta
+  if (carta !== null) {
+    pendiente = carta
+    pendienteAsistente = carta
+  }
   win.history.replaceState(win.history.state, "", `${pathname}${searchSinCarta}${hash}`)
 }
 
@@ -67,5 +74,12 @@ export function capturarCarta(win: Pantalla = window): void {
 export function tomarCarta(): string | null {
   const c = pendiente
   pendiente = null
+  return c
+}
+
+/** El asistente recoge el código (una vez), sin quitárselo a la calculadora. */
+export function tomarCartaAsistente(): string | null {
+  const c = pendienteAsistente
+  pendienteAsistente = null
   return c
 }

@@ -1655,5 +1655,24 @@
       "body": "Das SEDA-Team nimmt Kontakt mit Ihnen auf, um Ihr Haus zu bewerten."
     },
     "link": "Schätzung für Ihr Haus berechnen"
+  },
+  "asistente": {
+    "abrir": "Den Assistenten fragen",
+    "titulo": "SEDA-Assistent",
+    "subtitulo": "Künstliche Intelligenz · wir speichern das Gespräch nicht",
+    "cerrar": "Assistenten schließen",
+    "bienvenida": "Ich bin der Assistent von SEDA, eine künstliche Intelligenz, kein Mensch. Ich kann Ihnen unseren Service und den Tarif erklären, eine Schätzung mit derselben Berechnung wie der Rechner erstellen und Sie zu den Vorschriften für Ferienwohnungen in Andalusien informieren. Bitte schreiben Sie hier keine sensiblen Daten: keine Ausweise, Bankkonten, Karten oder Passwörter. Ich kann mich irren; für Wichtiges sprechen Sie bitte mit einem Menschen.",
+    "privacidad": "Wie wir Ihre Nachrichten behandeln",
+    "persona": "Mit einem Menschen sprechen",
+    "etiqueta": "Ihre Frage",
+    "placeholder": "Schreiben Sie Ihre Frage",
+    "enviar": "Senden",
+    "escribiendo": "Der Assistent schreibt…",
+    "error": "Ich konnte gerade nicht antworten. Wenn Sie möchten, hinterlassen Sie uns Ihre Daten und wir rufen Sie an, oder sprechen Sie mit einem Menschen.",
+    "dejar_datos": "Meine Daten hinterlassen",
+    "llamada": "Ein Gespräch buchen",
+    "restantes": "Noch {n} Zeichen",
+    "form_titulo": "Ihre Anfrage",
+    "form_cuerpo": "Hinterlassen Sie uns Ihren Namen, Ihre E-Mail-Adresse und, wenn Sie möchten, Ihre Telefonnummer: Nur das erreicht uns über dieses Formular. Das Gespräch wird weder gesendet noch gespeichert."
   }
 }

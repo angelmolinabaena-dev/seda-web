@@ -10,6 +10,7 @@
     "lint": "eslint .",
     "test": "vitest run",
     "test:integracion": "vitest run --config vitest.integracion.config.mts",
+    "asistente:bateria": "vitest run --config vitest.asistente-real.config.mts",
     "keys:check-leak": "node scripts/keys-check-leak.mjs",
     "tour360:preparar": "node scripts/tour360-preparar/index.mjs",
     "invariants:check": "node scripts/invariants-check.mjs",
@@ -20,6 +21,8 @@
     "prepare": "node scripts/setup-hooks.mjs"
   },
   "dependencies": {
+    "@ai-sdk/anthropic": "3.0.117",
+    "@ai-sdk/react": "3.0.283",
     "@radix-ui/react-accordion": "1.2.2",
     "@radix-ui/react-alert-dialog": "1.1.4",
     "@radix-ui/react-aspect-ratio": "1.1.1",
@@ -47,6 +50,7 @@
     "@radix-ui/react-toggle": "1.1.1",
     "@radix-ui/react-toggle-group": "1.1.1",
     "@radix-ui/react-tooltip": "1.1.6",
+    "ai": "6.0.280",
     "autoprefixer": "^10.4.20",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

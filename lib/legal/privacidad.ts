@@ -61,6 +61,17 @@ import type { DocumentoLegalMultilingue } from "./types"
       lugar `google_conference` (Google Meet). El iframe hace que
       calendly.com fije, al abrirlo, cookies propias (`_calendly_session`, `__cf_bm`,
       `_cfuvid`), medido con una petición a la URL del iframe.
+    · Asistente de propietarios (7-nov-2026, detrás de
+      `SEDA_FLAG_ASISTENTE_PROPIETARIOS`): chat en app/api/asistente/route.ts,
+      que no guarda la conversación (solo métricas sin contenido) y retira los
+      datos sensibles antes de enviarlos (lib/asistente/historial.ts). El modelo
+      es de Anthropic: contraparte en el EEE Anthropic Ireland, Limited
+      (Commercial Terms), encargado según su DPA (en vigor 24-feb-2025, SCC
+      módulos 2 y 3), sin entrenamiento con los datos (Commercial Terms) y
+      conservación según https://platform.claude.com/docs/en/manage-claude/api-and-data-retention
+      (leído el 7-nov-2026). El mini formulario del chat va al mismo CRM que la
+      calculadora, con canal "asistente" (app/api/asistente/solicitud).
+      Detalle y lo que queda por verificar: docs/ASISTENTE-PROPIETARIOS.md.
     · Las valoraciones de huéspedes NO van aquí: viven en guest-app, que
       tiene su propia política (`/legal/privacidad`) y no enlaza a esta.
 */
@@ -222,7 +233,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Si reservas una llamada, tus datos los tratan además Calendly y Google Ireland Limited, como se explica en «Reserva de una llamada con Calendly». No hay más destinatarios. No vendemos ni cedemos datos a terceros con fines comerciales. Solo se comunicarían a autoridades u organismos públicos si una norma lo exigiera. Las cartas postales tienen sus propios destinatarios, indicados en su sección.",
+                "Si reservas una llamada, tus datos los tratan además Calendly y Google Ireland Limited, como se explica en «Reserva de una llamada con Calendly». Si usas el asistente de propietarios, tus mensajes los trata además Anthropic, como se explica en «Asistente de propietarios». No hay más destinatarios. No vendemos ni cedemos datos a terceros con fines comerciales. Solo se comunicarían a autoridades u organismos públicos si una norma lo exigiera. Las cartas postales tienen sus propios destinatarios, indicados en su sección.",
             },
             {
               tipo: "parrafo",
@@ -338,6 +349,56 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
           ],
         },
         {
+          id: "asistente",
+          titulo: "Asistente de propietarios (inteligencia artificial)",
+          bloques: [
+            {
+              tipo: "parrafo",
+              texto:
+                "En /propietarios y en la calculadora puede haber un chat: el asistente de propietarios. Es una inteligencia artificial, no una persona, y lo dice en su primer mensaje (artículo 50 del Reglamento (UE) 2024/1689, de inteligencia artificial). Responde sobre el servicio de SEDA, su tarifa, la normativa de vivienda turística en Andalucía y la calculadora. No escribas en él datos sensibles: documentos, cuentas bancarias, tarjetas ni contraseñas.",
+            },
+            {
+              tipo: "tabla",
+              cabeceras: ["Aspecto", "Asistente de propietarios"],
+              filas: [
+                [
+                  "Datos",
+                  "Los mensajes que escribes y las respuestas del asistente. Antes de enviar tus mensajes, el servidor sustituye lo que parezca un dato sensible (IBAN, tarjeta, DNI o NIE, correo electrónico, teléfono, contraseñas) por «[dato retirado]». Tu dirección IP, solo para limitar la frecuencia de uso. Si pides que te contactemos, el formulario del chat recoge tu nombre, tu correo y, si quieres, tu teléfono.",
+                ],
+                [
+                  "Finalidad",
+                  "Responder a tus preguntas sobre la gestión de tu vivienda con SEDA. Con el formulario del chat, ponernos en contacto contigo. Sin perfiles y sin publicidad.",
+                ],
+                [
+                  "Base jurídica",
+                  "Artículo 6.1.b del RGPD: medidas precontractuales que tú pides al escribir. El formulario del chat, artículo 6.1.a del RGPD: tu consentimiento, que das con su casilla, como en la calculadora.",
+                ],
+                [
+                  "Quién los ve",
+                  "Nadie de SEDA lee la conversación, porque no la guardamos. Solo registramos métricas sin contenido: idioma, número de mensajes, herramientas usadas, duración y tamaño de la respuesta. Lo que dejas en el formulario del chat llega al registro interno de contactos de SEDA, igual que lo de la calculadora.",
+                ],
+                [
+                  "Encargado del tratamiento",
+                  "Anthropic Ireland, Limited, que presta el modelo de inteligencia artificial (Claude) que redacta las respuestas: cada mensaje se le envía para generar la respuesta. Actúa como encargado del tratamiento según su Anexo de Tratamiento de Datos (Data Processing Addendum, en vigor desde el 24 de febrero de 2025), que forma parte de sus Condiciones Comerciales, y estas le prohíben entrenar sus modelos con los mensajes. Vercel ejecuta la función que conecta el chat con Anthropic.",
+                ],
+                [
+                  "Transferencia internacional",
+                  "Anthropic trata y almacena los datos fuera del Espacio Económico Europeo, principalmente en Estados Unidos. La transferencia se ampara en las cláusulas contractuales tipo de la Comisión Europea (módulos dos y tres) que incorpora ese anexo.",
+                ],
+                [
+                  "Conservación",
+                  "SEDA no guarda la conversación: vive solo en la pestaña de tu navegador y desaparece al cerrarla o recargar la página. Según la documentación de Anthropic sobre su API (consultada el 7 de noviembre de 2026), con el modelo que usamos el contenido no se conserva por defecto una vez devuelta la respuesta; Anthropic puede conservarlo hasta 2 años si sus sistemas automáticos de seguridad marcan la conversación, o cuando lo exija la ley. La IP del control de frecuencia, en memoria y 10 minutos como máximo. Los datos del formulario del chat, como los de la calculadora.",
+                ],
+              ],
+            },
+            {
+              tipo: "parrafo",
+              texto:
+                "El asistente puede equivocarse. Sus estimaciones usan el mismo cálculo que la calculadora y no son una promesa de ingresos. No toma decisiones sobre ti. Para cualquier decisión, habla con una persona: el chat tiene siempre el enlace a la página de contacto. Como SEDA no guarda la conversación, no podemos darte acceso a ella ni borrarla; para los datos del formulario del chat, ver «Tus derechos».",
+            },
+          ],
+        },
+        {
           id: "conservacion",
           titulo: "Cuánto tiempo los conservamos",
           bloques: [
@@ -376,6 +437,11 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
               tipo: "parrafo",
               texto:
                 "Esta web no tiene base de datos propia ni registro de usuarios: lo que envías por el formulario de contacto se convierte en un correo electrónico y vive en un buzón. La única excepción es la calculadora para propietarios: lo que dejas en ella, y solo eso, lo reenvía el servidor de esta web al registro interno de contactos de SEDA, que está en el portal y no en esta web. Es una limitación deliberada — cuantos menos sitios guarden tus datos, menos sitios pueden perderlos.",
+            },
+            {
+              tipo: "parrafo",
+              texto:
+                "Lo mismo vale para el formulario del asistente de propietarios. Las conversaciones con el asistente no se guardan en ninguna parte de SEDA.",
             },
           ],
         },
@@ -422,7 +488,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "No tomamos decisiones automatizadas ni elaboramos perfiles con tus datos: cada mensaje lo lee una persona.",
+                "No tomamos decisiones automatizadas ni elaboramos perfiles con tus datos: cada mensaje de los formularios lo lee una persona. El asistente de propietarios responde de forma automática, pero no decide nada sobre ti.",
             },
           ],
         },
@@ -612,7 +678,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "If you book a call, your data is also processed by Calendly and Google Ireland Limited, as explained under “Booking a call with Calendly”. There are no other recipients. We do not sell or transfer data to third parties for commercial purposes. Data would only be disclosed to authorities or public bodies if a legal rule required it. Postal letters have their own recipients, given in their section.",
+                "If you book a call, your data is also processed by Calendly and Google Ireland Limited, as explained under “Booking a call with Calendly”. If you use the owners' assistant, your messages are also processed by Anthropic, as explained under “Owners' assistant”. There are no other recipients. We do not sell or transfer data to third parties for commercial purposes. Data would only be disclosed to authorities or public bodies if a legal rule required it. Postal letters have their own recipients, given in their section.",
             },
             {
               tipo: "parrafo",
@@ -728,6 +794,56 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
           ],
         },
         {
+          id: "asistente",
+          titulo: "Owners' assistant (artificial intelligence)",
+          bloques: [
+            {
+              tipo: "parrafo",
+              texto:
+                "On /propietarios and on the calculator there may be a chat: the owners' assistant. It is an artificial intelligence, not a person, and it says so in its first message (Article 50 of Regulation (EU) 2024/1689, the Artificial Intelligence Act). It answers questions about SEDA's service, its fees, the holiday-rental regulations in Andalusia and the calculator. Do not write sensitive data in it: documents, bank accounts, cards or passwords.",
+            },
+            {
+              tipo: "tabla",
+              cabeceras: ["Aspect", "Owners' assistant"],
+              filas: [
+                [
+                  "Data",
+                  "The messages you write and the assistant's replies. Before your messages are sent, the server replaces anything that looks like sensitive data (IBAN, card, Spanish DNI or NIE, email address, phone number, passwords) with “[dato retirado]”. Your IP address, only to limit how often the chat can be used. If you ask us to contact you, the chat form collects your name, your email and, if you wish, your phone number.",
+                ],
+                [
+                  "Purpose",
+                  "Answering your questions about managing your home with SEDA. With the chat form, getting in touch with you. No profiling and no advertising.",
+                ],
+                [
+                  "Legal basis",
+                  "Article 6(1)(b) GDPR: pre-contractual steps you request by writing. The chat form, Article 6(1)(a) GDPR: your consent, which you give with its checkbox, as on the calculator.",
+                ],
+                [
+                  "Who sees them",
+                  "Nobody at SEDA reads the conversation, because we do not keep it. We only record metrics with no content: language, number of messages, tools used, duration and size of the reply. What you leave in the chat form reaches SEDA's internal contact register, just like the calculator.",
+                ],
+                [
+                  "Processor",
+                  "Anthropic Ireland, Limited, which provides the artificial intelligence model (Claude) that writes the replies: each message is sent to it to generate the reply. It acts as a processor under its Data Processing Addendum (effective 24 February 2025), which forms part of its Commercial Terms, and those terms forbid it from training its models on the messages. Vercel runs the function that connects the chat to Anthropic.",
+                ],
+                [
+                  "International transfer",
+                  "Anthropic processes and stores the data outside the European Economic Area, mainly in the United States. The transfer relies on the European Commission's standard contractual clauses (modules two and three) incorporated in that addendum.",
+                ],
+                [
+                  "Retention",
+                  "SEDA does not keep the conversation: it lives only in your browser tab and disappears when you close it or reload the page. According to Anthropic's API documentation (consulted on 7 November 2026), with the model we use the content is not retained by default once the reply is returned; Anthropic may keep it for up to 2 years if its automated safety systems flag the conversation, or where the law requires it. The IP address used for the rate limiter, in memory for 10 minutes at most. The chat form data, like the calculator's.",
+                ],
+              ],
+            },
+            {
+              tipo: "parrafo",
+              texto:
+                "The assistant can make mistakes. Its estimates use the same calculation as the calculator and are not a promise of income. It makes no decisions about you. For any decision, speak to a person: the chat always shows the link to the contact page. As SEDA does not keep the conversation, we cannot give you access to it or delete it; for the chat form data, see “Your rights”.",
+            },
+          ],
+        },
+        {
           id: "conservacion",
           titulo: "How long we keep it",
           bloques: [
@@ -766,6 +882,11 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
               tipo: "parrafo",
               texto:
                 "This website has no database of its own and no user registry: what you send through the contact form becomes an email and lives in a mailbox. The only exception is the owner calculator: what you leave in it, and only that, is forwarded by this website's server to SEDA's internal contacts register, which is in the portal and not on this website. That is a deliberate limitation — the fewer places that hold your data, the fewer places can lose it.",
+            },
+            {
+              tipo: "parrafo",
+              texto:
+                "The same applies to the owners' assistant form. Conversations with the assistant are not kept anywhere at SEDA.",
             },
           ],
         },
@@ -809,7 +930,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "We take no automated decisions and build no profiles from your data: every message is read by a person.",
+                "We take no automated decisions and build no profiles from your data: every message sent through the forms is read by a person. The owners' assistant replies automatically, but it decides nothing about you.",
             },
           ],
         },
@@ -999,7 +1120,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Si vous réservez un appel, vos données sont aussi traitées par Calendly et Google Ireland Limited, comme expliqué sous « Réservation d'un appel avec Calendly ». Il n'y a pas d'autres destinataires. Nous ne vendons ni ne cédons de données à des tiers à des fins commerciales. Elles ne seraient communiquées aux autorités ou organismes publics que si une norme l'exigeait. Les courriers postaux ont leurs propres destinataires, indiqués dans leur section.",
+                "Si vous réservez un appel, vos données sont aussi traitées par Calendly et Google Ireland Limited, comme expliqué sous « Réservation d'un appel avec Calendly ». Si vous utilisez l'assistant pour propriétaires, vos messages sont aussi traités par Anthropic, comme expliqué sous « Assistant pour propriétaires ». Il n'y a pas d'autres destinataires. Nous ne vendons ni ne cédons de données à des tiers à des fins commerciales. Elles ne seraient communiquées aux autorités ou organismes publics que si une norme l'exigeait. Les courriers postaux ont leurs propres destinataires, indiqués dans leur section.",
             },
             {
               tipo: "parrafo",
@@ -1115,6 +1236,56 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
           ],
         },
         {
+          id: "asistente",
+          titulo: "Assistant pour propriétaires (intelligence artificielle)",
+          bloques: [
+            {
+              tipo: "parrafo",
+              texto:
+                "Sur /propietarios et sur le calculateur, il peut y avoir un chat : l'assistant pour propriétaires. C'est une intelligence artificielle, pas une personne, et il le dit dans son premier message (article 50 du règlement (UE) 2024/1689 sur l'intelligence artificielle). Il répond sur le service de SEDA, son tarif, la réglementation des logements touristiques en Andalousie et le calculateur. N'y écrivez pas de données sensibles : pièces d'identité, comptes bancaires, cartes ou mots de passe.",
+            },
+            {
+              tipo: "tabla",
+              cabeceras: ["Aspect", "Assistant pour propriétaires"],
+              filas: [
+                [
+                  "Données",
+                  "Les messages que vous écrivez et les réponses de l'assistant. Avant l'envoi de vos messages, le serveur remplace ce qui ressemble à une donnée sensible (IBAN, carte, DNI ou NIE espagnols, adresse e-mail, téléphone, mots de passe) par « [dato retirado] ». Votre adresse IP, uniquement pour limiter la fréquence d'utilisation. Si vous demandez à être contacté, le formulaire du chat recueille votre nom, votre e-mail et, si vous le souhaitez, votre téléphone.",
+                ],
+                [
+                  "Finalité",
+                  "Répondre à vos questions sur la gestion de votre logement avec SEDA. Avec le formulaire du chat, prendre contact avec vous. Sans profilage ni publicité.",
+                ],
+                [
+                  "Base juridique",
+                  "Article 6.1.b du RGPD : mesures précontractuelles que vous demandez en écrivant. Le formulaire du chat, article 6.1.a du RGPD : votre consentement, que vous donnez avec sa case, comme sur le calculateur.",
+                ],
+                [
+                  "Qui les voit",
+                  "Personne chez SEDA ne lit la conversation, car nous ne la conservons pas. Nous n'enregistrons que des mesures sans contenu : langue, nombre de messages, outils utilisés, durée et taille de la réponse. Ce que vous laissez dans le formulaire du chat arrive dans le registre interne des contacts de SEDA, comme pour le calculateur.",
+                ],
+                [
+                  "Sous-traitant",
+                  "Anthropic Ireland, Limited, qui fournit le modèle d'intelligence artificielle (Claude) qui rédige les réponses : chaque message lui est envoyé pour générer la réponse. Il agit comme sous-traitant selon son avenant relatif au traitement des données (Data Processing Addendum, en vigueur depuis le 24 février 2025), qui fait partie de ses conditions commerciales, lesquelles lui interdisent d'entraîner ses modèles avec les messages. Vercel exécute la fonction qui relie le chat à Anthropic.",
+                ],
+                [
+                  "Transfert international",
+                  "Anthropic traite et stocke les données hors de l'Espace économique européen, principalement aux États-Unis. Le transfert repose sur les clauses contractuelles types de la Commission européenne (modules deux et trois) intégrées à cet avenant.",
+                ],
+                [
+                  "Conservation",
+                  "SEDA ne conserve pas la conversation : elle n'existe que dans l'onglet de votre navigateur et disparaît lorsque vous le fermez ou rechargez la page. Selon la documentation d'Anthropic sur son API (consultée le 7 novembre 2026), avec le modèle que nous utilisons, le contenu n'est pas conservé par défaut une fois la réponse renvoyée ; Anthropic peut le conserver jusqu'à 2 ans si ses systèmes automatiques de sécurité signalent la conversation, ou lorsque la loi l'exige. L'adresse IP du contrôle de fréquence, en mémoire et 10 minutes au maximum. Les données du formulaire du chat, comme celles du calculateur.",
+                ],
+              ],
+            },
+            {
+              tipo: "parrafo",
+              texto:
+                "L'assistant peut se tromper. Ses estimations utilisent le même calcul que le calculateur et ne sont pas une promesse de revenus. Il ne prend aucune décision vous concernant. Pour toute décision, parlez à une personne : le chat affiche toujours le lien vers la page de contact. Comme SEDA ne conserve pas la conversation, nous ne pouvons ni vous y donner accès ni l'effacer ; pour les données du formulaire du chat, voir « Vos droits ».",
+            },
+          ],
+        },
+        {
           id: "conservacion",
           titulo: "Combien de temps nous les conservons",
           bloques: [
@@ -1153,6 +1324,11 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
               tipo: "parrafo",
               texto:
                 "Ce site n'a pas de base de données propre ni de registre d'utilisateurs : ce que vous envoyez par le formulaire de contact devient un courriel et vit dans une boîte. La seule exception est le calculateur pour propriétaires : ce que vous y laissez, et seulement cela, est transmis par le serveur de ce site au registre interne de contacts de SEDA, qui se trouve dans le portail et non sur ce site. C'est une limitation délibérée — moins d'endroits conservent vos données, moins d'endroits peuvent les perdre.",
+            },
+            {
+              tipo: "parrafo",
+              texto:
+                "Il en va de même pour le formulaire de l'assistant pour propriétaires. Les conversations avec l'assistant ne sont conservées nulle part chez SEDA.",
             },
           ],
         },
@@ -1196,7 +1372,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Nous ne prenons aucune décision automatisée et n'établissons aucun profil à partir de vos données : chaque message est lu par une personne.",
+                "Nous ne prenons aucune décision automatisée et n'établissons aucun profil à partir de vos données : chaque message des formulaires est lu par une personne. L'assistant pour propriétaires répond de façon automatique, mais ne décide rien vous concernant.",
             },
           ],
         },
@@ -1386,7 +1562,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Wenn Sie ein Gespräch buchen, verarbeiten auch Calendly und Google Ireland Limited Ihre Daten, wie unter „Buchung eines Gesprächs über Calendly“ erläutert. Weitere Empfänger gibt es nicht. Wir verkaufen oder übermitteln keine Daten zu kommerziellen Zwecken an Dritte. An Behörden oder öffentliche Stellen würden sie nur übermittelt, wenn eine Rechtsvorschrift das verlangt. Die Briefpost hat eigene Empfänger, die in ihrem Abschnitt genannt sind.",
+                "Wenn Sie ein Gespräch buchen, verarbeiten auch Calendly und Google Ireland Limited Ihre Daten, wie unter „Buchung eines Gesprächs über Calendly“ erläutert. Wenn Sie den Assistenten für Eigentümer nutzen, verarbeitet zusätzlich Anthropic Ihre Nachrichten, wie unter „Assistent für Eigentümer“ erläutert. Weitere Empfänger gibt es nicht. Wir verkaufen oder übermitteln keine Daten zu kommerziellen Zwecken an Dritte. An Behörden oder öffentliche Stellen würden sie nur übermittelt, wenn eine Rechtsvorschrift das verlangt. Die Briefpost hat eigene Empfänger, die in ihrem Abschnitt genannt sind.",
             },
             {
               tipo: "parrafo",
@@ -1502,6 +1678,56 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
           ],
         },
         {
+          id: "asistente",
+          titulo: "Assistent für Eigentümer (künstliche Intelligenz)",
+          bloques: [
+            {
+              tipo: "parrafo",
+              texto:
+                "Auf /propietarios und im Rechner kann es einen Chat geben: den Assistenten für Eigentümer. Er ist eine künstliche Intelligenz, kein Mensch, und sagt das in seiner ersten Nachricht (Artikel 50 der Verordnung (EU) 2024/1689 über künstliche Intelligenz). Er beantwortet Fragen zum Service von SEDA, zum Tarif, zu den Vorschriften für Ferienwohnungen in Andalusien und zum Rechner. Schreiben Sie dort keine sensiblen Daten: keine Ausweise, Bankkonten, Karten oder Passwörter.",
+            },
+            {
+              tipo: "tabla",
+              cabeceras: ["Aspekt", "Assistent für Eigentümer"],
+              filas: [
+                [
+                  "Daten",
+                  "Die Nachrichten, die Sie schreiben, und die Antworten des Assistenten. Bevor Ihre Nachrichten gesendet werden, ersetzt der Server alles, was wie ein sensibles Datum aussieht (IBAN, Karte, spanische DNI oder NIE, E-Mail-Adresse, Telefonnummer, Passwörter), durch „[dato retirado]“. Ihre IP-Adresse, nur um die Nutzungshäufigkeit zu begrenzen. Wenn Sie um Kontakt bitten, erfasst das Formular im Chat Ihren Namen, Ihre E-Mail-Adresse und, wenn Sie möchten, Ihre Telefonnummer.",
+                ],
+                [
+                  "Zweck",
+                  "Ihre Fragen zur Verwaltung Ihrer Immobilie mit SEDA beantworten. Mit dem Formular im Chat: mit Ihnen Kontakt aufnehmen. Ohne Profilbildung und ohne Werbung.",
+                ],
+                [
+                  "Rechtsgrundlage",
+                  "Art. 6 Abs. 1 lit. b DSGVO: vorvertragliche Maßnahmen, um die Sie mit Ihrer Nachricht bitten. Das Formular im Chat: Art. 6 Abs. 1 lit. a DSGVO, Ihre Einwilligung, die Sie mit dem Kontrollkästchen erteilen, wie im Rechner.",
+                ],
+                [
+                  "Wer sie sieht",
+                  "Bei SEDA liest niemand das Gespräch, weil wir es nicht speichern. Wir erfassen nur Kennzahlen ohne Inhalt: Sprache, Anzahl der Nachrichten, verwendete Werkzeuge, Dauer und Umfang der Antwort. Was Sie im Formular des Chats hinterlassen, gelangt in das interne Kontaktverzeichnis von SEDA, genau wie beim Rechner.",
+                ],
+                [
+                  "Auftragsverarbeiter",
+                  "Anthropic Ireland, Limited, das das KI-Modell (Claude) bereitstellt, das die Antworten verfasst: Jede Nachricht wird dorthin gesendet, um die Antwort zu erzeugen. Anthropic handelt als Auftragsverarbeiter nach seinem Data Processing Addendum (in Kraft seit dem 24. Februar 2025), das Teil seiner Commercial Terms ist; diese verbieten ihm, seine Modelle mit den Nachrichten zu trainieren. Vercel führt die Funktion aus, die den Chat mit Anthropic verbindet.",
+                ],
+                [
+                  "Internationale Übermittlung",
+                  "Anthropic verarbeitet und speichert die Daten außerhalb des Europäischen Wirtschaftsraums, hauptsächlich in den Vereinigten Staaten. Die Übermittlung stützt sich auf die Standardvertragsklauseln der Europäischen Kommission (Module zwei und drei), die dieses Addendum enthält.",
+                ],
+                [
+                  "Speicherdauer",
+                  "SEDA speichert das Gespräch nicht: Es existiert nur im Tab Ihres Browsers und verschwindet, wenn Sie ihn schließen oder die Seite neu laden. Laut der Dokumentation von Anthropic zu seiner API (abgerufen am 7. November 2026) wird der Inhalt bei dem von uns verwendeten Modell standardmäßig nicht gespeichert, sobald die Antwort zurückgegeben ist; Anthropic kann ihn bis zu 2 Jahre aufbewahren, wenn seine automatischen Sicherheitssysteme das Gespräch markieren, oder wenn das Gesetz es verlangt. Die IP-Adresse der Häufigkeitsbegrenzung: im Arbeitsspeicher, höchstens 10 Minuten. Die Daten aus dem Formular des Chats: wie beim Rechner.",
+                ],
+              ],
+            },
+            {
+              tipo: "parrafo",
+              texto:
+                "Der Assistent kann sich irren. Seine Schätzungen nutzen dieselbe Berechnung wie der Rechner und sind kein Einnahmeversprechen. Er trifft keine Entscheidungen über Sie. Für jede Entscheidung sprechen Sie mit einem Menschen: Der Chat zeigt immer den Link zur Kontaktseite. Da SEDA das Gespräch nicht speichert, können wir Ihnen weder Zugang dazu geben noch es löschen; für die Daten aus dem Formular des Chats siehe „Ihre Rechte“.",
+            },
+          ],
+        },
+        {
           id: "conservacion",
           titulo: "Wie lange wir sie aufbewahren",
           bloques: [
@@ -1540,6 +1766,11 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
               tipo: "parrafo",
               texto:
                 "Diese Website hat keine eigene Datenbank und kein Nutzerregister: Was Sie über das Kontaktformular senden, wird zu einer E-Mail und liegt in einem Postfach. Die einzige Ausnahme ist der Rechner für Eigentümer: Was Sie dort hinterlassen, und nur das, leitet der Server dieser Website an das interne Kontaktregister von SEDA weiter, das im Portal liegt und nicht auf dieser Website. Das ist eine bewusste Beschränkung — je weniger Orte Ihre Daten halten, desto weniger Orte können sie verlieren.",
+            },
+            {
+              tipo: "parrafo",
+              texto:
+                "Dasselbe gilt für das Formular des Assistenten für Eigentümer. Gespräche mit dem Assistenten werden bei SEDA nirgends gespeichert.",
             },
           ],
         },
@@ -1583,7 +1814,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Wir treffen keine automatisierten Entscheidungen und erstellen keine Profile aus Ihren Daten: Jede Nachricht liest ein Mensch.",
+                "Wir treffen keine automatisierten Entscheidungen und erstellen keine Profile aus Ihren Daten: Jede Nachricht aus den Formularen liest ein Mensch. Der Assistent für Eigentümer antwortet automatisch, entscheidet aber nichts über Sie.",
             },
           ],
         },
