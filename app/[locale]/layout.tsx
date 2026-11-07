@@ -1,7 +1,7 @@
 import type { ReactNode } from "react"
 import { notFound } from "next/navigation"
 import { NextIntlClientProvider, hasLocale } from "next-intl"
-import { setRequestLocale } from "next-intl/server"
+import { getMessages, setRequestLocale } from "next-intl/server"
 import { SkipLink } from "@/components/skip-link"
 import { Navigation } from "@/components/navigation"
 import { Footer } from "@/components/footer"
@@ -12,6 +12,7 @@ import { businessJsonLd } from "@/lib/jsonld"
 import { fontVariables } from "@/lib/fonts"
 import { TEXTOS_CONSENTIMIENTO } from "@/lib/consentimiento-textos"
 import { metaPixelActivo, metaPixelId } from "@/lib/meta-config.mjs"
+import { asistentePropietariosActivo } from "@/lib/asistente/config"
 
 import "../globals.css"
 
@@ -84,12 +85,21 @@ export default async function LocaleLayout({
     propsPie.avisoCookies = <ConsentimientoCookies pixelId={pixelId} textos={textosCookies} />
   }
 
+  // Asistente de propietarios (SEDA_FLAG_ASISTENTE_PROPIETARIOS): apagado, sus
+  // textos (`asistente.*`) no viajan al navegador. Sin `messages`, el proveedor
+  // manda TODOS los mensajes a cada página; así manda los mismos que antes del
+  // asistente. Encendido, todos, como siempre.
+  const mensajes = await getMessages()
+  const mensajesCliente = asistentePropietariosActivo()
+    ? mensajes
+    : Object.fromEntries(Object.entries(mensajes).filter(([espacio]) => espacio !== "asistente"))
+
   // `<html lang>` matches the rendered language: drives screen-reader
   // language switching and gives Google a strong locale signal at first paint.
   return (
     <html lang={locale} className={fontVariables} suppressHydrationWarning>
       <body className="font-sans antialiased">
-        <NextIntlClientProvider>
+        <NextIntlClientProvider messages={mensajesCliente}>
           <JsonLdScript data={businessLd} />
           <SkipLink />
           <Navigation />

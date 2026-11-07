@@ -54,6 +54,69 @@ function textoUnaLinea(v: unknown, max: number): string | null {
   return t
 }
 
+/** Los datos de contacto comunes a los dos formularios (calculadora y asistente). */
+export type Contacto = {
+  nombre: string
+  email: string
+  telefono?: string
+  locale: string
+  /** Código de la carta postal (?carta= del QR), tal cual llegó; solo si mide 1–40 caracteres. */
+  carta?: string
+}
+
+type ResultadoContacto = { ok: true; contacto: Contacto; honeypot: boolean } | { ok: false; error: string }
+
+/**
+ * Honeypot, consentimiento, nombre, correo, teléfono, idioma y carta: las reglas
+ * comunes. `b` ya es un objeto y sus claves ya se han comprobado.
+ */
+function validarContacto(b: Record<string, unknown>): ResultadoContacto {
+  // Honeypot: se mira el valor pero la decisión se toma después de validar todo,
+  // para que un bot reciba la misma respuesta que un envío bueno.
+  const trampa = b[HONEYPOT_FIELD]
+  if (trampa !== undefined && typeof trampa !== "string") return { ok: false, error: "invalid_field_value" }
+  if (typeof trampa === "string" && trampa.length > HONEYPOT_MAX) return { ok: false, error: "field_too_long" }
+  const honeypot = typeof trampa === "string" && trampa.trim().length > 0
+
+  if (b.consentimiento !== true) return { ok: false, error: "consent_required" }
+
+  const nombre = textoUnaLinea(b.nombre, LEAD_MAX.nombre)
+  if (nombre === null) return { ok: false, error: "invalid_name" }
+  if (nombre.length === 0) return { ok: false, error: "missing_field" }
+
+  const email = typeof b.email === "string" ? b.email.trim() : ""
+  if (email.length > MAX_EMAIL_LENGTH || !esEmailValido(email)) return { ok: false, error: "invalid_email" }
+
+  // V4-04: la regla del teléfono es la de seda_os (lib/telefono-e164.ts, copia
+  // atada por contrato). Lo que seda_os rechazaría se para AQUÍ, con un error
+  // que el formulario entiende («escriba el prefijo»), y no allí con un 502.
+  // Viaja ya en E.164: el portal lo normaliza otra vez y le da lo mismo.
+  let telefono: string | undefined
+  if (b.telefono !== undefined && b.telefono !== "") {
+    const t = textoUnaLinea(b.telefono, LEAD_MAX.telefono)
+    if (t === null) return { ok: false, error: "invalid_phone" }
+    if (t.length > 0) {
+      const e164 = normalizarTelefonoE164(t)
+      if (e164 === null) return { ok: false, error: "phone_needs_prefix" }
+      telefono = e164
+    }
+  }
+
+  if (typeof b.locale !== "string" || !(routing.locales as readonly string[]).includes(b.locale)) {
+    return { ok: false, error: "invalid_locale" }
+  }
+
+  // Cartas-QR: se reenvía tal cual, sin validar ni limpiar. Un valor que no es
+  // texto o mide más de 40 se omite (no se rechaza el lead por un dato de medición).
+  const carta = cartaParaEnviar(b.carta)
+
+  return {
+    ok: true,
+    honeypot,
+    contacto: { nombre, email, telefono, locale: b.locale, ...(carta !== undefined ? { carta } : {}) },
+  }
+}
+
 /**
  * Valida el cuerpo del navegador. Sin coerción: cada valor llega ya con su tipo.
  * El consentimiento es obligatorio y tiene que ser el booleano `true`; ni el
@@ -69,40 +132,8 @@ export function validarLead(body: unknown): ResultadoLead {
   ])
   if (Object.keys(b).some((k) => !permitidos.has(k))) return fallo("unknown_field")
 
-  // Honeypot: se mira el valor pero la decisión se toma después de validar todo,
-  // para que un bot reciba la misma respuesta que un envío bueno.
-  const trampa = b[HONEYPOT_FIELD]
-  if (trampa !== undefined && typeof trampa !== "string") return fallo("invalid_field_value")
-  if (typeof trampa === "string" && trampa.length > HONEYPOT_MAX) return fallo("field_too_long")
-  const honeypot = typeof trampa === "string" && trampa.trim().length > 0
-
-  if (b.consentimiento !== true) return fallo("consent_required")
-
-  const nombre = textoUnaLinea(b.nombre, LEAD_MAX.nombre)
-  if (nombre === null) return fallo("invalid_name")
-  if (nombre.length === 0) return fallo("missing_field")
-
-  const email = typeof b.email === "string" ? b.email.trim() : ""
-  if (email.length > MAX_EMAIL_LENGTH || !esEmailValido(email)) return fallo("invalid_email")
-
-  // V4-04: la regla del teléfono es la de seda_os (lib/telefono-e164.ts, copia
-  // atada por contrato). Lo que seda_os rechazaría se para AQUÍ, con un error
-  // que el formulario entiende («escriba el prefijo»), y no allí con un 502.
-  // Viaja ya en E.164: el portal lo normaliza otra vez y le da lo mismo.
-  let telefono: string | undefined
-  if (b.telefono !== undefined && b.telefono !== "") {
-    const t = textoUnaLinea(b.telefono, LEAD_MAX.telefono)
-    if (t === null) return fallo("invalid_phone")
-    if (t.length > 0) {
-      const e164 = normalizarTelefonoE164(t)
-      if (e164 === null) return fallo("phone_needs_prefix")
-      telefono = e164
-    }
-  }
-
-  if (typeof b.locale !== "string" || !(routing.locales as readonly string[]).includes(b.locale)) {
-    return fallo("invalid_locale")
-  }
+  const c = validarContacto(b)
+  if (!c.ok) return fallo(c.error)
 
   let municipio: string | undefined
   if (b.municipio !== undefined && b.municipio !== "") {
@@ -125,16 +156,35 @@ export function validarLead(body: unknown): ResultadoLead {
     return fallo("invalid_calculo")
   }
 
-  // Cartas-QR: se reenvía tal cual, sin validar ni limpiar. Un valor que no es
-  // texto o mide más de 40 se omite (no se rechaza el lead por un dato de medición).
-  const carta = cartaParaEnviar(b.carta)
-
+  const { nombre, email, telefono, locale, carta } = c.contacto
   return {
     ok: true,
-    honeypot,
-    lead: { nombre, email, telefono, locale: b.locale, municipio, dormitorios, precioNoche, ocupacionPct, ...(carta !== undefined ? { carta } : {}) },
+    honeypot: c.honeypot,
+    lead: { nombre, email, telefono, locale, municipio, dormitorios, precioNoche, ocupacionPct, ...(carta !== undefined ? { carta } : {}) },
   }
 }
+
+export type ResultadoLeadAsistente =
+  | { ok: true; lead: Contacto; honeypot: boolean }
+  | { ok: false; error: string }
+
+/**
+ * El mini formulario del asistente (app/api/asistente/solicitud): nombre, correo,
+ * teléfono opcional, consentimiento, idioma y carta. Mismas reglas que la
+ * calculadora, sin precio ni ocupación: el chat no manda ninguna cifra.
+ */
+export function validarLeadAsistente(body: unknown): ResultadoLeadAsistente {
+  if (typeof body !== "object" || body === null || Array.isArray(body)) return { ok: false, error: "invalid_body" }
+  const b = body as Record<string, unknown>
+  const permitidos = new Set(["nombre", "email", "telefono", "consentimiento", "locale", "carta", HONEYPOT_FIELD])
+  if (Object.keys(b).some((k) => !permitidos.has(k))) return { ok: false, error: "unknown_field" }
+  const c = validarContacto(b)
+  if (!c.ok) return c
+  return { ok: true, lead: c.contacto, honeypot: c.honeypot }
+}
+
+/** Por dónde llegó la persona (contrato de seda_os, docs/CONTRATO-LEADS-CANAL-CARTA.md de portal-propietarios). */
+export type CanalLead = "calculadora" | "asistente"
 
 /**
  * Cuerpo del POST al portal: el contrato de `leadPropietarioSchema` de seda_os
@@ -144,7 +194,7 @@ export function validarLead(body: unknown): ResultadoLead {
  * persona. La estimación NO viaja: el CRM no la guarda y se recalcula con la
  * tarifa cuando haga falta.
  */
-export function cuerpoPortal(lead: Lead) {
+export function cuerpoPortal(lead: Contacto & Partial<Omit<Lead, keyof Contacto>>, canal: CanalLead = "calculadora") {
   return {
     nombre: lead.nombre,
     correo: lead.email.toLowerCase(),
@@ -156,9 +206,11 @@ export function cuerpoPortal(lead: Lead) {
     // Locale de la página desde la que se envió el formulario (es|en|de|fr):
     // seda_os lo usa para contestar en ese idioma. Única clave añadida.
     idioma: lead.locale,
-    // Cartas-QR (seda_os #1150): `canal` siempre; `carta` solo si venía en la URL.
+    // Cartas-QR (seda_os #1150): `canal` siempre ("calculadora" o "asistente");
+    // `carta` solo si venía en la URL.
     // Ninguna cifra de la estimación viaja (decisión del 6-nov).
-    canal: "calculadora" as const,
+    // "asistente" → seda_os guarda origen 'web-asistente'.
+    canal,
     ...(lead.carta !== undefined ? { carta: lead.carta } : {}),
   }
 }

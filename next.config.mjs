@@ -17,7 +17,14 @@ const nextConfig = {
   // Inlina SEDA_FLAG_META_PIXEL en el código (`process.env.SEDA_FLAG_META_PIXEL`
   // literal): así, apagado, el bundler elimina el aviso de cookies y su chunk
   // (ver app/[locale]/layout.tsx). Solo el flag, que no es un secreto.
-  env: { SEDA_FLAG_META_PIXEL: process.env.SEDA_FLAG_META_PIXEL ?? "" },
+  // Igual con SEDA_FLAG_ASISTENTE_PROPIETARIOS: apagado, el botón del asistente
+  // no se compila en el chunk de /propietarios ni de la calculadora. Las rutas
+  // /api/asistente leen el valor en tiempo de ejecución (`asistentePropietariosActivo()`
+  // accede a `env[...]`, que el bundler no sustituye).
+  env: {
+    SEDA_FLAG_META_PIXEL: process.env.SEDA_FLAG_META_PIXEL ?? "",
+    SEDA_FLAG_ASISTENTE_PROPIETARIOS: process.env.SEDA_FLAG_ASISTENTE_PROPIETARIOS ?? "",
+  },
   async headers() {
     return [
       {

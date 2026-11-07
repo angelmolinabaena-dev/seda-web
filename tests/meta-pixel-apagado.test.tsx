@@ -27,7 +27,11 @@ import es from "@/messages/es.json"
 // `next/font/google` solo existe bajo el transformador de Next, no en vitest.
 vi.mock("@/lib/fonts", () => ({ fontVariables: "" }))
 // Y `setRequestLocale` exige un contexto de petición de Next que aquí no hay.
-vi.mock("next-intl/server", () => ({ setRequestLocale: () => {} }))
+// `getMessages`: el layout filtra los textos del asistente (feat/asistente-propietarios).
+vi.mock("next-intl/server", () => ({
+  setRequestLocale: () => {},
+  getMessages: async () => (await import("@/messages/es.json")).default,
+}))
 
 const ID = "123456789012345"
 
@@ -87,6 +91,26 @@ describe.each(routing.locales)("layout (%s)", (loc) => {
     const enlace = props.enlaceCookies
     expect(enlace.type).toBe(EnlaceConfigurarCookies)
     expect(enlace.props).toEqual({ etiqueta: TEXTOS_CONSENTIMIENTO[loc].enlacePie })
+  })
+})
+
+describe("layout: textos del asistente de propietarios", () => {
+  const mensajesDelProveedor = async () => {
+    const proveedor = elementos(await arbol("es")).find((e) => e.type === NextIntlClientProvider)!
+    return (proveedor.props as { messages: Record<string, unknown> }).messages
+  }
+
+  it("con SEDA_FLAG_ASISTENTE_PROPIETARIOS apagado, `asistente.*` no viaja al navegador; el resto, sí", async () => {
+    const m = await mensajesDelProveedor()
+    expect(m).not.toHaveProperty("asistente")
+    expect(Object.keys(m).sort()).toEqual(Object.keys(es).filter((k) => k !== "asistente").sort())
+  })
+
+  it("encendido, viajan todos los mensajes", async () => {
+    vi.stubEnv("SEDA_FLAG_ASISTENTE_PROPIETARIOS", "1")
+    const m = await mensajesDelProveedor()
+    expect(m).toHaveProperty("asistente")
+    expect(Object.keys(m).sort()).toEqual(Object.keys(es).sort())
   })
 })
 
