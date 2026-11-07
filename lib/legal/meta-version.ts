@@ -12,4 +12,4 @@
   lib/legal/meta.ts; tests/meta-pixel-legal.test.ts exige que esta fecha no sea
   anterior a las de los textos base.
 */
-export const ACTUALIZADO_CON_META = "2026-11-06"
+export const ACTUALIZADO_CON_META = "2026-11-07"

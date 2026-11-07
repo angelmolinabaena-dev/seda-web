@@ -1,4 +1,5 @@
 import { routing } from "@/i18n/routing"
+import { cartaParaEnviar } from "@/lib/carta-qr"
 import { MAX_EMAIL_LENGTH, esEmailValido } from "@/lib/api-guards"
 import { HONEYPOT_FIELD, HONEYPOT_MAX } from "@/lib/contact-fields"
 import { OCUPACION_MAX, OCUPACION_MIN, estimar } from "@/lib/calculadora-propietarios"
@@ -36,6 +37,8 @@ export type Lead = {
   dormitorios?: number
   precioNoche: number
   ocupacionPct: number
+  /** Código de la carta postal (?carta= del QR), tal cual llegó; solo si mide 1–40 caracteres. */
+  carta?: string
 }
 
 export type ResultadoLead =
@@ -62,7 +65,7 @@ export function validarLead(body: unknown): ResultadoLead {
 
   const permitidos = new Set([
     "nombre", "email", "telefono", "consentimiento", "locale", "municipio", "dormitorios",
-    "precioNoche", "ocupacionPct", HONEYPOT_FIELD,
+    "precioNoche", "ocupacionPct", "carta", HONEYPOT_FIELD,
   ])
   if (Object.keys(b).some((k) => !permitidos.has(k))) return fallo("unknown_field")
 
@@ -122,10 +125,14 @@ export function validarLead(body: unknown): ResultadoLead {
     return fallo("invalid_calculo")
   }
 
+  // Cartas-QR: se reenvía tal cual, sin validar ni limpiar. Un valor que no es
+  // texto o mide más de 40 se omite (no se rechaza el lead por un dato de medición).
+  const carta = cartaParaEnviar(b.carta)
+
   return {
     ok: true,
     honeypot,
-    lead: { nombre, email, telefono, locale: b.locale, municipio, dormitorios, precioNoche, ocupacionPct },
+    lead: { nombre, email, telefono, locale: b.locale, municipio, dormitorios, precioNoche, ocupacionPct, ...(carta !== undefined ? { carta } : {}) },
   }
 }
 
@@ -149,5 +156,9 @@ export function cuerpoPortal(lead: Lead) {
     // Locale de la página desde la que se envió el formulario (es|en|de|fr):
     // seda_os lo usa para contestar en ese idioma. Única clave añadida.
     idioma: lead.locale,
+    // Cartas-QR (seda_os #1150): `canal` siempre; `carta` solo si venía en la URL.
+    // Ninguna cifra de la estimación viaja (decisión del 6-nov).
+    canal: "calculadora" as const,
+    ...(lead.carta !== undefined ? { carta: lead.carta } : {}),
   }
 }

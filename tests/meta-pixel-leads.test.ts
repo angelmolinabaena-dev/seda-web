@@ -291,7 +291,7 @@ describe("el Lead de la calculadora (píxel + API de conversiones)", () => {
       const { POST } = await cargarRuta()
       await POST(peticion({ "x-consent-marketing": "1" }))
       const cuerpo = JSON.parse(String(llamadasA(URL_PORTAL)[0][1].body))
-      expect(Object.keys(cuerpo).sort()).toEqual(["consentimiento", "consentimiento_version", "correo", "dormitorios", "idioma", "municipio", "nombre", "telefono"])
+      expect(Object.keys(cuerpo).sort()).toEqual(["canal", "consentimiento", "consentimiento_version", "correo", "dormitorios", "idioma", "municipio", "nombre", "telefono"])
       expect(JSON.stringify(cuerpo)).not.toMatch(/event_id|fbp|fbc|meta/i)
     })
   })

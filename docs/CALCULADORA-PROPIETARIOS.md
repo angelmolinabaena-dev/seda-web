@@ -125,3 +125,9 @@ El límite del portal (5 por minuto e IP) sigue siendo compartido: todas las lla
 5. **El secreto de la firma**: `SEDA_LEADS_HMAC_SECRET`, el MISMO valor en este proyecto de Vercel (seda-web) y en el del
    portal (`portal-propietarios`), solo servidor, nunca `NEXT_PUBLIC_`. Luego `SEDA_FLAG_LEADS_PUBLICOS=1` en el portal.
 6. Poner la variable en Vercel y **redesplegar**.
+
+## Cartas-QR: `?carta=` y `canal` (plan «Motor SEDA», fase 1)
+
+- El QR de la carta postal lleva a `/propietarios/calculadora?carta=CODIGO`. `lib/carta-qr.ts` lo lee al entrar, lo guarda **solo en memoria de la página** (sin cookie ni almacenamiento) y lo quita de la URL con `history.replaceState`. El aviso de cookies llama a la misma función **antes** de cargar el píxel o hacer `PageView`, así que tampoco lo ve Meta con el consentimiento ya dado. La API de conversiones ya usaba la URL sin query.
+- Al enviar, el cuerpo firmado a seda_os lleva `canal: "calculadora"` siempre y `carta` solo si venía en la URL, tal cual, y si mide ≤ 40 caracteres (contrato: `docs/CONTRATO-LEADS-CANAL-CARTA.md` de portal-propietarios). No viaja ninguna cifra de la estimación.
+- Privacidad: línea nueva en la sección «cartas» (4 idiomas); `actualizado` y `ACTUALIZADO_CON_META` pasan a 2026-11-07.
