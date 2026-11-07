@@ -6,7 +6,10 @@ import { DefaultChatTransport, type UIMessage } from "ai"
 import { ArrowUp, CalendarDays, X } from "lucide-react"
 import { useLocale, useTranslations } from "next-intl"
 import { Link } from "@/i18n/navigation"
+import type { Locale } from "@/i18n/routing"
 import { LIMITES } from "@/lib/asistente/config"
+import { textoRespaldo } from "@/lib/asistente/respaldo"
+import { sinRespuesta } from "@/lib/asistente/sin-respuesta"
 import { FormularioSolicitud } from "./formulario-solicitud"
 
 /*
@@ -71,7 +74,10 @@ export default function AsistentePanel({ carta, abierto, onCerrar }: { carta: ()
     }
   }, [messages, status, id])
 
-  const mostrarFormulario = formularioManual || !!error || messages.some((m) => m.role === "assistant" && m.parts.some(pideFormulario))
+  // El modelo rechazó o no dijo nada: lo mismo que con un cupo agotado (respaldo + formulario).
+  const vacio = sinRespuesta(messages, status)
+  const mostrarFormulario =
+    formularioManual || !!error || vacio || messages.some((m) => m.role === "assistant" && m.parts.some(pideFormulario))
 
   function enviar(ev?: FormEvent) {
     ev?.preventDefault()
@@ -163,6 +169,11 @@ export default function AsistentePanel({ carta, abierto, onCerrar }: { carta: ()
           <p role="status" className="self-start text-[0.8rem] text-muted-foreground italic">
             {t("escribiendo")}
           </p>
+        )}
+        {vacio && !error && (
+          <div role="status" className="self-start max-w-[90%] rounded-2xl rounded-tl-sm bg-secondary/60 px-4 py-3">
+            <p>{textoRespaldo(locale as Locale, "no_disponible")}</p>
+          </div>
         )}
         {error && (
           <div role="alert" className="self-start max-w-[90%] rounded-2xl rounded-tl-sm border border-[#b85432]/40 bg-[#b85432]/8 px-4 py-3">

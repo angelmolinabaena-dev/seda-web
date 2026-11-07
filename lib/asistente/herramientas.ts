@@ -69,7 +69,7 @@ export const entradaEstimar = z.object({
   precioNoche: z
     .number()
     .describe(
-      "Precio medio por noche del alojamiento, en euros, tal como lo dice la persona (sin limpieza). Desde el 1-dic-2026, IVA incluido.",
+      "Precio medio por noche del alojamiento, en euros, tal como lo dice la persona (sin limpieza). Lo que la web dice del IVA de ese precio lo devuelve iva_alojamiento.",
     ),
   ocupacionPct: z.number().describe(`Ocupación anual en %, entre ${OCUPACION_MIN} y ${OCUPACION_MAX}, la que diga la persona.`),
 })
@@ -150,12 +150,17 @@ export function datosNormativa(locale: Locale, grupo?: GrupoId) {
 
 /* ── IVA del alojamiento ─────────────────────────────────────────────────── */
 
+// Solo lo que dice la web y lo que calcula la calculadora, de sus mismas fuentes:
+// el texto `calculadora.inputs.precio.hint` y `precioConIvaAlojamiento` (la fecha
+// de corte de lib/calculadora-propietarios.ts). Ni una frase propia sobre el RDL
+// 29/2026: si la votación de convalidación lo cambia, se cambia la web (texto y
+// fecha) y el asistente dice lo nuevo sin tocar este fichero.
+
 export function datosIvaAlojamiento(locale: Locale, hoy: string = hoyMadrid()) {
   return {
     loQueDiceLaWeb: textoWeb(locale, CLAVE_IVA_ALOJAMIENTO),
     hoy,
     elPrecioYaLlevaIva: precioConIvaAlojamiento(hoy),
-    aviso: "Puede cambiar: el Real Decreto-ley 29/2026 está pendiente de convalidación. Diga solo esto, con sus fechas.",
   }
 }
 
@@ -211,7 +216,7 @@ export function herramientasAsistente(locale: Locale, hoy: string = hoyMadrid())
       execute: async ({ grupo }) => datosNormativa(locale, grupo),
     }),
     iva_alojamiento: tool({
-      description: "Lo que dice la web sobre el IVA del precio por noche que paga el huésped (desde el 1-dic-2026).",
+      description: "Lo que dice la web (la calculadora) sobre el IVA del precio por noche que paga el huésped.",
       inputSchema: sinEntrada,
       execute: async () => datosIvaAlojamiento(locale, hoy),
     }),

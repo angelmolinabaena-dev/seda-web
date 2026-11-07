@@ -63,15 +63,26 @@ import type { DocumentoLegalMultilingue } from "./types"
       `_cfuvid`), medido con una petición a la URL del iframe.
     · Asistente de propietarios (7-nov-2026, detrás de
       `SEDA_FLAG_ASISTENTE_PROPIETARIOS`): chat en app/api/asistente/route.ts,
-      que no guarda la conversación (solo métricas sin contenido) y retira los
-      datos sensibles antes de enviarlos (lib/asistente/historial.ts). El modelo
-      es de Anthropic: contraparte en el EEE Anthropic Ireland, Limited
-      (Commercial Terms), encargado según su DPA (en vigor 24-feb-2025, SCC
-      módulos 2 y 3), sin entrenamiento con los datos (Commercial Terms) y
-      conservación según https://platform.claude.com/docs/en/manage-claude/api-and-data-retention
-      (leído el 7-nov-2026). El mini formulario del chat va al mismo CRM que la
-      calculadora, con canal "asistente" (app/api/asistente/solicitud).
-      Detalle y lo que queda por verificar: docs/ASISTENTE-PROPIETARIOS.md.
+      que no guarda la conversación y retira los datos sensibles antes de
+      enviarlos (lib/asistente/historial.ts). Lo único que registra es una línea
+      de métricas sin contenido ni IP (`metrica()` en esa ruta): idioma, turno,
+      herramientas, tipos de dato retirado (entrada) o tapado (salida), tokens
+      de entrada, salida y caché, pasos, motivo de fin, duración y, si lo hubo,
+      el motivo del respaldo. El modelo es de Anthropic: contraparte en el EEE
+      Anthropic Ireland, Limited (Commercial Terms), encargado según su DPA (en
+      vigor 24-feb-2025, SCC módulos 2 y 3) y sin entrenamiento con los datos
+      (Commercial Terms).
+      Conservación en Anthropic: sus dos fuentes no dicen lo mismo. El artículo
+      de privacidad (https://privacy.claude.com/en/articles/7996866-how-long-do-you-store-my-organization-s-data)
+      dice que borra entradas y salidas en 30 días como máximo; la página de la
+      API (https://platform.claude.com/docs/en/manage-claude/api-and-data-retention)
+      dice que no se conservan por defecto salvo los «Covered Models». La
+      política da el plazo más largo de los dos, 30 días, más las excepciones
+      que dan ambas: hasta 2 años si sus sistemas de seguridad marcan el
+      contenido, o lo que exija la ley (decisión de Ángel vía Cowork, 8-nov-2026).
+      El mini formulario del chat va al mismo CRM que la calculadora, con canal
+      "asistente" (app/api/asistente/solicitud). Detalle:
+      docs/ASISTENTE-PROPIETARIOS.md.
     · Las valoraciones de huéspedes NO van aquí: viven en guest-app, que
       tiene su propia política (`/legal/privacidad`) y no enlaza a esta.
 */
@@ -375,7 +386,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                 ],
                 [
                   "Quién los ve",
-                  "Nadie de SEDA lee la conversación, porque no la guardamos. Solo registramos métricas sin contenido: idioma, número de mensajes, herramientas usadas, duración y tamaño de la respuesta. Lo que dejas en el formulario del chat llega al registro interno de contactos de SEDA, igual que lo de la calculadora.",
+                  "Nadie de SEDA lee la conversación, porque no la guardamos. Solo registramos métricas sin contenido: idioma, número del mensaje en la conversación, herramientas usadas, tipos de dato retirado o tapado (por ejemplo «iban» o «teléfono», nunca el dato), tokens de entrada, de salida y en caché, número de pasos, motivo de fin, duración y, si lo hubo, el motivo del mensaje de respaldo. Lo que dejas en el formulario del chat llega al registro interno de contactos de SEDA, igual que lo de la calculadora.",
                 ],
                 [
                   "Encargado del tratamiento",
@@ -387,7 +398,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                 ],
                 [
                   "Conservación",
-                  "SEDA no guarda la conversación: vive solo en la pestaña de tu navegador y desaparece al cerrarla o recargar la página. Según la documentación de Anthropic sobre su API (consultada el 7 de noviembre de 2026), con el modelo que usamos el contenido no se conserva por defecto una vez devuelta la respuesta; Anthropic puede conservarlo hasta 2 años si sus sistemas automáticos de seguridad marcan la conversación, o cuando lo exija la ley. La IP del control de frecuencia, en memoria y 10 minutos como máximo. Los datos del formulario del chat, como los de la calculadora.",
+                  "SEDA no guarda la conversación: vive solo en la pestaña de tu navegador y desaparece al cerrarla o recargar la página. Anthropic borra los mensajes y las respuestas en un plazo máximo de 30 días, salvo que sus sistemas de seguridad los marquen (entonces hasta 2 años) o lo exija la ley. Fuentes: su artículo de privacidad sobre conservación y su documentación de la API, enlazados al final de esta sección. La IP del control de frecuencia, en memoria y 10 minutos como máximo. Los datos del formulario del chat, como los de la calculadora.",
                 ],
               ],
             },
@@ -396,6 +407,10 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
               texto:
                 "El asistente puede equivocarse. Sus estimaciones usan el mismo cálculo que la calculadora y no son una promesa de ingresos. No toma decisiones sobre ti. Para cualquier decisión, habla con una persona: el chat tiene siempre el enlace a la página de contacto. Como SEDA no guarda la conversación, no podemos darte acceso a ella ni borrarla; para los datos del formulario del chat, ver «Tus derechos».",
             },
+          ],
+          enlaces: [
+            { href: "https://privacy.claude.com/en/articles/7996866-how-long-do-you-store-my-organization-s-data", etiqueta: "Anthropic: cuánto tiempo conserva los datos" },
+            { href: "https://platform.claude.com/docs/en/manage-claude/api-and-data-retention", etiqueta: "Anthropic: conservación de datos de la API" },
           ],
         },
         {
@@ -820,7 +835,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                 ],
                 [
                   "Who sees them",
-                  "Nobody at SEDA reads the conversation, because we do not keep it. We only record metrics with no content: language, number of messages, tools used, duration and size of the reply. What you leave in the chat form reaches SEDA's internal contact register, just like the calculator.",
+                  "Nobody at SEDA reads the conversation, because we do not keep it. We only record metrics with no content: language, the message's position in the conversation, tools used, the types of data removed or masked (for example “iban” or “phone”, never the data itself), input, output and cached tokens, number of steps, finish reason, duration and, if there was one, the reason for the fallback message. What you leave in the chat form reaches SEDA's internal contact register, just like the calculator.",
                 ],
                 [
                   "Processor",
@@ -832,7 +847,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                 ],
                 [
                   "Retention",
-                  "SEDA does not keep the conversation: it lives only in your browser tab and disappears when you close it or reload the page. According to Anthropic's API documentation (consulted on 7 November 2026), with the model we use the content is not retained by default once the reply is returned; Anthropic may keep it for up to 2 years if its automated safety systems flag the conversation, or where the law requires it. The IP address used for the rate limiter, in memory for 10 minutes at most. The chat form data, like the calculator's.",
+                  "SEDA does not keep the conversation: it lives only in your browser tab and disappears when you close it or reload the page. Anthropic deletes the messages and replies within 30 days at most, unless its safety systems flag them (then up to 2 years) or the law requires otherwise. Sources: its privacy article on retention and its API documentation, linked at the end of this section. The IP address used for the rate limiter, in memory for 10 minutes at most. The chat form data, like the calculator's.",
                 ],
               ],
             },
@@ -841,6 +856,10 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
               texto:
                 "The assistant can make mistakes. Its estimates use the same calculation as the calculator and are not a promise of income. It makes no decisions about you. For any decision, speak to a person: the chat always shows the link to the contact page. As SEDA does not keep the conversation, we cannot give you access to it or delete it; for the chat form data, see “Your rights”.",
             },
+          ],
+          enlaces: [
+            { href: "https://privacy.claude.com/en/articles/7996866-how-long-do-you-store-my-organization-s-data", etiqueta: "Anthropic: how long it stores data" },
+            { href: "https://platform.claude.com/docs/en/manage-claude/api-and-data-retention", etiqueta: "Anthropic: API data retention" },
           ],
         },
         {
@@ -1262,7 +1281,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                 ],
                 [
                   "Qui les voit",
-                  "Personne chez SEDA ne lit la conversation, car nous ne la conservons pas. Nous n'enregistrons que des mesures sans contenu : langue, nombre de messages, outils utilisés, durée et taille de la réponse. Ce que vous laissez dans le formulaire du chat arrive dans le registre interne des contacts de SEDA, comme pour le calculateur.",
+                  "Personne chez SEDA ne lit la conversation, car nous ne la conservons pas. Nous n'enregistrons que des mesures sans contenu : langue, rang du message dans la conversation, outils utilisés, types de données retirées ou masquées (par exemple « iban » ou « téléphone », jamais la donnée), jetons en entrée, en sortie et en cache, nombre d'étapes, motif de fin, durée et, le cas échéant, le motif du message de secours. Ce que vous laissez dans le formulaire du chat arrive dans le registre interne des contacts de SEDA, comme pour le calculateur.",
                 ],
                 [
                   "Sous-traitant",
@@ -1274,7 +1293,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                 ],
                 [
                   "Conservation",
-                  "SEDA ne conserve pas la conversation : elle n'existe que dans l'onglet de votre navigateur et disparaît lorsque vous le fermez ou rechargez la page. Selon la documentation d'Anthropic sur son API (consultée le 7 novembre 2026), avec le modèle que nous utilisons, le contenu n'est pas conservé par défaut une fois la réponse renvoyée ; Anthropic peut le conserver jusqu'à 2 ans si ses systèmes automatiques de sécurité signalent la conversation, ou lorsque la loi l'exige. L'adresse IP du contrôle de fréquence, en mémoire et 10 minutes au maximum. Les données du formulaire du chat, comme celles du calculateur.",
+                  "SEDA ne conserve pas la conversation : elle n'existe que dans l'onglet de votre navigateur et disparaît lorsque vous le fermez ou rechargez la page. Anthropic supprime les messages et les réponses dans un délai maximal de 30 jours, sauf si ses systèmes de sécurité les signalent (alors jusqu'à 2 ans) ou si la loi l'exige. Sources : son article de confidentialité sur la conservation et la documentation de son API, liés à la fin de cette section. L'adresse IP du contrôle de fréquence, en mémoire et 10 minutes au maximum. Les données du formulaire du chat, comme celles du calculateur.",
                 ],
               ],
             },
@@ -1283,6 +1302,10 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
               texto:
                 "L'assistant peut se tromper. Ses estimations utilisent le même calcul que le calculateur et ne sont pas une promesse de revenus. Il ne prend aucune décision vous concernant. Pour toute décision, parlez à une personne : le chat affiche toujours le lien vers la page de contact. Comme SEDA ne conserve pas la conversation, nous ne pouvons ni vous y donner accès ni l'effacer ; pour les données du formulaire du chat, voir « Vos droits ».",
             },
+          ],
+          enlaces: [
+            { href: "https://privacy.claude.com/en/articles/7996866-how-long-do-you-store-my-organization-s-data", etiqueta: "Anthropic : durée de conservation des données" },
+            { href: "https://platform.claude.com/docs/en/manage-claude/api-and-data-retention", etiqueta: "Anthropic : conservation des données de l'API" },
           ],
         },
         {
@@ -1704,7 +1727,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                 ],
                 [
                   "Wer sie sieht",
-                  "Bei SEDA liest niemand das Gespräch, weil wir es nicht speichern. Wir erfassen nur Kennzahlen ohne Inhalt: Sprache, Anzahl der Nachrichten, verwendete Werkzeuge, Dauer und Umfang der Antwort. Was Sie im Formular des Chats hinterlassen, gelangt in das interne Kontaktverzeichnis von SEDA, genau wie beim Rechner.",
+                  "Bei SEDA liest niemand das Gespräch, weil wir es nicht speichern. Wir erfassen nur Kennzahlen ohne Inhalt: Sprache, Position der Nachricht im Gespräch, verwendete Werkzeuge, Arten entfernter oder abgedeckter Daten (zum Beispiel „iban“ oder „Telefon“, nie die Daten selbst), Eingabe-, Ausgabe- und Cache-Tokens, Anzahl der Schritte, Abschlussgrund, Dauer und gegebenenfalls den Grund für die Ersatznachricht. Was Sie im Formular des Chats hinterlassen, gelangt in das interne Kontaktverzeichnis von SEDA, genau wie beim Rechner.",
                 ],
                 [
                   "Auftragsverarbeiter",
@@ -1716,7 +1739,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                 ],
                 [
                   "Speicherdauer",
-                  "SEDA speichert das Gespräch nicht: Es existiert nur im Tab Ihres Browsers und verschwindet, wenn Sie ihn schließen oder die Seite neu laden. Laut der Dokumentation von Anthropic zu seiner API (abgerufen am 7. November 2026) wird der Inhalt bei dem von uns verwendeten Modell standardmäßig nicht gespeichert, sobald die Antwort zurückgegeben ist; Anthropic kann ihn bis zu 2 Jahre aufbewahren, wenn seine automatischen Sicherheitssysteme das Gespräch markieren, oder wenn das Gesetz es verlangt. Die IP-Adresse der Häufigkeitsbegrenzung: im Arbeitsspeicher, höchstens 10 Minuten. Die Daten aus dem Formular des Chats: wie beim Rechner.",
+                  "SEDA speichert das Gespräch nicht: Es existiert nur im Tab Ihres Browsers und verschwindet, wenn Sie ihn schließen oder die Seite neu laden. Anthropic löscht die Nachrichten und Antworten spätestens nach 30 Tagen, es sei denn, seine Sicherheitssysteme markieren sie (dann bis zu 2 Jahre) oder das Gesetz verlangt es. Quellen: sein Datenschutzartikel zur Speicherdauer und seine API-Dokumentation, verlinkt am Ende dieses Abschnitts. Die IP-Adresse der Häufigkeitsbegrenzung: im Arbeitsspeicher, höchstens 10 Minuten. Die Daten aus dem Formular des Chats: wie beim Rechner.",
                 ],
               ],
             },
@@ -1725,6 +1748,10 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
               texto:
                 "Der Assistent kann sich irren. Seine Schätzungen nutzen dieselbe Berechnung wie der Rechner und sind kein Einnahmeversprechen. Er trifft keine Entscheidungen über Sie. Für jede Entscheidung sprechen Sie mit einem Menschen: Der Chat zeigt immer den Link zur Kontaktseite. Da SEDA das Gespräch nicht speichert, können wir Ihnen weder Zugang dazu geben noch es löschen; für die Daten aus dem Formular des Chats siehe „Ihre Rechte“.",
             },
+          ],
+          enlaces: [
+            { href: "https://privacy.claude.com/en/articles/7996866-how-long-do-you-store-my-organization-s-data", etiqueta: "Anthropic: Speicherdauer der Daten" },
+            { href: "https://platform.claude.com/docs/en/manage-claude/api-and-data-retention", etiqueta: "Anthropic: Datenspeicherung der API" },
           ],
         },
         {

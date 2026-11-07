@@ -139,6 +139,10 @@ export async function POST(req: Request) {
 
   return result.toUIMessageStreamResponse({
     sendReasoning: false,
+    // El motivo de fin viaja con el mensaje: si el modelo rechaza («content-filter»)
+    // o no devuelve texto, el panel enseña el respaldo y el formulario
+    // (lib/asistente/sin-respuesta.ts). Solo el motivo: nada del contenido.
+    messageMetadata: ({ part }) => (part.type === "finish" ? { finishReason: part.finishReason } : undefined),
     sendSources: false,
     // El detalle del error no sale al navegador: la interfaz enseña el respaldo.
     onError: () => "no_disponible",

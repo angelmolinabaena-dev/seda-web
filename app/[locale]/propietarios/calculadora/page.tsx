@@ -1,11 +1,10 @@
+import type { ReactNode } from "react"
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { getTranslations, setRequestLocale } from "next-intl/server"
 import type { LocaleParams } from "@/i18n/routing"
 import { Link } from "@/i18n/navigation"
-import { AsistentePropietarios } from "@/components/asistente/asistente-propietarios"
 import { JsonLdScript } from "@/components/page-json-ld"
-import { asistentePropietariosActivo } from "@/lib/asistente/config"
 import { RUTA_CALCULADORA, calculadoraPropietariosActiva } from "@/lib/calculadora-propietarios"
 import { faqCalculadora } from "@/lib/faq"
 import { breadcrumbJsonLd, faqPageJsonLd } from "@/lib/jsonld"
@@ -31,6 +30,14 @@ export async function generateMetadata({ params }: LocaleParams): Promise<Metada
 }
 
 export default async function CalculadoraPropietariosPage({ params }: LocaleParams) {
+  // Asistente de propietarios (SEDA_FLAG_ASISTENTE_PROPIETARIOS=1, lib/asistente/config.ts).
+  // `process.env.…` literal e `import()` condicionado, como el aviso de cookies del
+  // layout: next.config.mjs inlina el flag y, apagado, el botón no entra en el bundle.
+  let asistente: ReactNode = null
+  if (process.env.SEDA_FLAG_ASISTENTE_PROPIETARIOS === "1") {
+    const { AsistentePropietarios } = await import("@/components/asistente/asistente-propietarios")
+    asistente = <AsistentePropietarios />
+  }
   if (!calculadoraPropietariosActiva()) notFound()
   const { locale } = await params
   setRequestLocale(locale)
@@ -68,8 +75,7 @@ export default async function CalculadoraPropietariosPage({ params }: LocalePara
       </header>
 
       <CalculadoraContent />
-      {/* Asistente de propietarios: solo con SEDA_FLAG_ASISTENTE_PROPIETARIOS=1 (lib/asistente/config.ts). */}
-      {asistentePropietariosActivo() && <AsistentePropietarios />}
+      {asistente}
 
       <section className="px-6 md:px-12 lg:px-20 py-20 md:py-28 bg-secondary/40">
         <div className="max-w-3xl mx-auto">

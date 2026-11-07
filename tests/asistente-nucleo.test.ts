@@ -11,6 +11,7 @@ import { acotarHistorial } from "@/lib/asistente/historial"
 import { INSTRUCCIONES, REFERENCIA_INTERNA } from "@/lib/asistente/instrucciones"
 import { MOTIVOS_RESPALDO, textoRespaldo } from "@/lib/asistente/respaldo"
 import { limpiarSalida, transformarSalida } from "@/lib/asistente/salida"
+import { sinRespuesta } from "@/lib/asistente/sin-respuesta"
 import { ESTRUCTURA } from "@/lib/guias-contenido/vut-andalucia"
 import { generalContact } from "@/lib/site-contact"
 import { TARIFA } from "@/lib/tarifa"
@@ -155,6 +156,40 @@ describe("datos sensibles", () => {
     expect(r.tipos.length).toBeGreaterThan(0)
   })
 
+  it.each([
+    "Necesito una mano de pintura antes del verano.",
+    "La casa está junto al pinar de Marbella.",
+    "Tengo las fotos en Pinterest.",
+    "La clave es la ubicación.",
+    "Es un punto clave para nosotros.",
+    "The pine trees and the pinboard are the key point here.",
+    "La clé, c'est l'emplacement ; un point clé pour nous.",
+    "Der Schlüssel ist die Lage, ein wichtiger Punkt.",
+    "Opinión: el PIN de la caja fuerte lo cambia el equipo.",
+  ])("frase normal sin tapar: %s", (t) => {
+    expect(retirarDatosSensibles(t).texto).toBe(t)
+    expect(limpiarSalida(t).texto).toBe(t)
+  })
+
+  it.each([
+    ["contraseña con dos puntos", "mi contraseña: Hunter2!", "Hunter2"],
+    ["PIN con igual", "PIN=4821", "4821"],
+    ["PIN con dos puntos", "el pin: 4821", "4821"],
+    ["clave con dos puntos", "clave: ab12cd", "ab12cd"],
+    ["password", "password: s3creta", "s3creta"],
+    ["mot de passe (espacio antes de los dos puntos)", "mot de passe : Soleil99", "Soleil99"],
+    ["Passwort", "Passwort: Sonne2026", "Sonne2026"],
+    ["con verbo, es", "Mi contraseña es Hunter2", "Hunter2"],
+    ["con verbo, en", "my password is hunter2", "hunter2"],
+    ["con verbo, de", "Mein Passwort ist Sonne2026", "Sonne2026"],
+    ["con verbo, fr", "mon mot de passe est Soleil99", "Soleil99"],
+    ["con verbo, PIN", "mi pin es 4821", "4821"],
+  ])("%s se tapa", (_n, texto, valor) => {
+    const r = retirarDatosSensibles(texto)
+    expect(r.texto).not.toContain(valor)
+    expect(r.tipos).toContain("clave")
+  })
+
   it("no toca precios, ocupaciones ni años", () => {
     const t = "Cobro 150 € la noche, 1.290 € de alta, un 65 % de ocupación desde 2026 y 35.588 € al año."
     expect(retirarDatosSensibles(t).texto).toBe(t)
@@ -255,5 +290,34 @@ describe("respaldo", () => {
   it("cuatro idiomas, todos los motivos, siempre con la salida de dejar los datos", () => {
     const deje = { es: /déjenos sus datos/i, en: /leave us your details/i, de: /hinterlassen Sie uns Ihre Daten/i, fr: /laissez-nous vos coordonnées/i }
     for (const l of routing.locales) for (const m of MOTIVOS_RESPALDO) expect(textoRespaldo(l, m)).toMatch(deje[l])
+  })
+})
+
+describe("sin respuesta del modelo → respaldo y formulario", () => {
+  const persona = { role: "user", parts: [{ type: "text", text: "¿Cuánto cobráis?" }] }
+  const asistente = (parts: { type: string; text?: string; state?: string }[], finishReason = "stop") => ({
+    role: "assistant",
+    parts,
+    metadata: { finishReason },
+  })
+
+  it("rechazo del modelo (content-filter), aunque traiga algo de texto", () => {
+    expect(sinRespuesta([persona, asistente([], "content-filter")], "ready")).toBe(true)
+    expect(sinRespuesta([persona, asistente([{ type: "text", text: "Lo siento" }], "content-filter")], "ready")).toBe(true)
+  })
+
+  it("turno terminado sin texto ni nada que enseñar", () => {
+    expect(sinRespuesta([persona, asistente([])], "ready")).toBe(true)
+    expect(sinRespuesta([persona, asistente([{ type: "text", text: "   " }, { type: "step-start" }])], "ready")).toBe(true)
+  })
+
+  it("no salta con una respuesta normal, con un botón o formulario, ni mientras escribe", () => {
+    expect(sinRespuesta([persona, asistente([{ type: "text", text: "La comisión es…" }])], "ready")).toBe(false)
+    expect(sinRespuesta([persona, asistente([{ type: "tool-ofrecer_solicitud", state: "output-available" }])], "ready")).toBe(false)
+    expect(sinRespuesta([persona, asistente([{ type: "tool-ofrecer_llamada", state: "output-available" }])], "ready")).toBe(false)
+    expect(sinRespuesta([persona, asistente([{ type: "data-respaldo" }])], "ready")).toBe(false)
+    expect(sinRespuesta([persona, asistente([])], "streaming")).toBe(false)
+    expect(sinRespuesta([persona], "ready")).toBe(false)
+    expect(sinRespuesta([], "ready")).toBe(false)
   })
 })

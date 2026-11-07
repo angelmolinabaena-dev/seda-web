@@ -15,17 +15,24 @@ import type { DocumentoLegalMultilingue } from "@/lib/legal/types"
       https://www.anthropic.com/legal/data-processing-addendum (leídas el 7-nov-2026).
     · Sin entrenamiento con los datos: Commercial Terms («Anthropic may not train
       models on Customer Content from Services»).
-    · Hasta 2 años si la conversación la marcan sus sistemas de seguridad:
-      https://platform.claude.com/docs/en/manage-claude/api-and-data-retention.
+    · Conservación: 30 días como máximo, salvo que sus sistemas de seguridad
+      marquen el contenido (hasta 2 años) o lo exija la ley. Las dos fuentes de
+      Anthropic no coinciden (el artículo de privacidad da 30 días; la página de
+      la API, sin conservación por defecto salvo los «Covered Models»); la
+      política da el plazo más largo y enlaza las dos:
+      https://privacy.claude.com/en/articles/7996866-how-long-do-you-store-my-organization-s-data
+      https://platform.claude.com/docs/en/manage-claude/api-and-data-retention
+    · Las métricas: lo que registra `metrica()` en app/api/asistente/route.ts
+      (incluidos los tipos de dato retirado o tapado y el motivo de fin).
     · Que SEDA no guarda la conversación: app/api/asistente/route.ts no escribe
       en ningún sitio (este sitio no tiene base de datos) y solo registra métricas.
 */
 
 const EXIGIDO: Record<string, RegExp[]> = {
-  es: [/Anthropic Ireland, Limited/, /encargado del tratamiento/, /24 de febrero de 2025/, /cláusulas contractuales tipo/, /2 años/, /entrenar/, /Reglamento \(UE\) 2024\/1689/, /artículo 50/, /SEDA no guarda la conversación/, /Artículo 6\.1\.b del RGPD/],
-  en: [/Anthropic Ireland, Limited/, /processor/, /24 February 2025/, /standard contractual clauses/, /2 years/, /training/, /Regulation \(EU\) 2024\/1689/, /Article 50/, /SEDA does not keep the conversation/, /Article 6\(1\)\(b\) GDPR/],
-  fr: [/Anthropic Ireland, Limited/, /sous-traitant/, /24 février 2025/, /clauses contractuelles types/, /2 ans/, /entraîner/, /règlement \(UE\) 2024\/1689/, /article 50/, /SEDA ne conserve pas la conversation/, /Article 6\.1\.b du RGPD/],
-  de: [/Anthropic Ireland, Limited/, /Auftragsverarbeiter/, /24\. Februar 2025/, /Standardvertragsklauseln/, /2 Jahre/, /trainieren/, /Verordnung \(EU\) 2024\/1689/, /Artikel 50/, /SEDA speichert das Gespräch nicht/, /Art\. 6 Abs\. 1 lit\. b DSGVO/],
+  es: [/30 días/, /tipos de dato retirado o tapado/, /motivo de fin/, /Anthropic Ireland, Limited/, /encargado del tratamiento/, /24 de febrero de 2025/, /cláusulas contractuales tipo/, /2 años/, /entrenar/, /Reglamento \(UE\) 2024\/1689/, /artículo 50/, /SEDA no guarda la conversación/, /Artículo 6\.1\.b del RGPD/],
+  en: [/30 days/, /types of data removed or masked/, /finish reason/, /Anthropic Ireland, Limited/, /processor/, /24 February 2025/, /standard contractual clauses/, /2 years/, /training/, /Regulation \(EU\) 2024\/1689/, /Article 50/, /SEDA does not keep the conversation/, /Article 6\(1\)\(b\) GDPR/],
+  fr: [/30 jours/, /types de données retirées ou masquées/, /motif de fin/, /Anthropic Ireland, Limited/, /sous-traitant/, /24 février 2025/, /clauses contractuelles types/, /2 ans/, /entraîner/, /règlement \(UE\) 2024\/1689/, /article 50/, /SEDA ne conserve pas la conversation/, /Article 6\.1\.b du RGPD/],
+  de: [/30 Tagen/, /Arten entfernter oder abgedeckter Daten/, /Abschlussgrund/, /Anthropic Ireland, Limited/, /Auftragsverarbeiter/, /24\. Februar 2025/, /Standardvertragsklauseln/, /2 Jahre/, /trainieren/, /Verordnung \(EU\) 2024\/1689/, /Artikel 50/, /SEDA speichert das Gespräch nicht/, /Art\. 6 Abs\. 1 lit\. b DSGVO/],
 }
 
 function comprobar(doc: DocumentoLegalMultilingue, etiqueta: string) {
@@ -35,6 +42,13 @@ function comprobar(doc: DocumentoLegalMultilingue, etiqueta: string) {
     expect(s, `${etiqueta}/${l}: falta la sección «asistente»`).toBeDefined()
     const texto = JSON.stringify(s)
     for (const re of EXIGIDO[l]) expect(texto, `${etiqueta}/${l}: ${re}`).toMatch(re)
+    const hrefs = (s?.enlaces ?? []).map((e) => e.href)
+    expect(hrefs, `${etiqueta}/${l}: fuentes de la conservación`).toEqual([
+      "https://privacy.claude.com/en/articles/7996866-how-long-do-you-store-my-organization-s-data",
+      "https://platform.claude.com/docs/en/manage-claude/api-and-data-retention",
+    ])
+    // La frase anterior («no se conserva por defecto») ya no está.
+    expect(texto).not.toMatch(/no se conserva por defecto|not retained by default|n'est pas conservé par défaut|standardmäßig nicht gespeichert/)
     const destinatarios = JSON.stringify(secciones.find((x) => x.id === "destinatarios"))
     expect(destinatarios, `${etiqueta}/${l}: destinatarios sin Anthropic`).toContain("Anthropic")
     const donde = JSON.stringify(secciones.find((x) => x.id === "donde-no-estan"))

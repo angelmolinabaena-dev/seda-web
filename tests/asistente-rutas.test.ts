@@ -22,6 +22,7 @@ let seq = 0
 // Lo que el modelo simulado recibe y devuelve en cada prueba.
 const llamadas: unknown[] = []
 let textoModelo = "La comisión de gestión es un 21% + IVA."
+let finModelo: "stop" | "content-filter" = "stop"
 
 vi.mock("@ai-sdk/anthropic", () => ({
   anthropic: () =>
@@ -32,12 +33,16 @@ vi.mock("@ai-sdk/anthropic", () => ({
           stream: simulateReadableStream({
             chunks: [
               { type: "stream-start", warnings: [] },
-              { type: "text-start", id: "t" },
-              ...textoModelo.match(/[\s\S]{1,7}/g)!.map((delta) => ({ type: "text-delta" as const, id: "t", delta })),
-              { type: "text-end", id: "t" },
+              ...(textoModelo
+                ? [
+                    { type: "text-start" as const, id: "t" },
+                    ...textoModelo.match(/[\s\S]{1,7}/g)!.map((delta) => ({ type: "text-delta" as const, id: "t", delta })),
+                    { type: "text-end" as const, id: "t" },
+                  ]
+                : []),
               {
                 type: "finish",
-                finishReason: { unified: "stop", raw: "end_turn" },
+                finishReason: { unified: finModelo, raw: finModelo === "stop" ? "end_turn" : "refusal" },
                 usage: { inputTokens: { total: 5, noCache: 5, cacheRead: 0, cacheWrite: 0 }, outputTokens: { total: 5, text: 5, reasoning: 0 } },
               },
             ],
@@ -76,6 +81,7 @@ describe("POST /api/asistente", () => {
   beforeEach(() => {
     llamadas.length = 0
     textoModelo = "La comisión de gestión es un 21% + IVA."
+    finModelo = "stop"
     log = vi.spyOn(console, "log").mockImplementation(() => {})
     vi.spyOn(console, "error").mockImplementation(() => {})
     vi.stubEnv("SEDA_FLAG_ASISTENTE_PROPIETARIOS", "1")
@@ -148,6 +154,20 @@ describe("POST /api/asistente", () => {
       expect(l).not.toContain("21%")
       expect(l).not.toMatch(/203\.0\.113/)
     }
+  })
+
+  it("el motivo de fin viaja en los metadatos del mensaje: un rechazo llega como «content-filter»", async () => {
+    textoModelo = ""
+    finModelo = "content-filter"
+    const { POST } = await rutaChat()
+    const cuerpo = await leer(await POST(peticionChat(bueno())))
+    expect(cuerpo).toContain('"finishReason":"content-filter"')
+    expect(cuerpo).not.toContain("text-delta")
+  })
+
+  it("una respuesta normal lleva «stop»", async () => {
+    const { POST } = await rutaChat()
+    expect(await leer(await POST(peticionChat(bueno())))).toContain('"finishReason":"stop"')
   })
 
   it("sin ANTHROPIC_API_KEY → mensaje de respaldo y señal para el formulario, sin llamar al modelo", async () => {

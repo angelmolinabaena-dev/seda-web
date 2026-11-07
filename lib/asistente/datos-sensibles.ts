@@ -11,7 +11,12 @@
     · DNI y NIE españoles (8 dígitos + letra; X/Y/Z + 7 dígitos + letra);
     · correos electrónicos y teléfonos (el contacto se deja en el formulario, con
       su consentimiento, no en la conversación);
-    · contraseñas y claves escritas como «contraseña: …», «password …», «PIN …».
+    · contraseñas, claves y PIN, solo cuando se escriben como tales: la palabra
+      completa seguida de «:» o «=» («contraseña: …», «PIN=…», «mot de passe : …»),
+      o con el verbo explícito («mi contraseña es …», «my password is …»,
+      «mein Passwort ist …», «mon mot de passe est …»). Una palabra corriente
+      («pintura», «pinar», «Pinterest», «la clave es la ubicación», «un punto
+      clave») no se toca: antes se tapaba, en la entrada y en la salida.
 
   Es una red, no una garantía: un dato escrito de forma rara puede pasar. Por eso
   la regla está también en las instrucciones («no lo repita») y la política de
@@ -28,7 +33,15 @@ const EMAIL = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi
 // Teléfono: prefijo opcional y 9 o más dígitos con separadores. Un precio
 // («1.290 €») o un año no llegan a 9 dígitos.
 const TELEFONO = /(?:\+|00)?\d(?:[ .-]?\d){8,14}\b/g
-const CLAVE = /\b(contraseña|password|passwort|mot de passe|pin|clave)\s*[:=]?\s*\S+/gi
+// Palabra completa: el «\b» final impide «pin» dentro de «pintura» o «pinar».
+// (\b de JavaScript solo conoce [A-Za-z0-9_]; todas estas palabras acaban en ASCII.)
+const PALABRA_CLAVE = String.raw`(?:contraseña|password|passwort|kennwort|mot de passe|code pin|pin|clave)`
+const CLAVE = new RegExp(String.raw`\b${PALABRA_CLAVE}\b\s*[:=]\s*\S+`, "gi")
+// «mi contraseña es X» y sus equivalentes, con el posesivo y el verbo explícitos.
+const CLAVE_VERBO = new RegExp(
+  String.raw`\b(?:mi|my|mein|meine|mon|ma)\s+${PALABRA_CLAVE}\b\s+(?:es|is|ist|lautet|est)\b\s*:?\s*\S+`,
+  "gi",
+)
 
 function pasaLuhn(digitos: string): boolean {
   let suma = 0
@@ -73,5 +86,6 @@ export function retirarDatosSensibles(texto: string, permitidos: readonly string
   t = tapar(EMAIL, "email")(t)
   t = tapar(TELEFONO, "telefono")(t)
   t = tapar(CLAVE, "clave")(t)
+  t = tapar(CLAVE_VERBO, "clave")(t)
   return { texto: t, tipos }
 }
