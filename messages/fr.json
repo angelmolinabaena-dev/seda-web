@@ -1655,5 +1655,24 @@
       "body": "L'équipe SEDA vous contactera pour évaluer votre bien."
     },
     "link": "Calculez l'estimation de votre maison"
+  },
+  "asistente": {
+    "abrir": "Poser une question à l'assistant",
+    "titulo": "Assistant SEDA",
+    "subtitulo": "Intelligence artificielle · nous ne conservons pas la conversation",
+    "cerrar": "Fermer l'assistant",
+    "bienvenida": "Je suis l'assistant de SEDA, une intelligence artificielle, pas une personne. Je peux vous présenter notre service et notre tarif, faire une estimation avec le même calcul que le calculateur et vous orienter sur la réglementation des logements touristiques en Andalousie. N'écrivez pas ici de données sensibles : pièces d'identité, comptes bancaires, cartes ou mots de passe. Je peux me tromper ; pour l'essentiel, parlez à une personne.",
+    "privacidad": "Comment nous traitons vos messages",
+    "persona": "Parler à une personne",
+    "etiqueta": "Votre question",
+    "placeholder": "Écrivez votre question",
+    "enviar": "Envoyer",
+    "escribiendo": "L'assistant écrit…",
+    "error": "Je n'ai pas pu répondre pour le moment. Si vous le souhaitez, laissez-nous vos coordonnées et nous vous appellerons, ou parlez à une personne.",
+    "dejar_datos": "Laisser mes coordonnées",
+    "llamada": "Réserver un appel",
+    "restantes": "{n} caractères restants",
+    "form_titulo": "Laissez votre demande",
+    "form_cuerpo": "Laissez-nous votre nom, votre e-mail et, si vous le souhaitez, votre téléphone : c'est tout ce que ce formulaire nous envoie. La conversation n'est ni envoyée ni conservée."
   }
 }

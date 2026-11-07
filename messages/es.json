@@ -1655,5 +1655,24 @@
       "body": "El equipo de SEDA se pondrá en contacto con usted para valorar su casa."
     },
     "link": "Calcule la estimación de su casa"
+  },
+  "asistente": {
+    "abrir": "Preguntar al asistente",
+    "titulo": "Asistente de SEDA",
+    "subtitulo": "Inteligencia artificial · no guardamos la conversación",
+    "cerrar": "Cerrar el asistente",
+    "bienvenida": "Soy el asistente de SEDA, una inteligencia artificial, no una persona. Puedo explicarle nuestro servicio y la tarifa, hacer una estimación con el mismo cálculo que la calculadora y orientarle sobre la normativa de vivienda turística en Andalucía. No escriba aquí datos sensibles: documentos, cuentas bancarias, tarjetas ni contraseñas. Puedo equivocarme; para lo importante, hable con una persona.",
+    "privacidad": "Cómo tratamos sus mensajes",
+    "persona": "Hablar con una persona",
+    "etiqueta": "Su pregunta",
+    "placeholder": "Escriba su pregunta",
+    "enviar": "Enviar",
+    "escribiendo": "El asistente está escribiendo…",
+    "error": "No he podido responder ahora. Si lo prefiere, déjenos sus datos y le llamamos, o hable con una persona.",
+    "dejar_datos": "Dejar mis datos",
+    "llamada": "Reservar una llamada",
+    "restantes": "Quedan {n} caracteres",
+    "form_titulo": "Deje su solicitud",
+    "form_cuerpo": "Déjenos su nombre, su correo y, si quiere, su teléfono: es lo único que nos llega de este formulario. La conversación no se envía ni se guarda."
   }
 }

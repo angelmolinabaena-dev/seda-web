@@ -67,7 +67,7 @@ describe("el vector, contra openssl", () => {
 describe("el secreto no sale del servidor", () => {
   const rastrear = (patron: string) => {
     try {
-      return execFileSync("git", ["grep", "-n", "-E", patron, "--", "app", "components", "lib", "hooks", "i18n"], {
+      return execFileSync("git", ["grep", "--untracked", "-n", "-E", patron, "--", "app", "components", "lib", "hooks", "i18n"], {
         encoding: "utf8",
       })
         .split("\n")
@@ -81,8 +81,15 @@ describe("el secreto no sale del servidor", () => {
     expect(rastrear("NEXT_PUBLIC_[A-Z_]*LEADS")).toEqual([])
   })
 
-  it("lib/lead-firma solo lo importa la ruta de servidor", () => {
+  // Desde el asistente (feat/asistente-propietarios) la firma vive en
+  // lib/lead-portal-envio.ts, el camino común de las dos puertas de leads.
+  it("lib/lead-firma solo lo importa el envío al portal (servidor)", () => {
     const importadores = rastrear("from [\"']@/lib/lead-firma[\"']").map((l) => l.split(":")[0])
-    expect(importadores).toEqual(["app/api/leads/propietario/route.ts"])
+    expect(importadores).toEqual(["lib/lead-portal-envio.ts"])
+  })
+
+  it("lib/lead-portal-envio solo lo importan las dos rutas de servidor", () => {
+    const importadores = rastrear("from [\"']@/lib/lead-portal-envio[\"']").map((l) => l.split(":")[0])
+    expect(importadores.sort()).toEqual(["app/api/asistente/solicitud/route.ts", "app/api/leads/propietario/route.ts"])
   })
 })

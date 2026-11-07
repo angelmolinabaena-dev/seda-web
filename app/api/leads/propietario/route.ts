@@ -1,11 +1,8 @@
-import { randomUUID } from "node:crypto"
-import { NextResponse, after } from "next/server"
+import { NextResponse } from "next/server"
 import { clientKey, crearLimitador, esMismoOrigen } from "@/lib/api-guards"
-import { calculadoraPropietariosActiva } from "@/lib/calculadora-propietarios"
-import { ENDPOINT_PORTAL_LEADS_PROPIETARIO, cuerpoPortal, validarLead } from "@/lib/lead-propietario"
-import { cabecerasFirmaPortal, secretoLead } from "@/lib/lead-firma"
-import { enviarLeadCapi, identificadoresDeCookie } from "@/lib/meta-capi"
-import { metaCapiActivo, metaPixelActivo } from "@/lib/meta-config.mjs"
+import { RUTA_CALCULADORA, calculadoraPropietariosActiva } from "@/lib/calculadora-propietarios"
+import { cuerpoPortal, validarLead } from "@/lib/lead-propietario"
+import { reenviarLeadAlPortal } from "@/lib/lead-portal-envio"
 
 /*
   Lead de la calculadora de propietarios (/propietarios/calculadora).
@@ -55,60 +52,9 @@ import { metaCapiActivo, metaPixelActivo } from "@/lib/meta-config.mjs"
 */
 
 const MAX_BODY_BYTES = 4 * 1024
-const TIMEOUT_PORTAL_MS = 8_000
 const limitar = crearLimitador(5, 10 * 60 * 1000)
 
-/** IP del visitante para el límite del portal; undefined si no la hay (no se manda). */
-function ipVisitante(req: Request): string | undefined {
-  const ip = clientKey(req)
-  return ip && ip !== "unknown" ? ip : undefined
-}
-
 const json = (body: Record<string, unknown>, init?: ResponseInit) => NextResponse.json(body, init)
-
-/** Cabecera con la que el navegador declara el consentimiento de marketing (solo la manda con una elección vigente). */
-const CABECERA_CONSENTIMIENTO_MARKETING = "x-consent-marketing"
-
-/** Para que el envío a Meta no retrase la respuesta: `after` en producción; directo si no hay petición en curso (tests). */
-function trasResponder(tarea: () => Promise<unknown>): void {
-  try {
-    after(tarea)
-  } catch {
-    void tarea()
-  }
-}
-
-/** URL de la página que envió el formulario, sin query ni hash: el `Referer` solo si es del mismo origen. */
-function urlOrigenEvento(req: Request): string {
-  const origen = req.headers.get("origin") ?? ""
-  try {
-    const ref = new URL(req.headers.get("referer") ?? "")
-    if (origen && ref.origin === origen) return `${ref.origin}${ref.pathname}`
-  } catch {
-    // sin Referer válido
-  }
-  return `${origen}/propietarios/calculadora`
-}
-
-/**
- * Medición de Meta del lead recién creado. Devuelve el `event_id` compartido
- * con el píxel, o null si no hay nada que medir. Se llama SOLO tras un 2xx del portal.
- */
-function medirLead(req: Request, estadoPortal: number): string | null {
-  if (!metaPixelActivo()) return null
-  if (req.headers.get(CABECERA_CONSENTIMIENTO_MARKETING) !== "1") return null
-  if (estadoPortal !== 201) {
-    console.warn("[/api/leads/propietario] el portal respondió", estadoPortal, "y no 201: no se emite Lead")
-    return null
-  }
-  const eventId = randomUUID()
-  if (metaCapiActivo()) {
-    const { fbp, fbc } = identificadoresDeCookie(req.headers.get("cookie"))
-    const evento = { eventId, urlOrigen: urlOrigenEvento(req), ip: ipVisitante(req), userAgent: req.headers.get("user-agent") ?? undefined, fbp, fbc }
-    trasResponder(() => enviarLeadCapi(evento))
-  }
-  return eventId
-}
 
 export async function POST(req: Request) {
   if (!calculadoraPropietariosActiva()) {
@@ -153,51 +99,7 @@ export async function POST(req: Request) {
     return json({ ok: true })
   }
 
-  const secreto = secretoLead()
-  if (!secreto) {
-    console.error("[/api/leads/propietario] falta SEDA_LEADS_HMAC_SECRET (o tiene menos de 32 caracteres): no se envía al portal")
-    return json({ ok: false, error: "not_configured" }, { status: 503 })
-  }
-
-  // UNA serialización: el mismo texto va a la firma y al body.
-  const cuerpo = JSON.stringify(cuerpoPortal(v.lead))
-  const visitante = ipVisitante(req)
-  try {
-    const resp = await fetch(ENDPOINT_PORTAL_LEADS_PROPIETARIO, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        ...cabecerasFirmaPortal({ secreto, url: ENDPOINT_PORTAL_LEADS_PROPIETARIO, cuerpo, ahora: new Date() }),
-        ...(visitante ? { "X-Visitor-Ip": visitante } : {}),
-      },
-      body: cuerpo,
-      signal: AbortSignal.timeout(TIMEOUT_PORTAL_MS),
-    })
-    if (!resp.ok) {
-      console.error("[/api/leads/propietario] el portal respondió", resp.status)
-      // V4-04: un 400 del portal es un DATO que no acepta (su .strict() o su
-      // CHECK), no una avería: reintentar «en unos minutos» daría lo mismo.
-      // Se dice como dato (422) y el formulario pide revisar los datos.
-      if (resp.status === 400) return json({ ok: false, error: "rejected_data" }, { status: 422 })
-      // V4-M06: límite por visitante del portal (5/min). Ventana de un minuto.
-      if (resp.status === 429) {
-        const rc = (await resp.json().catch(() => ({}))) as { error?: string }
-        if (rc.error === "demasiadas_solicitudes") {
-          return json({ ok: false, error: "demasiadas_solicitudes" }, { status: 429, headers: { "Retry-After": "60" } })
-        }
-      }
-      return json({ ok: false, error: "send_failed" }, { status: 502 })
-    }
-    // La medición NUNCA puede estropear un lead ya creado: pase lo que pase aquí, el visitante ve el éxito.
-    let eventId: string | null = null
-    try {
-      eventId = medirLead(req, resp.status)
-    } catch {
-      console.error("[/api/leads/propietario] fallo en la medición de Meta; el lead ya está creado")
-    }
-    return json(eventId ? { ok: true, lead: { event_id: eventId } } : { ok: true })
-  } catch (err) {
-    console.error("[/api/leads/propietario] error de red hacia el portal", err instanceof Error ? err.name : "unknown")
-    return json({ ok: false, error: "network_error" }, { status: 502 })
-  }
+  // Firma, envío al portal, errores y medición de Meta: lib/lead-portal-envio.ts
+  // (el mismo camino que usa el asistente, con canal "asistente").
+  return reenviarLeadAlPortal(req, cuerpoPortal(v.lead), { etiqueta: "/api/leads/propietario", rutaPagina: RUTA_CALCULADORA })
 }

@@ -18,6 +18,8 @@ export default defineConfig({
     include: ["tests/**/*.test.{ts,tsx}"],
     // Necesitan el build y un `next start`: van en `npm run test:integracion`
     // (vitest.integracion.config.mts), después de `npm run build`.
-    exclude: [...configDefaults.exclude, "tests/integracion/**"],
+    // tests/asistente-real: la batería del asistente contra el modelo real, a mano
+    // (`npm run asistente:bateria`, vitest.asistente-real.config.mts).
+    exclude: [...configDefaults.exclude, "tests/integracion/**", "tests/asistente-real/**"],
   },
 })
