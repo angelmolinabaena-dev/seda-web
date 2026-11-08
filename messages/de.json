@@ -1675,6 +1675,6 @@
     "llamada": "Ein Gespräch buchen",
     "restantes": "Noch {n} Zeichen",
     "form_titulo": "Ihre Anfrage",
-    "form_cuerpo": "Hinterlassen Sie uns Ihren Namen, Ihre E-Mail-Adresse und, wenn Sie möchten, Ihre Telefonnummer: Nur das erreicht uns über dieses Formular. Das Gespräch wird weder gesendet noch gespeichert."
+    "form_cuerpo": "Hinterlassen Sie uns Ihren Namen, Ihre E-Mail-Adresse und, wenn Sie möchten, Ihre Telefonnummer: Nur das erreicht uns über dieses Formular. Das Gespräch wird mit diesem Formular nicht übermittelt: Es erreicht SEDA nicht."
   }
 }

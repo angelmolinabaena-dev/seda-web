@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from "react"
 import dynamic from "next/dynamic"
 import { MessageCircle } from "lucide-react"
 import { useTranslations } from "next-intl"
+import { initBotId } from "botid/client/core"
+import { RUTAS_BOTID } from "@/lib/asistente/config"
 import { capturarCarta, tomarCartaAsistente } from "@/lib/carta-qr"
 
 /*
@@ -19,7 +21,14 @@ import { capturarCarta, tomarCartaAsistente } from "@/lib/carta-qr"
   Carta del QR: en la calculadora, el código de ?carta= se lee al entrar
   (lib/carta-qr.ts) y el asistente recoge su copia en memoria para mandarla con
   la solicitud, sin quitársela al formulario de la calculadora.
+
+  Vercel BotID (lib/asistente/bots.ts): se inicia aquí, y no en
+  instrumentation-client.ts, para que solo lo carguen las páginas que tienen el
+  asistente y solo con el interruptor encendido. Firma las peticiones a
+  /api/asistente y /api/asistente/solicitud; en desarrollo no hace nada.
 */
+
+let botIdIniciado = false
 
 const AsistentePanel = dynamic(() => import("./asistente-panel"), { ssr: false })
 
@@ -29,6 +38,13 @@ export function AsistentePropietarios() {
   const [cargado, setCargado] = useState(false)
   const boton = useRef<HTMLButtonElement>(null)
   const carta = useRef<string | null>(null)
+
+  useEffect(() => {
+    if (!botIdIniciado) {
+      botIdIniciado = true
+      initBotId({ protect: RUTAS_BOTID })
+    }
+  }, [])
 
   useEffect(() => {
     capturarCarta()

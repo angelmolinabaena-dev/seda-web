@@ -1,3 +1,4 @@
+import { withBotId } from "botid/next/config"
 import createNextIntlPlugin from "next-intl/plugin"
 import { SOURCE_CSP_GLOBAL, cspGlobal } from "./lib/csp.mjs"
 import { avisosConfiguracionMeta } from "./lib/meta-config.mjs"
@@ -64,4 +65,7 @@ const nextConfig = {
   },
 }
 
-export default withNextIntl(nextConfig)
+// withBotId: las reescrituras de Vercel BotID (script y proxy, mismo origen) que usa
+// el asistente de propietarios (lib/asistente/bots.ts). Sin el asistente encendido,
+// ninguna página pide esas rutas.
+export default withBotId(withNextIntl(nextConfig))

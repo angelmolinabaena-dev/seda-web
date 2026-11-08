@@ -3,6 +3,7 @@ import { createUIMessageStream, createUIMessageStreamResponse, streamText } from
 import { NextResponse } from "next/server"
 import { routing, type Locale } from "@/i18n/routing"
 import { clientKey, esMismoOrigen } from "@/lib/api-guards"
+import { esBot } from "@/lib/asistente/bots"
 import { ASISTENTE_MODEL_ID, LIMITES, asistentePropietariosActivo } from "@/lib/asistente/config"
 import { conversacionAgotada, crearCupos } from "@/lib/asistente/cupos"
 import { acotarHistorial } from "@/lib/asistente/historial"
@@ -17,7 +18,10 @@ import { prepararTurno } from "@/lib/asistente/turno"
     leer nada. No se llama a nadie.
   · Solo del propio sitio (Origin / Sec-Fetch-Site), `application/json`, cuerpo
     de LIMITES.bytesPeticion como mucho.
-  · Cupos (lib/asistente/cupos.ts): por visitante, por conversación y diario.
+  · Bots: Vercel BotID (lib/asistente/bots.ts) → 403 sin leer el cuerpo.
+  · Cupos (lib/asistente/cupos.ts): por visitante, por conversación, por IP y
+    día, y diario global; en Upstash (compartidos entre instancias) si están
+    sus variables, en memoria si no.
     Pasado un cupo NO se llama al modelo: se responde, en el mismo formato del
     chat, el mensaje de respaldo («déjenos sus datos y le llamamos») y una señal
     `data-respaldo` para que la interfaz muestre el formulario.
@@ -46,8 +50,8 @@ function metrica(datos: Record<string, unknown>) {
 }
 
 /** Respuesta de respaldo en el formato del chat: un mensaje del asistente y la señal para enseñar el formulario. */
-function respaldo(locale: Locale, motivo: MotivoRespaldo) {
-  metrica({ locale, respaldo: motivo })
+function respaldo(locale: Locale, motivo: MotivoRespaldo, detalle: Record<string, unknown> = {}) {
+  metrica({ locale, respaldo: motivo, ...detalle })
   const stream = createUIMessageStream({
     execute: ({ writer }) => {
       writer.write({ type: "start" })
@@ -67,6 +71,7 @@ export async function POST(req: Request) {
   if (!/^application\/json\b/i.test(req.headers.get("content-type") ?? "")) {
     return json({ ok: false, error: "unsupported_media_type" }, { status: 415 })
   }
+  if (await esBot(req)) return json({ ok: false, error: "forbidden" }, { status: 403 })
 
   const declarado = Number(req.headers.get("content-length") ?? "")
   if (Number.isFinite(declarado) && declarado > LIMITES.bytesPeticion) {
@@ -92,7 +97,8 @@ export async function POST(req: Request) {
   if (!esLocale(locale)) return json({ ok: false, error: "invalid_locale" }, { status: 400 })
 
   // Por visitante ANTES de nada caro.
-  if (!cupos.visitante(clientKey(req)).ok) return respaldo(locale, "limite_visitante")
+  const ip = clientKey(req)
+  if (!(await cupos.visitante(ip))) return respaldo(locale, "limite_visitante")
 
   const historial = acotarHistorial(messages)
   if (!historial.ok) return json({ ok: false, error: historial.error }, { status: 400 })
@@ -102,7 +108,9 @@ export async function POST(req: Request) {
     console.error("[/api/asistente] falta ANTHROPIC_API_KEY: el asistente responde con el mensaje de respaldo")
     return respaldo(locale, "no_disponible")
   }
-  if (!cupos.diario()) return respaldo(locale, "tope_diario")
+  // Superado el de una IP, solo esa IP recibe tope_diario; el global, todos.
+  const diario = await cupos.diario(ip)
+  if (diario !== "ok") return respaldo(locale, "tope_diario", { tope: diario === "tope_ip" ? "ip" : "global" })
 
   const inicio = Date.now()
   const herramientasUsadas: string[] = []

@@ -207,6 +207,22 @@ describe("POST /api/asistente", () => {
     expect(r.headers.get("x-asistente-respaldo")).toBe("tope_diario")
     expect(await leer(r)).toContain("Hinterlassen Sie uns Ihre Daten")
   })
+
+  it("tope por IP y día: solo esa IP recibe tope_diario, las demás siguen; la métrica no lleva la IP", async () => {
+    vi.stubEnv("SEDA_ASISTENTE_TOPE_DIARIO_IP", "1")
+    const { POST } = await rutaChat()
+    const mismo = { "x-forwarded-for": "198.51.100.200" }
+    await leer(await POST(peticionChat(bueno(), mismo)))
+    const r = await POST(peticionChat(bueno(), mismo))
+    expect(r.headers.get("x-asistente-respaldo")).toBe("tope_diario")
+    await leer(r)
+    const otra = await POST(peticionChat(bueno(), { "x-forwarded-for": "198.51.100.201" }))
+    expect(otra.headers.get("x-asistente-respaldo")).toBeNull()
+    expect(await leer(otra)).toContain("21% + IVA")
+    const lineas = log.mock.calls.map((c: unknown[]) => String(c[0])).filter((l: string) => l.includes("asistente.turno"))
+    expect(lineas.some((l) => l.includes('"tope":"ip"'))).toBe(true)
+    expect(lineas.join("\n")).not.toMatch(/198\.51\.100/)
+  })
 })
 
 /* ── El mini formulario ─────────────────────────────────────────────────── */

@@ -1675,6 +1675,6 @@
     "llamada": "Reservar una llamada",
     "restantes": "Quedan {n} caracteres",
     "form_titulo": "Deje su solicitud",
-    "form_cuerpo": "Déjenos su nombre, su correo y, si quiere, su teléfono: es lo único que nos llega de este formulario. La conversación no se envía ni se guarda."
+    "form_cuerpo": "Déjenos su nombre, su correo y, si quiere, su teléfono: es lo único que nos llega de este formulario. La conversación no viaja con este formulario: a SEDA no le llega."
   }
 }
