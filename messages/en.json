@@ -1598,7 +1598,8 @@
       "precio": {
         "label": "Average nightly rate you expect",
         "placeholder": "Example: 250",
-        "hint": "What the guest pays per night for the accommodation, without cleaning. Until 30 November 2026 it is exempt from VAT. From 1 December, for stays of 30 nights or fewer, the rate includes 10% VAT and the calculator removes it before calculating: €110 a night is €100 of accommodation. It is the figure you expect, not a market average: we have no sourced one that we could cite."
+        "hint": "What the guest pays per night for the accommodation, without cleaning. Until [[iva.ultimoDiaExento]] it is exempt from VAT. From [[iva.fechaCorte]], for stays of [[iva.maxNoches]] nights or fewer, the rate includes [[iva.pct]] VAT and the calculator removes it from the days of the estimate that fall on or after that date: [[iva.ejPrecio]] a night is [[iva.ejAlojamiento]] of accommodation. It is the figure you expect, not a market average: we have no sourced one that we could cite.",
+        "hint_sin_rdl": "What the guest pays per night for the accommodation, without cleaning. It is exempt from VAT: the calculator takes the whole rate as accommodation. It is the figure you expect, not a market average: we have no sourced one that we could cite."
       },
       "ocupacion": {
         "label": "Expected annual occupancy",
@@ -1624,8 +1625,9 @@
         "iva": "VAT on the commission, on top"
       },
       "como": "How it is calculated",
-      "como_body": "Gross income = occupancy × 365 nights × nightly rate; from 1 December 2026, without the 10% accommodation VAT included in the rate (rate ÷ 1.10), as for stays of 30 nights or fewer. The channel commission is calculated on what the guest pays. SEDA's commission is the lower of [[tarifa.comision]] of the accommodation once the channel's commission is deducted and [[tarifa.tope]] of the accommodation; it is never calculated on cleaning or on the accommodation VAT. The [[tarifa.iva]] VAT on the commission is added on top and is not deducted from the net.",
-      "iva_alojamiento": "From 1 December 2026 the nightly rate includes 10% VAT on the accommodation. Of the {pagado} guests would pay, {cuota} is that VAT, which is paid to the Spanish tax authority: it is not your income or part of the commission base, and it is already left out of the gross income."
+      "como_body": "Gross income = occupancy × 365 nights × nightly rate, counting the 365 days from today. On the days from [[iva.fechaCorte]], without the [[iva.pct]] accommodation VAT included in the rate (rate ÷ [[iva.divisor]]), as for stays of [[iva.maxNoches]] nights or fewer; if the estimate starts before that date, the VAT is removed only from the part of the year that falls after it. The channel commission is calculated on what the guest pays. SEDA's commission is the lower of [[tarifa.comision]] of the accommodation once the channel's commission is deducted and [[tarifa.tope]] of the accommodation; it is never calculated on cleaning or on the accommodation VAT. The [[tarifa.iva]] VAT on the commission is added on top and is not deducted from the net.",
+      "como_body_sin_rdl": "Gross income = occupancy × 365 nights × nightly rate; the accommodation is exempt from VAT and the whole rate is accommodation. The channel commission is calculated on what the guest pays. SEDA's commission is the lower of [[tarifa.comision]] of the accommodation once the channel's commission is deducted and [[tarifa.tope]] of the accommodation; it is never calculated on cleaning. The [[tarifa.iva]] VAT on the commission is added on top and is not deducted from the net.",
+      "iva_alojamiento": "From [[iva.fechaCorte]] the nightly rate includes [[iva.pct]] VAT on the accommodation. Of the 365 days in this estimate, {dias} fall on or after that date: of the {pagado} guests would pay, {cuota} is that VAT, which is paid to the Spanish tax authority. It is not your income or part of the commission base, and it is already left out of the gross income."
     },
     "aviso": {
       "label": "Important",

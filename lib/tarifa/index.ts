@@ -1,4 +1,5 @@
 import datos from "./tarifa.json"
+import { RDL29_IVA_ALOJAMIENTO, diaAnterior } from "@/lib/iva-alojamiento"
 
 /*
   Tarifa v6 — el único sitio donde la web calcula y formatea sus cifras.
@@ -163,13 +164,52 @@ export function tokensTarifa(locale: Idioma): Record<string, string> {
   }
 }
 
-const TOKEN = /\[\[tarifa\.([A-Za-z0-9]+)\]\]/g
+/* ── Tokens del IVA del alojamiento (RDL 29/2026) ───────────────────────── */
+
+const FORMATO_FECHA: Record<Idioma, string> = { es: "es-ES", en: "en-GB", fr: "fr-FR", de: "de-DE" }
+
+/** `YYYY-MM-DD` → «1 de diciembre de 2026» · «1 December 2026» · «1er décembre 2026» · «1. Dezember 2026». */
+export function fechaLarga(fecha: string, locale: Idioma): string {
+  const [a, m, d] = fecha.split("-").map(Number)
+  const formato = new Intl.DateTimeFormat(FORMATO_FECHA[locale], { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" })
+  const texto = formato.format(new Date(Date.UTC(a, m - 1, d)))
+  // En francés el día 1 se escribe «1er» (premier), no «1».
+  return locale === "fr" && d === 1 ? texto.replace(/^1(?=\s)/, "1er") : texto
+}
+
+/**
+ * Los tokens `[[iva.<nombre>]]`, de lib/iva-alojamiento.ts (la única fuente),
+ * formateados para `locale`. Ni la fecha ni el porcentaje del RDL se escriben en
+ * messages/*.json: se escribe el token.
+ */
+export function tokensIvaAlojamiento(locale: Idioma): Record<string, string> {
+  const { fechaCorte, pct, maxNoches } = RDL29_IVA_ALOJAMIENTO
+  const ejAlojamiento = 100
+  return {
+    fechaCorte: fechaLarga(fechaCorte, locale),
+    ultimoDiaExento: fechaLarga(diaAnterior(fechaCorte), locale),
+    pct: locale === "en" ? `${pct}%` : `${pct} %`,
+    maxNoches: String(maxNoches),
+    // «110 € por noche son 100 € de alojamiento».
+    ejPrecio: euros((ejAlojamiento * (100 + pct)) / 100, locale),
+    ejAlojamiento: euros(ejAlojamiento, locale),
+    // «precio ÷ 1,10»: 110 céntimos → «1,10» / «1.10».
+    divisor: numero(100 + pct, locale),
+  }
+}
+
+const TOKEN = /\[\[(tarifa|iva)\.([A-Za-z0-9]+)\]\]/g
 
 /** Sustituye los tokens de una cadena. Un token desconocido lanza: nunca llega a la web un `[[…]]`. */
-export function resolverTexto(texto: string, locale: Idioma, tokens = tokensTarifa(locale)): string {
-  return texto.replace(TOKEN, (_, nombre: string) => {
-    const valor = tokens[nombre]
-    if (valor === undefined) throw new Error(`messages: token [[tarifa.${nombre}]] sin definir en lib/tarifa`)
+export function resolverTexto(
+  texto: string,
+  locale: Idioma,
+  tokens = tokensTarifa(locale),
+  tokensIva = tokensIvaAlojamiento(locale),
+): string {
+  return texto.replace(TOKEN, (_, grupo: "tarifa" | "iva", nombre: string) => {
+    const valor = (grupo === "iva" ? tokensIva : tokens)[nombre]
+    if (valor === undefined) throw new Error(`messages: token [[${grupo}.${nombre}]] sin definir en lib/tarifa`)
     return valor
   })
 }
@@ -179,8 +219,9 @@ type Arbol = { [k: string]: Arbol | string }
 /** Resuelve los tokens de todo un árbol de mensajes (el que next-intl recibe). */
 export function resolverMensajes<T extends Arbol>(mensajes: T, locale: Idioma): T {
   const tokens = tokensTarifa(locale)
+  const tokensIva = tokensIvaAlojamiento(locale)
   const recorrer = (nodo: Arbol | string): Arbol | string => {
-    if (typeof nodo === "string") return resolverTexto(nodo, locale, tokens)
+    if (typeof nodo === "string") return resolverTexto(nodo, locale, tokens, tokensIva)
     return Object.fromEntries(Object.entries(nodo).map(([k, v]) => [k, recorrer(v)]))
   }
   return recorrer(mensajes) as T

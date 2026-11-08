@@ -14,6 +14,7 @@ import {
   estimar,
   type EstadoFormulario,
 } from "@/lib/calculadora-propietarios"
+import { rdl29Aplicado } from "@/lib/iva-alojamiento"
 import { cabecerasConsentimiento, rastrearLead } from "@/lib/meta-pixel-cliente"
 import { normalizarTelefonoE164 } from "@/lib/telefono-e164"
 import { euros, type Idioma } from "@/lib/tarifa"
@@ -32,7 +33,9 @@ import { ZONAS } from "@/lib/zonas"
      etiquetado como ejemplo con las cifras de la tarifa (lib/tarifa).
 
   Las cifras salen de `estimar` (lib/calculadora-propietarios), que lee la
-  tarifa v6 de lib/tarifa. Aquí no hay ningún porcentaje escrito.
+  tarifa v6 de lib/tarifa y el RDL 29/2026 de lib/iva-alojamiento. Aquí no hay
+  ningún porcentaje ni fecha escritos. Con SEDA_IVA_ALOJAMIENTO_RDL29=0 la
+  ayuda del precio y «cómo se calcula» usan su variante «sin RDL».
 */
 
 type Estado = EstadoFormulario
@@ -105,7 +108,11 @@ export function CalculadoraContent() {
   }, [])
 
   const precio = Number(precioTxt.replace(",", "."))
-  const est = ocupacion === null ? null : estimar(precio, ocupacion)
+  // El mismo valor en el servidor y aquí: next.config.mjs inlina la variable.
+  const rdl29 = rdl29Aplicado()
+  const est = ocupacion === null ? null : estimar(precio, ocupacion, undefined, rdl29)
+  const hintPrecio = rdl29 ? t("calculadora.inputs.precio.hint") : t("calculadora.inputs.precio.hint_sin_rdl")
+  const comoBody = rdl29 ? t("calculadora.results.como_body") : t("calculadora.results.como_body_sin_rdl")
 
   async function enviar(ev: FormEvent<HTMLFormElement>) {
     ev.preventDefault()
@@ -216,7 +223,7 @@ export function CalculadoraContent() {
 
               <p className="text-[0.8rem] leading-relaxed text-muted-foreground -mt-2">{t("calculadora.inputs.context_note")}</p>
 
-              <Campo label={`${t("calculadora.inputs.precio.label")} (€)`} hint={t("calculadora.inputs.precio.hint")}>
+              <Campo label={`${t("calculadora.inputs.precio.label")} (€)`} hint={hintPrecio}>
                 {(p) => (
                   <input
                     {...p}
@@ -326,11 +333,15 @@ export function CalculadoraContent() {
                   </p>
                   {est.ivaAlojamientoIncluido && (
                     <p className="text-[0.85rem] leading-relaxed text-foreground/85 mt-6">
-                      {t("calculadora.results.iva_alojamiento", { pagado: e(est.pagadoHuespedes), cuota: e(est.cuotaIvaAlojamiento) })}
+                      {t("calculadora.results.iva_alojamiento", {
+                        dias: est.diasConIva,
+                        pagado: e(est.pagadoHuespedes),
+                        cuota: e(est.cuotaIvaAlojamiento),
+                      })}
                     </p>
                   )}
 
-                  <p className="text-[0.85rem] leading-relaxed text-muted-foreground mt-2">{t("calculadora.results.como_body")}</p>
+                  <p className="text-[0.85rem] leading-relaxed text-muted-foreground mt-2">{comoBody}</p>
                 </>
               ) : (
                 <div className="mt-6">

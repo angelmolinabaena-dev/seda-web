@@ -3,6 +3,7 @@ import de from "@/messages/de.json"
 import en from "@/messages/en.json"
 import es from "@/messages/es.json"
 import fr from "@/messages/fr.json"
+import { claveSegunRdl29, rdl29Aplicado } from "@/lib/iva-alojamiento"
 import { resolverTexto } from "@/lib/tarifa"
 
 /*
@@ -42,8 +43,19 @@ export function faqPropietarios(locale: Locale): { pregunta: string; respuesta: 
 
 /**
  * El IVA del alojamiento — UNA sola fuente: lo que dice la calculadora junto al
- * campo del precio (`calculadora.inputs.precio.hint`). La votación de
- * convalidación del RDL 29/2026 (~12-nov-2026) puede cambiarlo; cuando cambie
- * la web, cambia esto.
+ * campo del precio (`calculadora.inputs.precio.hint`), con su fecha y su
+ * porcentaje interpolados de lib/iva-alojamiento.ts. Si el RDL 29/2026 no se
+ * convalida (SEDA_IVA_ALOJAMIENTO_RDL29=0), la calculadora dice la variante
+ * `…_sin_rdl` y el asistente dice la misma.
  */
 export const CLAVE_IVA_ALOJAMIENTO = "calculadora.inputs.precio.hint"
+
+/** La clave del texto del IVA que dice la web con el régimen vigente. */
+export function claveIvaAlojamiento(rdl29: boolean = rdl29Aplicado()) {
+  return claveSegunRdl29(CLAVE_IVA_ALOJAMIENTO, rdl29)
+}
+
+/** «Cómo se calcula» de la calculadora, con el régimen vigente. */
+export function claveComoSeCalcula(rdl29: boolean = rdl29Aplicado()) {
+  return claveSegunRdl29("calculadora.results.como_body", rdl29)
+}

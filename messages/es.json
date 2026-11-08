@@ -1598,7 +1598,8 @@
       "precio": {
         "label": "Precio medio por noche que espera",
         "placeholder": "Ejemplo: 250",
-        "hint": "Lo que paga el huésped por noche por el alojamiento, sin limpieza. Hasta el 30 de noviembre de 2026 está exento de IVA. Desde el 1 de diciembre, en estancias de 30 noches o menos, el precio lleva dentro un 10 % de IVA y la calculadora lo quita antes de calcular: 110 € por noche son 100 € de alojamiento. Es la cifra que usted espera, no una media de mercado: no tenemos ninguna con fuente que podamos citar."
+        "hint": "Lo que paga el huésped por noche por el alojamiento, sin limpieza. Hasta el [[iva.ultimoDiaExento]] está exento de IVA. Desde el [[iva.fechaCorte]], en estancias de [[iva.maxNoches]] noches o menos, el precio lleva dentro un [[iva.pct]] de IVA y la calculadora lo quita de los días de la estimación que caen desde esa fecha: [[iva.ejPrecio]] por noche son [[iva.ejAlojamiento]] de alojamiento. Es la cifra que usted espera, no una media de mercado: no tenemos ninguna con fuente que podamos citar.",
+        "hint_sin_rdl": "Lo que paga el huésped por noche por el alojamiento, sin limpieza. Está exento de IVA: la calculadora toma todo el precio como alojamiento. Es la cifra que usted espera, no una media de mercado: no tenemos ninguna con fuente que podamos citar."
       },
       "ocupacion": {
         "label": "Ocupación anual esperada",
@@ -1624,8 +1625,9 @@
         "iva": "IVA de la comisión, aparte"
       },
       "como": "Cómo se calcula",
-      "como_body": "Ingresos brutos = ocupación × 365 noches × precio por noche; desde el 1 de diciembre de 2026, sin el 10 % de IVA del alojamiento que lleva dentro el precio (precio ÷ 1,10), como en estancias de 30 noches o menos. La comisión del canal se calcula sobre lo que paga el huésped. La comisión de SEDA es la menor entre el [[tarifa.comision]] del alojamiento una vez descontada la comisión del canal y el [[tarifa.tope]] del alojamiento; no se calcula sobre la limpieza ni sobre el IVA del alojamiento. El IVA del [[tarifa.iva]] sobre la comisión se suma aparte y no está restado del neto.",
-      "iva_alojamiento": "Desde el 1 de diciembre de 2026 el precio por noche lleva dentro un 10 % de IVA del alojamiento. De {pagado} que pagarían los huéspedes, {cuota} son ese IVA, que se ingresa a Hacienda: no es ingreso suyo ni base de la comisión, y ya está fuera de los ingresos brutos."
+      "como_body": "Ingresos brutos = ocupación × 365 noches × precio por noche, contando los 365 días desde hoy. En los días desde el [[iva.fechaCorte]], sin el [[iva.pct]] de IVA del alojamiento que lleva dentro el precio (precio ÷ [[iva.divisor]]), como en estancias de [[iva.maxNoches]] noches o menos; si la estimación empieza antes de esa fecha, ese IVA solo se quita de la parte del año que cae después. La comisión del canal se calcula sobre lo que paga el huésped. La comisión de SEDA es la menor entre el [[tarifa.comision]] del alojamiento una vez descontada la comisión del canal y el [[tarifa.tope]] del alojamiento; no se calcula sobre la limpieza ni sobre el IVA del alojamiento. El IVA del [[tarifa.iva]] sobre la comisión se suma aparte y no está restado del neto.",
+      "como_body_sin_rdl": "Ingresos brutos = ocupación × 365 noches × precio por noche; el alojamiento está exento de IVA y todo el precio es alojamiento. La comisión del canal se calcula sobre lo que paga el huésped. La comisión de SEDA es la menor entre el [[tarifa.comision]] del alojamiento una vez descontada la comisión del canal y el [[tarifa.tope]] del alojamiento; no se calcula sobre la limpieza. El IVA del [[tarifa.iva]] sobre la comisión se suma aparte y no está restado del neto.",
+      "iva_alojamiento": "Desde el [[iva.fechaCorte]] el precio por noche lleva dentro un [[iva.pct]] de IVA del alojamiento. De los 365 días de esta estimación, {dias} caen desde esa fecha: de {pagado} que pagarían los huéspedes, {cuota} son ese IVA, que se ingresa a Hacienda. No es ingreso suyo ni base de la comisión, y ya está fuera de los ingresos brutos."
     },
     "aviso": {
       "label": "Importante",

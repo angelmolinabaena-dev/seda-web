@@ -49,6 +49,12 @@ import type { DocumentoLegalMultilingue } from "./types"
       `vercel.json` (`regions: ["fra1"]`, como este repo).
     · IP: `rateLimit()` en esa misma ruta la guarda en un `Map` en memoria
       con ventana de 10 minutos (`RATE_LIMIT_WINDOW_MS`). No se persiste.
+      Además (MOT-M04, REA-MOTOR, 8-nov-2026): la ruta manda la IP al portal en
+      `X-Visitor-Ip` (lib/lead-portal-envio.ts, calculadora y solicitud del
+      asistente) y el portal, para su límite por visitante, guarda en Upstash un
+      resumen sha256 de la IP durante 60 s. Dato seudonimizado; Upstash, encargado.
+      Lo del portal sale de la REA-MOTOR (seda_os, PR #1151), no se ha leído su
+      código desde este repo.
     · Ausencia de analítica y de píxeles: comprobado por búsqueda en todo el
       árbol (`analytics`, `gtag`, `fbq`, `hotjar`, `clarity`, `posthog`,
       `plausible`, `SpeedInsights`) — cero coincidencias.
@@ -90,7 +96,7 @@ import type { DocumentoLegalMultilingue } from "./types"
 export const PRIVACIDAD: DocumentoLegalMultilingue = {
   id: "privacidad",
   ruta: "/privacidad",
-  actualizado: "2026-11-07",
+  actualizado: "2026-11-08",
   traducciones: {
     es: {
       titulo: "Política de privacidad",
@@ -225,6 +231,11 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                   "Estados Unidos. La base de datos está en Fráncfort (UE).",
                 ],
                 [
+                  "Upstash, Inc.",
+                  "Cuando envías tus datos desde la calculadora o desde el asistente, el portal de SEDA guarda en Upstash, durante 60 segundos, un resumen criptográfico de tu IP (un dato seudonimizado, no la IP en claro) para limitar abusos. Actúa como encargado del tratamiento.",
+                  "Estados Unidos",
+                ],
+                [
                   "Resend, Inc.",
                   "Entrega el correo que contiene lo que has escrito en el formulario.",
                   "Estados Unidos",
@@ -249,7 +260,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Vercel, Resend, Supabase y Calendly son sociedades estadounidenses: el tratamiento implica una transferencia internacional de datos fuera del Espacio Económico Europeo. Puedes pedirnos información sobre las garantías aplicables a esa transferencia escribiendo a {email}.",
+                "Vercel, Resend, Supabase, Upstash y Calendly son sociedades estadounidenses: el tratamiento implica una transferencia internacional de datos fuera del Espacio Económico Europeo. Puedes pedirnos información sobre las garantías aplicables a esa transferencia escribiendo a {email}.",
             },
           ],
         },
@@ -440,7 +451,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "El control de frecuencia de los formularios guarda tu dirección IP en memoria durante diez minutos como máximo: no se escribe en ninguna base de datos y no sobrevive al reinicio del servicio. Los registros técnicos del proveedor de alojamiento se conservan según sus propios plazos, que no decidimos nosotros.",
+                "El control de frecuencia de los formularios de esta web guarda tu dirección IP en memoria durante diez minutos como máximo: no se escribe en ninguna base de datos y no sobrevive al reinicio del servicio. Además, para limitar abusos, cuando envías tus datos desde la calculadora o desde el asistente el portal de SEDA guarda un resumen criptográfico de tu IP (un dato seudonimizado) durante 60 segundos en Upstash, su encargado del tratamiento. Los registros técnicos del proveedor de alojamiento se conservan según sus propios plazos, que no decidimos nosotros.",
             },
           ],
         },
@@ -674,6 +685,11 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                   "United States. The database is in Frankfurt (EU).",
                 ],
                 [
+                  "Upstash, Inc.",
+                  "When you send your details from the calculator or the assistant, SEDA's portal stores in Upstash, for 60 seconds, a cryptographic digest of your IP (pseudonymised data, not the IP in clear) to limit abuse. It acts as a processor.",
+                  "United States",
+                ],
+                [
                   "Resend, Inc.",
                   "Delivers the email containing what you wrote in the form.",
                   "United States",
@@ -698,7 +714,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Vercel, Resend, Supabase and Calendly are US companies, so the processing involves an international transfer of data outside the European Economic Area. You can ask us about the safeguards applicable to that transfer by writing to {email}.",
+                "Vercel, Resend, Supabase, Upstash and Calendly are US companies, so the processing involves an international transfer of data outside the European Economic Area. You can ask us about the safeguards applicable to that transfer by writing to {email}.",
             },
           ],
         },
@@ -889,7 +905,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "The forms' rate limiter holds your IP address in memory for ten minutes at most: it is never written to a database and does not survive a restart of the service. The hosting provider's technical logs are kept for its own periods, which we do not decide.",
+                "This site's form rate limiter holds your IP address in memory for ten minutes at most: it is never written to a database and does not survive a restart of the service. In addition, to limit abuse, when you send your details from the calculator or the assistant SEDA's portal stores a cryptographic digest of your IP (pseudonymised data) for 60 seconds in Upstash, its processor. The hosting provider's technical logs are kept for its own periods, which we do not decide.",
             },
           ],
         },
@@ -1120,6 +1136,11 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                   "États-Unis. La base de données se trouve à Francfort (UE).",
                 ],
                 [
+                  "Upstash, Inc.",
+                  "Lorsque vous envoyez vos coordonnées depuis le calculateur ou l'assistant, le portail de SEDA conserve chez Upstash, pendant 60 secondes, une empreinte cryptographique de votre adresse IP (une donnée pseudonymisée, pas l'adresse IP en clair) pour limiter les abus. Upstash agit comme sous-traitant.",
+                  "États-Unis",
+                ],
+                [
                   "Resend, Inc.",
                   "Achemine le courriel contenant ce que vous avez écrit dans le formulaire.",
                   "États-Unis",
@@ -1144,7 +1165,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Vercel, Resend, Supabase et Calendly sont des sociétés américaines : le traitement implique un transfert international de données hors de l'Espace économique européen. Vous pouvez nous demander des informations sur les garanties applicables à ce transfert en écrivant à {email}.",
+                "Vercel, Resend, Supabase, Upstash et Calendly sont des sociétés américaines : le traitement implique un transfert international de données hors de l'Espace économique européen. Vous pouvez nous demander des informations sur les garanties applicables à ce transfert en écrivant à {email}.",
             },
           ],
         },
@@ -1335,7 +1356,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Le contrôle de fréquence des formulaires conserve votre adresse IP en mémoire pendant dix minutes au maximum : elle n'est écrite dans aucune base de données et ne survit pas au redémarrage du service. Les journaux techniques de l'hébergeur suivent ses propres délais, que nous ne décidons pas.",
+                "Le contrôle de fréquence des formulaires de ce site conserve votre adresse IP en mémoire pendant dix minutes au maximum : elle n'est écrite dans aucune base de données et ne survit pas au redémarrage du service. En outre, pour limiter les abus, lorsque vous envoyez vos coordonnées depuis le calculateur ou l'assistant, le portail de SEDA conserve une empreinte cryptographique de votre adresse IP (une donnée pseudonymisée) pendant 60 secondes chez Upstash, son sous-traitant. Les journaux techniques de l'hébergeur suivent ses propres délais, que nous ne décidons pas.",
             },
           ],
         },
@@ -1566,6 +1587,11 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                   "Vereinigte Staaten. Die Datenbank befindet sich in Frankfurt (EU).",
                 ],
                 [
+                  "Upstash, Inc.",
+                  "Wenn Sie Ihre Daten über den Rechner oder den Assistenten senden, speichert das Portal von SEDA bei Upstash 60 Sekunden lang einen kryptografischen Hashwert Ihrer IP-Adresse (ein pseudonymisiertes Datum, nicht die IP-Adresse im Klartext), um Missbrauch zu begrenzen. Upstash handelt als Auftragsverarbeiter.",
+                  "Vereinigte Staaten",
+                ],
+                [
                   "Resend, Inc.",
                   "Stellt die E-Mail zu, die Ihre Formulareingaben enthält.",
                   "Vereinigte Staaten",
@@ -1590,7 +1616,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Vercel, Resend, Supabase und Calendly sind US-amerikanische Unternehmen: Die Verarbeitung umfasst eine internationale Datenübermittlung außerhalb des Europäischen Wirtschaftsraums. Informationen zu den für diese Übermittlung geltenden Garantien erhalten Sie auf Anfrage unter {email}.",
+                "Vercel, Resend, Supabase, Upstash und Calendly sind US-amerikanische Unternehmen: Die Verarbeitung umfasst eine internationale Datenübermittlung außerhalb des Europäischen Wirtschaftsraums. Informationen zu den für diese Übermittlung geltenden Garantien erhalten Sie auf Anfrage unter {email}.",
             },
           ],
         },
@@ -1781,7 +1807,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Die Frequenzbegrenzung der Formulare hält Ihre IP-Adresse höchstens zehn Minuten im Arbeitsspeicher: Sie wird in keine Datenbank geschrieben und überlebt keinen Neustart des Dienstes. Die technischen Protokolle des Hosting-Anbieters folgen dessen eigenen Fristen, über die wir nicht entscheiden.",
+                "Die Frequenzbegrenzung der Formulare dieser Website hält Ihre IP-Adresse höchstens zehn Minuten im Arbeitsspeicher: Sie wird in keine Datenbank geschrieben und überlebt keinen Neustart des Dienstes. Außerdem speichert das Portal von SEDA, um Missbrauch zu begrenzen, einen kryptografischen Hashwert Ihrer IP-Adresse (ein pseudonymisiertes Datum) 60 Sekunden lang bei Upstash, seinem Auftragsverarbeiter, wenn Sie Ihre Daten über den Rechner oder den Assistenten senden. Die technischen Protokolle des Hosting-Anbieters folgen dessen eigenen Fristen, über die wir nicht entscheiden.",
             },
           ],
         },

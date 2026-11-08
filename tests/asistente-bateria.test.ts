@@ -154,11 +154,13 @@ describe("batería del asistente — modelo simulado", () => {
 const normalizar = (o: unknown) => JSON.parse(JSON.stringify(o).replace(/[\u00a0\u202f]/g, " "))
 
 describe("estimar: las cifras de la calculadora, confrontadas a mano", () => {
-  it("150 €/noche al 65 %, antes del 1-dic (sin IVA del alojamiento)", () => {
+  it("150 €/noche al 65 %, con el alojamiento exento (RDL 29/2026 sin aplicar)", () => {
+    // Con D-12 una fecha anterior al 1-dic ya no basta para que ningún día lleve IVA:
+    // estas cifras son las del alojamiento exento y se piden con el RDL sin aplicar.
     // A mano: 0,65 × 365 × 150 = 35.587,5 → 35.588 € de alojamiento.
     // Directa: 21 % de 35.588 = 7.473,48; tope 20 % = 7.117,60 → manda el tope: 7.118 €. Neto 35.588 − 7.118 = 28.470 €.
     // Canal 15 %: 5.338,20 → 5.338 €; 21 % de (35.588 − 5.338,20) = 6.352,46 → 6.352 €. Neto 35.588 − 5.338 − 6.352 = 23.898 €.
-    const d = normalizar(datosEstimacion("es", 150, 65, HOY_BATERIA)) as Record<string, Record<string, string> | string>
+    const d = normalizar(datosEstimacion("es", 150, 65, HOY_BATERIA, false)) as Record<string, Record<string, string> | string>
     expect(d.ingresosBrutosAlojamiento).toBe("35.588 €")
     expect((d.reservaDirecta as Record<string, string>).comisionSeda).toBe("7.118 €")
     expect((d.reservaDirecta as Record<string, string>).netoAntesDeImpuestos).toBe("28.470 €")

@@ -21,9 +21,13 @@ const nextConfig = {
   // no se compila en el chunk de /propietarios ni de la calculadora. Las rutas
   // /api/asistente leen el valor en tiempo de ejecución (`asistentePropietariosActivo()`
   // accede a `env[...]`, que el bundler no sustituye).
+  // SEDA_IVA_ALOJAMIENTO_RDL29 (lib/iva-alojamiento.ts) se inlina para que la
+  // calculadora, que calcula en el navegador, y el servidor (textos, asistente)
+  // apliquen el mismo régimen del IVA del alojamiento: cambiarlo exige redeploy.
   env: {
     SEDA_FLAG_META_PIXEL: process.env.SEDA_FLAG_META_PIXEL ?? "",
     SEDA_FLAG_ASISTENTE_PROPIETARIOS: process.env.SEDA_FLAG_ASISTENTE_PROPIETARIOS ?? "",
+    SEDA_IVA_ALOJAMIENTO_RDL29: process.env.SEDA_IVA_ALOJAMIENTO_RDL29 ?? "",
   },
   async headers() {
     return [

@@ -11,5 +11,9 @@
   subir esta fecha al día de la activación. El texto legal con Meta está en
   lib/legal/meta.ts; tests/meta-pixel-legal.test.ts exige que esta fecha no sea
   anterior a las de los textos base.
+
+  8-nov-2026 (MOT-M04): la privacidad base sube a 2026-11-08 (Upstash como
+  encargado) y esta fecha la acompaña, porque la variante con Meta incluye ese
+  mismo cambio y no puede llevar una fecha anterior. El flag sigue apagado.
 */
-export const ACTUALIZADO_CON_META = "2026-11-07"
+export const ACTUALIZADO_CON_META = "2026-11-08"
