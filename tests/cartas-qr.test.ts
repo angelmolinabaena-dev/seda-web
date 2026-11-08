@@ -246,10 +246,10 @@ describe("política de privacidad: la línea de las cartas con QR, en los cuatro
       })
     }
   }
-  it("la fecha de la política está al día (2026-11-07) y es la que viaja como consentimiento_version", () => {
-    expect(PRIVACIDAD.actualizado).toBe("2026-11-07")
+  it("la fecha de la política está al día (2026-11-08, MOT-M04) y es la que viaja como consentimiento_version", () => {
+    expect(PRIVACIDAD.actualizado).toBe("2026-11-08")
     const r = validarLead(LEAD)
     if (!r.ok) throw new Error("debía aceptarse")
-    expect(cuerpoPortal(r.lead).consentimiento_version).toBe("2026-11-07")
+    expect(cuerpoPortal(r.lead).consentimiento_version).toBe("2026-11-08")
   })
 })

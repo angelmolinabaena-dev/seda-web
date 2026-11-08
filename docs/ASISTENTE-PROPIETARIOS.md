@@ -39,10 +39,11 @@ WhatsApp (guest-app, fase siguiente) podrá usar `acotarHistorial` → `preparar
   `normativa`, de `lib/guias-contenido/vut-andalucia.ts` con su artículo; `servicio`,
   de las preguntas frecuentes de `/propietarios` (`prop.faq.items`).
 - **IVA del alojamiento:** solo lo que dice la web, de las mismas fuentes que la
-  calculadora: el texto `calculadora.inputs.precio.hint` y la fecha de corte de
-  `lib/calculadora-propietarios.ts`. Ni el código ni las instrucciones dicen nada propio
-  sobre el RDL 29/2026. **Tras la votación de convalidación (~12-nov) basta con cambiar la
-  web (ese texto y la calculadora); el asistente lo sigue solo.**
+  calculadora: el texto `calculadora.inputs.precio.hint` (o su variante `_sin_rdl`) y
+  `lib/iva-alojamiento.ts`. Ni el código ni las instrucciones dicen nada propio sobre el
+  RDL 29/2026. `estimar` aplica D-12 igual que la calculadora: la cuota sale de los días
+  proyectados desde el 1-dic-2026. **Si el RDL no se convalida (~12-nov),
+  `SEDA_IVA_ALOJAMIENTO_RDL29=0` y redeploy: la web y el asistente cambian a la vez.**
 - **Datos sensibles:** nunca los pide. IBAN, tarjetas, DNI/NIE, correos, teléfonos y
   contraseñas se sustituyen por «[dato retirado]» antes de salir hacia Anthropic, y otra
   vez en la salida (el contacto público de SEDA sí puede salir). Contraseñas, claves y PIN

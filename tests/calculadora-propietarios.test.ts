@@ -40,13 +40,17 @@ import { netoAnual, resolverMensajes, type Idioma } from "@/lib/tarifa"
              (exacto 232.842,625; en pantalla el neto es bruto − canal − comisión ya redondeados)
 */
 
-// Estas cifras son las de ANTES del 1-dic-2026 (alojamiento exento): la fecha va
+// Estas cifras son las del alojamiento EXENTO: todo el precio es alojamiento.
+// Con D-12 ya no basta una fecha anterior al 1-dic para que ningún día lleve IVA
+// (una estimación del 30-nov proyecta 364 días desde el corte), así que se piden
+// con el RDL 29/2026 sin aplicar (SEDA_IVA_ALOJAMIENTO_RDL29=0). La fecha va
 // fijada para que el test no cambie de significado solo por pasar el día.
 const ANTES = "2026-11-30"
+const SIN_RDL = false
 
 describe("cálculo, contra cifras hechas a mano", () => {
   it("A · 200 € × 50 %: directa 7.300 € de comisión y neto 29.200 €; por canal 6.515 € y 24.510 €", () => {
-    const e = estimar(200, 50, ANTES)!
+    const e = estimar(200, 50, ANTES, SIN_RDL)!
     expect(e.alojamientoAnual).toBe(36500)
     expect(e.directa).toEqual({ canal: 0, comision: 7300, iva: 1533, neto: 29200 })
     expect(e.conCanal).toEqual({ canal: 5475, comision: 6515, iva: 1368, neto: 24510 })
@@ -55,14 +59,14 @@ describe("cálculo, contra cifras hechas a mano", () => {
   })
 
   it("B · 1.450 € × 72 %: 381.060 € brutos, neto 304.848 € directa y 255.882 € por canal", () => {
-    const e = estimar(1450, 72, ANTES)!
+    const e = estimar(1450, 72, ANTES, SIN_RDL)!
     expect(e.alojamientoAnual).toBe(381060)
     expect(e.directa).toEqual({ canal: 0, comision: 76212, iva: 16005, neto: 304848 })
     expect(e.conCanal).toEqual({ canal: 57159, comision: 68019, iva: 14284, neto: 255882 })
   })
 
   it("C · 1.000 € × 95 %: los medios euros se redondean hacia arriba y la cuenta visible cuadra", () => {
-    const e = estimar(1000, 95, ANTES)!
+    const e = estimar(1000, 95, ANTES, SIN_RDL)!
     expect(e.alojamientoAnual).toBe(346750)
     expect(e.directa).toEqual({ canal: 0, comision: 69350, iva: 14564, neto: 277400 })
     expect(e.conCanal).toEqual({ canal: 52013, comision: 61895, iva: 12998, neto: 232842 })
@@ -70,14 +74,14 @@ describe("cálculo, contra cifras hechas a mano", () => {
 
   it("en reserva directa manda el tope del 20 %, no el 21 %: la comisión es el 20 % del alojamiento", () => {
     for (const [precio, ocu] of [[200, 50], [1450, 72], [1000, 95], [333, 41]] as const) {
-      const e = estimar(precio, ocu, ANTES)!
+      const e = estimar(precio, ocu, ANTES, SIN_RDL)!
       expect(e.directa.comision).toBe(Math.round(e.alojamientoAnual * 0.2))
     }
   })
 
   it("lo que se ve suma: bruto − canal − comisión = neto, en los dos escenarios", () => {
     for (const [precio, ocu] of [[200, 50], [1450, 72], [1000, 95], [333, 41], [87.5, 63]] as const) {
-      const e = estimar(precio, ocu, ANTES)!
+      const e = estimar(precio, ocu, ANTES, SIN_RDL)!
       expect(e.alojamientoAnual - e.directa.canal - e.directa.comision).toBe(e.directa.neto)
       expect(e.alojamientoAnual - e.conCanal.canal - e.conCanal.comision).toBe(e.conCanal.neto)
     }
@@ -85,7 +89,7 @@ describe("cálculo, contra cifras hechas a mano", () => {
 
   it("no se aleja más de 1 € del neto de /propietarios (`netoAnual`), que redondea solo al final", () => {
     for (const [precio, ocu] of [[200, 50], [1450, 72], [1000, 95], [333, 41]] as const) {
-      const e = estimar(precio, ocu, ANTES)!
+      const e = estimar(precio, ocu, ANTES, SIN_RDL)!
       const ref = netoAnual(e.alojamientoAnual)
       expect(Math.abs(e.directa.neto - ref.directa)).toBeLessThanOrEqual(1)
       expect(Math.abs(e.conCanal.neto - ref.ota)).toBeLessThanOrEqual(1)
@@ -94,16 +98,16 @@ describe("cálculo, contra cifras hechas a mano", () => {
 
   it("control negativo: con la v3 (24 % plano) el neto directo del caso B sería 289.606 €, que NO es el de la v6", () => {
     expect(Math.round(381060 * (1 - 0.24))).toBe(289606)
-    expect(estimar(1450, 72, ANTES)!.directa.neto).not.toBe(289606)
+    expect(estimar(1450, 72, ANTES, SIN_RDL)!.directa.neto).not.toBe(289606)
   })
 
   it("sin precio o sin ocupación utilizables no hay estimación", () => {
-    expect(estimar(0, 50, ANTES)).toBeNull()
-    expect(estimar(-10, 50, ANTES)).toBeNull()
-    expect(estimar(Number.NaN, 50, ANTES)).toBeNull()
-    expect(estimar(200, 0, ANTES)).toBeNull()
-    expect(estimar(200, 101, ANTES)).toBeNull()
-    expect(estimar(200_001, 50, ANTES)).toBeNull()
+    expect(estimar(0, 50, ANTES, SIN_RDL)).toBeNull()
+    expect(estimar(-10, 50, ANTES, SIN_RDL)).toBeNull()
+    expect(estimar(Number.NaN, 50, ANTES, SIN_RDL)).toBeNull()
+    expect(estimar(200, 0, ANTES, SIN_RDL)).toBeNull()
+    expect(estimar(200, 101, ANTES, SIN_RDL)).toBeNull()
+    expect(estimar(200_001, 50, ANTES, SIN_RDL)).toBeNull()
   })
 })
 
@@ -596,12 +600,78 @@ describe("V4-04: desde el 1-dic-2026 se quita la cuota del 10 % antes de calcula
     expect(e.conCanal).toEqual({ canal: 3011, comision: 3200, iva: 672, neto: 12039 })
   })
 
-  it("el mismo caso el 30-nov: sin cuota, el alojamiento es todo lo pagado", () => {
+  /*
+    D-12 (MOT-08): la proyección aplica el régimen de los días que proyecta, no
+    el de hoy. El mismo caso D con la estimación hecha el 30-nov:
+      proyecta del 30-nov-2026 al 29-nov-2027: 1 día exento (el 30-nov) y 364 con IVA
+      lo pagado por día = 0,5 × 110 = 55 € → en los 364 días con IVA, 55 × 364 = 20.020 €
+      cuota = 20.020 × 10 / 110 = 1.820 €  →  alojamiento = 20.075 − 1.820 = 18.255 €
+    Antes de D-12 salía 20.075 € (sin cuota): 1.825 € más que el día siguiente.
+  */
+  it("D-12 · el mismo caso el 30-nov: 364 de sus 365 días llevan IVA, cuota 1.820 € y alojamiento 18.255 €", () => {
     const e = estimar(110, 50, "2026-11-30")!
-    expect(e.ivaAlojamientoIncluido).toBe(false)
-    expect(e.cuotaIvaAlojamiento).toBe(0)
-    expect(e.alojamientoAnual).toBe(20075)
+    expect(e.ivaAlojamientoIncluido).toBe(true)
+    expect(e.diasConIva).toBe(364)
     expect(e.pagadoHuespedes).toBe(20075)
+    expect(e.cuotaIvaAlojamiento).toBe(1820)
+    expect(e.alojamientoAnual).toBe(18255)
+  })
+
+  /*
+    El caso del encargo (MOT-08), A MANO, sin la función:
+      110 €/noche · 60 % de ocupación · estimación hecha el 15-nov-2026
+      pagado por los huéspedes = 0,6 × 365 × 110 = 24.090 €   (66 € por día)
+      días proyectados exentos: del 15 al 30 de noviembre = 16  →  con IVA: 365 − 16 = 349
+      pagado en días con IVA = 66 × 349 = 23.034 €
+      cuota = 23.034 × 10 / 110 = 2.094 €   (11 × 2.094 = 23.034, exacto)
+      alojamiento = 24.090 − 2.094 = 21.996 €
+      directa: tope 20 % × 21.996 = 4.399,20 → 4.399 (21 % = 4.619,16 no manda)
+               IVA 21 % × 4.399,20 = 923,83 → 924 · neto 21.996 − 4.399 = 17.597
+      canal:   15 % × 24.090 = 3.613,50 → 3.614 · base 21.996 − 3.613,50 = 18.382,50
+               21 % = 3.860,325 → 3.860,33 → 3.860 (tope 4.399,20 no actúa)
+               IVA 21 % × 3.860,33 = 810,67 → 811 · neto 21.996 − 3.614 − 3.860 = 14.522
+    Las dos referencias: el mismo día sin D-12 (régimen de hoy, exento) daba
+    24.090 € de alojamiento; desde el 1-dic, 24.090 × 100 / 110 = 21.900 €.
+  */
+  it("D-12 · 110 € × 60 % desde el 15-nov-2026: 349 días con IVA, cuota 2.094 € y alojamiento 21.996 € (a mano)", () => {
+    const e = estimar(110, 60, "2026-11-15")!
+    expect(e.desde).toBe("2026-11-15")
+    expect(e.diasConIva).toBe(349)
+    expect(e.pagadoHuespedes).toBe(24090)
+    expect(e.cuotaIvaAlojamiento).toBe(2094)
+    expect(e.alojamientoAnual).toBe(21996)
+    expect(e.directa).toEqual({ canal: 0, comision: 4399, iva: 924, neto: 17597 })
+    expect(e.conCanal).toEqual({ canal: 3614, comision: 3860, iva: 811, neto: 14522 })
+    // Ni el régimen de hoy (exento) ni el de diciembre (todo con IVA): entre los dos.
+    expect(e.alojamientoAnual).not.toBe(24090)
+    expect(e.alojamientoAnual).not.toBe(21900)
+  })
+
+  it("D-12 · el salto del 30-nov al 1-dic es de un día de cuota, no de un año", () => {
+    const nov = estimar(110, 50, "2026-11-30")!
+    const dic = estimar(110, 50, DESDE)!
+    // 1 día de 55 € pagados → 5 € de cuota (55 × 10 / 110).
+    expect(nov.alojamientoAnual - dic.alojamientoAnual).toBe(5)
+  })
+
+  it("D-12 · una estimación que acaba antes del corte no lleva cuota; una que empieza después, toda", () => {
+    expect(estimar(110, 50, "2025-11-30")!.diasConIva).toBe(0) // proyecta hasta el 29-nov-2026
+    expect(estimar(110, 50, "2025-12-01")!.diasConIva).toBe(0) // hasta el 30-nov-2026, último día exento
+    expect(estimar(110, 50, "2025-12-02")!.diasConIva).toBe(1) // el 1-dic-2026 entra
+    expect(estimar(110, 50, "2027-06-01")!.diasConIva).toBe(365)
+    expect(estimar(110, 50, "2025-11-30")!.cuotaIvaAlojamiento).toBe(0)
+  })
+
+  it("SEDA_IVA_ALOJAMIENTO_RDL29=0 · sin el RDL ningún día lleva IVA: el alojamiento es todo lo pagado", () => {
+    for (const desde of ["2026-11-15", DESDE, "2027-06-01"]) {
+      const e = estimar(110, 50, desde, false)!
+      expect(e.ivaAlojamientoIncluido).toBe(false)
+      expect(e.diasConIva).toBe(0)
+      expect(e.cuotaIvaAlojamiento).toBe(0)
+      expect(e.alojamientoAnual).toBe(20075)
+    }
+    expect(precioConIvaAlojamiento(DESDE, false)).toBe(false)
+    expect(precioNocheSinIva(110, DESDE, false)).toBe(110)
   })
 
   it("control negativo: sin quitar la cuota, la comisión directa del caso D saldría 4.015 € (20 % de 20.075), un 10 % más", () => {
@@ -632,6 +702,20 @@ describe("V4-04: el formulario no promete enviar la estimación", () => {
   // La palabra «estimación» en cada idioma, tal como la usan sus textos.
   const ESTIMACION: Record<Idioma, RegExp> = { es: /estimaci/i, en: /estimate/i, fr: /estimation/i, de: /schätzung/i }
   const IVA: Record<Idioma, RegExp> = { es: /IVA/, en: /VAT/, fr: /TVA/, de: /MwSt/ }
+  const EXENTO: Record<Idioma, RegExp> = { es: /exento/, en: /exempt/, fr: /exonéré/, de: /befreit/ }
+  // Escritas aquí a mano (no con la función): lo que la web debe decir del 1-dic-2026 y del 30-nov-2026.
+  const FECHA_CORTE_TEXTO: Record<Idioma, string> = {
+    es: "1 de diciembre de 2026",
+    en: "1 December 2026",
+    fr: "1er décembre 2026",
+    de: "1. Dezember 2026",
+  }
+  const ULTIMO_EXENTO_TEXTO: Record<Idioma, string> = {
+    es: "30 de noviembre de 2026",
+    en: "30 November 2026",
+    fr: "30 novembre 2026",
+    de: "30. November 2026",
+  }
 
   const calc = (l: Idioma) =>
     (JSON.parse(readFileSync(join(process.cwd(), `messages/${l}.json`), "utf8")) as {
@@ -657,12 +741,40 @@ describe("V4-04: el formulario no promete enviar la estimación", () => {
     })
 
     it(`${l}: la ayuda del precio dice cómo va el IVA (exento hasta el 30-nov, 10 % dentro desde el 1-dic, 30 noches, 110 → 100)`, () => {
-      const hint = calc(l).inputs.precio.hint
+      const hint = (resolverMensajes(calc(l) as never, l) as unknown as ReturnType<typeof calc>).inputs.precio.hint
       expect(hint).toMatch(IVA[l])
       expect(hint).toMatch(/10 ?%/)
       expect(hint).toContain("30")
       expect(hint).toMatch(/110/)
       expect(hint).toMatch(/100/)
+      expect(hint).toContain(FECHA_CORTE_TEXTO[l])
+      expect(hint).toContain(ULTIMO_EXENTO_TEXTO[l])
+    })
+
+    it(`${l}: MOT-09 · ni la fecha ni el porcentaje del RDL están escritos a mano en los textos del IVA`, () => {
+      const c = calc(l) as unknown as {
+        inputs: { precio: Record<string, string> }
+        results: Record<string, string>
+      }
+      const textos = [c.inputs.precio.hint, c.inputs.precio.hint_sin_rdl, c.results.como_body, c.results.como_body_sin_rdl, c.results.iva_alojamiento]
+      for (const t of textos) {
+        expect(t).toBeTypeOf("string")
+        expect(t).not.toMatch(/20\d\d/) // ningún año
+        expect(t).not.toMatch(/\b10 ?%/) // el tipo
+        expect(t).not.toMatch(/\b30\b/) // ni el tope de noches ni el 30-nov
+        expect(t).not.toMatch(/1[,.]10|\b110\b/) // ni el divisor ni el ejemplo
+      }
+      // Con el RDL: la fecha y el porcentaje salen de lib/iva-alojamiento.ts.
+      for (const t of [c.inputs.precio.hint, c.results.como_body, c.results.iva_alojamiento]) {
+        expect(t).toContain("[[iva.fechaCorte]]")
+        expect(t).toContain("[[iva.pct]]")
+      }
+      // La variante «sin RDL» no habla de fecha ni de tipo: el alojamiento, exento.
+      for (const t of [c.inputs.precio.hint_sin_rdl, c.results.como_body_sin_rdl]) {
+        expect(t).not.toContain("[[iva.")
+        expect(t).toMatch(EXENTO[l])
+      }
+      expect(c.results.iva_alojamiento).toMatch(/\{dias\}/)
     })
 
     it(`${l}: hay texto para pedir el prefijo, para el dato rechazado y para la cuota en el resultado`, () => {

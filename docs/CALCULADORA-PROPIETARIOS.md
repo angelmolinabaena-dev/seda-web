@@ -23,7 +23,7 @@ Todo sale de `lib/tarifa` (tarifa v6, `lib/tarifa/tarifa.json`); la calculadora 
 
 ```
 pagado por los huéspedes = ocupación × 365 × precio medio por noche
-cuota IVA alojamiento    = pagado × 10 / 110      (desde el 1-dic-2026; 0 antes)
+cuota IVA alojamiento    = pagado × días con IVA / 365 × 10 / 110   (de los 365 días proyectados desde hoy, los ≥ 1-dic-2026)
 alojamiento anual        = pagado − cuota
 comisión del canal       = % del canal × pagado   (el canal cobra sobre el precio)
 comisión SEDA            = la menor de  21 % × (alojamiento − comisión del canal)  y  20 % × alojamiento
@@ -31,14 +31,23 @@ neto                     = alojamiento − comisión del canal − comisión SED
 IVA del 21 % de la comisión: aparte, no está restado del neto
 ```
 
-**El IVA del alojamiento (V4-04, 5-nov-2026).** Desde el 1-dic-2026 (RDL 29/2026), una estancia de 30 noches o menos
-tributa al 10 % y el precio al huésped es IVA incluido. seda_os quita esa cuota de la base de la comisión (D-3, #1129).
-seda_os la saca con `ivaAlojamientoPorCobro`, que reparte por cobros; la web no tiene cobros ni estancias, así que usa
-la regla del precio: **todo el precio por noche es IVA incluido, como si todas las estancias fueran de ≤ 30 noches**.
-110 €/noche ⇒ 100 € de alojamiento. La ayuda del precio lo dice, en los cuatro idiomas, y el resultado enseña la cuota
-quitada. La fecha se compara como texto `YYYY-MM-DD` en hora de Madrid. **Si el RDL no se convalida**, la fecha de
-`FECHA_CORTE_IVA_ALOJAMIENTO` (lib/calculadora-propietarios.ts) y los textos hay que retirarlos: la calculadora no lee
-`IVA_ALOJAMIENTO_RDL29` de seda_os.
+**El IVA del alojamiento (V4-04, 5-nov-2026; D-12, 8-nov-2026).** Desde el 1-dic-2026 (RDL 29/2026), una estancia de 30
+noches o menos tributa al 10 % y el precio al huésped es IVA incluido. seda_os quita esa cuota de la base de la comisión (D-3,
+#1129). seda_os la saca con `ivaAlojamientoPorCobro`, que reparte por cobros; la web no tiene cobros ni estancias, así que usa
+la regla del precio: **en los días con IVA, todo el precio por noche es IVA incluido, como si todas las estancias fueran de
+≤ 30 noches**. 110 €/noche ⇒ 100 € de alojamiento. La ayuda del precio lo dice, en los cuatro idiomas, y el resultado enseña
+la cuota quitada y cuántos de los 365 días la llevan.
+
+- **D-12 (MOT-08):** la estimación proyecta 365 días desde hoy y aplica el régimen de los días que proyecta, no el de hoy:
+  `cuota = pagado × días con IVA / 365 × 10 / 110`. Hecha el 15-nov-2026, 349 de sus 365 días llevan IVA. Antes se miraba
+  solo el día de hoy y la misma estimación salía ~9 % más alta en noviembre que el 1-dic. El asistente usa la misma `estimar`.
+- **Una sola fuente (MOT-09):** la fecha, el 10 % y las 30 noches viven en `lib/iva-alojamiento.ts` (`RDL29_IVA_ALOJAMIENTO`).
+  Los textos llevan `[[iva.fechaCorte]]`, `[[iva.pct]]`… y `lib/tarifa` los resuelve, como `[[tarifa.…]]`.
+  `tests/iva-alojamiento-contrato.test.ts` fija los tres valores a mano, como el vector de la firma: el mismo vector debe
+  estar en seda_os contra `FECHA_CORTE_IVA_VUT` (`lib/factura-iva-regla.ts`).
+- **Si el RDL no se convalida:** `SEDA_IVA_ALOJAMIENTO_RDL29=0` en Vercel y **redeploy** (next.config.mjs la inlina). Ningún
+  día lleva IVA y la web dice las variantes `calculadora.inputs.precio.hint_sin_rdl` y `calculadora.results.como_body_sin_rdl`;
+  el asistente dice las mismas. Sin la variable (por defecto) el RDL se aplica.
 
 - Se enseñan **dos extremos**, como el simulador de `/propietarios`: reserva directa (0 % de canal)
   y un canal que cobra el 15 % (`TARIFA.ejemplos.canalPct`, el ejemplo de la tarifa; no es una media de mercado).
@@ -109,8 +118,10 @@ firma caducada o cuerpo alterado, 401; y la ruta del portal está además detrá
 El vector de contrato, idéntico en los dos repos y calculado con `openssl`: `tests/lead-firma-contrato.test.ts` aquí y
 `tests/leads-firma-contrato.test.ts` en seda_os.
 
-El límite del portal (5 por minuto e IP) sigue siendo compartido: todas las llamadas salen de las IPs de Vercel de seda-web
-(V4-M06, aparte).
+El límite del portal (5 por minuto) es por visitante desde el #115 (V4-M06): seda-web le pasa la IP del visitante en
+`X-Visitor-Ip` (`lib/lead-portal-envio.ts`), fuera de la firma, del cuerpo y de los logs, y su 429 `demasiadas_solicitudes`
+llega a la calculadora como «espere un minuto» (`estadoTrasRespuesta`). Para ese límite el portal guarda en Upstash un resumen
+sha256 de la IP durante 60 s (REA-MOTOR, MOT-M04); la política de privacidad lo dice desde el 8-nov-2026.
 
 ## Antes de encender el flag
 
@@ -119,7 +130,10 @@ El límite del portal (5 por minuto e IP) sigue siendo compartido: todas las lla
    personales), `conservacion` (1 año desde el último contacto si no hay contrato) y `donde-no-estan`.
    `tests/privacidad-calculadora.test.ts` falla si algún idioma deja de mencionar la calculadora. **Texto legal pendiente de
    que lo revise Ángel o la asesora** antes de encender el flag; los puntos sin verificar están en el PR #104.
-2. **Endpoint de CRM-PROPIETARIOS**: contrato alineado (arriba). Falta aplicar su PROPUESTA en producción; hasta entonces el portal responde 503.
+2. **Endpoint de CRM-PROPIETARIOS**: contrato alineado (arriba). La PROPUESTA ya no está pendiente y el portal ya no responde
+   503 por ella (REA-MOTOR, MOT-M10). No se ha podido comprobar desde el entorno del 8-nov-2026 (sin salida a producción): antes de
+   encender, `curl -X POST https://portal.sedaprivatehomes.com/api/leads/propietario` sin firma debe dar 404 (con
+   `SEDA_FLAG_LEADS_PUBLICOS` apagado) o 401 (encendido, sin firma), nunca 503.
 3. **Revisión de los textos nuevos** (`calculadora.*` en `messages/*.json`, los cuatro idiomas). Marcados como TEXTO NUEVO.
 4. **Firewall de Vercel**: regla de frecuencia para `/api/leads/propietario` (el límite en código es por instancia).
 5. **El secreto de la firma**: `SEDA_LEADS_HMAC_SECRET`, el MISMO valor en este proyecto de Vercel (seda-web) y en el del

@@ -10,11 +10,12 @@ import {
   hoyMadrid,
   precioConIvaAlojamiento,
 } from "@/lib/calculadora-propietarios"
+import { DIAS_PROYECCION, rdl29Aplicado } from "@/lib/iva-alojamiento"
 import { ESTRUCTURA, formatearRef, requisitosDe, type GrupoId } from "@/lib/guias-contenido/vut-andalucia"
 import { esPublicable, getGuiaBySlug } from "@/lib/guias"
 import { TARIFA, euros, tokensTarifa } from "@/lib/tarifa"
 import { enlaceLlamada } from "./config"
-import { CLAVE_IVA_ALOJAMIENTO, faqPropietarios, textoWeb } from "./fuentes"
+import { claveComoSeCalcula, claveIvaAlojamiento, faqPropietarios, textoWeb } from "./fuentes"
 
 /*
   Herramientas del asistente. Cada una envuelve datos REALES de la web para que
@@ -74,11 +75,18 @@ export const entradaEstimar = z.object({
   ocupacionPct: z.number().describe(`Ocupación anual en %, entre ${OCUPACION_MIN} y ${OCUPACION_MAX}, la que diga la persona.`),
 })
 
-export function datosEstimacion(locale: Locale, precioNoche: number, ocupacionPct: number, hoy: string = hoyMadrid()) {
+export function datosEstimacion(
+  locale: Locale,
+  precioNoche: number,
+  ocupacionPct: number,
+  hoy: string = hoyMadrid(),
+  rdl29: boolean = rdl29Aplicado(),
+) {
   if (!Number.isFinite(ocupacionPct) || ocupacionPct < OCUPACION_MIN || ocupacionPct > OCUPACION_MAX) {
     return { error: "ocupacion_fuera_de_rango", rango: `${OCUPACION_MIN}–${OCUPACION_MAX} %` }
   }
-  const est = estimar(precioNoche, ocupacionPct, hoy)
+  // La misma función y el mismo régimen que la calculadora: D-12, la cuota sale de los días proyectados con IVA.
+  const est = estimar(precioNoche, ocupacionPct, hoy, rdl29)
   if (!est) return { error: "precio_no_valido", maximo: fmt(locale)(PRECIO_NOCHE_MAX) }
   const e = fmt(locale)
   return {
@@ -90,6 +98,7 @@ export function datosEstimacion(locale: Locale, precioNoche: number, ocupacionPc
       ? {
           pagadoPorHuespedes: e(est.pagadoHuespedes),
           ivaAlojamientoDentroDelPrecio: e(est.cuotaIvaAlojamiento),
+          diasDeLaEstimacionConIva: `${est.diasConIva} de ${DIAS_PROYECCION}`,
         }
       : {}),
     reservaDirecta: {
@@ -106,7 +115,7 @@ export function datosEstimacion(locale: Locale, precioNoche: number, ocupacionPc
       netoAntesDeImpuestos: e(est.conCanal.neto),
     },
     limpieza: textoWeb(locale, "calculadora.results.table.limpieza_value"),
-    comoSeCalcula: textoWeb(locale, "calculadora.results.como_body"),
+    comoSeCalcula: textoWeb(locale, claveComoSeCalcula(rdl29)),
     aviso: textoWeb(locale, "calculadora.aviso.body"),
     calculadora: RUTA_CALCULADORA,
   }
@@ -151,16 +160,16 @@ export function datosNormativa(locale: Locale, grupo?: GrupoId) {
 /* ── IVA del alojamiento ─────────────────────────────────────────────────── */
 
 // Solo lo que dice la web y lo que calcula la calculadora, de sus mismas fuentes:
-// el texto `calculadora.inputs.precio.hint` y `precioConIvaAlojamiento` (la fecha
-// de corte de lib/calculadora-propietarios.ts). Ni una frase propia sobre el RDL
-// 29/2026: si la votación de convalidación lo cambia, se cambia la web (texto y
-// fecha) y el asistente dice lo nuevo sin tocar este fichero.
+// el texto `calculadora.inputs.precio.hint` (o su variante sin RDL) y
+// `precioConIvaAlojamiento` (lib/iva-alojamiento.ts). Ni una frase propia sobre
+// el RDL 29/2026: si no se convalida, SEDA_IVA_ALOJAMIENTO_RDL29=0 cambia la web
+// y el asistente dice lo mismo sin tocar este fichero.
 
-export function datosIvaAlojamiento(locale: Locale, hoy: string = hoyMadrid()) {
+export function datosIvaAlojamiento(locale: Locale, hoy: string = hoyMadrid(), rdl29: boolean = rdl29Aplicado()) {
   return {
-    loQueDiceLaWeb: textoWeb(locale, CLAVE_IVA_ALOJAMIENTO),
+    loQueDiceLaWeb: textoWeb(locale, claveIvaAlojamiento(rdl29)),
     hoy,
-    elPrecioYaLlevaIva: precioConIvaAlojamiento(hoy),
+    elPrecioYaLlevaIva: precioConIvaAlojamiento(hoy, rdl29),
   }
 }
 
@@ -195,7 +204,7 @@ export type NombreHerramienta = (typeof NOMBRES_HERRAMIENTAS)[number]
 
 const sinEntrada = z.object({})
 
-export function herramientasAsistente(locale: Locale, hoy: string = hoyMadrid()) {
+export function herramientasAsistente(locale: Locale, hoy: string = hoyMadrid(), rdl29: boolean = rdl29Aplicado()) {
   return {
     tarifa: tool({
       description:
@@ -207,7 +216,7 @@ export function herramientasAsistente(locale: Locale, hoy: string = hoyMadrid())
       description:
         "Estimación anual con el mismo cálculo que la calculadora de la web, a partir del precio por noche y la ocupación que diga la persona. Devuelve cifras ya formateadas: cópielas tal cual.",
       inputSchema: entradaEstimar,
-      execute: async ({ precioNoche, ocupacionPct }) => datosEstimacion(locale, precioNoche, ocupacionPct, hoy),
+      execute: async ({ precioNoche, ocupacionPct }) => datosEstimacion(locale, precioNoche, ocupacionPct, hoy, rdl29),
     }),
     normativa: tool({
       description:
@@ -218,7 +227,7 @@ export function herramientasAsistente(locale: Locale, hoy: string = hoyMadrid())
     iva_alojamiento: tool({
       description: "Lo que dice la web (la calculadora) sobre el IVA del precio por noche que paga el huésped.",
       inputSchema: sinEntrada,
-      execute: async () => datosIvaAlojamiento(locale, hoy),
+      execute: async () => datosIvaAlojamiento(locale, hoy, rdl29),
     }),
     servicio: tool({
       description:

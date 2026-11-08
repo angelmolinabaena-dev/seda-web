@@ -595,8 +595,8 @@ function parchesPrivacidad(capi: boolean): Record<Locale, Parche> {
         "Si aceptas las cookies de marketing, los datos del píxel los recibe además Meta, como se explica arriba. No hay más destinatarios.",
       ],
       [
-        "Vercel, Resend, Supabase y Calendly son sociedades estadounidenses: el tratamiento implica una transferencia internacional de datos fuera del Espacio Económico Europeo.",
-        "Vercel, Resend, Supabase y Calendly son sociedades estadounidenses y Meta Platforms Ireland Limited puede transferir los datos del píxel a su matriz en Estados Unidos: el tratamiento implica una transferencia internacional de datos fuera del Espacio Económico Europeo. Meta indica en su política de datos que ampara esas transferencias en la decisión de adecuación del Marco de Privacidad de Datos UE–EE. UU. y en cláusulas contractuales tipo.",
+        "Vercel, Resend, Supabase, Upstash y Calendly son sociedades estadounidenses: el tratamiento implica una transferencia internacional de datos fuera del Espacio Económico Europeo.",
+        "Vercel, Resend, Supabase, Upstash y Calendly son sociedades estadounidenses y Meta Platforms Ireland Limited puede transferir los datos del píxel a su matriz en Estados Unidos: el tratamiento implica una transferencia internacional de datos fuera del Espacio Económico Europeo. Meta indica en su política de datos que ampara esas transferencias en la decisión de adecuación del Marco de Privacidad de Datos UE–EE. UU. y en cláusulas contractuales tipo.",
       ],
     ],
     filas: [
@@ -649,8 +649,8 @@ function parchesPrivacidad(capi: boolean): Record<Locale, Parche> {
         "If you accept marketing cookies, Meta also receives the pixel data, as explained above. There are no other recipients.",
       ],
       [
-        "Vercel, Resend, Supabase and Calendly are US companies, so the processing involves an international transfer of data outside the European Economic Area.",
-        "Vercel, Resend, Supabase and Calendly are US companies, and Meta Platforms Ireland Limited may transfer the pixel data to its parent in the United States, so the processing involves an international transfer of data outside the European Economic Area. Meta states in its data policy that it relies on the adequacy decision for the EU–US Data Privacy Framework and on standard contractual clauses for those transfers.",
+        "Vercel, Resend, Supabase, Upstash and Calendly are US companies, so the processing involves an international transfer of data outside the European Economic Area.",
+        "Vercel, Resend, Supabase, Upstash and Calendly are US companies, and Meta Platforms Ireland Limited may transfer the pixel data to its parent in the United States, so the processing involves an international transfer of data outside the European Economic Area. Meta states in its data policy that it relies on the adequacy decision for the EU–US Data Privacy Framework and on standard contractual clauses for those transfers.",
       ],
     ],
     filas: [
@@ -703,8 +703,8 @@ function parchesPrivacidad(capi: boolean): Record<Locale, Parche> {
         "Si vous acceptez les cookies de marketing, Meta reçoit en outre les données du pixel, comme expliqué ci-dessus. Il n'y a pas d'autres destinataires.",
       ],
       [
-        "Vercel, Resend, Supabase et Calendly sont des sociétés américaines : le traitement implique un transfert international de données hors de l'Espace économique européen.",
-        "Vercel, Resend, Supabase et Calendly sont des sociétés américaines et Meta Platforms Ireland Limited peut transférer les données du pixel à sa maison mère aux États-Unis : le traitement implique un transfert international de données hors de l'Espace économique européen. Meta indique dans sa politique de données qu'elle fonde ces transferts sur la décision d'adéquation relative au Cadre de protection des données UE–États-Unis et sur des clauses contractuelles types.",
+        "Vercel, Resend, Supabase, Upstash et Calendly sont des sociétés américaines : le traitement implique un transfert international de données hors de l'Espace économique européen.",
+        "Vercel, Resend, Supabase, Upstash et Calendly sont des sociétés américaines et Meta Platforms Ireland Limited peut transférer les données du pixel à sa maison mère aux États-Unis : le traitement implique un transfert international de données hors de l'Espace économique européen. Meta indique dans sa politique de données qu'elle fonde ces transferts sur la décision d'adéquation relative au Cadre de protection des données UE–États-Unis et sur des clauses contractuelles types.",
       ],
     ],
     filas: [
@@ -757,8 +757,8 @@ function parchesPrivacidad(capi: boolean): Record<Locale, Parche> {
         "Wenn Sie die Marketing-Cookies akzeptieren, erhält zusätzlich Meta die Pixel-Daten, wie oben erläutert. Weitere Empfänger gibt es nicht.",
       ],
       [
-        "Vercel, Resend, Supabase und Calendly sind US-amerikanische Unternehmen: Die Verarbeitung umfasst eine internationale Datenübermittlung außerhalb des Europäischen Wirtschaftsraums.",
-        "Vercel, Resend, Supabase und Calendly sind US-amerikanische Unternehmen, und Meta Platforms Ireland Limited kann die Pixel-Daten an die Muttergesellschaft in den Vereinigten Staaten übermitteln: Die Verarbeitung umfasst eine internationale Datenübermittlung außerhalb des Europäischen Wirtschaftsraums. Meta gibt in seiner Datenrichtlinie an, diese Übermittlungen auf den Angemessenheitsbeschluss zum EU-US-Datenschutzrahmen und auf Standardvertragsklauseln zu stützen.",
+        "Vercel, Resend, Supabase, Upstash und Calendly sind US-amerikanische Unternehmen: Die Verarbeitung umfasst eine internationale Datenübermittlung außerhalb des Europäischen Wirtschaftsraums.",
+        "Vercel, Resend, Supabase, Upstash und Calendly sind US-amerikanische Unternehmen, und Meta Platforms Ireland Limited kann die Pixel-Daten an die Muttergesellschaft in den Vereinigten Staaten übermitteln: Die Verarbeitung umfasst eine internationale Datenübermittlung außerhalb des Europäischen Wirtschaftsraums. Meta gibt in seiner Datenrichtlinie an, diese Übermittlungen auf den Angemessenheitsbeschluss zum EU-US-Datenschutzrahmen und auf Standardvertragsklauseln zu stützen.",
       ],
     ],
     filas: [

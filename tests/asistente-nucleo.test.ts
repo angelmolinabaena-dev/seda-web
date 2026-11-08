@@ -5,8 +5,15 @@ import { routing } from "@/i18n/routing"
 import { ASISTENTE_MODEL_ID, LIMITES, asistentePropietariosActivo, enlaceLlamada, topeDiario } from "@/lib/asistente/config"
 import { conversacionAgotada, crearCupos } from "@/lib/asistente/cupos"
 import { MARCA_RETIRADO, retirarDatosSensibles } from "@/lib/asistente/datos-sensibles"
-import { CLAVE_IVA_ALOJAMIENTO, textoWeb } from "@/lib/asistente/fuentes"
-import { NOMBRES_HERRAMIENTAS, datosIvaAlojamiento, datosNormativa, datosTarifa, herramientasAsistente } from "@/lib/asistente/herramientas"
+import { CLAVE_IVA_ALOJAMIENTO, claveComoSeCalcula, claveIvaAlojamiento, textoWeb } from "@/lib/asistente/fuentes"
+import {
+  NOMBRES_HERRAMIENTAS,
+  datosEstimacion,
+  datosIvaAlojamiento,
+  datosNormativa,
+  datosTarifa,
+  herramientasAsistente,
+} from "@/lib/asistente/herramientas"
 import { acotarHistorial } from "@/lib/asistente/historial"
 import { INSTRUCCIONES, REFERENCIA_INTERNA } from "@/lib/asistente/instrucciones"
 import { MOTIVOS_RESPALDO, textoRespaldo } from "@/lib/asistente/respaldo"
@@ -14,7 +21,7 @@ import { limpiarSalida, transformarSalida } from "@/lib/asistente/salida"
 import { sinRespuesta } from "@/lib/asistente/sin-respuesta"
 import { ESTRUCTURA } from "@/lib/guias-contenido/vut-andalucia"
 import { generalContact } from "@/lib/site-contact"
-import { TARIFA } from "@/lib/tarifa"
+import { TARIFA, resolverTexto, type Idioma } from "@/lib/tarifa"
 
 /*
   El núcleo del asistente (lib/asistente/*), sin modelo. Las cifras se confrontan
@@ -124,11 +131,37 @@ describe("herramientas: datos reales de la web", () => {
 
   it("IVA del alojamiento: una sola fuente, el texto de la calculadora en messages/*.json", () => {
     for (const l of routing.locales) {
-      expect(datosIvaAlojamiento(l, "2026-11-07").loQueDiceLaWeb).toBe(mensajes(l).calculadora.inputs.precio.hint)
-      expect(textoWeb(l, CLAVE_IVA_ALOJAMIENTO)).toBe(mensajes(l).calculadora.inputs.precio.hint)
+      // El texto crudo lleva [[iva.…]]; la web y el asistente dicen el texto resuelto, el mismo.
+      const hint = resolverTexto(mensajes(l).calculadora.inputs.precio.hint, l as Idioma)
+      expect(datosIvaAlojamiento(l, "2026-11-07", true).loQueDiceLaWeb).toBe(hint)
+      expect(textoWeb(l, CLAVE_IVA_ALOJAMIENTO)).toBe(hint)
+      expect(hint).not.toContain("[[")
     }
-    expect(datosIvaAlojamiento("es", "2026-11-30").elPrecioYaLlevaIva).toBe(false)
-    expect(datosIvaAlojamiento("es", "2026-12-01").elPrecioYaLlevaIva).toBe(true)
+    expect(datosIvaAlojamiento("es", "2026-11-30", true).elPrecioYaLlevaIva).toBe(false)
+    expect(datosIvaAlojamiento("es", "2026-12-01", true).elPrecioYaLlevaIva).toBe(true)
+  })
+
+  it("SEDA_IVA_ALOJAMIENTO_RDL29=0: el asistente dice la variante «sin RDL» de la web, la misma que la calculadora", () => {
+    expect(claveIvaAlojamiento(false)).toBe("calculadora.inputs.precio.hint_sin_rdl")
+    expect(claveIvaAlojamiento(true)).toBe("calculadora.inputs.precio.hint")
+    expect(claveComoSeCalcula(false)).toBe("calculadora.results.como_body_sin_rdl")
+    for (const l of routing.locales) {
+      const d = datosIvaAlojamiento(l, "2026-12-01", false)
+      expect(d.loQueDiceLaWeb).toBe(resolverTexto(mensajes(l).calculadora.inputs.precio.hint_sin_rdl, l as Idioma))
+      expect(d.elPrecioYaLlevaIva).toBe(false)
+      const e = datosEstimacion(l, 110, 50, "2026-12-01", false) as Record<string, unknown>
+      expect(e).not.toHaveProperty("ivaAlojamientoDentroDelPrecio")
+      expect(e.comoSeCalcula).toBe(resolverTexto(mensajes(l).calculadora.results.como_body_sin_rdl, l as Idioma))
+    }
+  })
+
+  it("D-12 en el asistente: la misma cifra a mano que la calculadora (110 € × 60 % desde el 15-nov-2026)", () => {
+    // A mano (tests/calculadora-propietarios.test.ts): 24.090 € pagados, 349 días con IVA, cuota 2.094 €, alojamiento 21.996 €.
+    const d = JSON.parse(JSON.stringify(datosEstimacion("es", 110, 60, "2026-11-15", true)).replace(/[\u00a0\u202f]/g, " "))
+    expect(d.pagadoPorHuespedes).toBe("24.090 €")
+    expect(d.ivaAlojamientoDentroDelPrecio).toBe("2.094 €")
+    expect(d.ingresosBrutosAlojamiento).toBe("21.996 €")
+    expect(d.diasDeLaEstimacionConIva).toBe("349 de 365")
   })
 
   it("ofrecer_solicitud no recibe ningún dato: el modelo no rellena el formulario", () => {

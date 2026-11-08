@@ -1598,7 +1598,8 @@
       "precio": {
         "label": "Prix moyen par nuit que vous attendez",
         "placeholder": "Exemple : 250",
-        "hint": "Ce que paie le voyageur par nuit pour l'hébergement, ménage exclu. Jusqu'au 30 novembre 2026, il est exonéré de TVA. À partir du 1er décembre, pour les séjours de 30 nuits ou moins, le prix inclut 10 % de TVA et le calculateur la retire avant de calculer : 110 € par nuit font 100 € d'hébergement. C'est le chiffre que vous attendez, pas une moyenne du marché : nous n'en avons aucune, sourcée, que nous puissions citer."
+        "hint": "Ce que paie le voyageur par nuit pour l'hébergement, ménage exclu. Jusqu'au [[iva.ultimoDiaExento]], il est exonéré de TVA. À partir du [[iva.fechaCorte]], pour les séjours de [[iva.maxNoches]] nuits ou moins, le prix inclut [[iva.pct]] de TVA et le calculateur la retire des jours de l'estimation qui tombent à partir de cette date : [[iva.ejPrecio]] par nuit font [[iva.ejAlojamiento]] d'hébergement. C'est le chiffre que vous attendez, pas une moyenne du marché : nous n'en avons aucune, sourcée, que nous puissions citer.",
+        "hint_sin_rdl": "Ce que paie le voyageur par nuit pour l'hébergement, ménage exclu. Il est exonéré de TVA : le calculateur prend tout le prix comme hébergement. C'est le chiffre que vous attendez, pas une moyenne du marché : nous n'en avons aucune, sourcée, que nous puissions citer."
       },
       "ocupacion": {
         "label": "Taux d'occupation annuel attendu",
@@ -1624,8 +1625,9 @@
         "iva": "TVA sur la commission, en sus"
       },
       "como": "Comment c'est calculé",
-      "como_body": "Revenus bruts = taux d'occupation × 365 nuits × prix par nuit ; à partir du 1er décembre 2026, sans les 10 % de TVA d'hébergement inclus dans le prix (prix ÷ 1,10), comme pour les séjours de 30 nuits ou moins. La commission du canal est calculée sur ce que paie le voyageur. La commission de SEDA est la plus faible entre [[tarifa.comision]] de l'hébergement une fois déduite la commission du canal et [[tarifa.tope]] de l'hébergement ; elle n'est jamais calculée sur le ménage ni sur la TVA de l'hébergement. La TVA de [[tarifa.iva]] sur la commission s'ajoute en sus et n'est pas déduite du net.",
-      "iva_alojamiento": "À partir du 1er décembre 2026, le prix par nuit inclut 10 % de TVA sur l'hébergement. Sur les {pagado} que paieraient les voyageurs, {cuota} correspondent à cette TVA, reversée au fisc espagnol : ce n'est ni un revenu pour vous ni une base de la commission, et elle est déjà exclue des revenus bruts."
+      "como_body": "Revenus bruts = taux d'occupation × 365 nuits × prix par nuit, sur les 365 jours à partir d'aujourd'hui. Pour les jours à partir du [[iva.fechaCorte]], sans les [[iva.pct]] de TVA d'hébergement inclus dans le prix (prix ÷ [[iva.divisor]]), comme pour les séjours de [[iva.maxNoches]] nuits ou moins ; si l'estimation commence avant cette date, la TVA n'est retirée que de la partie de l'année qui tombe après. La commission du canal est calculée sur ce que paie le voyageur. La commission de SEDA est la plus faible entre [[tarifa.comision]] de l'hébergement une fois déduite la commission du canal et [[tarifa.tope]] de l'hébergement ; elle n'est jamais calculée sur le ménage ni sur la TVA de l'hébergement. La TVA de [[tarifa.iva]] sur la commission s'ajoute en sus et n'est pas déduite du net.",
+      "como_body_sin_rdl": "Revenus bruts = taux d'occupation × 365 nuits × prix par nuit ; l'hébergement est exonéré de TVA et tout le prix est de l'hébergement. La commission du canal est calculée sur ce que paie le voyageur. La commission de SEDA est la plus faible entre [[tarifa.comision]] de l'hébergement une fois déduite la commission du canal et [[tarifa.tope]] de l'hébergement ; elle n'est jamais calculée sur le ménage. La TVA de [[tarifa.iva]] sur la commission s'ajoute en sus et n'est pas déduite du net.",
+      "iva_alojamiento": "À partir du [[iva.fechaCorte]], le prix par nuit inclut [[iva.pct]] de TVA sur l'hébergement. Sur les 365 jours de cette estimation, {dias} tombent à partir de cette date : sur les {pagado} que paieraient les voyageurs, {cuota} correspondent à cette TVA, reversée au fisc espagnol. Ce n'est ni un revenu pour vous ni une base de la commission, et elle est déjà exclue des revenus bruts."
     },
     "aviso": {
       "label": "Important",
