@@ -96,6 +96,8 @@ export function proxy(request: NextRequest) {
     pathname.startsWith("/_next/") ||
     pathname.startsWith("/api/") ||
     pathname.startsWith("/_vercel/") ||
+    // Vercel BotID: su script y su proxy (reescrituras de withBotId en next.config.mjs).
+    pathname.startsWith("/149e9513-01fa-4fb0-aad4-566afd725d1b/") ||
     /\.[a-zA-Z0-9]+$/.test(pathname)
   ) {
     return NextResponse.next()
@@ -115,5 +117,5 @@ export function proxy(request: NextRequest) {
 }
 
 export const proxyConfig = {
-  matcher: ["/((?!api|_next|_vercel|.*\\..*).*)"],
+  matcher: ["/((?!api|_next|_vercel|149e9513-01fa-4fb0-aad4-566afd725d1b|.*\\..*).*)"],
 }

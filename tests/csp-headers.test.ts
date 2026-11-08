@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
-import { SOURCE_CSP_GLOBAL, cspGlobal } from '../lib/csp.mjs'
+import { PREFIJO_BOTID, SOURCE_CSP_GLOBAL, cspGlobal } from '../lib/csp.mjs'
 import nextConfig from '../next.config.mjs'
 
 /**
@@ -69,13 +69,19 @@ describe('Content-Security-Policy global (lib/csp.mjs → next.config.mjs)', () 
     expect(csp).toBe(CSP_DE_PRODUCCION_HOY)
   })
 
-  it('next.config.mjs la publica en el mismo source que usaba vercel.json', async () => {
+  it('next.config.mjs la publica en el source de vercel.json, menos las rutas de Vercel BotID', async () => {
     const reglas = (await nextConfig.headers!()) as { source: string; headers: Cabecera[] }[]
-    expect(reglas).toHaveLength(1)
-    expect(reglas[0].source).toBe('/((?!tour/).*)')
-    expect(reglas[0].source).toBe(SOURCE_CSP_GLOBAL)
-    expect(reglas[0].source).toBe(reglaGlobal?.source)
-    expect(reglas[0].headers).toEqual([{ key: 'Content-Security-Policy', value: cspGlobal() }])
+    // Dos reglas: la CSP global y la que añade withBotId (botid/next/config) a sus rutas.
+    expect(reglas).toHaveLength(2)
+    const [global, botid] = reglas
+    expect(global.source).toBe('/((?!tour/|149e9513-01fa-4fb0-aad4-566afd725d1b/).*)')
+    expect(global.source).toBe(SOURCE_CSP_GLOBAL)
+    // Lo mismo que vercel.json (/((?!tour/).*)) con una exclusión más, nada más.
+    expect(global.source.replace(`|${PREFIJO_BOTID}`, '')).toBe(reglaGlobal?.source)
+    expect(global.headers).toEqual([{ key: 'Content-Security-Policy', value: cspGlobal() }])
+    // MOT-11: BotID lleva su propia CSP; si la global también le llegara, `frame-ancestors 'none'` la anularía.
+    expect(botid.source).toBe('/149e9513-01fa-4fb0-aad4-566afd725d1b/2d206a39-8ed7-437e-a3be-862e0f06eea3/:path*')
+    expect(botid.headers).toContainEqual({ key: 'Content-Security-Policy', value: "frame-ancestors 'self'" })
   })
 
   it('vercel.json NO lleva CSP en la regla global: dos CSP se intersecan y la de vercel.json anularía a Meta', () => {

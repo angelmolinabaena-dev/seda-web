@@ -8,6 +8,7 @@ import { useLocale, useTranslations } from "next-intl"
 import { Link } from "@/i18n/navigation"
 import type { Locale } from "@/i18n/routing"
 import { LIMITES } from "@/lib/asistente/config"
+import { cuerpoPeticion } from "@/lib/asistente/peticion"
 import { textoRespaldo } from "@/lib/asistente/respaldo"
 import { sinRespuesta } from "@/lib/asistente/sin-respuesta"
 import { FormularioSolicitud } from "./formulario-solicitud"
@@ -56,7 +57,12 @@ export default function AsistentePanel({ carta, abierto, onCerrar }: { carta: ()
   const entrada = useRef<HTMLTextAreaElement>(null)
   const final = useRef<HTMLDivElement>(null)
 
-  const transport = useMemo(() => new DefaultChatTransport({ api: "/api/asistente", body: { locale } }), [locale])
+  // Solo el texto de cada mensaje (lib/asistente/peticion.ts): con las salidas de las
+  // herramientas, el cuerpo pasaba de 32 KB hacia el turno 7-11 y el chat daba 413.
+  const transport = useMemo(
+    () => new DefaultChatTransport({ api: "/api/asistente", body: { locale }, prepareSendMessagesRequest: cuerpoPeticion }),
+    [locale],
+  )
   const { messages, sendMessage, status, error } = useChat({ transport })
   const ocupado = status === "submitted" || status === "streaming"
 
@@ -102,6 +108,9 @@ export default function AsistentePanel({ carta, abierto, onCerrar }: { carta: ()
       role="dialog"
       aria-modal="false"
       aria-labelledby={`${id}-titulo`}
+      // MOT-M11: el aviso de IA (art. 50 del Reglamento de IA) es la descripción del
+      // diálogo: el lector de pantalla lo anuncia al abrirlo, no solo al recorrer el log.
+      aria-describedby={`${id}-aviso`}
       onKeyDown={(ev) => {
         if (ev.key === "Escape") onCerrar()
       }}
@@ -127,7 +136,9 @@ export default function AsistentePanel({ carta, abierto, onCerrar }: { carta: ()
       <div role="log" aria-live="polite" aria-relevant="additions" className="flex-1 overflow-y-auto px-4 py-5 flex flex-col gap-3 text-[0.92rem] leading-relaxed">
         {/* Primer mensaje: de la interfaz, no del modelo. */}
         <div className="self-start max-w-[90%] rounded-2xl rounded-tl-sm bg-secondary/60 px-4 py-3">
-          <p className="whitespace-pre-line">{t("bienvenida")}</p>
+          <p id={`${id}-aviso`} className="whitespace-pre-line">
+            {t("bienvenida")}
+          </p>
         </div>
 
         {messages.map((m) => {

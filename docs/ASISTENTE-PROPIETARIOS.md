@@ -122,27 +122,61 @@ no admite `effort`), y se vuelve a correr.
 
 ## Costes y abuso — qué se ha elegido y por qué
 
-Elegido: **límites en memoria + regla del Firewall de Vercel + límite de gasto en Anthropic.**
-No Upstash.
+Revisado el 8-nov-2026 (ASISTENTE-ANTES-DE-ENCENDER, MOT-11 de la REA-MOTOR §8.6). Antes
+todos los cupos vivían en memoria por instancia y no había nada contra bots: un script
+agotaba el tope diario y toda la campaña recibía `tope_diario` hasta medianoche.
 
-- seda-web no tiene Upstash ni ninguna base de datos propia, y la política de privacidad
-  dice «sin base de datos propia». Upstash sería un proveedor nuevo con datos (IPs) fuera
-  de la UE, otra variable secreta y otra fila en la privacidad. Para el tráfico de un
-  piloto no compensa.
-- **En código (por instancia):** 20 turnos por IP cada 10 min; 15 mensajes por conversación;
-  `SEDA_ASISTENTE_TOPE_DIARIO` turnos al día (400 por defecto); 1.000 caracteres por
-  mensaje; 16 mensajes de historial; 1.200 tokens de salida por paso y 5 pasos por turno;
-  cuerpo de 32 kB como máximo. Pasado un cupo no se llama al modelo: el chat contesta el
-  mensaje de respaldo («déjenos sus datos y le llamamos») y enseña el formulario.
-- **Lo que hace global el techo** (porque las instancias suman cupos):
+Elegido: **Upstash para los cupos + Vercel BotID + regla del Firewall + límite de gasto
+en Anthropic.**
+
+- **Cupos** (`lib/asistente/cupos.ts`), por orden:
+  1. 20 turnos por IP cada 10 min (ventana deslizante, `@upstash/ratelimit`);
+  2. 15 mensajes por conversación (los cuenta el servidor en el historial);
+  3. **por IP y día** (Madrid): `SEDA_ASISTENTE_TOPE_DIARIO_IP`, 60 por defecto. Superado,
+     **solo esa IP** recibe `tope_diario`; el resto sigue;
+  4. **diario global** (Madrid): `SEDA_ASISTENTE_TOPE_DIARIO`, 400 por defecto, para todo el
+     sitio.
+
+  Además: 1.000 caracteres por mensaje; 16 mensajes de historial; 1.200 tokens de salida
+  por paso y 5 pasos por turno; cuerpo de 32 kB como máximo. Pasado un cupo no se llama al
+  modelo: el chat contesta el mensaje de respaldo y enseña el formulario. La métrica del
+  respaldo diario dice `"tope":"ip"` o `"tope":"global"` (parte del «motivo del mensaje de
+  respaldo» que ya nombra la política).
+- **Dónde viven:** con `UPSTASH_REDIS_REST_URL` y `UPSTASH_REDIS_REST_TOKEN`, en Upstash: un
+  solo contador para todas las instancias. **Sin ellas, o si Upstash falla, caen al límite
+  en memoria por instancia** (lo de antes): el asistente sigue respondiendo, pero el tope
+  diario vuelve a ser por instancia. Se ve en los logs de la función: `console.warn`
+  «sin UPSTASH_REDIS_REST_URL / UPSTASH_REDIS_REST_TOKEN» en producción, o `console.error`
+  «Upstash no responde» si falla.
+- **La IP:** nunca llega a Upstash en claro: la clave es un HMAC-SHA256 de la IP con el
+  token de Upstash como clave (32 hex). Caduca sola: la ventana por visitante a los 20 min
+  y 1 s (`@upstash/ratelimit` expira a dos ventanas + 1 s); el contador diario de la IP, a
+  la medianoche de Madrid + 60 s. Upstash ya figuraba en la política (#123, por el portal);
+  su fila se amplía al asistente en los cuatro idiomas.
+- **El 413 del historial** (MOT-11): el navegador reenviaba la conversación entera con las
+  salidas de las herramientas. Medido con el `Chat` del AI SDK contra la ruta real
+  (`tests/asistente-cuerpo.test.ts`): 413 en el turno 7 si cada turno usa `servicio` y
+  `estimar` (36,4 kB), en el 11 con una herramienta (35,6 kB); desde ahí, todos los turnos
+  fallaban. Ahora el panel manda solo el texto (`lib/asistente/peticion.ts`,
+  `prepareSendMessagesRequest`): 10,8 kB en el turno 15. El servidor sigue recortando a 16
+  mensajes y el modelo recibe lo mismo que antes (el test lo compara).
+- **Contra bots:** mismo origen (`Origin` / `Sec-Fetch-Site`), JSON, tamaño acotado, honeypot
+  en el formulario y **Vercel BotID** en `POST /api/asistente` y `POST /api/asistente/solicitud`
+  (`lib/asistente/bots.ts`; un bot recibe 403 sin llegar al modelo ni al portal). BotID es de
+  Vercel, que ya aloja el sitio: no añade encargado. El script de BotID solo se carga en las
+  páginas con el asistente y con el interruptor encendido (`initBotId` en
+  `components/asistente/asistente-propietarios.tsx`, no en `instrumentation-client.ts`). Si
+  BotID no responde, la petición pasa (los cupos siguen delante).
+  - **Planes de BotID — sin verificar desde esta sesión** (el proxy no deja abrir
+    vercel.com; el README del paquete `botid@1.5.12` no habla de planes): no me consta qué
+    incluye el plan Pro. Hay que comprobarlo en https://vercel.com/docs/botid antes de
+    encender. El README sí dice cómo activar el modo avanzado: *Project → Firewall →
+    Configure → Vercel BotID Deep Analysis*; el código no cambia.
+- **Lo que sigue siendo techo duro**, fuera del código:
   1. Regla de **límite de frecuencia en el Firewall de Vercel** para `/api/asistente`
-     (la propone Cowork a Ángel; sugerencia: 30 peticiones/10 min por IP, acción 429) y,
-     si hay abuso, el *challenge* del Firewall en esa ruta.
+     (sugerencia: 30 peticiones/10 min por IP, acción 429).
   2. **Límite de gasto mensual** del espacio de trabajo de la clave en la consola de
-     Anthropic. Cuando Anthropic deja de responder por el límite, el chat da el mensaje de
-     respaldo.
-- **Contra bots:** solo mismo origen (`Origin` / `Sec-Fetch-Site`), JSON, tamaño acotado,
-  honeypot en el formulario, el límite por IP y el Firewall.
+     Anthropic.
 
 ## Pasos para encenderlo (Ángel)
 
@@ -155,13 +189,25 @@ No Upstash.
    |---|---|---|
    | `ANTHROPIC_API_KEY` | la clave del paso 2 | **sí** |
    | `NEXT_PUBLIC_SEDA_CALENDLY_URL` | p. ej. `https://calendly.com/sedaprivatehomes-info` (solo `https://calendly.com/…`; sin ella, el botón lleva a `/meet`) | no |
-   | `SEDA_ASISTENTE_TOPE_DIARIO` | opcional, turnos al día por instancia (400 si no se pone) | no |
+   | `UPSTASH_REDIS_REST_URL` | la URL REST de la base de Upstash (`https://…upstash.io`) | no |
+   | `UPSTASH_REDIS_REST_TOKEN` | su token REST (no el de solo lectura: hace INCR) | **sí** |
+   | `SEDA_ASISTENTE_TOPE_DIARIO` | opcional, turnos al día de todo el sitio (400 si no se pone) | no |
+   | `SEDA_ASISTENTE_TOPE_DIARIO_IP` | opcional, turnos al día por IP (60 si no se pone) | no |
    | `SEDA_FLAG_ASISTENTE_PROPIETARIOS` | `1` — **el último** | no |
 
    El formulario del chat usa el `SEDA_LEADS_HMAC_SECRET` que ya tiene la calculadora.
    Las páginas son estáticas: el interruptor y el enlace de Calendly se leen al construir,
    así que hace falta **volver a desplegar** tras cambiarlos.
-4. **Firewall de Vercel:** la regla de `/api/asistente` (arriba).
+   **Sin las dos de Upstash el asistente funciona, pero los cupos caen al límite en memoria
+   por instancia**: el tope diario vuelve a ser por instancia (lo que REA-MOTOR §8.6 señaló).
+   Comprobar tras desplegar que los logs de `/api/asistente` NO dicen «sin UPSTASH_REDIS_REST_URL»
+   y que en la consola de Upstash aparecen claves `seda-web:asistente:*`.
+4. **Firewall de Vercel:** la regla de `/api/asistente` (arriba). **BotID:** confirmar en
+   https://vercel.com/docs/botid qué incluye el plan Pro y, si procede, activar *Deep
+   Analysis* (Firewall → Configure). Comprobar en el navegador, con el asistente abierto,
+   si BotID deja cookies o datos en el almacenamiento del navegador: la política de cookies
+   dice hoy que no se usa el almacenamiento local; no me consta lo que hace el script de
+   BotID y habría que verlo en las herramientas del navegador.
 5. **seda_os:** confirmar que `canal: "asistente"` ya entra como `web-asistente` (migración
    `PROPUESTA_2026-11-07_leads_canal_carta.sql`); hasta entonces entra como
    `web-calculadora` sin perder el lead (contrato).

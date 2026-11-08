@@ -1675,6 +1675,6 @@
     "llamada": "Réserver un appel",
     "restantes": "{n} caractères restants",
     "form_titulo": "Laissez votre demande",
-    "form_cuerpo": "Laissez-nous votre nom, votre e-mail et, si vous le souhaitez, votre téléphone : c'est tout ce que ce formulaire nous envoie. La conversation n'est ni envoyée ni conservée."
+    "form_cuerpo": "Laissez-nous votre nom, votre e-mail et, si vous le souhaitez, votre téléphone : c'est tout ce que ce formulaire nous envoie. La conversation ne part pas avec ce formulaire : elle n'arrive pas à SEDA."
   }
 }

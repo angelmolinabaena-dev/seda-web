@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { clientKey, crearLimitador, esMismoOrigen } from "@/lib/api-guards"
+import { esBot } from "@/lib/asistente/bots"
 import { asistentePropietariosActivo } from "@/lib/asistente/config"
 import { cuerpoPortal, validarLeadAsistente } from "@/lib/lead-propietario"
 import { reenviarLeadAlPortal } from "@/lib/lead-portal-envio"
@@ -15,7 +16,7 @@ import { reenviarLeadAlPortal } from "@/lib/lead-portal-envio"
 
   Lo rellena la PERSONA en pantalla, con la casilla de consentimiento y su texto
   (`calculadora.form.consent`); el modelo no interviene. Mismas guardas que la
-  calculadora: interruptor (404), mismo origen, JSON, tamaño, frecuencia,
+  calculadora: interruptor (404), mismo origen, JSON, Vercel BotID (403), tamaño, frecuencia,
   honeypot, consentimiento `true`, teléfono con la regla de seda_os, firma HMAC,
   y el Lead de Meta solo con consentimiento de marketing y 201 del portal
   (lib/lead-portal-envio.ts).
@@ -32,6 +33,7 @@ export async function POST(req: Request) {
   if (!/^application\/json\b/i.test(req.headers.get("content-type") ?? "")) {
     return json({ ok: false, error: "unsupported_media_type" }, { status: 415 })
   }
+  if (await esBot(req)) return json({ ok: false, error: "forbidden" }, { status: 403 })
 
   const limite = limitar(clientKey(req))
   if (!limite.ok) {

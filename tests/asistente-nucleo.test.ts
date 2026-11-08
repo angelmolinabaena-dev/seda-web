@@ -63,25 +63,24 @@ describe("interruptor y configuración", () => {
 })
 
 describe("cupos", () => {
-  it("por visitante: LIMITES.turnosPorVisitante por ventana", () => {
+  it("por visitante: LIMITES.turnosPorVisitante por ventana", async () => {
     let t = 1_000_000
-    const c = crearCupos(() => t)
-    for (let i = 0; i < LIMITES.turnosPorVisitante; i++) expect(c.visitante("1.2.3.4").ok).toBe(true)
-    expect(c.visitante("1.2.3.4").ok).toBe(false)
-    expect(c.visitante("5.6.7.8").ok).toBe(true)
+    const c = crearCupos({ ahora: () => t, env: {} })
+    for (let i = 0; i < LIMITES.turnosPorVisitante; i++) expect(await c.visitante("1.2.3.4")).toBe(true)
+    expect(await c.visitante("1.2.3.4")).toBe(false)
+    expect(await c.visitante("5.6.7.8")).toBe(true)
     t += LIMITES.ventanaVisitanteMs + 1
-    expect(c.visitante("1.2.3.4").ok).toBe(true)
+    expect(await c.visitante("1.2.3.4")).toBe(true)
   })
 
-  it("diario: se agota y vuelve al día siguiente (hora de Madrid)", () => {
+  it("diario: se agota y vuelve al día siguiente (hora de Madrid)", async () => {
     let t = Date.parse("2026-11-07T10:00:00Z")
-    const c = crearCupos(() => t)
-    const env = { SEDA_ASISTENTE_TOPE_DIARIO: "2" }
-    expect(c.diario(env)).toBe(true)
-    expect(c.diario(env)).toBe(true)
-    expect(c.diario(env)).toBe(false)
+    const c = crearCupos({ ahora: () => t, env: { SEDA_ASISTENTE_TOPE_DIARIO: "2" } })
+    expect(await c.diario("1.1.1.1")).toBe("ok")
+    expect(await c.diario("2.2.2.2")).toBe("ok")
+    expect(await c.diario("3.3.3.3")).toBe("tope_global")
     t = Date.parse("2026-11-07T23:30:00Z") // 00:30 del 8-nov en Madrid
-    expect(c.diario(env)).toBe(true)
+    expect(await c.diario("3.3.3.3")).toBe("ok")
   })
 
   it("por conversación", () => {

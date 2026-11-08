@@ -135,6 +135,26 @@ describe.each(routing.locales)("política con Meta — %s", (loc) => {
     expect(falsas[loc].some((f) => base.includes(f))).toBe(true)
   })
 
+  it("MOT-12: el Lead sale de dos formularios —la calculadora y el asistente— y las políticas nombran los dos", () => {
+    // El mini formulario del asistente dispara el mismo Lead (rastrearLead en
+    // components/asistente/formulario-solicitud.tsx y medirLead en
+    // lib/lead-portal-envio.ts, que usan las dos rutas). Cada frase que nombra el
+    // formulario de la calculadora como origen del Lead nombra también el del asistente.
+    const calc = { es: /calculadora/, en: /calculator/, fr: /calculateur/, de: /Rechner/ }[loc]
+    const asist = { es: /asistente de propietarios/, en: /owners' assistant/, fr: /assistant pour propriétaires/, de: /Eigentümer-Assistent/ }[loc]
+    const lead = { es: /Lead|solicitudes/, en: /Lead|submissions|requests/, fr: /Lead|envois|demandes/, de: /Lead|Absendungen|Anfragen/ }[loc]
+    const conMetaCapi = variantesConMeta(true)
+    for (const doc of [sin.cookies, sin.privacidad, conMetaCapi.cookies, conMetaCapi.privacidad]) {
+      const meta = doc.traducciones[loc].secciones.filter((s) => JSON.stringify(s).includes("Meta"))
+      const frases = meta.flatMap((s) => JSON.stringify(s.bloques).split(/(?<=[.!?»"])\s*(?=[A-ZÀ-Ü«„“])|","|\],\[/))
+      const deLead = frases.filter((f) => calc.test(f) && lead.test(f))
+      expect(deLead.length, "hay frases sobre el Lead de la calculadora").toBeGreaterThan(0)
+      for (const f of deLead) expect(f, f).toMatch(asist)
+    }
+    // y el chat no viaja a Meta: lo dice la política de cookies
+    expect(cookies).toMatch({ es: /en el chat/, en: /in the chat/, fr: /dans le chat/, de: /im Chat/ }[loc])
+  })
+
   it("la API de conversiones aparece en las políticas SOLO si está encendida", () => {
     const api: Record<string, RegExp> = { es: /API de conversiones/, en: /Conversions API/, fr: /API de conversions/, de: /Conversions API/ }
     expect(cookies).not.toMatch(api[loc])

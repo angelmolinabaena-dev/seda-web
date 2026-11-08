@@ -44,6 +44,53 @@ describe("MOT-M04: Upstash en la política de privacidad", () => {
     }
   }
 
+  /*
+    MOT-11 (ASISTENTE-ANTES-DE-ENCENDER): los límites del asistente viven en
+    Upstash (lib/asistente/cupos.ts). Plazos del código: la ventana por visitante
+    caduca a `window * 2 + 1000` ms (@upstash/ratelimit, PEXPIRE del script de
+    ventana deslizante) = 20 min y 1 s; el contador diario, a la medianoche de
+    Madrid + 60 s (`segundosHastaMedianocheMadrid`).
+  */
+  const ASISTENTE = { es: /asistente/, en: /assistant/, fr: /assistant/, de: /Assistent/ } as const
+  const VEINTE = { es: /20 minutos/, en: /20 minutes/, fr: /vingtaine de minutes/, de: /20 Minuten/ } as const
+  const MEDIANOCHE = { es: /medianoche,? \(?hora de Madrid/, en: /midnight,? \(?Madrid time/, fr: /minuit,? \(?heure de Madrid/, de: /Mitternacht,? \(?Madrider Zeit/ } as const
+  const fila = (doc: typeof PRIVACIDAD, l: (typeof LOCALES)[number]) =>
+    JSON.stringify(
+      doc.traducciones[l].secciones
+        .find((s) => s.id === "destinatarios")!
+        .bloques.flatMap((b) => (b.tipo === "tabla" ? b.filas : []))
+        .find((f) => f[0] === "Upstash, Inc."),
+    )
+  for (const [nombre, doc] of [
+    ["base", PRIVACIDAD],
+    ["con Meta", variantesConMeta(true).privacidad],
+  ] as const) {
+    for (const l of LOCALES) {
+      it(`${nombre} / ${l}: la fila de Upstash cubre también los límites del asistente (20 min y hasta medianoche)`, () => {
+        const f = fila(doc, l)
+        expect(f).toMatch(ASISTENTE[l])
+        expect(f).toMatch(VEINTE[l])
+        expect(f).toMatch(MEDIANOCHE[l])
+        expect(f).toMatch(SESENTA[l]) // lo del portal sigue
+      })
+
+      it(`${nombre} / ${l}: la sección del asistente ya no dice «en memoria, 10 minutos» y nombra a Upstash`, () => {
+        const a = seccion(doc, l, "asistente")
+        expect(a).toContain("Upstash")
+        expect(a).toMatch(SEUDONIMO[l])
+        expect(a).toMatch(VEINTE[l])
+        expect(a).not.toMatch(/en memoria y 10 minutos|in memory for 10 minutes|en mémoire et 10 minutes|im Arbeitsspeicher, höchstens 10 Minuten/)
+        expect(a).toContain("BotID")
+      })
+
+      it(`${nombre} / ${l}: la conservación general recoge los plazos del asistente`, () => {
+        const c = seccion(doc, l, "conservacion")
+        expect(c).toMatch(VEINTE[l])
+        expect(c).toMatch(MEDIANOCHE[l])
+      })
+    }
+  }
+
   it("la «Última actualización» sube al día del cambio (2026-11-08)", () => {
     expect(PRIVACIDAD.actualizado).toBe("2026-11-08")
   })

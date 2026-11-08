@@ -53,6 +53,11 @@ import type { DocumentoLegalMultilingue } from "./types"
       `X-Visitor-Ip` (lib/lead-portal-envio.ts, calculadora y solicitud del
       asistente) y el portal, para su límite por visitante, guarda en Upstash un
       resumen sha256 de la IP durante 60 s. Dato seudonimizado; Upstash, encargado.
+      Y (MOT-11, ASISTENTE-ANTES-DE-ENCENDER) los límites del asistente guardan en
+      Upstash un HMAC-SHA256 de la IP (lib/asistente/cupos.ts): la ventana por
+      visitante, ~20 min (@upstash/ratelimit caduca a dos ventanas de 10 min), y el
+      tope diario por IP, hasta la medianoche de Madrid + 60 s. Solo contadores:
+      seda-web sigue sin base de datos propia de personas.
       Lo del portal sale de la REA-MOTOR (seda_os, PR #1151), no se ha leído su
       código desde este repo.
     · Ausencia de analítica y de píxeles: comprobado por búsqueda en todo el
@@ -232,7 +237,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                 ],
                 [
                   "Upstash, Inc.",
-                  "Cuando envías tus datos desde la calculadora o desde el asistente, el portal de SEDA guarda en Upstash, durante 60 segundos, un resumen criptográfico de tu IP (un dato seudonimizado, no la IP en claro) para limitar abusos. Actúa como encargado del tratamiento.",
+                  "Cuando envías tus datos desde la calculadora o desde el asistente, el portal de SEDA guarda en Upstash, durante 60 segundos, un resumen criptográfico de tu IP (un dato seudonimizado, no la IP en claro) para limitar abusos. Si usas el asistente de propietarios, esta web guarda también en Upstash, para sus límites de uso, un resumen criptográfico de tu IP (tampoco la IP en claro): unos 20 minutos para el límite por visitante y, para el tope diario, hasta la medianoche (hora de Madrid). Actúa como encargado del tratamiento.",
                   "Estados Unidos",
                 ],
                 [
@@ -401,7 +406,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                 ],
                 [
                   "Encargado del tratamiento",
-                  "Anthropic Ireland, Limited, que presta el modelo de inteligencia artificial (Claude) que redacta las respuestas: cada mensaje se le envía para generar la respuesta. Actúa como encargado del tratamiento según su Anexo de Tratamiento de Datos (Data Processing Addendum, en vigor desde el 24 de febrero de 2025), que forma parte de sus Condiciones Comerciales, y estas le prohíben entrenar sus modelos con los mensajes. Vercel ejecuta la función que conecta el chat con Anthropic.",
+                  "Anthropic Ireland, Limited, que presta el modelo de inteligencia artificial (Claude) que redacta las respuestas: cada mensaje se le envía para generar la respuesta. Actúa como encargado del tratamiento según su Anexo de Tratamiento de Datos (Data Processing Addendum, en vigor desde el 24 de febrero de 2025), que forma parte de sus Condiciones Comerciales, y estas le prohíben entrenar sus modelos con los mensajes. Vercel ejecuta la función que conecta el chat con Anthropic y comprueba, con su servicio BotID, que las peticiones del chat no las hace un programa automático. Upstash, Inc. guarda los contadores de los límites de uso (ver «Destinatarios»).",
                 ],
                 [
                   "Transferencia internacional",
@@ -409,7 +414,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                 ],
                 [
                   "Conservación",
-                  "SEDA no guarda la conversación: vive solo en la pestaña de tu navegador y desaparece al cerrarla o recargar la página. Anthropic borra los mensajes y las respuestas en un plazo máximo de 30 días, salvo que sus sistemas de seguridad los marquen (entonces hasta 2 años) o lo exija la ley. Fuentes: su artículo de privacidad sobre conservación y su documentación de la API, enlazados al final de esta sección. La IP del control de frecuencia, en memoria y 10 minutos como máximo. Los datos del formulario del chat, como los de la calculadora.",
+                  "SEDA no guarda la conversación: vive solo en la pestaña de tu navegador y desaparece al cerrarla o recargar la página. Anthropic borra los mensajes y las respuestas en un plazo máximo de 30 días, salvo que sus sistemas de seguridad los marquen (entonces hasta 2 años) o lo exija la ley. Fuentes: su artículo de privacidad sobre conservación y su documentación de la API, enlazados al final de esta sección. Para los límites de uso, un resumen criptográfico de tu IP (un dato seudonimizado, no la IP en claro) se guarda en Upstash unos 20 minutos (límite por visitante) y hasta la medianoche, hora de Madrid (tope diario); si Upstash no está disponible, en la memoria del servidor y con esos mismos plazos como máximo. Los datos del formulario del chat, como los de la calculadora.",
                 ],
               ],
             },
@@ -451,7 +456,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "El control de frecuencia de los formularios de esta web guarda tu dirección IP en memoria durante diez minutos como máximo: no se escribe en ninguna base de datos y no sobrevive al reinicio del servicio. Además, para limitar abusos, cuando envías tus datos desde la calculadora o desde el asistente el portal de SEDA guarda un resumen criptográfico de tu IP (un dato seudonimizado) durante 60 segundos en Upstash, su encargado del tratamiento. Los registros técnicos del proveedor de alojamiento se conservan según sus propios plazos, que no decidimos nosotros.",
+                "El control de frecuencia de los formularios de esta web guarda tu dirección IP en memoria durante diez minutos como máximo: no se escribe en ninguna base de datos y no sobrevive al reinicio del servicio. Además, para limitar abusos, cuando envías tus datos desde la calculadora o desde el asistente el portal de SEDA guarda un resumen criptográfico de tu IP (un dato seudonimizado) durante 60 segundos en Upstash, su encargado del tratamiento. Los límites de uso del asistente guardan también en Upstash un resumen criptográfico de tu IP: unos 20 minutos (límite por visitante) y hasta la medianoche, hora de Madrid (tope diario). Los registros técnicos del proveedor de alojamiento se conservan según sus propios plazos, que no decidimos nosotros.",
             },
           ],
         },
@@ -686,7 +691,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                 ],
                 [
                   "Upstash, Inc.",
-                  "When you send your details from the calculator or the assistant, SEDA's portal stores in Upstash, for 60 seconds, a cryptographic digest of your IP (pseudonymised data, not the IP in clear) to limit abuse. It acts as a processor.",
+                  "When you send your details from the calculator or the assistant, SEDA's portal stores in Upstash, for 60 seconds, a cryptographic digest of your IP (pseudonymised data, not the IP in clear) to limit abuse. If you use the owners' assistant, this site also stores in Upstash, for its usage limits, a cryptographic digest of your IP (again, not the IP in clear): about 20 minutes for the per-visitor limit and, for the daily cap, until midnight (Madrid time). It acts as a processor.",
                   "United States",
                 ],
                 [
@@ -855,7 +860,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                 ],
                 [
                   "Processor",
-                  "Anthropic Ireland, Limited, which provides the artificial intelligence model (Claude) that writes the replies: each message is sent to it to generate the reply. It acts as a processor under its Data Processing Addendum (effective 24 February 2025), which forms part of its Commercial Terms, and those terms forbid it from training its models on the messages. Vercel runs the function that connects the chat to Anthropic.",
+                  "Anthropic Ireland, Limited, which provides the artificial intelligence model (Claude) that writes the replies: each message is sent to it to generate the reply. It acts as a processor under its Data Processing Addendum (effective 24 February 2025), which forms part of its Commercial Terms, and those terms forbid it from training its models on the messages. Vercel runs the function that connects the chat to Anthropic and checks, with its BotID service, that the chat's requests are not made by an automated program. Upstash, Inc. stores the counters for the usage limits (see “Recipients”).",
                 ],
                 [
                   "International transfer",
@@ -863,7 +868,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                 ],
                 [
                   "Retention",
-                  "SEDA does not keep the conversation: it lives only in your browser tab and disappears when you close it or reload the page. Anthropic deletes the messages and replies within 30 days at most, unless its safety systems flag them (then up to 2 years) or the law requires otherwise. Sources: its privacy article on retention and its API documentation, linked at the end of this section. The IP address used for the rate limiter, in memory for 10 minutes at most. The chat form data, like the calculator's.",
+                  "SEDA does not keep the conversation: it lives only in your browser tab and disappears when you close it or reload the page. Anthropic deletes the messages and replies within 30 days at most, unless its safety systems flag them (then up to 2 years) or the law requires otherwise. Sources: its privacy article on retention and its API documentation, linked at the end of this section. For the usage limits, a cryptographic digest of your IP (pseudonymised data, not the IP in clear) is stored in Upstash for about 20 minutes (per-visitor limit) and until midnight, Madrid time (daily cap); if Upstash is unavailable, in the server's memory and for those same periods at most. The chat form data, like the calculator's.",
                 ],
               ],
             },
@@ -905,7 +910,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "This site's form rate limiter holds your IP address in memory for ten minutes at most: it is never written to a database and does not survive a restart of the service. In addition, to limit abuse, when you send your details from the calculator or the assistant SEDA's portal stores a cryptographic digest of your IP (pseudonymised data) for 60 seconds in Upstash, its processor. The hosting provider's technical logs are kept for its own periods, which we do not decide.",
+                "This site's form rate limiter holds your IP address in memory for ten minutes at most: it is never written to a database and does not survive a restart of the service. In addition, to limit abuse, when you send your details from the calculator or the assistant SEDA's portal stores a cryptographic digest of your IP (pseudonymised data) for 60 seconds in Upstash, its processor. The assistant's usage limits also store a cryptographic digest of your IP in Upstash: about 20 minutes (per-visitor limit) and until midnight, Madrid time (daily cap). The hosting provider's technical logs are kept for its own periods, which we do not decide.",
             },
           ],
         },
@@ -1137,7 +1142,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                 ],
                 [
                   "Upstash, Inc.",
-                  "Lorsque vous envoyez vos coordonnées depuis le calculateur ou l'assistant, le portail de SEDA conserve chez Upstash, pendant 60 secondes, une empreinte cryptographique de votre adresse IP (une donnée pseudonymisée, pas l'adresse IP en clair) pour limiter les abus. Upstash agit comme sous-traitant.",
+                  "Lorsque vous envoyez vos coordonnées depuis le calculateur ou l'assistant, le portail de SEDA conserve chez Upstash, pendant 60 secondes, une empreinte cryptographique de votre adresse IP (une donnée pseudonymisée, pas l'adresse IP en clair) pour limiter les abus. Si vous utilisez l'assistant pour propriétaires, ce site conserve aussi chez Upstash, pour ses limites d'utilisation, une empreinte cryptographique de votre adresse IP (là non plus, pas l'adresse IP en clair) : une vingtaine de minutes pour la limite par visiteur et, pour le plafond quotidien, jusqu'à minuit (heure de Madrid). Upstash agit comme sous-traitant.",
                   "États-Unis",
                 ],
                 [
@@ -1306,7 +1311,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                 ],
                 [
                   "Sous-traitant",
-                  "Anthropic Ireland, Limited, qui fournit le modèle d'intelligence artificielle (Claude) qui rédige les réponses : chaque message lui est envoyé pour générer la réponse. Il agit comme sous-traitant selon son avenant relatif au traitement des données (Data Processing Addendum, en vigueur depuis le 24 février 2025), qui fait partie de ses conditions commerciales, lesquelles lui interdisent d'entraîner ses modèles avec les messages. Vercel exécute la fonction qui relie le chat à Anthropic.",
+                  "Anthropic Ireland, Limited, qui fournit le modèle d'intelligence artificielle (Claude) qui rédige les réponses : chaque message lui est envoyé pour générer la réponse. Il agit comme sous-traitant selon son avenant relatif au traitement des données (Data Processing Addendum, en vigueur depuis le 24 février 2025), qui fait partie de ses conditions commerciales, lesquelles lui interdisent d'entraîner ses modèles avec les messages. Vercel exécute la fonction qui relie le chat à Anthropic et vérifie, avec son service BotID, que les requêtes du chat ne viennent pas d'un programme automatisé. Upstash, Inc. conserve les compteurs des limites d'utilisation (voir « Destinataires »).",
                 ],
                 [
                   "Transfert international",
@@ -1314,7 +1319,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                 ],
                 [
                   "Conservation",
-                  "SEDA ne conserve pas la conversation : elle n'existe que dans l'onglet de votre navigateur et disparaît lorsque vous le fermez ou rechargez la page. Anthropic supprime les messages et les réponses dans un délai maximal de 30 jours, sauf si ses systèmes de sécurité les signalent (alors jusqu'à 2 ans) ou si la loi l'exige. Sources : son article de confidentialité sur la conservation et la documentation de son API, liés à la fin de cette section. L'adresse IP du contrôle de fréquence, en mémoire et 10 minutes au maximum. Les données du formulaire du chat, comme celles du calculateur.",
+                  "SEDA ne conserve pas la conversation : elle n'existe que dans l'onglet de votre navigateur et disparaît lorsque vous le fermez ou rechargez la page. Anthropic supprime les messages et les réponses dans un délai maximal de 30 jours, sauf si ses systèmes de sécurité les signalent (alors jusqu'à 2 ans) ou si la loi l'exige. Sources : son article de confidentialité sur la conservation et la documentation de son API, liés à la fin de cette section. Pour les limites d'utilisation, une empreinte cryptographique de votre adresse IP (une donnée pseudonymisée, pas l'adresse IP en clair) est conservée chez Upstash une vingtaine de minutes (limite par visiteur) et jusqu'à minuit, heure de Madrid (plafond quotidien) ; si Upstash n'est pas disponible, dans la mémoire du serveur et pour ces mêmes durées au maximum. Les données du formulaire du chat, comme celles du calculateur.",
                 ],
               ],
             },
@@ -1356,7 +1361,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Le contrôle de fréquence des formulaires de ce site conserve votre adresse IP en mémoire pendant dix minutes au maximum : elle n'est écrite dans aucune base de données et ne survit pas au redémarrage du service. En outre, pour limiter les abus, lorsque vous envoyez vos coordonnées depuis le calculateur ou l'assistant, le portail de SEDA conserve une empreinte cryptographique de votre adresse IP (une donnée pseudonymisée) pendant 60 secondes chez Upstash, son sous-traitant. Les journaux techniques de l'hébergeur suivent ses propres délais, que nous ne décidons pas.",
+                "Le contrôle de fréquence des formulaires de ce site conserve votre adresse IP en mémoire pendant dix minutes au maximum : elle n'est écrite dans aucune base de données et ne survit pas au redémarrage du service. En outre, pour limiter les abus, lorsque vous envoyez vos coordonnées depuis le calculateur ou l'assistant, le portail de SEDA conserve une empreinte cryptographique de votre adresse IP (une donnée pseudonymisée) pendant 60 secondes chez Upstash, son sous-traitant. Les limites d'utilisation de l'assistant conservent aussi chez Upstash une empreinte cryptographique de votre adresse IP : une vingtaine de minutes (limite par visiteur) et jusqu'à minuit, heure de Madrid (plafond quotidien). Les journaux techniques de l'hébergeur suivent ses propres délais, que nous ne décidons pas.",
             },
           ],
         },
@@ -1588,7 +1593,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                 ],
                 [
                   "Upstash, Inc.",
-                  "Wenn Sie Ihre Daten über den Rechner oder den Assistenten senden, speichert das Portal von SEDA bei Upstash 60 Sekunden lang einen kryptografischen Hashwert Ihrer IP-Adresse (ein pseudonymisiertes Datum, nicht die IP-Adresse im Klartext), um Missbrauch zu begrenzen. Upstash handelt als Auftragsverarbeiter.",
+                  "Wenn Sie Ihre Daten über den Rechner oder den Assistenten senden, speichert das Portal von SEDA bei Upstash 60 Sekunden lang einen kryptografischen Hashwert Ihrer IP-Adresse (ein pseudonymisiertes Datum, nicht die IP-Adresse im Klartext), um Missbrauch zu begrenzen. Wenn Sie den Eigentümer-Assistenten nutzen, speichert diese Website für dessen Nutzungsgrenzen zusätzlich bei Upstash einen kryptografischen Hashwert Ihrer IP-Adresse (auch hier nicht die IP-Adresse im Klartext): etwa 20 Minuten für die Grenze pro Besucher und, für die Tagesobergrenze, bis Mitternacht (Madrider Zeit). Upstash handelt als Auftragsverarbeiter.",
                   "Vereinigte Staaten",
                 ],
                 [
@@ -1757,7 +1762,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                 ],
                 [
                   "Auftragsverarbeiter",
-                  "Anthropic Ireland, Limited, das das KI-Modell (Claude) bereitstellt, das die Antworten verfasst: Jede Nachricht wird dorthin gesendet, um die Antwort zu erzeugen. Anthropic handelt als Auftragsverarbeiter nach seinem Data Processing Addendum (in Kraft seit dem 24. Februar 2025), das Teil seiner Commercial Terms ist; diese verbieten ihm, seine Modelle mit den Nachrichten zu trainieren. Vercel führt die Funktion aus, die den Chat mit Anthropic verbindet.",
+                  "Anthropic Ireland, Limited, das das KI-Modell (Claude) bereitstellt, das die Antworten verfasst: Jede Nachricht wird dorthin gesendet, um die Antwort zu erzeugen. Anthropic handelt als Auftragsverarbeiter nach seinem Data Processing Addendum (in Kraft seit dem 24. Februar 2025), das Teil seiner Commercial Terms ist; diese verbieten ihm, seine Modelle mit den Nachrichten zu trainieren. Vercel führt die Funktion aus, die den Chat mit Anthropic verbindet, und prüft mit seinem Dienst BotID, dass die Anfragen des Chats nicht von einem automatisierten Programm stammen. Upstash, Inc. speichert die Zähler der Nutzungsgrenzen (siehe „Empfänger“).",
                 ],
                 [
                   "Internationale Übermittlung",
@@ -1765,7 +1770,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
                 ],
                 [
                   "Speicherdauer",
-                  "SEDA speichert das Gespräch nicht: Es existiert nur im Tab Ihres Browsers und verschwindet, wenn Sie ihn schließen oder die Seite neu laden. Anthropic löscht die Nachrichten und Antworten spätestens nach 30 Tagen, es sei denn, seine Sicherheitssysteme markieren sie (dann bis zu 2 Jahre) oder das Gesetz verlangt es. Quellen: sein Datenschutzartikel zur Speicherdauer und seine API-Dokumentation, verlinkt am Ende dieses Abschnitts. Die IP-Adresse der Häufigkeitsbegrenzung: im Arbeitsspeicher, höchstens 10 Minuten. Die Daten aus dem Formular des Chats: wie beim Rechner.",
+                  "SEDA speichert das Gespräch nicht: Es existiert nur im Tab Ihres Browsers und verschwindet, wenn Sie ihn schließen oder die Seite neu laden. Anthropic löscht die Nachrichten und Antworten spätestens nach 30 Tagen, es sei denn, seine Sicherheitssysteme markieren sie (dann bis zu 2 Jahre) oder das Gesetz verlangt es. Quellen: sein Datenschutzartikel zur Speicherdauer und seine API-Dokumentation, verlinkt am Ende dieses Abschnitts. Für die Nutzungsgrenzen wird ein kryptografischer Hashwert Ihrer IP-Adresse (ein pseudonymisiertes Datum, nicht die IP-Adresse im Klartext) bei Upstash gespeichert: etwa 20 Minuten (Grenze pro Besucher) und bis Mitternacht Madrider Zeit (Tagesobergrenze); ist Upstash nicht verfügbar, im Arbeitsspeicher des Servers und höchstens für dieselben Zeiträume. Die Daten aus dem Formular des Chats: wie beim Rechner.",
                 ],
               ],
             },
@@ -1807,7 +1812,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Die Frequenzbegrenzung der Formulare dieser Website hält Ihre IP-Adresse höchstens zehn Minuten im Arbeitsspeicher: Sie wird in keine Datenbank geschrieben und überlebt keinen Neustart des Dienstes. Außerdem speichert das Portal von SEDA, um Missbrauch zu begrenzen, einen kryptografischen Hashwert Ihrer IP-Adresse (ein pseudonymisiertes Datum) 60 Sekunden lang bei Upstash, seinem Auftragsverarbeiter, wenn Sie Ihre Daten über den Rechner oder den Assistenten senden. Die technischen Protokolle des Hosting-Anbieters folgen dessen eigenen Fristen, über die wir nicht entscheiden.",
+                "Die Frequenzbegrenzung der Formulare dieser Website hält Ihre IP-Adresse höchstens zehn Minuten im Arbeitsspeicher: Sie wird in keine Datenbank geschrieben und überlebt keinen Neustart des Dienstes. Außerdem speichert das Portal von SEDA, um Missbrauch zu begrenzen, einen kryptografischen Hashwert Ihrer IP-Adresse (ein pseudonymisiertes Datum) 60 Sekunden lang bei Upstash, seinem Auftragsverarbeiter, wenn Sie Ihre Daten über den Rechner oder den Assistenten senden. Die Nutzungsgrenzen des Assistenten speichern bei Upstash ebenfalls einen kryptografischen Hashwert Ihrer IP-Adresse: etwa 20 Minuten (Grenze pro Besucher) und bis Mitternacht Madrider Zeit (Tagesobergrenze). Die technischen Protokolle des Hosting-Anbieters folgen dessen eigenen Fristen, über die wir nicht entscheiden.",
             },
           ],
         },

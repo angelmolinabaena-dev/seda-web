@@ -73,15 +73,36 @@ export const LIMITES = {
   ventanaVisitanteMs: 10 * 60 * 1000,
 } as const
 
+const entero = (v: string | undefined, porDefecto: number) => {
+  const n = Number(v)
+  return Number.isInteger(n) && n > 0 ? n : porDefecto
+}
+
 /**
- * Tope diario de turnos (por instancia de la función; ver
- * docs/ASISTENTE-PROPIETARIOS.md, «Costes»). Variable pública, no secreta:
- * `SEDA_ASISTENTE_TOPE_DIARIO`. Sin ella o con un valor raro, 400.
+ * Tope diario de turnos de TODO el sitio (día de Madrid). Compartido entre
+ * instancias si hay Upstash (lib/asistente/cupos.ts); sin Upstash, por
+ * instancia. Variable pública, no secreta: `SEDA_ASISTENTE_TOPE_DIARIO`. Sin
+ * ella o con un valor raro, 400.
  */
 export function topeDiario(env: Env = process.env): number {
-  const n = Number(env.SEDA_ASISTENTE_TOPE_DIARIO)
-  return Number.isInteger(n) && n > 0 ? n : 400
+  return entero(env.SEDA_ASISTENTE_TOPE_DIARIO, 400)
 }
+
+/**
+ * Tope diario de turnos por IP (día de Madrid). Superado, solo esa IP recibe el
+ * respaldo `tope_diario`; el resto sigue. `SEDA_ASISTENTE_TOPE_DIARIO_IP`, 60 por
+ * defecto: cuatro conversaciones completas (15 turnos), holgado para una
+ * oficina o una red móvil que comparta IP.
+ */
+export function topeDiarioPorIp(env: Env = process.env): number {
+  return entero(env.SEDA_ASISTENTE_TOPE_DIARIO_IP, 60)
+}
+
+/** Las rutas que protege Vercel BotID (lib/asistente/bots.ts). Aquí y no allí: el navegador las importa. */
+export const RUTAS_BOTID = [
+  { path: "/api/asistente", method: "POST" },
+  { path: "/api/asistente/solicitud", method: "POST" },
+]
 
 /*
   ── La llamada con una persona ───────────────────────────────────────────────

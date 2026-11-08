@@ -200,7 +200,7 @@ function parchesCookies(capi: boolean): Record<Locale, Parche> {
               {
                 tipo: "parrafo",
                 texto:
-                  "Si pulsas «Aceptar», cargamos en tu navegador el píxel de Meta (Facebook e Instagram). Lo usamos para una sola cosa: medir nuestra publicidad en Meta, es decir, cuántas visitas a la web y cuántas solicitudes del formulario de la calculadora para propietarios llegan desde nuestros anuncios.",
+                  "Si pulsas «Aceptar», cargamos en tu navegador el píxel de Meta (Facebook e Instagram). Lo usamos para una sola cosa: medir nuestra publicidad en Meta, es decir, cuántas visitas a la web y cuántas solicitudes de propietarios —del formulario de la calculadora o del formulario del asistente de propietarios— llegan desde nuestros anuncios.",
               },
               {
                 tipo: "tabla",
@@ -214,14 +214,14 @@ function parchesCookies(capi: boolean): Record<Locale, Parche> {
               {
                 tipo: "parrafo",
                 texto:
-                  "Duraciones según la documentación de Meta; aún no las hemos medido en un navegador, a diferencia de las de Calendly. Con el píxel, Meta recibe la página que visitas, el identificador de esas cookies, tu dirección IP y datos de tu navegador (tipo, idioma) y, cuando envías el formulario de la calculadora, un evento «Lead» que solo dice que se ha enviado un formulario. No enviamos tu nombre, tu correo ni tu teléfono —ni siquiera cifrados—, ni lo que escribes en el formulario, ni las cifras de la estimación. El píxel está configurado sin coincidencia avanzada.",
+                  "Duraciones según la documentación de Meta; aún no las hemos medido en un navegador, a diferencia de las de Calendly. Con el píxel, Meta recibe la página que visitas, el identificador de esas cookies, tu dirección IP y datos de tu navegador (tipo, idioma) y, cuando envías el formulario de la calculadora o el del asistente de propietarios, un evento «Lead» que solo dice que se ha enviado un formulario. No enviamos tu nombre, tu correo ni tu teléfono —ni siquiera cifrados—, ni lo que escribes en el formulario o en el chat, ni las cifras de la estimación. El píxel está configurado sin coincidencia avanzada.",
               },
               ...(capi
                 ? ([
                     {
                       tipo: "parrafo",
                       texto:
-                        "Además, cuando envías el formulario de la calculadora, nuestro servidor envía a Meta ese mismo evento «Lead» a través de su API de conversiones, con el mismo identificador de evento para que Meta lo cuente una sola vez. Lleva tu dirección IP, los datos de tu navegador y, si existen, los identificadores de las cookies anteriores; nunca tu nombre, tu correo ni tu teléfono. Solo lo hace si has aceptado las cookies de marketing.",
+                        "Además, cuando envías el formulario de la calculadora o el del asistente de propietarios, nuestro servidor envía a Meta ese mismo evento «Lead» a través de su API de conversiones, con el mismo identificador de evento para que Meta lo cuente una sola vez. Lleva tu dirección IP, los datos de tu navegador y, si existen, los identificadores de las cookies anteriores; nunca tu nombre, tu correo ni tu teléfono. Solo lo hace si has aceptado las cookies de marketing.",
                     },
                   ] as BloqueLegal[])
                 : []),
@@ -313,7 +313,7 @@ function parchesCookies(capi: boolean): Record<Locale, Parche> {
               {
                 tipo: "parrafo",
                 texto:
-                  "If you press “Accept”, we load the Meta pixel (Facebook and Instagram) in your browser. We use it for one thing only: measuring our advertising on Meta, that is, how many visits to the site and how many submissions of the owners' calculator form come from our ads.",
+                  "If you press “Accept”, we load the Meta pixel (Facebook and Instagram) in your browser. We use it for one thing only: measuring our advertising on Meta, that is, how many visits to the site and how many owner requests — from the calculator form or from the owners' assistant form — come from our ads.",
               },
               {
                 tipo: "tabla",
@@ -327,14 +327,14 @@ function parchesCookies(capi: boolean): Record<Locale, Parche> {
               {
                 tipo: "parrafo",
                 texto:
-                  "Lifetimes as stated in Meta's documentation; we have not yet measured them in a browser, unlike Calendly's. With the pixel, Meta receives the page you visit, the identifier in those cookies, your IP address and browser data (type, language) and, when you submit the calculator form, a “Lead” event that only says a form was submitted. We do not send your name, email or phone — not even hashed — nor what you type in the form, nor the figures of the estimate. The pixel is configured without advanced matching.",
+                  "Lifetimes as stated in Meta's documentation; we have not yet measured them in a browser, unlike Calendly's. With the pixel, Meta receives the page you visit, the identifier in those cookies, your IP address and browser data (type, language) and, when you submit the calculator form or the owners' assistant form, a “Lead” event that only says a form was submitted. We do not send your name, email or phone — not even hashed — nor what you type in the form or in the chat, nor the figures of the estimate. The pixel is configured without advanced matching.",
               },
               ...(capi
                 ? ([
                     {
                       tipo: "parrafo",
                       texto:
-                        "In addition, when you submit the calculator form, our server sends Meta that same “Lead” event through its Conversions API, with the same event ID so that Meta counts it once. It carries your IP address, your browser data and, if they exist, the identifiers in the cookies above; never your name, email or phone. It only does so if you accepted marketing cookies.",
+                        "In addition, when you submit the calculator form or the owners' assistant form, our server sends Meta that same “Lead” event through its Conversions API, with the same event ID so that Meta counts it once. It carries your IP address, your browser data and, if they exist, the identifiers in the cookies above; never your name, email or phone. It only does so if you accepted marketing cookies.",
                     },
                   ] as BloqueLegal[])
                 : []),
@@ -426,7 +426,7 @@ function parchesCookies(capi: boolean): Record<Locale, Parche> {
               {
                 tipo: "parrafo",
                 texto:
-                  "Si vous appuyez sur « Accepter », nous chargeons le pixel Meta (Facebook et Instagram) dans votre navigateur. Nous l'utilisons pour une seule chose : mesurer notre publicité sur Meta, c'est-à-dire combien de visites du site et combien d'envois du formulaire du calculateur pour propriétaires proviennent de nos annonces.",
+                  "Si vous appuyez sur « Accepter », nous chargeons le pixel Meta (Facebook et Instagram) dans votre navigateur. Nous l'utilisons pour une seule chose : mesurer notre publicité sur Meta, c'est-à-dire combien de visites du site et combien de demandes de propriétaires — envoyées depuis le formulaire du calculateur ou depuis celui de l'assistant pour propriétaires — proviennent de nos annonces.",
               },
               {
                 tipo: "tabla",
@@ -440,14 +440,14 @@ function parchesCookies(capi: boolean): Record<Locale, Parche> {
               {
                 tipo: "parrafo",
                 texto:
-                  "Durées selon la documentation de Meta ; nous ne les avons pas encore mesurées dans un navigateur, contrairement à celles de Calendly. Avec le pixel, Meta reçoit la page que vous visitez, l'identifiant de ces cookies, votre adresse IP et des données de votre navigateur (type, langue) et, lorsque vous envoyez le formulaire du calculateur, un événement « Lead » qui indique seulement qu'un formulaire a été envoyé. Nous n'envoyons ni votre nom, ni votre courriel, ni votre téléphone — pas même chiffrés —, ni ce que vous saisissez dans le formulaire, ni les chiffres de l'estimation. Le pixel est configuré sans appariement avancé.",
+                  "Durées selon la documentation de Meta ; nous ne les avons pas encore mesurées dans un navigateur, contrairement à celles de Calendly. Avec le pixel, Meta reçoit la page que vous visitez, l'identifiant de ces cookies, votre adresse IP et des données de votre navigateur (type, langue) et, lorsque vous envoyez le formulaire du calculateur ou celui de l'assistant pour propriétaires, un événement « Lead » qui indique seulement qu'un formulaire a été envoyé. Nous n'envoyons ni votre nom, ni votre courriel, ni votre téléphone — pas même chiffrés —, ni ce que vous saisissez dans le formulaire ou dans le chat, ni les chiffres de l'estimation. Le pixel est configuré sans appariement avancé.",
               },
               ...(capi
                 ? ([
                     {
                       tipo: "parrafo",
                       texto:
-                        "En outre, lorsque vous envoyez le formulaire du calculateur, notre serveur envoie à Meta ce même événement « Lead » via son API de conversions, avec le même identifiant d'événement pour que Meta ne le compte qu'une fois. Il contient votre adresse IP, les données de votre navigateur et, s'ils existent, les identifiants des cookies ci-dessus ; jamais votre nom, votre courriel ni votre téléphone. Il ne le fait que si vous avez accepté les cookies de marketing.",
+                        "En outre, lorsque vous envoyez le formulaire du calculateur ou celui de l'assistant pour propriétaires, notre serveur envoie à Meta ce même événement « Lead » via son API de conversions, avec le même identifiant d'événement pour que Meta ne le compte qu'une fois. Il contient votre adresse IP, les données de votre navigateur et, s'ils existent, les identifiants des cookies ci-dessus ; jamais votre nom, votre courriel ni votre téléphone. Il ne le fait que si vous avez accepté les cookies de marketing.",
                     },
                   ] as BloqueLegal[])
                 : []),
@@ -539,7 +539,7 @@ function parchesCookies(capi: boolean): Record<Locale, Parche> {
               {
                 tipo: "parrafo",
                 texto:
-                  "Wenn Sie auf „Akzeptieren“ klicken, laden wir das Meta-Pixel (Facebook und Instagram) in Ihrem Browser. Wir nutzen es für genau einen Zweck: unsere Werbung auf Meta zu messen, also wie viele Besuche der Website und wie viele Absendungen des Formulars des Eigentümer-Rechners aus unseren Anzeigen stammen.",
+                  "Wenn Sie auf „Akzeptieren“ klicken, laden wir das Meta-Pixel (Facebook und Instagram) in Ihrem Browser. Wir nutzen es für genau einen Zweck: unsere Werbung auf Meta zu messen, also wie viele Besuche der Website und wie viele Anfragen von Eigentümern — über das Formular des Rechners oder über das Formular des Eigentümer-Assistenten — aus unseren Anzeigen stammen.",
               },
               {
                 tipo: "tabla",
@@ -553,14 +553,14 @@ function parchesCookies(capi: boolean): Record<Locale, Parche> {
               {
                 tipo: "parrafo",
                 texto:
-                  "Laufzeiten nach der Dokumentation von Meta; wir haben sie noch nicht in einem Browser gemessen, anders als die von Calendly. Mit dem Pixel erhält Meta die besuchte Seite, die Kennung dieser Cookies, Ihre IP-Adresse und Browserdaten (Typ, Sprache) und, wenn Sie das Formular des Rechners absenden, ein „Lead“-Ereignis, das nur besagt, dass ein Formular abgesendet wurde. Wir senden weder Ihren Namen noch Ihre E-Mail noch Ihre Telefonnummer — auch nicht gehasht —, nicht das, was Sie im Formular eingeben, und nicht die Zahlen der Schätzung. Das Pixel ist ohne erweiterten Abgleich konfiguriert.",
+                  "Laufzeiten nach der Dokumentation von Meta; wir haben sie noch nicht in einem Browser gemessen, anders als die von Calendly. Mit dem Pixel erhält Meta die besuchte Seite, die Kennung dieser Cookies, Ihre IP-Adresse und Browserdaten (Typ, Sprache) und, wenn Sie das Formular des Rechners oder das des Eigentümer-Assistenten absenden, ein „Lead“-Ereignis, das nur besagt, dass ein Formular abgesendet wurde. Wir senden weder Ihren Namen noch Ihre E-Mail noch Ihre Telefonnummer — auch nicht gehasht —, nicht das, was Sie im Formular oder im Chat eingeben, und nicht die Zahlen der Schätzung. Das Pixel ist ohne erweiterten Abgleich konfiguriert.",
               },
               ...(capi
                 ? ([
                     {
                       tipo: "parrafo",
                       texto:
-                        "Zusätzlich sendet unser Server, wenn Sie das Formular des Rechners absenden, dasselbe „Lead“-Ereignis über die Conversions API an Meta, mit derselben Ereignis-ID, damit Meta es nur einmal zählt. Es enthält Ihre IP-Adresse, Ihre Browserdaten und, falls vorhanden, die Kennungen der obigen Cookies; niemals Ihren Namen, Ihre E-Mail oder Ihre Telefonnummer. Das geschieht nur, wenn Sie die Marketing-Cookies akzeptiert haben.",
+                        "Zusätzlich sendet unser Server, wenn Sie das Formular des Rechners oder das des Eigentümer-Assistenten absenden, dasselbe „Lead“-Ereignis über die Conversions API an Meta, mit derselben Ereignis-ID, damit Meta es nur einmal zählt. Es enthält Ihre IP-Adresse, Ihre Browserdaten und, falls vorhanden, die Kennungen der obigen Cookies; niemals Ihren Namen, Ihre E-Mail oder Ihre Telefonnummer. Das geschieht nur, wenn Sie die Marketing-Cookies akzeptiert haben.",
                     },
                   ] as BloqueLegal[])
                 : []),
@@ -604,13 +604,13 @@ function parchesPrivacidad(capi: boolean): Record<Locale, Parche> {
         seccion: "datos",
         fila: [
           "Cookies de marketing (solo si pulsas «Aceptar» en el aviso de cookies)",
-          "Identificadores de las cookies de Meta (_fbp y _fbc), páginas que visitas, dirección IP y datos de tu navegador; y, si envías el formulario de la calculadora, el aviso de que lo has enviado (sin tu nombre, correo ni teléfono). Detalle en la política de cookies.",
+          "Identificadores de las cookies de Meta (_fbp y _fbc), páginas que visitas, dirección IP y datos de tu navegador; y, si envías el formulario de la calculadora o el del asistente de propietarios, el aviso de que lo has enviado (sin tu nombre, correo ni teléfono). Detalle en la política de cookies.",
         ],
       },
       {
         seccion: "finalidad",
         fila: [
-          `Medir cuántas visitas y cuántas solicitudes de la calculadora llegan desde nuestros anuncios en Meta (píxel de Meta${apiEs}).`,
+          `Medir cuántas visitas y cuántas solicitudes de la calculadora y del asistente de propietarios llegan desde nuestros anuncios en Meta (píxel de Meta${apiEs}).`,
           "Artículo 6.1.a del RGPD y artículo 22.2 de la LSSI: tu consentimiento, que das pulsando «Aceptar» en el aviso de cookies. Guardamos tu elección 24 meses, con su fecha y la versión de esta política. Puedes retirarlo cuando quieras con «Configurar cookies», en el pie de cualquier página.",
         ],
       },
@@ -658,13 +658,13 @@ function parchesPrivacidad(capi: boolean): Record<Locale, Parche> {
         seccion: "datos",
         fila: [
           "Marketing cookies (only if you press “Accept” in the cookie notice)",
-          "Identifiers in Meta's cookies (_fbp and _fbc), pages you visit, IP address and browser data; and, if you submit the calculator form, the notice that you submitted it (without your name, email or phone). Details in the cookie policy.",
+          "Identifiers in Meta's cookies (_fbp and _fbc), pages you visit, IP address and browser data; and, if you submit the calculator form or the owners' assistant form, the notice that you submitted it (without your name, email or phone). Details in the cookie policy.",
         ],
       },
       {
         seccion: "finalidad",
         fila: [
-          `Measure how many visits and how many calculator submissions come from our ads on Meta (Meta pixel${apiEn}).`,
+          `Measure how many visits and how many calculator and owners' assistant submissions come from our ads on Meta (Meta pixel${apiEn}).`,
           "Article 6.1.a GDPR and Article 22.2 LSSI: your consent, which you give by pressing “Accept” in the cookie notice. We keep your choice for 24 months, with its date and the version of this policy. You can withdraw it at any time with “Cookie settings” in the footer of any page.",
         ],
       },
@@ -712,13 +712,13 @@ function parchesPrivacidad(capi: boolean): Record<Locale, Parche> {
         seccion: "datos",
         fila: [
           "Cookies de marketing (uniquement si vous appuyez sur « Accepter » dans le bandeau de cookies)",
-          "Identifiants des cookies de Meta (_fbp et _fbc), pages que vous visitez, adresse IP et données de votre navigateur ; et, si vous envoyez le formulaire du calculateur, l'information que vous l'avez envoyé (sans votre nom, courriel ni téléphone). Détail dans la politique de cookies.",
+          "Identifiants des cookies de Meta (_fbp et _fbc), pages que vous visitez, adresse IP et données de votre navigateur ; et, si vous envoyez le formulaire du calculateur ou celui de l'assistant pour propriétaires, l'information que vous l'avez envoyé (sans votre nom, courriel ni téléphone). Détail dans la politique de cookies.",
         ],
       },
       {
         seccion: "finalidad",
         fila: [
-          `Mesurer combien de visites et combien d'envois du calculateur proviennent de nos annonces sur Meta (pixel Meta${apiFr}).`,
+          `Mesurer combien de visites et combien d'envois du calculateur et de l'assistant pour propriétaires proviennent de nos annonces sur Meta (pixel Meta${apiFr}).`,
           "Article 6.1.a du RGPD et article 22.2 de la LSSI : votre consentement, que vous donnez en appuyant sur « Accepter » dans le bandeau de cookies. Nous conservons votre choix 24 mois, avec sa date et la version de cette politique. Vous pouvez le retirer à tout moment avec « Configurer les cookies », en pied de n'importe quelle page.",
         ],
       },
@@ -766,13 +766,13 @@ function parchesPrivacidad(capi: boolean): Record<Locale, Parche> {
         seccion: "datos",
         fila: [
           "Marketing-Cookies (nur wenn Sie im Cookie-Hinweis auf „Akzeptieren“ klicken)",
-          "Kennungen der Meta-Cookies (_fbp und _fbc), besuchte Seiten, IP-Adresse und Browserdaten; und, wenn Sie das Formular des Rechners absenden, die Information, dass Sie es abgesendet haben (ohne Ihren Namen, Ihre E-Mail oder Telefonnummer). Einzelheiten in der Cookie-Richtlinie.",
+          "Kennungen der Meta-Cookies (_fbp und _fbc), besuchte Seiten, IP-Adresse und Browserdaten; und, wenn Sie das Formular des Rechners oder das des Eigentümer-Assistenten absenden, die Information, dass Sie es abgesendet haben (ohne Ihren Namen, Ihre E-Mail oder Telefonnummer). Einzelheiten in der Cookie-Richtlinie.",
         ],
       },
       {
         seccion: "finalidad",
         fila: [
-          `Messen, wie viele Besuche und wie viele Absendungen des Rechners aus unseren Anzeigen auf Meta stammen (Meta-Pixel${apiDe}).`,
+          `Messen, wie viele Besuche und wie viele Absendungen des Rechners und des Eigentümer-Assistenten aus unseren Anzeigen auf Meta stammen (Meta-Pixel${apiDe}).`,
           "Artikel 6 Abs. 1 Buchst. a DSGVO und Artikel 22.2 LSSI: Ihre Einwilligung, die Sie durch Klick auf „Akzeptieren“ im Cookie-Hinweis erteilen. Wir speichern Ihre Auswahl 24 Monate lang, mit Datum und Version dieser Richtlinie. Sie können sie jederzeit über „Cookies konfigurieren“ in der Fußzeile jeder Seite widerrufen.",
         ],
       },

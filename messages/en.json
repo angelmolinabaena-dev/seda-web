@@ -1675,6 +1675,6 @@
     "llamada": "Book a call",
     "restantes": "{n} characters left",
     "form_titulo": "Leave your request",
-    "form_cuerpo": "Leave us your name, your email and, if you wish, your phone number: that is all this form sends us. The conversation is neither sent nor kept."
+    "form_cuerpo": "Leave us your name, your email and, if you wish, your phone number: that is all this form sends us. The conversation does not travel with this form: it never reaches SEDA."
   }
 }
