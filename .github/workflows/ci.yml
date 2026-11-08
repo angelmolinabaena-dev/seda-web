@@ -52,7 +52,7 @@ concurrency:
 jobs:
   verify:
     name: verify (legal + leak-scan + lint + tsc + build)
-    runs-on: ubuntu-latest
+    runs-on: ubicloud-standard-2
     timeout-minutes: 15
 
     steps:

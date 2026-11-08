@@ -51,7 +51,7 @@ concurrency:
 jobs:
   conflict-markers:
     name: conflict-markers (marcadores de merge sin resolver)
-    runs-on: ubuntu-latest
+    runs-on: ubicloud-standard-2
     timeout-minutes: 5
 
     steps:
@@ -81,7 +81,7 @@ jobs:
 
   invariants:
     name: invariantes (reglas compartidas presentes)
-    runs-on: ubuntu-latest
+    runs-on: ubicloud-standard-2
     timeout-minutes: 5
 
     steps:
