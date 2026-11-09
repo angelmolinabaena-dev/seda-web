@@ -75,7 +75,13 @@ function medirBarra() {
   const problemas: string[] = []
   for (const { e, t, r } of items) {
     if (lineas(e) > 1) problemas.push(`«${t}» ocupa varias líneas`)
-    if (e.scrollWidth > e.clientWidth + 0.5) problemas.push(`«${t}» tiene la etiqueta cortada (${e.scrollWidth} > ${e.clientWidth})`)
+    // «Reservar» recorta su brillo (overflow: hidden): su scrollWidth cuenta el brillo fuera de la caja, no el texto.
+    if (e.hasAttribute("data-barra-reservar")) {
+      const rg = document.createRange()
+      rg.selectNodeContents(e)
+      const tr = rg.getBoundingClientRect()
+      if (tr.left < r.left - 0.5 || tr.right > r.right + 0.5) problemas.push(`«${t}» tiene la etiqueta cortada`)
+    } else if (e.scrollWidth > e.clientWidth + 0.5) problemas.push(`«${t}» tiene la etiqueta cortada (${e.scrollWidth} > ${e.clientWidth})`)
     if (r.left < -0.5 || r.right > innerWidth + 0.5) problemas.push(`«${t}» se sale de la ventana (${Math.round(r.left)}–${Math.round(r.right)} de ${innerWidth})`)
     if (r.top < -0.5 || r.bottom > innerHeight + 0.5) problemas.push(`«${t}» queda fuera de la ventana por arriba o abajo`)
     for (const hijo of e.querySelectorAll<HTMLElement>("span")) {
@@ -182,7 +188,7 @@ describe("la barra de móvil y de tablet", () => {
           expect(arriba.letras, "sin letras junto al logo").toBe(false)
           // Grupo central centrado de verdad en la pantalla (±4 px).
           // (a 360 px el idioma y el menú de la derecha ocupan más que el logo y empujan el centro unos píxeles)
-          expect(arriba.centroDesplazamiento, `${idioma} ${ancho}px: grupo central descentrado`).toBeLessThanOrEqual(ancho >= 390 ? 4 : 14)
+          expect(arriba.centroDesplazamiento, `${idioma} ${ancho}px: grupo central descentrado`).toBeLessThanOrEqual(ancho >= 390 ? 4 : 20)
           // «Silenciosa» (31c): un solo botón relleno, «Reservar»; Portal, idioma y menú, sin borde ni fondo.
           expect(arriba.estilos.rellenos, "un solo botón relleno en la barra").toHaveLength(1)
           expect(arriba.estilos.rellenos[0]).toBe(arriba.reservar?.clave === "reservar" ? (await import(`@/messages/${idioma}.json`)).default.movil.reservar : "")
@@ -817,4 +823,274 @@ describe("hero: logo grande más pequeño en móvil", () => {
       })
     })
   }
+})
+
+/* ── Animaciones de la barra (31d) ─────────────────────────────────────────── */
+
+const NUESTRAS = ["flecha-vaiven", "brillo-dos-pasadas", "brillo-una-pasada"]
+
+/** Animaciones CSS de la barra que corren ahora, con su duración total (retraso + duración × repeticiones). */
+function animacionesDeLaBarra(nombres: string[]) {
+  return document
+    .getAnimations()
+    .filter((a) => a instanceof CSSAnimation && nombres.includes(a.animationName))
+    .map((a) => {
+      const t = a.effect!.getComputedTiming()
+      return { nombre: (a as CSSAnimation).animationName, total: Number(t.endTime), iteraciones: t.iterations, estado: a.playState }
+    })
+}
+
+async function conMovimiento(ancho: number, reducido: boolean, url: string, f: (p: P) => Promise<void>) {
+  const p = await navegador!.newPage({ viewport: { width: ancho, height: alto(ancho) }, reducedMotion: reducido ? "reduce" : "no-preference" })
+  try {
+    await p.goto(servidor.base + url, { waitUntil: "networkidle" })
+    await f(p)
+  } finally {
+    await p.close()
+  }
+}
+
+describe("animaciones de la barra: con movimiento", () => {
+  for (const ancho of [390, 820]) {
+    it(`${ancho}px: al cargar corren el vaivén de la flecha y las dos pasadas del brillo, y ninguna dura más de 5 s`, async (ctx) => {
+      if (!navegador) return ctx.skip()
+      const p = await navegador.newPage({ viewport: { width: ancho, height: alto(ancho) }, reducedMotion: "no-preference" })
+      try {
+        // Sin esperar a networkidle: las animaciones de carga duran pocos segundos.
+        await p.goto(servidor.base + "/", { waitUntil: "networkidle" }).catch(() => undefined)
+        await p.evaluate(() => {
+          // Reinicia las animaciones de carga para medirlas desde el principio (la página ya pasó su networkidle).
+          document.querySelectorAll<HTMLElement>("[data-carga]").forEach((e) => {
+            e.setAttribute("data-carga", "no")
+            void e.offsetWidth
+            e.setAttribute("data-carga", "si")
+          })
+        })
+        const anims = await p.evaluate(animacionesDeLaBarra, NUESTRAS)
+        const nombres = new Set(anims.map((a) => a.nombre))
+        expect(nombres.has("flecha-vaiven"), "vaivén de la flecha").toBe(true)
+        expect(nombres.has("brillo-dos-pasadas"), "brillo de Reservar").toBe(true)
+        for (const a of anims) expect(a.total, `${a.nombre} dura ${a.total} ms`).toBeLessThanOrEqual(5000)
+        expect(anims.find((a) => a.nombre === "flecha-vaiven")!.iteraciones).toBe(3)
+        // Y se paran solas: pasados 5,5 s no queda ninguna automática.
+        await p.waitForTimeout(5500)
+        expect(await p.evaluate(animacionesDeLaBarra, NUESTRAS)).toEqual([])
+      } finally {
+        await p.close()
+      }
+    }, 20_000)
+  }
+
+  it("390px: al pasar el ratón por Portal vuelve el vaivén, y por Reservar, una pasada del brillo", async (ctx) => {
+    if (!navegador) return ctx.skip()
+    await conMovimiento(390, false, "/", async (p) => {
+      await p.waitForTimeout(5500)
+      expect(await p.evaluate(animacionesDeLaBarra, NUESTRAS)).toEqual([])
+      await p.hover("[data-portal-movil] > button")
+      await p.waitForTimeout(200)
+      expect((await p.evaluate(animacionesDeLaBarra, NUESTRAS)).map((a) => a.nombre)).toContain("flecha-vaiven")
+      await p.hover("[data-barra-reservar]")
+      await p.waitForTimeout(200)
+      const a = await p.evaluate(animacionesDeLaBarra, NUESTRAS)
+      expect(a.map((x) => x.nombre)).toContain("brillo-una-pasada")
+      for (const x of a) expect(x.total).toBeLessThanOrEqual(5000)
+    })
+  }, 20_000)
+})
+
+describe("animaciones de la barra: prefers-reduced-motion: reduce", () => {
+  for (const [idioma, ruta] of Object.entries(IDIOMAS)) {
+    for (const ancho of [360, 820]) {
+      it(`${idioma} ${ancho}px: no hay ninguna animación automática ni transición en la flecha y la X`, async (ctx) => {
+        if (!navegador) return ctx.skip()
+        await conMovimiento(ancho, true, ruta, async (p) => {
+          expect(await p.evaluate(animacionesDeLaBarra, NUESTRAS), "ninguna animación corre").toEqual([])
+          const r = await p.evaluate(() => {
+            const nav = document.querySelector("header nav")!
+            const vis = (s: string) => [...nav.querySelectorAll<HTMLElement>(s)].find((e) => e.getBoundingClientRect().width > 0)
+            const flecha = vis("[data-flecha-portal]")
+            const linea = vis(".menu-linea-1") ?? nav.querySelector<SVGElement>(".menu-linea-1")
+            const brillo = vis("[data-barra-reservar]")
+            return {
+              flechaTransicion: flecha ? getComputedStyle(flecha).transitionDuration : "",
+              lineaTransicion: linea ? getComputedStyle(linea).transitionDuration : "",
+              brilloAnimacion: brillo ? getComputedStyle(brillo, "::after").animationName : "",
+              vaiven: (() => {
+                const e = vis("[data-flecha-portal-vaiven]")
+                return e ? getComputedStyle(e).animationName : ""
+              })(),
+            }
+          })
+          expect(r.flechaTransicion).toMatch(/^0s$/)
+          expect(r.lineaTransicion).toMatch(/^0s$/)
+          expect(r.brilloAnimacion).toBe("none")
+          expect(r.vaiven).toBe("none")
+          // El estado cambia igual, sin transición.
+          await p.click("[data-boton-menu]:visible")
+          await p.waitForTimeout(100)
+          const lineas = await p.evaluate(() => getComputedStyle(document.querySelector(".menu-linea-1")!).transform)
+          expect(lineas, "la X se forma al instante").not.toBe("none")
+        })
+      })
+    }
+  }
+})
+
+describe("el botón del menú y la flecha de Portal", () => {
+  for (const [idioma, ruta] of Object.entries(IDIOMAS)) {
+    it(`${idioma} 390px: el botón del menú cambia aria-expanded y aria-label, y las líneas forman una X (±45°); al cerrar vuelven`, async (ctx) => {
+      if (!navegador) return ctx.skip()
+      const m = (await import(`@/messages/${idioma}.json`)).default.nav
+      await conMovimiento(390, false, ruta, async (p) => {
+        const leer = () =>
+          p.evaluate(() => {
+            const b = [...document.querySelectorAll<HTMLElement>("[data-boton-menu]")].find((x) => x.getBoundingClientRect().width > 0)!
+            const ang = (sel: string) => {
+              const mt = new DOMMatrix(getComputedStyle(b.querySelector(sel)!).transform)
+              return Math.round((Math.atan2(mt.b, mt.a) * 180) / Math.PI)
+            }
+            return { expanded: b.getAttribute("aria-expanded"), label: b.getAttribute("aria-label"), l1: ang(".menu-linea-1"), l2: ang(".menu-linea-2"), n: document.querySelectorAll("[data-boton-menu]").length }
+          })
+        const a = await leer()
+        expect([a.expanded, a.label, a.l1, a.l2, a.n]).toEqual(["false", m.open_menu, 0, 0, 1])
+        await p.click("[data-boton-menu]:visible")
+        await p.waitForTimeout(450)
+        const b = await leer()
+        expect([b.expanded, b.label, b.l1, b.l2, b.n], "abierto: es el mismo botón, ya en X").toEqual(["true", m.close_menu, 45, -45, 1])
+        await p.click("[data-boton-menu]:visible")
+        await p.waitForTimeout(450)
+        const c = await leer()
+        expect([c.expanded, c.label, c.l1, c.l2]).toEqual(["false", m.open_menu, 0, 0])
+      })
+    })
+  }
+
+  it("390px: al pasar el ratón por el menú cerrado las líneas se separan un poco (±1,5 px)", async (ctx) => {
+    if (!navegador) return ctx.skip()
+    await conMovimiento(390, false, "/", async (p) => {
+      await p.hover("[data-boton-menu]")
+      await p.waitForTimeout(400)
+      const d = await p.evaluate(() => [new DOMMatrix(getComputedStyle(document.querySelector(".menu-linea-1")!).transform).f, new DOMMatrix(getComputedStyle(document.querySelector(".menu-linea-2")!).transform).f])
+      expect(d).toEqual([-1.5, 1.5])
+    })
+  })
+
+  for (const [ancho, selector] of [
+    [390, "[data-portal-movil] > button"],
+    [820, "[data-tablet-portal] > button"],
+  ] as const) {
+    it(`${ancho}px: la flecha de Portal gira 180° con el panel abierto y vuelve al cerrarlo (10 px, trazo 2)`, async (ctx) => {
+      if (!navegador) return ctx.skip()
+      await conMovimiento(ancho, false, "/", async (p) => {
+        const leer = () =>
+          p.evaluate((sel) => {
+            const f = [...document.querySelectorAll<SVGElement>(`${sel} [data-flecha-portal]`)].find((e) => e.getBoundingClientRect().width > 0)!
+            const mt = new DOMMatrix(getComputedStyle(f).transform)
+            return { giro: Math.round((Math.atan2(mt.b, mt.a) * 180) / Math.PI), ancho: Math.round(f.getBoundingClientRect().width), trazo: f.getAttribute("stroke-width"), expanded: f.closest("button")!.getAttribute("aria-expanded") }
+          }, selector)
+        const a = await leer()
+        expect([a.giro, a.ancho, a.trazo, a.expanded]).toEqual([0, 10, "2", "false"])
+        await p.click(selector)
+        await p.waitForTimeout(450)
+        const b = await leer()
+        expect(Math.abs(b.giro), "girada 180°").toBe(180)
+        expect(b.expanded).toBe("true")
+        await p.keyboard.press("Escape")
+        await p.waitForTimeout(450)
+        expect((await leer()).giro).toBe(0)
+      })
+    })
+  }
+})
+
+describe("las animaciones no mueven el diseño", () => {
+  for (const ancho of [360, 390, 820]) {
+    it(`${ancho}px: ningún desplazamiento de diseño en la cabecera durante la carga, y los botones no se mueven mientras animan`, async (ctx) => {
+      if (!navegador) return ctx.skip()
+      const p = await navegador.newPage({ viewport: { width: ancho, height: alto(ancho) }, reducedMotion: "no-preference" })
+      try {
+        await p.goto(servidor.base + "/", { waitUntil: "networkidle" })
+        const r = await p.evaluate(async () => {
+          const botones = () => [...document.querySelectorAll<HTMLElement>("header nav a, header nav button")].filter((e) => e.getBoundingClientRect().width > 0 && !e.closest("[role=menu]")).map((e) => e.getBoundingClientRect()).map((b) => [b.left, b.top, b.width, b.height].map((n) => Math.round(n * 100) / 100))
+          let cls = 0
+          const po = new PerformanceObserver((l) => {
+            for (const en of l.getEntries() as unknown as { value: number; hadRecentInput: boolean; sources?: { node?: Node }[] }[]) {
+              if (!en.hadRecentInput && (en.sources ?? []).some((s) => s.node && document.querySelector("header")?.contains(s.node))) cls += en.value
+            }
+          })
+          po.observe({ type: "layout-shift", buffered: true })
+          // Reinicia las animaciones de carga y compara las cajas de los botones a lo largo de ellas.
+          document.querySelectorAll<HTMLElement>("[data-carga]").forEach((e) => {
+            e.setAttribute("data-carga", "no")
+            void e.offsetWidth
+            e.setAttribute("data-carga", "si")
+          })
+          const antes = botones()
+          const muestras: number[][][] = []
+          for (let i = 0; i < 8; i++) {
+            await new Promise((res) => setTimeout(res, 500))
+            muestras.push(botones())
+          }
+          await new Promise((res) => setTimeout(res, 100))
+          po.disconnect()
+          return { cls, antes, muestras }
+        })
+        expect(r.cls, "desplazamiento de diseño en la cabecera").toBe(0)
+        for (const m of r.muestras) expect(m, "cajas de los botones de la barra").toEqual(r.antes)
+      } finally {
+        await p.close()
+      }
+    }, 30_000)
+  }
+})
+
+describe("contraste de «Reservar» durante el brillo", () => {
+  for (const [idioma, ruta] of Object.entries(IDIOMAS)) {
+    it(`${idioma} 390px: el texto de Reservar ≥ 4,5:1 en reposo y con el brillo en su punto más claro, en la barra sobre la foto y en la barra clara`, async (ctx) => {
+      if (!navegador) return ctx.skip()
+      await conMovimiento(390, true, ruta, async (p) => {
+        const medir = () =>
+          p.evaluate(() => {
+            const e = [...document.querySelectorAll<HTMLElement>("[data-barra-reservar]")].find((x) => x.getBoundingClientRect().width > 0)!
+            const n = (c: string) => (c.match(/-?\d*\.?\d+/g) || []).map(Number)
+            const lin = (v: number) => ((v /= 255) <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4)
+            const L = (c: number[]) => 0.2126 * lin(c[0]) + 0.7152 * lin(c[1]) + 0.0722 * lin(c[2])
+            const k = (a: number[], b: number[]) => {
+              const [h, l] = [L(a), L(b)].sort((x, y) => y - x)
+              return (h + 0.05) / (l + 0.05)
+            }
+            const bg = n(getComputedStyle(e).backgroundColor).slice(0, 3)
+            const tx = n(getComputedStyle(e).color).slice(0, 3)
+            const alfa = Number(getComputedStyle(e).getPropertyValue("--brillo-alfa"))
+            // El brillo es blanco con esa opacidad por encima del texto y del fondo (peor caso: el centro del degradado).
+            const mezcla = (c: number[]) => c.map((v) => v * (1 - alfa) + 255 * alfa)
+            return { reposo: k(tx, bg), brillo: k(mezcla(tx), mezcla(bg)), alfa }
+          })
+        const foto = await medir()
+        expect(foto.alfa).toBeGreaterThan(0)
+        expect(foto.reposo).toBeGreaterThanOrEqual(4.5)
+        expect(foto.brillo, "con el brillo, sobre la foto").toBeGreaterThanOrEqual(4.5)
+        await p.evaluate(() => window.scrollTo(0, 900))
+        await p.waitForTimeout(900)
+        await p.evaluate(() => window.scrollTo(0, 860))
+        await p.waitForTimeout(900)
+        const clara = await medir()
+        expect(clara.reposo).toBeGreaterThanOrEqual(4.5)
+        expect(clara.brillo, "con el brillo, en la barra clara").toBeGreaterThanOrEqual(4.5)
+      })
+    })
+  }
+})
+
+describe("animaciones: el escritorio no cambia", () => {
+  it("1.280 px: ninguna animación ni elemento nuevo de la barra de móvil", async (ctx) => {
+    if (!navegador) return ctx.skip()
+    await conMovimiento(1280, false, "/", async (p) => {
+      const r = await p.evaluate((nombres) => ({
+        animaciones: document.getAnimations().filter((a) => a instanceof CSSAnimation && nombres.includes(a.animationName)).length,
+        visibles: [...document.querySelectorAll<HTMLElement>(".reservar-brillo, .boton-portal, .boton-menu, [data-flecha-portal]")].filter((e) => e.getBoundingClientRect().width > 0).length,
+      }), NUESTRAS)
+      expect(r).toEqual({ animaciones: 0, visibles: 0 })
+    })
+  })
 })

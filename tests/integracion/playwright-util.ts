@@ -12,7 +12,7 @@ export type Pagina = {
   keyboard: { press(tecla: string): Promise<void> }
   mouse: { click(x: number, y: number): Promise<void> }
 }
-export type Navegador = { newPage(o: { viewport: { width: number; height: number } }): Promise<Pagina>; close(): Promise<void> }
+export type Navegador = { newPage(o: { viewport: { width: number; height: number }; reducedMotion?: "reduce" | "no-preference" }): Promise<Pagina>; close(): Promise<void> }
 export type Pw = { chromium: { launch(): Promise<Navegador> } }
 
 export function cargarPlaywright(): Pw | null {

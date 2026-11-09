@@ -228,3 +228,122 @@
     color: #000 !important;
   }
 }
+
+/* ── Animaciones de la barra de móvil y tablet (< 1.280 px; cabecera-movil.tsx) ─────────────────────────
+   Solo transform y opacity: no mueven el diseño. Ninguna automática dura más de 5 s (WCAG 2.2.2):
+   vaivén de la flecha 3 × 1,2 s = 3,6 s; brillo de «Reservar» 0,6 s de espera + 3,9 s = 4,5 s.
+   Con prefers-reduced-motion: reduce no hay ninguna (la flecha y la X cambian sin transición). */
+@keyframes flecha-vaiven {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(2px);
+  }
+}
+@keyframes brillo-dos-pasadas {
+  /* Pasada 1 (1,2 s), pausa de 1,5 s, pasada 2 (1,2 s): 3,9 s en total */
+  0% {
+    transform: translateX(-140%) skewX(-20deg);
+    opacity: 1;
+  }
+  30.77% {
+    transform: translateX(260%) skewX(-20deg);
+    opacity: 1;
+  }
+  30.78%,
+  69.22% {
+    transform: translateX(-140%) skewX(-20deg);
+    opacity: 0;
+  }
+  69.23% {
+    transform: translateX(-140%) skewX(-20deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(260%) skewX(-20deg);
+    opacity: 1;
+  }
+}
+@keyframes brillo-una-pasada {
+  from {
+    transform: translateX(-140%) skewX(-20deg);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(260%) skewX(-20deg);
+    opacity: 1;
+  }
+}
+.flecha-portal-vaiven {
+  display: inline-flex;
+}
+.flecha-portal-vaiven[data-carga="si"],
+.boton-portal:hover .flecha-portal-vaiven,
+.boton-portal:focus-visible .flecha-portal-vaiven {
+  animation: flecha-vaiven 1.2s ease-in-out 3;
+}
+.reservar-brillo {
+  --brillo-alfa: 0.3; /* opacidad máxima del brillo: el test de contraste la lee */
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  transition:
+    background-color 0.5s,
+    opacity 0.2s,
+    transform 0.12s;
+}
+.reservar-brillo:active {
+  transform: scale(0.97);
+}
+.reservar-brillo::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 55%;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateX(-140%) skewX(-20deg);
+  background: linear-gradient(105deg, transparent 0%, rgba(255, 255, 255, var(--brillo-alfa)) 50%, transparent 100%);
+}
+.reservar-brillo[data-carga="si"]::after {
+  animation: brillo-dos-pasadas 3.9s ease-in-out 0.6s 1 both;
+}
+.reservar-brillo:hover::after,
+.reservar-brillo:focus-visible::after {
+  animation: brillo-una-pasada 1.2s ease-in-out 1 both;
+}
+.menu-icono line {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 250ms ease-in-out;
+}
+.boton-menu:hover:not([aria-expanded="true"]) .menu-linea-1 {
+  transform: translateY(-1.5px);
+}
+.boton-menu:hover:not([aria-expanded="true"]) .menu-linea-2 {
+  transform: translateY(1.5px);
+}
+.boton-menu[aria-expanded="true"] .menu-linea-1 {
+  transform: translateY(3px) rotate(45deg);
+}
+.boton-menu[aria-expanded="true"] .menu-linea-2 {
+  transform: translateY(-3px) rotate(-45deg);
+}
+@media (prefers-reduced-motion: reduce) {
+  .flecha-portal-vaiven,
+  .flecha-portal-vaiven[data-carga="si"],
+  .boton-portal:hover .flecha-portal-vaiven,
+  .boton-portal:focus-visible .flecha-portal-vaiven,
+  .reservar-brillo[data-carga="si"]::after,
+  .reservar-brillo:hover::after,
+  .reservar-brillo:focus-visible::after {
+    animation: none;
+  }
+  .reservar-brillo,
+  .menu-icono line,
+  .flecha-portal-giro {
+    transition: none;
+  }
+}

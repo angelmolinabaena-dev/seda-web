@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useId, useRef, useState, useTransition } from "react"
-import { ArrowUpRight, Building2, ChevronDown, KeyRound, Lock, MessageCircle, Smartphone, X } from "lucide-react"
+import { ArrowUpRight, Building2, ChevronDown, KeyRound, Lock, MessageCircle, Smartphone } from "lucide-react"
 import { useLocale, useTranslations } from "next-intl"
 import { Link, usePathname, useRouter } from "@/i18n/navigation"
 import { routing, type Locale } from "@/i18n/routing"
@@ -19,19 +19,41 @@ import { DESTINO_PROPIETARIOS, DESTINO_VIAJEROS, URL_GUEST_APP, URL_PORTAL_PROPI
 const OLIVA = "#536043"
 
 /** «Reservar» (crema sobre la foto, tinta sobre la barra clara) → reserva; en páginas de propietarios, «Valorar» → propietarios. */
+/** Verdadero durante la animación de carga (se apaga sola pasados `ms`): los brillos y vaivenes de la barra. */
+function useAnimacionDeCarga(ms: number): boolean {
+  const [carga, setCarga] = useState(true)
+  useEffect(() => {
+    const id = setTimeout(() => setCarga(false), ms)
+    return () => clearTimeout(id)
+  }, [ms])
+  return carga
+}
+
 export function BotonReservar({ tipo, solido }: { tipo: TipoPagina; solido: boolean }) {
   const t = useTranslations()
   const r = reservaDe(tipo)
+  const carga = useAnimacionDeCarga(4800)
   return (
     <Link
       href={r.href}
       data-barra-reservar={r.clave}
-      className={`inline-flex h-[38px] shrink-0 items-center justify-center whitespace-nowrap rounded-full px-[18px] text-[13.5px] font-bold transition-colors duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current focus-visible:ring-offset-2 ${
+      data-carga={carga ? "si" : "no"}
+      className={`reservar-brillo inline-flex h-[38px] shrink-0 items-center justify-center whitespace-nowrap rounded-full px-[18px] text-[13.5px] font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current focus-visible:ring-offset-2 ${
         solido ? "bg-foreground text-background hover:opacity-90" : "bg-background text-foreground hover:opacity-90"
       }`}
     >
       {t(`movil.${r.clave}`)}
     </Link>
+  )
+}
+
+/** Flecha de «Portal»: vaivén de 2 px al cargar (3 veces) y al pasar el ratón o enfocar; gira 180° con el panel abierto. */
+function FlechaPortal({ abierto }: { abierto: boolean }) {
+  const carga = useAnimacionDeCarga(3900)
+  return (
+    <span aria-hidden data-flecha-portal-vaiven className="flecha-portal-vaiven" data-carga={carga ? "si" : "no"}>
+      <ChevronDown data-flecha-portal data-abierta={abierto ? "si" : "no"} className={`flecha-portal-giro h-2.5 w-2.5 transition-transform duration-200 ${abierto ? "rotate-180" : ""}`} strokeWidth={2} />
+    </span>
   )
 }
 
@@ -99,12 +121,13 @@ export function PortalMovil({ abierto, setAbierto, solido }: { abierto: boolean;
         aria-expanded={abierto}
         aria-controls={id}
         aria-haspopup="dialog"
-        className={`inline-flex h-11 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-sm px-2 font-mono text-[10px] uppercase tracking-[0.18em] opacity-90 transition-colors duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current ${
+        className={`boton-portal inline-flex h-11 shrink-0 items-center gap-1 whitespace-nowrap rounded-sm px-1.5 font-mono text-[10px] uppercase tracking-[0.18em] opacity-90 transition-colors duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current ${
           solido ? "text-foreground" : "text-background"
         }`}
       >
         <Lock className="h-[13px] w-[13px] shrink-0" strokeWidth={1.5} aria-hidden />
         {t("movil.portal")}
+        <FlechaPortal abierto={abierto} />
       </button>
       {abierto && (
         <div
@@ -209,13 +232,13 @@ export function PortalMenu({ solido }: { solido: boolean }) {
         onClick={() => setAbierto((v) => !v)}
         aria-haspopup="menu"
         aria-expanded={abierto}
-        className={`inline-flex min-h-[44px] items-center gap-1.5 whitespace-nowrap rounded-sm px-1 font-mono text-[10px] uppercase tracking-[0.18em] opacity-90 transition-colors duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current ${
+        className={`boton-portal inline-flex min-h-[44px] items-center gap-1.5 whitespace-nowrap rounded-sm px-1 font-mono text-[10px] uppercase tracking-[0.18em] opacity-90 transition-colors duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current ${
           solido ? "text-foreground" : "text-background"
         }`}
       >
         <Lock className="h-[13px] w-[13px] shrink-0" strokeWidth={1.5} aria-hidden />
         {t("nav.portal")}
-        <span className={`ml-0.5 inline-block text-[8px] opacity-70 transition-transform duration-200 ${abierto ? "rotate-180" : ""}`}>▼</span>
+        <FlechaPortal abierto={abierto} />
       </button>
       <div role="menu" className={`absolute right-0 top-full z-10 w-[22rem] max-w-[calc(100vw-2rem)] whitespace-normal pt-2 transition-all duration-200 ${abierto ? "visible opacity-100" : "pointer-events-none invisible opacity-0"}`}>
         <div data-portal-panel className="box-border w-full border border-border bg-background shadow-xl">
@@ -397,7 +420,7 @@ export function SelectorIdiomaCompacto({ solido }: { solido: boolean }) {
         aria-haspopup="menu"
         aria-expanded={abierto}
         aria-label={t("movil.idioma_actual", { idioma: locale.toUpperCase() })}
-        className={`inline-flex h-11 shrink-0 items-center gap-0.5 rounded-sm px-1.5 font-mono text-[10px] font-semibold uppercase tracking-[0.12em] transition-colors duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current ${
+        className={`inline-flex h-11 shrink-0 items-center gap-0.5 rounded-sm px-1 font-mono text-[10px] font-semibold uppercase tracking-[0.12em] transition-colors duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current ${
           solido ? "text-foreground" : "text-background"
         }`}
       >
@@ -426,7 +449,10 @@ export function SelectorIdiomaCompacto({ solido }: { solido: boolean }) {
   )
 }
 
-/** Botón del menú: solo el icono de dos líneas (44 × 44, sin borde) ↔ X. El nombre accesible va en el aria-label. */
+/**
+ * Botón del menú: solo el icono (44 × 44, sin borde). Es el mismo botón en los dos estados: las dos líneas giran ±45° y
+ * se cruzan en una X al abrir (250 ms) y vuelven al cerrar; `aria-expanded` y `aria-label` van al día.
+ */
 export function BotonMenu({ abierto, solido, onClick }: { abierto: boolean; solido: boolean; onClick: () => void }) {
   const t = useTranslations()
   return (
@@ -436,17 +462,14 @@ export function BotonMenu({ abierto, solido, onClick }: { abierto: boolean; soli
       data-boton-menu
       aria-label={abierto ? t("nav.close_menu") : t("nav.open_menu")}
       aria-expanded={abierto}
-      className={`inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-sm transition-colors duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current ${
+      className={`boton-menu inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-sm transition-colors duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current ${
         solido || abierto ? "text-foreground" : "text-background"
       }`}
     >
-      {abierto ? (
-        <X className="h-5 w-5" strokeWidth={1.5} aria-hidden />
-      ) : (
-        <svg viewBox="0 0 20 20" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" aria-hidden>
-          <path d="M3 7h14M3 13h14" />
-        </svg>
-      )}
+      <svg viewBox="0 0 20 20" className="menu-icono h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" aria-hidden>
+        <line className="menu-linea-1" x1="3" y1="7" x2="17" y2="7" />
+        <line className="menu-linea-2" x1="3" y1="13" x2="17" y2="13" />
+      </svg>
     </button>
   )
 }
