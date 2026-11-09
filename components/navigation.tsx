@@ -590,7 +590,9 @@ export function Navigation() {
             per-element transition-delay (see below). The combined
             effect reads like an editorial curtain reveal. */}
       <div
-        className={`min-[1280px]:hidden fixed inset-0 z-40 bg-background/[0.98] backdrop-blur-md ${
+        // z-[45]: por encima del botón del asistente (z-40, también fixed y posterior en el DOM, que antes quedaba
+        // encima del botón «Solicitar estancia» del menú) y por debajo de la cabecera (z-50) y del panel del asistente.
+        className={`min-[1280px]:hidden fixed inset-0 z-[45] bg-background/[0.98] backdrop-blur-md ${
           isOpen
             ? "opacity-100 pointer-events-auto transition-opacity duration-200 ease-out"
             : "opacity-0 pointer-events-none transition-opacity duration-150 ease-in"
