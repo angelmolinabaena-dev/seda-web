@@ -75,16 +75,17 @@ function medirBarra() {
   const problemas: string[] = []
   for (const { e, t, r } of items) {
     if (lineas(e) > 1) problemas.push(`«${t}» ocupa varias líneas`)
-    // «Reservar» recorta su brillo (overflow: hidden): su scrollWidth cuenta el brillo fuera de la caja, no el texto.
+    // «Reservar» lleva un halo que crece fuera de su caja: se compara el rectángulo del texto, no el scrollWidth.
     if (e.hasAttribute("data-barra-reservar")) {
       const rg = document.createRange()
-      rg.selectNodeContents(e)
+      const texto = [...e.childNodes].find((n) => n.nodeType === 3 && (n.textContent || "").trim())!
+      rg.selectNodeContents(texto)
       const tr = rg.getBoundingClientRect()
       if (tr.left < r.left - 0.5 || tr.right > r.right + 0.5) problemas.push(`«${t}» tiene la etiqueta cortada`)
     } else if (e.scrollWidth > e.clientWidth + 0.5) problemas.push(`«${t}» tiene la etiqueta cortada (${e.scrollWidth} > ${e.clientWidth})`)
     if (r.left < -0.5 || r.right > innerWidth + 0.5) problemas.push(`«${t}» se sale de la ventana (${Math.round(r.left)}–${Math.round(r.right)} de ${innerWidth})`)
     if (r.top < -0.5 || r.bottom > innerHeight + 0.5) problemas.push(`«${t}» queda fuera de la ventana por arriba o abajo`)
-    for (const hijo of e.querySelectorAll<HTMLElement>("span")) {
+    for (const hijo of e.querySelectorAll<HTMLElement>("span:not([aria-hidden])")) {
       const rh = hijo.getBoundingClientRect()
       if (rh.width > 0 && (rh.left < r.left - 0.5 || rh.right > r.right + 0.5)) problemas.push(`«${(hijo.textContent || "").trim()}» desborda su botón`)
     }
@@ -825,18 +826,18 @@ describe("hero: logo grande más pequeño en móvil", () => {
   }
 })
 
-/* ── Animaciones de la barra (31d) ─────────────────────────────────────────── */
+/* ── Animaciones de la barra (31e): halo de Reservar, candado y subrayado de Portal ─────────── */
 
-const NUESTRAS = ["flecha-vaiven", "brillo-dos-pasadas", "brillo-una-pasada"]
+const NUESTRAS = ["halo-pulso", "portal-arco", "portal-linea"]
 
-/** Animaciones CSS de la barra que corren ahora, con su duración total (retraso + duración × repeticiones). */
+/** Animaciones CSS de la barra que están corriendo ahora, con su duración total (retraso + duración × repeticiones). */
 function animacionesDeLaBarra(nombres: string[]) {
   return document
     .getAnimations()
-    .filter((a) => a instanceof CSSAnimation && nombres.includes(a.animationName))
+    .filter((a) => a instanceof CSSAnimation && nombres.includes(a.animationName) && a.playState === "running")
     .map((a) => {
       const t = a.effect!.getComputedTiming()
-      return { nombre: (a as CSSAnimation).animationName, total: Number(t.endTime), iteraciones: t.iterations, estado: a.playState }
+      return { nombre: (a as CSSAnimation).animationName, total: Number(t.endTime), duracion: Number(t.duration), iteraciones: Number(t.iterations) }
     })
 }
 
@@ -850,86 +851,112 @@ async function conMovimiento(ancho: number, reducido: boolean, url: string, f: (
   }
 }
 
+const resumen = (a: { nombre: string; iteraciones: number; duracion: number; total: number }[]) => Object.fromEntries(a.map((x) => [x.nombre, `${x.iteraciones}×${x.duracion}`]))
+
 describe("animaciones de la barra: con movimiento", () => {
   for (const ancho of [390, 820]) {
-    it(`${ancho}px: al cargar corren el vaivén de la flecha y las dos pasadas del brillo, y ninguna dura más de 5 s`, async (ctx) => {
+    it(`${ancho}px: al cargar corren el halo (3 × 1,6 s), el candado y el subrayado (2 × 2,4 s); ninguna pasa de 5 s, y se paran solas`, async (ctx) => {
       if (!navegador) return ctx.skip()
       const p = await navegador.newPage({ viewport: { width: ancho, height: alto(ancho) }, reducedMotion: "no-preference" })
       try {
-        // Sin esperar a networkidle: las animaciones de carga duran pocos segundos.
-        await p.goto(servidor.base + "/", { waitUntil: "networkidle" }).catch(() => undefined)
-        await p.evaluate(() => {
-          // Reinicia las animaciones de carga para medirlas desde el principio (la página ya pasó su networkidle).
-          document.querySelectorAll<HTMLElement>("[data-carga]").forEach((e) => {
-            e.setAttribute("data-carga", "no")
-            void e.offsetWidth
-            e.setAttribute("data-carga", "si")
-          })
-        })
+        // Recarga sin esperar a networkidle para pillar las de carga desde el principio.
+        await p.goto(servidor.base + "/", { waitUntil: "networkidle" })
+        await p.evaluate(() => location.reload())
+        await p.waitForTimeout(700)
         const anims = await p.evaluate(animacionesDeLaBarra, NUESTRAS)
-        const nombres = new Set(anims.map((a) => a.nombre))
-        expect(nombres.has("flecha-vaiven"), "vaivén de la flecha").toBe(true)
-        expect(nombres.has("brillo-dos-pasadas"), "brillo de Reservar").toBe(true)
+        expect(resumen(anims)).toEqual({ "halo-pulso": "3×1600", "portal-arco": "2×2400", "portal-linea": "2×2400" })
         for (const a of anims) expect(a.total, `${a.nombre} dura ${a.total} ms`).toBeLessThanOrEqual(5000)
-        expect(anims.find((a) => a.nombre === "flecha-vaiven")!.iteraciones).toBe(3)
-        // Y se paran solas: pasados 5,5 s no queda ninguna automática.
-        await p.waitForTimeout(5500)
-        expect(await p.evaluate(animacionesDeLaBarra, NUESTRAS)).toEqual([])
+        await p.waitForTimeout(5200)
+        expect(await p.evaluate(animacionesDeLaBarra, NUESTRAS), "se paran solas").toEqual([])
       } finally {
         await p.close()
       }
-    }, 20_000)
+    }, 25_000)
   }
 
-  it("390px: al pasar el ratón por Portal vuelve el vaivén, y por Reservar, una pasada del brillo", async (ctx) => {
-    if (!navegador) return ctx.skip()
-    await conMovimiento(390, false, "/", async (p) => {
-      await p.waitForTimeout(5500)
-      expect(await p.evaluate(animacionesDeLaBarra, NUESTRAS)).toEqual([])
-      await p.hover("[data-portal-movil] > button")
-      await p.waitForTimeout(200)
-      expect((await p.evaluate(animacionesDeLaBarra, NUESTRAS)).map((a) => a.nombre)).toContain("flecha-vaiven")
-      await p.hover("[data-barra-reservar]")
-      await p.waitForTimeout(200)
-      const a = await p.evaluate(animacionesDeLaBarra, NUESTRAS)
-      expect(a.map((x) => x.nombre)).toContain("brillo-una-pasada")
-      for (const x of a) expect(x.total).toBeLessThanOrEqual(5000)
-    })
-  }, 20_000)
+  for (const [ancho, portal] of [
+    [390, "[data-portal-movil] > button"],
+    [820, "[data-tablet-portal] > button"],
+  ] as const) {
+    it(`${ancho}px: vuelven al pasar el ratón y al enfocar (Reservar: un pulso; Portal: una secuencia)`, async (ctx) => {
+      if (!navegador) return ctx.skip()
+      await conMovimiento(ancho, false, "/", async (p) => {
+        await p.waitForTimeout(5500)
+        expect(await p.evaluate(animacionesDeLaBarra, NUESTRAS)).toEqual([])
+        await p.hover("[data-barra-reservar]")
+        await p.waitForTimeout(200)
+        expect(resumen(await p.evaluate(animacionesDeLaBarra, NUESTRAS)), "hover en Reservar").toEqual({ "halo-pulso": "1×1600" })
+        await p.waitForTimeout(1800)
+        await p.hover(portal)
+        await p.waitForTimeout(200)
+        expect(resumen(await p.evaluate(animacionesDeLaBarra, NUESTRAS)), "hover en Portal").toEqual({ "portal-arco": "1×2400", "portal-linea": "1×2400" })
+        await p.waitForTimeout(2600)
+        // Foco por teclado/programático
+        await p.evaluate(() => (document.querySelector("[data-barra-reservar]") as HTMLElement).blur())
+        await p.evaluate(() => [...document.querySelectorAll<HTMLElement>("[data-barra-reservar]")].find((e) => e.getBoundingClientRect().width > 0)!.focus())
+        await p.waitForTimeout(200)
+        expect(resumen(await p.evaluate(animacionesDeLaBarra, NUESTRAS)), "foco en Reservar").toEqual({ "halo-pulso": "1×1600" })
+        await p.waitForTimeout(1800)
+        await p.evaluate((sel) => [...document.querySelectorAll<HTMLElement>(sel)].find((e) => e.getBoundingClientRect().width > 0)!.focus(), portal)
+        await p.waitForTimeout(200)
+        expect(resumen(await p.evaluate(animacionesDeLaBarra, NUESTRAS)), "foco en Portal").toEqual({ "portal-arco": "1×2400", "portal-linea": "1×2400" })
+      })
+    }, 25_000)
+
+    it(`${ancho}px: vuelven al subir arriba del todo después de haber bajado más de 200 px, y no si solo se bajó un poco`, async (ctx) => {
+      if (!navegador) return ctx.skip()
+      await conMovimiento(ancho, false, "/", async (p) => {
+        await p.waitForTimeout(5500)
+        // Bajar solo 120 px y volver: nada.
+        await p.evaluate(() => window.scrollTo(0, 120))
+        await p.waitForTimeout(400)
+        await p.evaluate(() => window.scrollTo(0, 0))
+        await p.waitForTimeout(300)
+        expect(await p.evaluate(animacionesDeLaBarra, NUESTRAS), "con 120 px no hay pulso").toEqual([])
+        // Bajar 600 px y volver arriba: pulso de Reservar y secuencia de Portal.
+        await p.evaluate(() => window.scrollTo(0, 600))
+        await p.waitForTimeout(500)
+        expect(await p.evaluate(animacionesDeLaBarra, NUESTRAS), "al bajar no hay pulso").toEqual([])
+        await p.evaluate(() => window.scrollTo(0, 0))
+        await p.waitForTimeout(300)
+        const a = await p.evaluate(animacionesDeLaBarra, NUESTRAS)
+        expect(resumen(a), "al volver arriba").toEqual({ "halo-pulso": "1×1600", "portal-arco": "1×2400", "portal-linea": "1×2400" })
+        for (const x of a) expect(x.total).toBeLessThanOrEqual(5000)
+      })
+    }, 25_000)
+  }
 })
 
 describe("animaciones de la barra: prefers-reduced-motion: reduce", () => {
   for (const [idioma, ruta] of Object.entries(IDIOMAS)) {
     for (const ancho of [360, 820]) {
-      it(`${idioma} ${ancho}px: no hay ninguna animación automática ni transición en la flecha y la X`, async (ctx) => {
+      it(`${idioma} ${ancho}px: ninguna animación (ni al cargar, ni al pasar el ratón, ni al subir) y sin transición en la flecha y la X`, async (ctx) => {
         if (!navegador) return ctx.skip()
         await conMovimiento(ancho, true, ruta, async (p) => {
           expect(await p.evaluate(animacionesDeLaBarra, NUESTRAS), "ninguna animación corre").toEqual([])
+          const portal = ancho >= 768 ? "[data-tablet-portal] > button" : "[data-portal-movil] > button"
+          await p.hover("[data-barra-reservar]")
+          await p.hover(portal)
+          await p.evaluate(() => window.scrollTo(0, 600))
+          await p.waitForTimeout(300)
+          await p.evaluate(() => window.scrollTo(0, 0))
+          await p.waitForTimeout(300)
+          expect(await p.evaluate(animacionesDeLaBarra, NUESTRAS), "tampoco con hover ni al subir").toEqual([])
           const r = await p.evaluate(() => {
-            const nav = document.querySelector("header nav")!
-            const vis = (s: string) => [...nav.querySelectorAll<HTMLElement>(s)].find((e) => e.getBoundingClientRect().width > 0)
-            const flecha = vis("[data-flecha-portal]")
-            const linea = vis(".menu-linea-1") ?? nav.querySelector<SVGElement>(".menu-linea-1")
-            const brillo = vis("[data-barra-reservar]")
+            const vis = (s: string) => [...document.querySelectorAll<HTMLElement>(s)].find((e) => e.getBoundingClientRect().width > 0)
+            const nombre = (e?: Element | null) => (e ? getComputedStyle(e).animationName : "")
             return {
-              flechaTransicion: flecha ? getComputedStyle(flecha).transitionDuration : "",
-              lineaTransicion: linea ? getComputedStyle(linea).transitionDuration : "",
-              brilloAnimacion: brillo ? getComputedStyle(brillo, "::after").animationName : "",
-              vaiven: (() => {
-                const e = vis("[data-flecha-portal-vaiven]")
-                return e ? getComputedStyle(e).animationName : ""
-              })(),
+              halo: nombre(vis("[data-halo-reservar]")),
+              arco: nombre(vis("[data-portal-secuencia] .portal-arco")),
+              linea: nombre([...document.querySelectorAll<HTMLElement>("[data-portal-linea]")].find((e) => (e.closest("button") as HTMLElement).getBoundingClientRect().width > 0)),
+              flecha: getComputedStyle(vis("[data-flecha-portal]")!).transitionDuration,
+              menu: getComputedStyle(document.querySelector(".menu-linea-1")!).transitionDuration,
             }
           })
-          expect(r.flechaTransicion).toMatch(/^0s$/)
-          expect(r.lineaTransicion).toMatch(/^0s$/)
-          expect(r.brilloAnimacion).toBe("none")
-          expect(r.vaiven).toBe("none")
-          // El estado cambia igual, sin transición.
+          expect(r).toEqual({ halo: "none", arco: "none", linea: "none", flecha: "0s", menu: "0s" })
           await p.click("[data-boton-menu]:visible")
           await p.waitForTimeout(100)
-          const lineas = await p.evaluate(() => getComputedStyle(document.querySelector(".menu-linea-1")!).transform)
-          expect(lineas, "la X se forma al instante").not.toBe("none")
+          expect(await p.evaluate(() => getComputedStyle(document.querySelector(".menu-linea-1")!).transform), "la X se forma al instante").not.toBe("none")
         })
       })
     }
@@ -1005,35 +1032,37 @@ describe("el botón del menú y la flecha de Portal", () => {
 
 describe("las animaciones no mueven el diseño", () => {
   for (const ancho of [360, 390, 820]) {
-    it(`${ancho}px: ningún desplazamiento de diseño en la cabecera durante la carga, y los botones no se mueven mientras animan`, async (ctx) => {
+    it(`${ancho}px: ningún desplazamiento de diseño en la cabecera y las cajas de los botones no se mueven mientras animan`, async (ctx) => {
       if (!navegador) return ctx.skip()
       const p = await navegador.newPage({ viewport: { width: ancho, height: alto(ancho) }, reducedMotion: "no-preference" })
       try {
         await p.goto(servidor.base + "/", { waitUntil: "networkidle" })
         const r = await p.evaluate(async () => {
-          const botones = () => [...document.querySelectorAll<HTMLElement>("header nav a, header nav button")].filter((e) => e.getBoundingClientRect().width > 0 && !e.closest("[role=menu]")).map((e) => e.getBoundingClientRect()).map((b) => [b.left, b.top, b.width, b.height].map((n) => Math.round(n * 100) / 100))
+          const cajas = () =>
+            [...document.querySelectorAll<HTMLElement>("header nav a, header nav button")]
+              .filter((e) => e.getBoundingClientRect().width > 0 && !e.closest("[role=menu]"))
+              .map((e) => e.getBoundingClientRect())
+              .map((b) => [b.left, b.top, b.width, b.height].map((n) => Math.round(n * 100) / 100))
           let cls = 0
           const po = new PerformanceObserver((l) => {
             for (const en of l.getEntries() as unknown as { value: number; hadRecentInput: boolean; sources?: { node?: Node }[] }[]) {
               if (!en.hadRecentInput && (en.sources ?? []).some((s) => s.node && document.querySelector("header")?.contains(s.node))) cls += en.value
             }
           })
-          po.observe({ type: "layout-shift", buffered: true })
-          // Reinicia las animaciones de carga y compara las cajas de los botones a lo largo de ellas.
-          document.querySelectorAll<HTMLElement>("[data-carga]").forEach((e) => {
-            e.setAttribute("data-carga", "no")
-            void e.offsetWidth
-            e.setAttribute("data-carga", "si")
-          })
-          const antes = botones()
+          po.observe({ type: "layout-shift", buffered: true }) // incluye lo ocurrido durante la carga
+          const visible = (s: string) => [...document.querySelectorAll<HTMLElement>(s)].find((e) => e.getBoundingClientRect().width > 0)!
+          const antes = cajas()
+          // Dispara a la vez el halo y la secuencia de Portal y compara las cajas durante todo el efecto.
+          visible("[data-barra-reservar]").dispatchEvent(new MouseEvent("mouseover", { bubbles: true }))
+          visible("[data-barra-reservar]").focus()
+          visible("[data-portal-movil] > button, [data-tablet-portal] > button").focus()
           const muestras: number[][][] = []
-          for (let i = 0; i < 8; i++) {
-            await new Promise((res) => setTimeout(res, 500))
-            muestras.push(botones())
+          for (let i = 0; i < 6; i++) {
+            await new Promise((res) => setTimeout(res, 450))
+            muestras.push(cajas())
           }
-          await new Promise((res) => setTimeout(res, 100))
           po.disconnect()
-          return { cls, antes, muestras }
+          return { cls, antes, muestras, corriendo: document.getAnimations().filter((a) => a.playState === "running").length }
         })
         expect(r.cls, "desplazamiento de diseño en la cabecera").toBe(0)
         for (const m of r.muestras) expect(m, "cajas de los botones de la barra").toEqual(r.antes)
@@ -1044,51 +1073,72 @@ describe("las animaciones no mueven el diseño", () => {
   }
 })
 
-describe("contraste de «Reservar» durante el brillo", () => {
+describe("«Reservar» con el halo: contraste y forma", () => {
   for (const [idioma, ruta] of Object.entries(IDIOMAS)) {
-    it(`${idioma} 390px: el texto de Reservar ≥ 4,5:1 en reposo y con el brillo en su punto más claro, en la barra sobre la foto y en la barra clara`, async (ctx) => {
+    it(`${idioma} 390px: texto ≥ 4,5:1 sobre la foto y en la barra clara; el halo es un aro dorado #ebd4ad que crece de 1 a 1,35 y se desvanece`, async (ctx) => {
       if (!navegador) return ctx.skip()
-      await conMovimiento(390, true, ruta, async (p) => {
+      await conMovimiento(390, false, ruta, async (p) => {
         const medir = () =>
           p.evaluate(() => {
             const e = [...document.querySelectorAll<HTMLElement>("[data-barra-reservar]")].find((x) => x.getBoundingClientRect().width > 0)!
             const n = (c: string) => (c.match(/-?\d*\.?\d+/g) || []).map(Number)
             const lin = (v: number) => ((v /= 255) <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4)
             const L = (c: number[]) => 0.2126 * lin(c[0]) + 0.7152 * lin(c[1]) + 0.0722 * lin(c[2])
-            const k = (a: number[], b: number[]) => {
-              const [h, l] = [L(a), L(b)].sort((x, y) => y - x)
-              return (h + 0.05) / (l + 0.05)
-            }
-            const bg = n(getComputedStyle(e).backgroundColor).slice(0, 3)
-            const tx = n(getComputedStyle(e).color).slice(0, 3)
-            const alfa = Number(getComputedStyle(e).getPropertyValue("--brillo-alfa"))
-            // El brillo es blanco con esa opacidad por encima del texto y del fondo (peor caso: el centro del degradado).
-            const mezcla = (c: number[]) => c.map((v) => v * (1 - alfa) + 255 * alfa)
-            return { reposo: k(tx, bg), brillo: k(mezcla(tx), mezcla(bg)), alfa }
+            const [h, l] = [L(n(getComputedStyle(e).color)), L(n(getComputedStyle(e).backgroundColor))].sort((x, y) => y - x)
+            return (h + 0.05) / (l + 0.05)
           })
-        const foto = await medir()
-        expect(foto.alfa).toBeGreaterThan(0)
-        expect(foto.reposo).toBeGreaterThanOrEqual(4.5)
-        expect(foto.brillo, "con el brillo, sobre la foto").toBeGreaterThanOrEqual(4.5)
+        expect(await medir()).toBeGreaterThanOrEqual(4.5)
+        const halo = await p.evaluate(() => {
+          const h = [...document.querySelectorAll<HTMLElement>("[data-halo-reservar]")].find((x) => x.getBoundingClientRect().width > 0)!
+          const c = getComputedStyle(h)
+          const k = document.getAnimations().find((a) => (a as CSSAnimation).animationName === "halo-pulso")!
+          const fr = (k.effect as KeyframeEffect).getKeyframes()
+          return { borde: c.borderTopColor, ancho: c.borderTopWidth, transform: fr.map((f) => String(f.transform)), opacidad: fr.map((f) => Number(f.opacity)), propiedades: [...new Set(fr.flatMap((f) => Object.keys(f)))].filter((q) => !["offset", "computedOffset", "easing", "composite"].includes(q)).sort() }
+        })
+        expect(halo.borde).toBe("rgb(235, 212, 173)")
+        expect(halo.transform).toEqual(["scale(1)", "scale(1.35)"])
+        expect(halo.opacidad[1]).toBe(0)
+        expect(halo.propiedades, "solo transform y opacity").toEqual(["opacity", "transform"])
         await p.evaluate(() => window.scrollTo(0, 900))
         await p.waitForTimeout(900)
         await p.evaluate(() => window.scrollTo(0, 860))
         await p.waitForTimeout(900)
-        const clara = await medir()
-        expect(clara.reposo).toBeGreaterThanOrEqual(4.5)
-        expect(clara.brillo, "con el brillo, en la barra clara").toBeGreaterThanOrEqual(4.5)
+        expect(await medir(), "en la barra clara").toBeGreaterThanOrEqual(4.5)
       })
     })
   }
+  it("390px: el subrayado de Portal es una línea de 1 px #ebd4ad y el candado y el subrayado solo usan transform y opacity", async (ctx) => {
+    if (!navegador) return ctx.skip()
+    await conMovimiento(390, false, "/", async (p) => {
+      const r = await p.evaluate(() => {
+        const l = document.querySelector<HTMLElement>("[data-portal-linea]")!
+        const c = getComputedStyle(l)
+        const props = (n: string) => {
+          const a = document.getAnimations().find((x) => (x as CSSAnimation).animationName === n)!
+          const fr = (a.effect as KeyframeEffect).getKeyframes()
+          return [...new Set(fr.flatMap((f) => Object.keys(f)))].filter((q) => !["offset", "computedOffset", "easing", "composite"].includes(q)).sort()
+        }
+        return { alto: c.height, color: c.backgroundColor, linea: props("portal-linea"), arco: props("portal-arco") }
+      })
+      expect(r.alto).toBe("1px")
+      expect(r.color).toBe("rgb(235, 212, 173)")
+      expect(r.linea).toEqual(["opacity", "transform"])
+      expect(r.arco).toEqual(["transform"])
+    })
+  })
 })
 
 describe("animaciones: el escritorio no cambia", () => {
-  it("1.280 px: ninguna animación ni elemento nuevo de la barra de móvil", async (ctx) => {
+  it("1.280 px: ninguna animación ni elemento nuevo de la barra de móvil, ni al pasar por arriba", async (ctx) => {
     if (!navegador) return ctx.skip()
     await conMovimiento(1280, false, "/", async (p) => {
+      await p.evaluate(() => window.scrollTo(0, 600))
+      await p.waitForTimeout(400)
+      await p.evaluate(() => window.scrollTo(0, 0))
+      await p.waitForTimeout(400)
       const r = await p.evaluate((nombres) => ({
         animaciones: document.getAnimations().filter((a) => a instanceof CSSAnimation && nombres.includes(a.animationName)).length,
-        visibles: [...document.querySelectorAll<HTMLElement>(".reservar-brillo, .boton-portal, .boton-menu, [data-flecha-portal]")].filter((e) => e.getBoundingClientRect().width > 0).length,
+        visibles: [...document.querySelectorAll<HTMLElement>(".reservar-halo, .boton-portal, .boton-menu, [data-flecha-portal], [data-halo-reservar], [data-portal-linea]")].filter((e) => e.getBoundingClientRect().width > 0).length,
       }), NUESTRAS)
       expect(r).toEqual({ animaciones: 0, visibles: 0 })
     })

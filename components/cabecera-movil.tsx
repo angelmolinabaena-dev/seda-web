@@ -1,7 +1,7 @@
 "use client"
 
-import { useEffect, useId, useRef, useState, useTransition } from "react"
-import { ArrowUpRight, Building2, ChevronDown, KeyRound, Lock, MessageCircle, Smartphone } from "lucide-react"
+import { useCallback, useEffect, useId, useRef, useState, useTransition } from "react"
+import { ArrowUpRight, Building2, ChevronDown, KeyRound, MessageCircle, Smartphone } from "lucide-react"
 import { useLocale, useTranslations } from "next-intl"
 import { Link, usePathname, useRouter } from "@/i18n/navigation"
 import { routing, type Locale } from "@/i18n/routing"
@@ -18,42 +18,78 @@ import { DESTINO_PROPIETARIOS, DESTINO_VIAJEROS, URL_GUEST_APP, URL_PORTAL_PROPI
 
 const OLIVA = "#536043"
 
-/** «Reservar» (crema sobre la foto, tinta sobre la barra clara) → reserva; en páginas de propietarios, «Valorar» → propietarios. */
-/** Verdadero durante la animación de carga (se apaga sola pasados `ms`): los brillos y vaivenes de la barra. */
-function useAnimacionDeCarga(ms: number): boolean {
-  const [carga, setCarga] = useState(true)
+/**
+ * Llamadas de atención de la barra (31e). Al cargar, el CSS corre `alCargar` repeticiones (`--pulsos`); después, `disparar()`
+ * las reinicia con 1 repetición (sin volver a montar nada: así no se pierde un clic). Se llama al volver arriba del todo
+ * tras haber bajado más de 200 px, y desde los manejadores de ratón y foco. El elemento con `ref` lleva `--pulsos`; los
+ * elementos animados llevan `data-anima`.
+ */
+function usePulso<T extends HTMLElement>(alCargar: number) {
+  const ref = useRef<T>(null)
+  const disparar = useCallback(() => {
+    const raiz = ref.current
+    if (!raiz) return
+    raiz.style.setProperty("--pulsos", "1")
+    const animados = [raiz, ...Array.from(raiz.querySelectorAll<HTMLElement | SVGElement>("[data-anima]"))].filter((e) => e.hasAttribute("data-anima"))
+    for (const e of animados) e.style.animation = "none"
+    void raiz.offsetWidth // reflujo: el navegador ve «sin animación» antes de que vuelva la de la hoja de estilos
+    for (const e of animados) e.style.animation = ""
+  }, [])
   useEffect(() => {
-    const id = setTimeout(() => setCarga(false), ms)
-    return () => clearTimeout(id)
-  }, [ms])
-  return carga
+    let bajo = window.scrollY > 200
+    const alDesplazar = () => {
+      const y = window.scrollY
+      if (y > 200) bajo = true
+      else if (y <= 2 && bajo) {
+        bajo = false
+        disparar()
+      }
+    }
+    window.addEventListener("scroll", alDesplazar, { passive: true })
+    return () => window.removeEventListener("scroll", alDesplazar)
+  }, [disparar])
+  return { ref, disparar, alCargar }
 }
 
+/** «Reservar» (crema sobre la foto, tinta sobre la barra clara) → reserva; en páginas de propietarios, «Valorar» → propietarios. Halo dorado. */
 export function BotonReservar({ tipo, solido }: { tipo: TipoPagina; solido: boolean }) {
   const t = useTranslations()
   const r = reservaDe(tipo)
-  const carga = useAnimacionDeCarga(4800)
+  const { ref, disparar, alCargar } = usePulso<HTMLSpanElement>(3)
   return (
     <Link
       href={r.href}
       data-barra-reservar={r.clave}
-      data-carga={carga ? "si" : "no"}
-      className={`reservar-brillo inline-flex h-[38px] shrink-0 items-center justify-center whitespace-nowrap rounded-full px-[18px] text-[13.5px] font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current focus-visible:ring-offset-2 ${
+      onMouseEnter={disparar}
+      onFocus={disparar}
+      className={`reservar-halo inline-flex h-[38px] shrink-0 items-center justify-center whitespace-nowrap rounded-full px-[18px] text-[13.5px] font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current focus-visible:ring-offset-2 ${
         solido ? "bg-foreground text-background hover:opacity-90" : "bg-background text-foreground hover:opacity-90"
       }`}
     >
+      <span ref={ref} aria-hidden data-halo-reservar data-anima className="halo-reservar" style={{ "--pulsos": alCargar } as React.CSSProperties} />
       {t(`movil.${r.clave}`)}
     </Link>
   )
 }
 
-/** Flecha de «Portal»: vaivén de 2 px al cargar (3 veces) y al pasar el ratón o enfocar; gira 180° con el panel abierto. */
-function FlechaPortal({ abierto }: { abierto: boolean }) {
-  const carga = useAnimacionDeCarga(3900)
+/** Candado que se abre y línea dorada que se dibuja bajo el texto, a la vez; y la flecha ▾ que solo gira con el panel abierto. */
+function ContenidoPortal({ texto, abierto, ref, alCargar }: { texto: string; abierto: boolean; ref: React.Ref<HTMLSpanElement>; alCargar: number }) {
   return (
-    <span aria-hidden data-flecha-portal-vaiven className="flecha-portal-vaiven" data-carga={carga ? "si" : "no"}>
-      <ChevronDown data-flecha-portal data-abierta={abierto ? "si" : "no"} className={`flecha-portal-giro h-2.5 w-2.5 transition-transform duration-200 ${abierto ? "rotate-180" : ""}`} strokeWidth={2} />
-    </span>
+    <>
+      <span ref={ref} data-portal-secuencia className="portal-contenido" style={{ "--pulsos": alCargar } as React.CSSProperties}>
+        <svg viewBox="0 0 24 24" className="portal-candado h-[13px] w-[13px] shrink-0" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+          <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+          <path className="portal-arco" data-anima d="M7 11V7a5 5 0 0 1 10 0v4" />
+        </svg>
+        <span className="portal-texto">
+          {texto}
+          <span aria-hidden data-portal-linea data-anima className="portal-linea" />
+        </span>
+      </span>
+      <span aria-hidden className="inline-flex">
+        <ChevronDown data-flecha-portal data-abierta={abierto ? "si" : "no"} className={`flecha-portal-giro h-2.5 w-2.5 transition-transform duration-200 ${abierto ? "rotate-180" : ""}`} strokeWidth={2} />
+      </span>
+    </>
   )
 }
 
@@ -92,6 +128,7 @@ export function PortalMovil({ abierto, setAbierto, solido }: { abierto: boolean;
   const raiz = useRef<HTMLDivElement>(null)
   const boton = useRef<HTMLButtonElement>(null)
   const id = useId()
+  const { ref: refPulso, disparar, alCargar } = usePulso<HTMLSpanElement>(2)
 
   useEffect(() => {
     if (!abierto) return
@@ -121,13 +158,13 @@ export function PortalMovil({ abierto, setAbierto, solido }: { abierto: boolean;
         aria-expanded={abierto}
         aria-controls={id}
         aria-haspopup="dialog"
+        onMouseEnter={disparar}
+        onFocus={disparar}
         className={`boton-portal inline-flex h-11 shrink-0 items-center gap-1 whitespace-nowrap rounded-sm px-1.5 font-mono text-[10px] uppercase tracking-[0.18em] opacity-90 transition-colors duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current ${
           solido ? "text-foreground" : "text-background"
         }`}
       >
-        <Lock className="h-[13px] w-[13px] shrink-0" strokeWidth={1.5} aria-hidden />
-        {t("movil.portal")}
-        <FlechaPortal abierto={abierto} />
+        <ContenidoPortal texto={t("movil.portal")} abierto={abierto} ref={refPulso} alCargar={alCargar} />
       </button>
       {abierto && (
         <div
@@ -214,6 +251,7 @@ export function PortalMenu({ solido }: { solido: boolean }) {
   const t = useTranslations()
   const [abierto, setAbierto] = useState(false)
   const raiz = useRef<HTMLDivElement>(null)
+  const { ref: refPulso, disparar, alCargar } = usePulso<HTMLSpanElement>(2)
   useEffect(() => {
     if (!abierto) return
     const alPulsar = (e: KeyboardEvent) => e.key === "Escape" && setAbierto(false)
@@ -232,13 +270,13 @@ export function PortalMenu({ solido }: { solido: boolean }) {
         onClick={() => setAbierto((v) => !v)}
         aria-haspopup="menu"
         aria-expanded={abierto}
+        onMouseEnter={disparar}
+        onFocus={disparar}
         className={`boton-portal inline-flex min-h-[44px] items-center gap-1.5 whitespace-nowrap rounded-sm px-1 font-mono text-[10px] uppercase tracking-[0.18em] opacity-90 transition-colors duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current ${
           solido ? "text-foreground" : "text-background"
         }`}
       >
-        <Lock className="h-[13px] w-[13px] shrink-0" strokeWidth={1.5} aria-hidden />
-        {t("nav.portal")}
-        <FlechaPortal abierto={abierto} />
+        <ContenidoPortal texto={t("nav.portal")} abierto={abierto} ref={refPulso} alCargar={alCargar} />
       </button>
       <div role="menu" className={`absolute right-0 top-full z-10 w-[22rem] max-w-[calc(100vw-2rem)] whitespace-normal pt-2 transition-all duration-200 ${abierto ? "visible opacity-100" : "pointer-events-none invisible opacity-0"}`}>
         <div data-portal-panel className="box-border w-full border border-border bg-background shadow-xl">
