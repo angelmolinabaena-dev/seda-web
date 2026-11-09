@@ -496,11 +496,11 @@ export function Navigation() {
               </button>
               <div
                 role="menu"
-                className={`absolute right-0 top-full pt-2 transition-all duration-200 w-[300px] z-10 ${
+                className={`absolute right-0 top-full pt-2 transition-all duration-200 w-[22rem] max-w-[calc(100vw-2rem)] whitespace-normal z-10 ${
                   isAccessOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"
                 }`}
               >
-                <div className="bg-background border border-border shadow-xl">
+                <div data-portal-panel className="box-border w-full bg-background border border-border shadow-xl">
                   <TarjetasPortal />
                 </div>
               </div>
@@ -590,7 +590,9 @@ export function Navigation() {
             per-element transition-delay (see below). The combined
             effect reads like an editorial curtain reveal. */}
       <div
-        className={`min-[1280px]:hidden fixed inset-0 z-40 bg-background/[0.98] backdrop-blur-md ${
+        // z-[45]: por encima del botón del asistente (z-40, también fixed y posterior en el DOM, que antes quedaba
+        // encima del botón «Solicitar estancia» del menú) y por debajo de la cabecera (z-50) y del panel del asistente.
+        className={`min-[1280px]:hidden fixed inset-0 z-[45] bg-background/[0.98] backdrop-blur-md ${
           isOpen
             ? "opacity-100 pointer-events-auto transition-opacity duration-200 ease-out"
             : "opacity-0 pointer-events-none transition-opacity duration-150 ease-in"

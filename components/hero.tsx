@@ -153,6 +153,8 @@ export function Hero() {
             <div className="w-[26px] md:w-[36px] h-px bg-[rgba(255,249,240,0.40)] mt-[26px] md:mt-[30px]" />
             <h1 className="mt-[24px] md:mt-[28px] font-serif font-light text-[clamp(2.5rem,7vw,6rem)] leading-[1.02] tracking-[-0.015em] text-background text-balance">
               {t("home.hero.h1.line1")}
+              {/* El espacio va ANTES del <br>: por debajo de md el <br> está oculto y sin él se lee «inteligente.Alma». */}
+              {" "}
               <br className="hidden md:block" />
               <span className="italic">{t("home.hero.h1.line2")}</span>
             </h1>

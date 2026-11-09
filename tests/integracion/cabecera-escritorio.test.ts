@@ -30,7 +30,7 @@ const IDIOMAS: Record<string, string> = { es: "/", en: "/en", fr: "/fr", de: "/d
 // Playwright no es dependencia del proyecto: tipos mínimos de lo que se usa.
 type Pagina = {
   goto(url: string, o: { waitUntil: "networkidle" }): Promise<unknown>
-  evaluate<T>(f: (() => T) | string): Promise<T>
+  evaluate<T, A = undefined>(f: ((arg: A) => T) | string, arg?: A): Promise<T>
   waitForTimeout(ms: number): Promise<void>
   click(selector: string): Promise<void>
   hover(selector: string): Promise<void>
@@ -398,6 +398,182 @@ describe("la franja fina: sin solapes, una línea, y se recoge al bajar", () => 
           expect(r.velo, "velo de la barra sobre la foto").toBeCloseTo(0.68, 2)
           expect(r.n).toBeGreaterThan(8)
           expect(r.peor, `peor texto de la barra: «${r.cual}»`).toBeGreaterThanOrEqual(4.5)
+        } finally {
+          await p.close()
+        }
+      })
+    }
+  }
+})
+
+/* ── El desplegable «Portal» contiene sus tarjetas (PORTAL-DESPLEGABLE) ─────────
+   Defecto visto a 1.356 px: las tarjetas eran más anchas que el panel crema y se salían por la
+   derecha (la etiqueta larga heredaba `white-space: nowrap` del bloque derecho de la barra). */
+
+function medirContencion([selectorPanel, selectorTarjetas]: [string, string]) {
+  const panel = document.querySelector<HTMLElement>(selectorPanel)
+  if (!panel) return { error: `no hay ${selectorPanel}` }
+  const rp = panel.getBoundingClientRect()
+  const problemas: string[] = []
+  const dentro = (r: DOMRect, c: DOMRect, que: string, margen = 0.5) => {
+    if (r.left < c.left - margen || r.right > c.right + margen) problemas.push(`${que} se sale de su contenedor (${Math.round(r.left)}–${Math.round(r.right)} frente a ${Math.round(c.left)}–${Math.round(c.right)})`)
+  }
+  if (rp.left < -0.5 || rp.right > innerWidth + 0.5) problemas.push(`el panel se sale de la ventana (${Math.round(rp.left)}–${Math.round(rp.right)} de ${innerWidth})`)
+  const tarjetas = [...document.querySelectorAll<HTMLElement>(selectorTarjetas)]
+  for (const t of tarjetas) {
+    const rt = t.getBoundingClientRect()
+    const nombre = (t.textContent || "").replace(/\s+/g, " ").trim().slice(0, 30)
+    dentro(rt, rp, `la tarjeta «${nombre}»`)
+    if (rt.left < -0.5 || rt.right > innerWidth + 0.5) problemas.push(`la tarjeta «${nombre}» se sale de la ventana`)
+    if (t.scrollWidth > t.clientWidth + 0.5) problemas.push(`la tarjeta «${nombre}» desborda ${t.scrollWidth - t.clientWidth} px`)
+    for (const h of t.querySelectorAll<HTMLElement>("*")) {
+      const rh = h.getBoundingClientRect()
+      if (rh.width > 0) dentro(rh, rt, `el texto «${(h.textContent || "").trim().slice(0, 24)}»`, 1)
+    }
+  }
+  if (panel.scrollWidth > panel.clientWidth + 0.5) problemas.push(`el panel desborda ${panel.scrollWidth - panel.clientWidth} px`)
+  return { problemas, n: tarjetas.length, ancho: Math.round(rp.width), anchoTarjeta: tarjetas[0] ? Math.round(tarjetas[0].getBoundingClientRect().width) : 0, derechaPanel: Math.round(rp.right) }
+}
+
+describe("el desplegable Portal ▾ contiene sus tarjetas", () => {
+  for (const [idioma, ruta] of Object.entries(IDIOMAS)) {
+    for (const ancho of [1280, 1356, 1440, 1920]) {
+      it(`${idioma} ${ancho}px: ninguna tarjeta ni texto se sale del panel ni de la ventana, y el panel acaba en el borde del botón`, async (ctx) => {
+        if (!navegador) return ctx.skip()
+        const p = await navegador.newPage({ viewport: { width: ancho, height: 900 } })
+        try {
+          await p.goto(servidor.base + ruta, { waitUntil: "networkidle" })
+          await p.hover("button[aria-haspopup='menu']:has-text('Portal'), button[aria-haspopup='menu']:has-text('Portail')")
+          await p.waitForTimeout(400)
+          const r = await p.evaluate(medirContencion, ["[data-portal-panel]", "[data-portal-tarjeta]"] as [string, string])
+          expect(r).not.toHaveProperty("error")
+          expect((r as { problemas: string[] }).problemas, `${idioma} ${ancho}px`).toEqual([])
+          expect((r as { n: number }).n).toBe(2)
+          // Las dos tarjetas ocupan el ancho útil del panel (panel − 2 bordes − 2×8 de relleno).
+          expect((r as { anchoTarjeta: number }).anchoTarjeta).toBe((r as { ancho: number }).ancho - 2 - 16)
+          const boton = await p.evaluate(() => {
+            const b = [...document.querySelectorAll<HTMLElement>("header nav button[aria-haspopup='menu']")].find((e) => e.getBoundingClientRect().width > 0 && e.closest("[class*='gap-2']") && /Portal|Portail/.test(e.textContent || ""))
+            return b ? Math.round(b.getBoundingClientRect().right) : null
+          })
+          expect(boton, "botón Portal encontrado").not.toBeNull()
+          expect(Math.abs((r as { derechaPanel: number }).derechaPanel - (boton as number)), "panel alineado al borde derecho del botón").toBeLessThanOrEqual(1)
+        } finally {
+          await p.close()
+        }
+      })
+    }
+  }
+
+  for (const [idioma, ruta] of Object.entries(IDIOMAS)) {
+    it(`${idioma} 390px (móvil): las tarjetas de la franja y los accesos de Portal del menú no se salen`, async (ctx) => {
+      if (!navegador) return ctx.skip()
+      const p = await navegador.newPage({ viewport: { width: 390, height: 844 } })
+      try {
+        await p.goto(servidor.base + ruta, { waitUntil: "networkidle" })
+        await p.click("button[aria-label][aria-expanded]")
+        await p.waitForTimeout(800)
+        const franja = (await p.evaluate(medirContencion, ["[data-franja-movil]", "[data-franja-movil] a"] as [string, string])) as { problemas: string[]; n: number }
+        expect(franja.problemas, `${idioma} tarjetas de la franja`).toEqual([])
+        expect(franja.n).toBe(2)
+        // Pie del menú móvil: «Acceso huéspedes · Acceso propietarios».
+        const pie = await p.evaluate(() => {
+          const enlaces = [...document.querySelectorAll<HTMLAnchorElement>("a[href*='sedaprivatehomes.com']")].filter((a) => a.getBoundingClientRect().width > 0 && a.closest("[aria-hidden='false'], [inert]") !== null && !a.closest("header"))
+          const fuera = enlaces.filter((a) => {
+            const r = a.getBoundingClientRect()
+            return r.left < -0.5 || r.right > innerWidth + 0.5
+          })
+          return { n: enlaces.length, fuera: fuera.map((a) => (a.textContent || "").trim()), scrollW: document.documentElement.scrollWidth, innerW: innerWidth }
+        })
+        expect(pie.n).toBeGreaterThanOrEqual(2)
+        expect(pie.fuera, "accesos de Portal fuera de la ventana").toEqual([])
+        expect(pie.scrollW, "scroll horizontal").toBeLessThanOrEqual(pie.innerW)
+      } finally {
+        await p.close()
+      }
+    })
+  }
+})
+
+/* ── Móvil: menú abierto frente al botón del asistente, y título del hero ────────
+   Con el menú abierto (fixed inset-0) el botón del asistente (fixed z-40, posterior en el DOM)
+   quedaba encima del botón «Solicitar estancia» del menú; y por debajo de md el <br> del título del
+   hero está oculto y se leía «inteligente.Alma». */
+
+describe("móvil: el menú abierto queda por encima del asistente", () => {
+  for (const ancho of [390, 820]) {
+    it(`${ancho}px: con el menú abierto, nada con z-index 40 (el botón del asistente) tapa ningún enlace del menú`, async (ctx) => {
+      if (!navegador) return ctx.skip()
+      const p = await navegador.newPage({ viewport: { width: ancho, height: 900 } })
+      try {
+        await p.goto(servidor.base, { waitUntil: "networkidle" })
+        await p.click("button[aria-label][aria-expanded]")
+        await p.waitForTimeout(800)
+        const r = await p.evaluate(() => {
+          // Sonda: un elemento fixed z-index 40 que cubre toda la ventana, como el botón del asistente (fixed z-40).
+          // Si el menú está por encima, el punto central de cada enlace del menú sigue siendo del menú.
+          const sonda = document.createElement("div")
+          sonda.id = "sonda-z40"
+          sonda.style.cssText = "position:fixed;inset:0;z-index:40;background:transparent"
+          document.body.appendChild(sonda)
+          const menu = document.querySelector<HTMLElement>("div.fixed.inset-0")!
+          const enlaces = [...menu.querySelectorAll<HTMLAnchorElement>("a")].filter((a) => {
+            const q = a.getBoundingClientRect()
+            return q.width > 0 && q.height > 0 && q.top >= 0 && q.bottom <= innerHeight
+          })
+          const tapados = enlaces
+            .filter((a) => {
+              const q = a.getBoundingClientRect()
+              const el = document.elementFromPoint(q.left + q.width / 2, q.top + q.height / 2)
+              return !(el && (a === el || a.contains(el)))
+            })
+            .map((a) => (a.textContent || "").trim().slice(0, 24))
+          // Y el botón real del asistente, si esta compilación lo lleva (solo con SEDA_FLAG_ASISTENTE_PROPIETARIOS=1).
+          const boton = document.querySelector<HTMLElement>("[data-asistente-boton]")
+          let botonTapa: string[] = []
+          if (boton) {
+            const b = boton.getBoundingClientRect()
+            botonTapa = enlaces
+              .filter((a) => {
+                const q = a.getBoundingClientRect()
+                const x = Math.min(Math.max(q.left + q.width / 2, b.left + 1), b.right - 1)
+                const y = Math.min(Math.max(q.top + q.height / 2, b.top + 1), b.bottom - 1)
+                const dentro = x >= q.left && x <= q.right && y >= q.top && y <= q.bottom && b.width > 0
+                if (!dentro) return false
+                const el = document.elementFromPoint(x, y)
+                return !(el && (a === el || a.contains(el)))
+              })
+              .map((a) => (a.textContent || "").trim().slice(0, 24))
+          }
+          return { n: enlaces.length, tapados, botonTapa, conBoton: !!boton, zMenu: getComputedStyle(menu).zIndex }
+        })
+        expect(r.n, "enlaces del menú visibles").toBeGreaterThan(3)
+        expect(Number(r.zMenu), "el menú queda por encima de z-40").toBeGreaterThan(40)
+        expect(r.tapados, "enlaces del menú tapados por algo de z-40").toEqual([])
+        expect(r.botonTapa, "enlaces del menú tapados por el botón del asistente").toEqual([])
+      } finally {
+        await p.close()
+      }
+    })
+  }
+})
+
+describe("hero de la portada: espacio entre las dos frases del título", () => {
+  for (const [idioma, ruta] of Object.entries(IDIOMAS)) {
+    for (const ancho of [390, 820, 1440]) {
+      it(`${idioma} ${ancho}px: el título lleva espacio entre la primera y la segunda frase`, async (ctx) => {
+        if (!navegador) return ctx.skip()
+        const m = (await import(`@/messages/${idioma}.json`)).default.home.hero.h1 as { line1: string; line2: string }
+        const p = await navegador.newPage({ viewport: { width: ancho, height: 900 } })
+        try {
+          await p.goto(servidor.base + ruta, { waitUntil: "networkidle" })
+          const h1 = await p.evaluate(() => {
+            const e = document.querySelector<HTMLElement>("#hero h1")!
+            return { texto: (e.textContent || "").replace(/\s+/g, " ").trim(), visible: (e as HTMLElement).innerText.replace(/\s+/g, " ").trim() }
+          })
+          expect(h1.texto).toBe(`${m.line1} ${m.line2}`)
+          // Lo que se ve (innerText respeta el <br> oculto): también separado.
+          expect(h1.visible).toBe(`${m.line1} ${m.line2}`)
+          expect(h1.visible).not.toMatch(/[.!?][A-ZÁÉÍÓÚÀÂÇÉÈÊÎÔÛÄÖÜ]/)
         } finally {
           await p.close()
         }

@@ -132,7 +132,7 @@ export function TarjetasFranjaMovil({ tipo, onNavegar }: { tipo: TipoPagina; onN
     { lado: "propietarios" as const, etiqueta: t("franja.propietarios"), frase: t("franja.frase_propietarios"), enlace: t("cta.valorar_propiedad"), href: DESTINO_PROPIETARIOS },
   ]
   return (
-    <div data-franja-movil className="mb-8 grid grid-cols-1 gap-3 sm:grid-cols-2">
+    <div data-franja-movil className="mb-8 grid grid-cols-[minmax(0,1fr)] gap-3 sm:grid-cols-2">
       {tarjetas.map((c) => {
         const destacada = tipo === c.lado
         return (
@@ -140,7 +140,7 @@ export function TarjetasFranjaMovil({ tipo, onNavegar }: { tipo: TipoPagina; onN
             key={c.lado}
             href={c.href}
             onClick={onNavegar(c.href)}
-            className={`flex flex-col gap-1.5 rounded-sm border px-4 py-3.5 transition-colors ${
+            className={`box-border flex w-full min-w-0 flex-col gap-1.5 break-words rounded-sm border px-4 py-3.5 transition-colors ${
               destacada ? "border-[hsl(var(--gold))]/60 bg-[hsl(var(--gold))]/[0.08]" : "border-border"
             }`}
           >
@@ -167,7 +167,7 @@ export function TarjetasPortal() {
     { clave: "propietarios", titulo: t("franja.propietarios_titulo"), linea: t("franja.propietarios_linea"), href: URL_PORTAL_PROPIETARIO },
   ]
   return (
-    <div className="grid gap-2 p-2">
+    <div className="grid grid-cols-[minmax(0,1fr)] gap-2 p-2">
       {tarjetas.map((c) => (
         <a
           key={c.clave}
@@ -176,7 +176,7 @@ export function TarjetasPortal() {
           rel="noopener noreferrer"
           role="menuitem"
           data-portal-tarjeta={c.clave}
-          className="group flex flex-col gap-1 rounded-sm border border-border px-4 py-3 transition-colors hover:border-foreground/30 hover:bg-secondary/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current"
+          className="group box-border flex w-full min-w-0 flex-col gap-1 whitespace-normal break-words rounded-sm border border-border px-4 py-3 transition-colors hover:border-foreground/30 hover:bg-secondary/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current"
         >
           <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-foreground">{c.titulo}</span>
           <span className="text-[0.8rem] leading-snug text-muted-foreground">{c.linea}</span>
