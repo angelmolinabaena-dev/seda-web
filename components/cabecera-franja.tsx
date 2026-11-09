@@ -23,9 +23,9 @@ import {
   · Izquierda, viajeros: «Solicitar estancia →». Derecha, propietarios: «Valorar mi
     propiedad →» en oro claro. Mismos destinos que el botón que tenía la barra.
   · Según la página (lib/franja-cabecera.ts): en las de propietarios la mitad de
-    propietarios queda plena, con un punto dorado delante, y la de viajeros atenuada;
-    en las de viajeros, al revés; en la portada y el resto, iguales. Solo se atenúan la
-    etiqueta y la frase: los enlaces conservan su contraste.
+    propietarios queda destacada y en las de viajeros la de viajeros; en la portada y el
+    resto, iguales. Se destaca con un punto dorado delante, la etiqueta en oro claro y la
+    frase al 90 %; la otra mitad NO se apaga: todo el texto pasa 4,5:1 sobre la foto más clara.
   · Ancho: desde 1.440 px completa; de 1.280 a 1.439, solo etiqueta y enlace (sin la
     frase); por debajo de 1.280 no se ve y sus dos enlaces van arriba del menú móvil.
   · Al bajar por la página se recoge con una transición suave (sin animación con
@@ -37,7 +37,6 @@ const oro = `hsl(${ORO_CLARO_HSL[0]} ${ORO_CLARO_HSL[1]}% ${ORO_CLARO_HSL[2]}%)`
 
 function Mitad({
   lado,
-  plena,
   destacada,
   etiqueta,
   frase,
@@ -45,7 +44,6 @@ function Mitad({
   href,
 }: {
   lado: "viajeros" | "propietarios"
-  plena: boolean
   destacada: boolean
   etiqueta: string
   frase: string
@@ -56,11 +54,11 @@ function Mitad({
   return (
     <div
       data-franja-mitad={lado}
-      data-franja-estado={destacada ? "plena" : plena ? "igual" : "atenuada"}
+      data-franja-estado={destacada ? "destacada" : "igual"}
       className={`flex min-w-0 flex-1 items-center gap-2.5 whitespace-nowrap ${propietarios ? "border-l pl-6" : "pr-6"}`}
       style={propietarios ? { borderColor: crema(0.1) } : undefined}
     >
-      <span className="flex shrink-0 items-center gap-2 font-mono text-[10px] uppercase tracking-[0.22em]" style={{ color: crema(plena ? ALFA.etiqueta : ALFA.etiquetaAtenuada) }}>
+      <span className="flex shrink-0 items-center gap-2 font-mono text-[10px] uppercase tracking-[0.22em]" style={{ color: destacada ? oro : crema(ALFA.etiqueta) }}>
         {destacada && <span aria-hidden className="inline-block h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: oro }} />}
         {etiqueta}
       </span>
@@ -68,7 +66,7 @@ function Mitad({
         ·
       </span>
       {/* La frase solo desde 1.440 px. */}
-      <span className="hidden shrink-0 text-[12.5px] min-[1440px]:inline" style={{ color: crema(plena ? ALFA.frase : ALFA.fraseAtenuada) }}>
+      <span className="hidden shrink-0 text-[12.5px] min-[1440px]:inline" style={{ color: crema(destacada ? ALFA.fraseDestacada : ALFA.frase) }}>
         {frase}
       </span>
       <span aria-hidden className="hidden shrink-0 min-[1440px]:inline" style={{ color: crema(0.3) }}>
@@ -107,7 +105,6 @@ export function FranjaCabecera({ tipo, recogida }: { tipo: TipoPagina; recogida:
       >
         <Mitad
           lado="viajeros"
-          plena={tipo !== "propietarios"}
           destacada={tipo === "viajeros"}
           etiqueta={t("franja.viajeros")}
           frase={t("franja.frase_viajeros")}
@@ -116,7 +113,6 @@ export function FranjaCabecera({ tipo, recogida }: { tipo: TipoPagina; recogida:
         />
         <Mitad
           lado="propietarios"
-          plena={tipo !== "viajeros"}
           destacada={tipo === "propietarios"}
           etiqueta={t("franja.propietarios")}
           frase={t("franja.frase_propietarios")}

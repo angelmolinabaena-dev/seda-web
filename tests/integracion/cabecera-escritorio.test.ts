@@ -175,11 +175,33 @@ function medirFranja() {
   for (const m of mitades) if (m.scrollWidth > m.clientWidth + 0.5) problemas.push(`la mitad «${m.dataset.franjaMitad}» desborda ${m.scrollWidth - m.clientWidth} px`)
   const [m1, m2] = mitades.map((m) => m.getBoundingClientRect())
   if (m1 && m2 && m1.right > m2.left + 1) problemas.push("las dos mitades se solapan")
+  // Contraste del texto REAL que pinta el navegador sobre el velo con la foto más clara posible (blanco),
+  // calculado con la fórmula WCAG (no con las constantes del código).
+  const num = (c: string) => (c.match(/-?\d*\.?\d+/g) || []).map(Number)
+  const rgba = (c: string): [number, number, number, number] => {
+    const n = num(c)
+    const f = c.startsWith("color(") ? 255 : 1
+    return [n[0] * f, n[1] * f, n[2] * f, n.length > 3 ? n[3] : 1]
+  }
+  const lin = (v: number) => ((v /= 255) <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4)
+  const lum = (c: number[]) => 0.2126 * lin(c[0]) + 0.7152 * lin(c[1]) + 0.0722 * lin(c[2])
+  const veloC = rgba(getComputedStyle(franja.firstElementChild as HTMLElement).backgroundColor)
+  const fondo = [0, 1, 2].map((i) => veloC[i] * veloC[3] + 255 * (1 - veloC[3]))
+  let peorContraste = Infinity
+  const textos = [...franja.querySelectorAll<HTMLElement>("[data-franja-mitad] > *")].filter((e) => visible(e) && (e.textContent || "").trim().length > 1)
+  for (const e of textos) {
+    const c = rgba(getComputedStyle(e).color)
+    const t = [0, 1, 2].map((i) => c[i] * c[3] + fondo[i] * (1 - c[3]))
+    const [hi, lo] = [lum(t), lum(fondo)].sort((a, b) => b - a)
+    peorContraste = Math.min(peorContraste, (hi + 0.05) / (lo + 0.05))
+  }
   const frase = !![...franja.querySelectorAll<HTMLElement>("[data-franja-mitad] span")].find((e) => e.className.includes("text-[12.5px]") && visible(e))
   const interior = franja.firstElementChild as HTMLElement
   return {
     problemas,
     frase,
+    peorContraste,
+    nTextos: textos.length,
     alto: Math.round(franja.getBoundingClientRect().height),
     altoInterior: Math.round(interior.getBoundingClientRect().height),
     visible: visible(franja),
@@ -211,6 +233,8 @@ describe("la franja fina: sin solapes, una línea, y se recoge al bajar", () => 
           expect(arriba.alto, "alto de la franja").toBe(36)
           expect(arriba.altoInterior).toBe(36)
           expect(arriba.frase, "la frase se ve solo desde 1.440 px").toBe(ancho >= 1440)
+          expect(arriba.nTextos, "etiquetas y enlaces (y frases desde 1.440)").toBeGreaterThanOrEqual(4)
+          expect(arriba.peorContraste, "todo el texto de la franja ≥ 4,5:1 sobre la foto más clara").toBeGreaterThanOrEqual(4.5)
           expect(arriba.recogida).toBe("no")
           expect(arriba.inert).toBe(false)
           expect(arriba.cta?.estado, "sin botón en la barra mientras la franja está").toBe("oculto")
@@ -244,7 +268,7 @@ describe("la franja fina: sin solapes, una línea, y se recoge al bajar", () => 
     ["/faq", "neutro", "Solicitar estancia"],
   ]
   for (const [ruta, tipo, boton] of RUTAS) {
-    it(`${ruta}: ${tipo} → mitades ${tipo === "neutro" ? "iguales" : "con " + tipo + " plena"}; botón «${boton}» tras bajar`, async (ctx) => {
+    it(`${ruta}: ${tipo} → mitades ${tipo === "neutro" ? "iguales" : "con " + tipo + " destacada"}; botón «${boton}» tras bajar`, async (ctx) => {
       if (!navegador) return ctx.skip()
       const p = await navegador.newPage({ viewport: { width: 1440, height: 900 } })
       try {
@@ -252,11 +276,12 @@ describe("la franja fina: sin solapes, una línea, y se recoge al bajar", () => 
         const r = await p.evaluate(medirFranja)
         expect(r.tipo).toBe(tipo)
         const esperado = {
-          propietarios: { propietarios: "plena", viajeros: "atenuada" },
-          viajeros: { propietarios: "atenuada", viajeros: "plena" },
+          propietarios: { propietarios: "destacada", viajeros: "igual" },
+          viajeros: { propietarios: "igual", viajeros: "destacada" },
           neutro: { propietarios: "igual", viajeros: "igual" },
         }[tipo]
         expect(r.estados).toEqual(esperado)
+        expect(r.peorContraste, `${ruta}: todo el texto ≥ 4,5:1`).toBeGreaterThanOrEqual(4.5)
         await p.evaluate(() => window.scrollTo(0, 900))
         await p.waitForTimeout(1000)
         const abajo = await p.evaluate(medirFranja)
@@ -276,7 +301,8 @@ describe("la franja fina: sin solapes, una línea, y se recoge al bajar", () => 
       await p.goto(servidor.base + ruta, { waitUntil: "networkidle" })
       const r = await p.evaluate(medirFranja)
       expect(r.problemas).toEqual([])
-      expect(Object.values(r.estados)).toContain("plena")
+      expect(r.peorContraste, "también la mitad destacada ≥ 4,5:1").toBeGreaterThanOrEqual(4.5)
+      expect(Object.values(r.estados)).toContain("destacada")
     } finally {
       await p.close()
     }

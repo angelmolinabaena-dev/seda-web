@@ -111,16 +111,20 @@ describe("contraste del texto de la franja sobre la foto más clara (fondo blanc
   it.each([
     ["etiqueta (crema al 60 %)", ALFA.etiqueta, "crema"],
     ["frase (crema al 74 %)", ALFA.frase, "crema"],
+    ["frase de la mitad destacada (crema al 90 %)", ALFA.fraseDestacada, "crema"],
     ["enlace (crema)", ALFA.enlace, "crema"],
-    ["enlace de propietarios (oro claro)", 1, "oro"],
+    ["etiqueta de la mitad destacada y enlace de propietarios (oro claro)", 1, "oro"],
   ] as const)("%s ≥ 4,5:1", (_, alfa, color) => {
     const texto = mezcla(color === "crema" ? crema : oro, alfa, fondo)
     expect(ratio(texto, fondo)).toBeGreaterThanOrEqual(4.5)
   })
-  it("los enlaces no se atenúan: la mitad atenuada solo baja etiqueta y frase", () => {
+  it("nada de la franja se apaga: no hay opacidades atenuadas, y la destacada es más clara que la normal", () => {
+    expect(Object.keys(ALFA).sort()).toEqual(["enlace", "etiqueta", "frase", "fraseDestacada"])
     expect(ALFA.enlace).toBe(1)
-    expect(ALFA.etiquetaAtenuada).toBeLessThan(ALFA.etiqueta)
-    expect(ALFA.fraseAtenuada).toBeLessThan(ALFA.frase)
+    expect(ALFA.fraseDestacada).toBeGreaterThan(ALFA.frase)
+  })
+  it("cada opacidad de texto que define ALFA pasa 4,5:1 (la foto más clara posible es el blanco)", () => {
+    for (const a of Object.values(ALFA)) expect(ratio(mezcla(crema, a, fondo), fondo)).toBeGreaterThanOrEqual(4.5)
   })
 })
 

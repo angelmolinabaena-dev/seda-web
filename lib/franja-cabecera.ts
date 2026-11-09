@@ -2,7 +2,7 @@
   Franja fina de la cabecera (propuesta D del lienzo de diseño, ronda 2): habla a
   los dos públicos, viajeros y propietarios, encima de la barra.
 
-  Aquí, sin React: el tipo de página por ruta (qué mitad queda plena), los destinos
+  Aquí, sin React: el tipo de página por ruta (qué mitad se destaca), los destinos
   de los enlaces y los colores, para poder probarlos sin navegador.
 */
 
@@ -47,12 +47,15 @@ export const CREMA_HSL = [36, 38, 97] as const
 /** `--gold-light` (app/globals.css), hsl(38 60% 80%). */
 export const ORO_CLARO_HSL = [38, 60, 80] as const
 
-/** Opacidad del texto de la franja sobre el velo (crema). */
+/**
+ * Opacidad del texto de la franja sobre el velo (crema). Nada se apaga: todo el texto de la
+ * franja pasa 4,5:1 sobre la foto más clara. La mitad que corresponde al tipo de página se
+ * distingue DESTACÁNDOLA (punto dorado, etiqueta en oro claro y frase al 90 %), no atenuando la otra.
+ */
 export const ALFA = {
   etiqueta: 0.6,
   frase: 0.74,
   enlace: 1,
-  /** Mitad atenuada: solo etiqueta y frase; los enlaces no se atenúan. */
-  etiquetaAtenuada: 0.38,
-  fraseAtenuada: 0.42,
+  /** Mitad destacada: la etiqueta va en `--gold-light` (opaco) y la frase sube al 90 %. */
+  fraseDestacada: 0.9,
 } as const
