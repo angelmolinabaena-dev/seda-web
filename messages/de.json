@@ -31,6 +31,25 @@
     "propietarios_linea": "Öffnen Sie das Portal für Ihre Immobilie.",
     "entrar": "Anmelden"
   },
+  "movil": {
+    "portal": "Portal",
+    "reservar": "Buchen",
+    "valorar": "Bewerten",
+    "menu": "Menü",
+    "portal_seccion": "Portal",
+    "portal_aria": "Portalzugänge",
+    "portal_texto": "Privater Zugang für Gäste und Eigentümer.",
+    "huespedes_etiqueta": "Gäste",
+    "huespedes_nombre": "Guest App",
+    "propietarios_etiqueta": "Eigentümer",
+    "propietarios_nombre": "Eigentümerportal",
+    "asistente_titulo": "SEDA-Assistent",
+    "asistente_texto": "Fragen Sie uns",
+    "menu_huespedes": "Gäste",
+    "menu_propietarios": "Eigentümer",
+    "menu_seda": "SEDA",
+    "menu_aria": "Hauptmenü"
+  },
   "cta": {
     "solicitar_estancia": "Aufenthalt anfragen",
     "valorar_propiedad": "Meine Immobilie bewerten",
@@ -1672,6 +1691,7 @@
   },
   "asistente": {
     "abrir": "Den Assistenten fragen",
+    "corto": "Fragen Sie uns",
     "abrir_portada": "Eigentümer? Fragen Sie uns",
     "abrir_portada_aria": "Eigentümer? Fragen Sie uns: öffnet den Assistenten von SEDA",
     "titulo": "SEDA-Assistent",

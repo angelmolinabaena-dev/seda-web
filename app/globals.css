@@ -203,6 +203,12 @@
     @apply bg-background text-foreground;
     overflow-x: clip;
   }
+  /* Por debajo de 1.280 px el asistente flota abajo a la derecha: la página deja sitio para que no tape el último enlace. */
+  @media (max-width: 1279px) {
+    html[data-asistente] body {
+      padding-bottom: calc(22px + 44px + 18px + env(safe-area-inset-bottom));
+    }
+  }
   ::selection {
     background-color: hsl(var(--olive));
     color: hsl(var(--background));

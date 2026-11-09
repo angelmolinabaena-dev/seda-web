@@ -31,6 +31,25 @@
     "propietarios_linea": "Accédez au portail de votre bien.",
     "entrar": "Entrer"
   },
+  "movil": {
+    "portal": "Portail",
+    "reservar": "Réserver",
+    "valorar": "Estimer",
+    "menu": "Menu",
+    "portal_seccion": "Portail",
+    "portal_aria": "Accès au portail",
+    "portal_texto": "Accès privé pour les voyageurs et les propriétaires.",
+    "huespedes_etiqueta": "Voyageurs",
+    "huespedes_nombre": "Guest App",
+    "propietarios_etiqueta": "Propriétaires",
+    "propietarios_nombre": "Portail propriétaire",
+    "asistente_titulo": "Assistant SEDA",
+    "asistente_texto": "Demandez-nous",
+    "menu_huespedes": "Voyageurs",
+    "menu_propietarios": "Propriétaires",
+    "menu_seda": "SEDA",
+    "menu_aria": "Menu principal"
+  },
   "cta": {
     "solicitar_estancia": "Demander un séjour",
     "valorar_propiedad": "Estimer ma propriété",
@@ -1672,6 +1691,7 @@
   },
   "asistente": {
     "abrir": "Poser une question à l'assistant",
+    "corto": "Demandez-nous",
     "abrir_portada": "Propriétaire ? Demandez-nous",
     "abrir_portada_aria": "Propriétaire ? Demandez-nous : ouvre l'assistant de SEDA",
     "titulo": "Assistant SEDA",

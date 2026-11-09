@@ -26,8 +26,8 @@ import {
     propietarios queda destacada y en las de viajeros la de viajeros; en la portada y el
     resto, iguales. Se destaca con un punto dorado delante, la etiqueta en oro claro y la
     frase al 90 %; la otra mitad NO se apaga: todo el texto pasa 4,5:1 sobre la foto más clara.
-  · Ancho: desde 1.440 px completa; de 1.280 a 1.439, solo etiqueta y enlace (sin la
-    frase); por debajo de 1.280 no se ve y sus dos enlaces van arriba del menú móvil.
+  · Ancho: desde 1.440 px completa; de 768 a 1.439, solo etiqueta y enlace (sin la
+    frase); de 768 a 1.279 px, una sola línea (etiqueta y enlace, sin frase); por debajo de 768 no se ve (Reservar y Valorar están en el menú).
   · Al bajar por la página se recoge con una transición suave (sin animación con
     prefers-reduced-motion) y deja de recibir foco.
 */
@@ -91,14 +91,14 @@ export function FranjaCabecera({ tipo, recogida }: { tipo: TipoPagina; recogida:
       data-franja-tipo={tipo}
       data-franja-recogida={recogida ? "si" : "no"}
       // Altura animada con un contenedor que recorta; recogida, además `inert` (sin foco ni lector de pantalla).
-      className={`hidden overflow-hidden transition-[height,opacity] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] motion-reduce:transition-none min-[1280px]:block ${
+      className={`hidden overflow-hidden transition-[height,opacity] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] motion-reduce:transition-none md:block ${
         recogida ? "h-0 opacity-0" : "h-9 opacity-100"
       }`}
       aria-hidden={recogida ? true : undefined}
       inert={recogida}
     >
       <div
-        className="flex h-9 items-center border-b px-12 backdrop-blur-md min-[1340px]:px-20"
+        className="flex h-9 items-center border-b px-6 backdrop-blur-md md:px-8 min-[1280px]:px-12 min-[1340px]:px-20"
         style={{ background: `rgba(${VELO_RGB.join(",")},${VELO_ALFA})`, borderColor: crema(0.1) }}
         role="region"
         aria-label={t("franja.aria")}
@@ -120,41 +120,6 @@ export function FranjaCabecera({ tipo, recogida }: { tipo: TipoPagina; recogida:
           href={DESTINO_PROPIETARIOS}
         />
       </div>
-    </div>
-  )
-}
-
-/** Dos tarjetas arriba del menú móvil (por debajo de 1.280 px la franja no se ve). */
-export function TarjetasFranjaMovil({ tipo, onNavegar }: { tipo: TipoPagina; onNavegar: (href: string) => (e: React.MouseEvent<HTMLAnchorElement>) => void }) {
-  const t = useTranslations()
-  const tarjetas = [
-    { lado: "viajeros" as const, etiqueta: t("franja.viajeros"), frase: t("franja.frase_viajeros"), enlace: t("cta.solicitar_estancia"), href: DESTINO_VIAJEROS },
-    { lado: "propietarios" as const, etiqueta: t("franja.propietarios"), frase: t("franja.frase_propietarios"), enlace: t("cta.valorar_propiedad"), href: DESTINO_PROPIETARIOS },
-  ]
-  return (
-    <div data-franja-movil className="mb-8 grid grid-cols-[minmax(0,1fr)] gap-3 sm:grid-cols-2">
-      {tarjetas.map((c) => {
-        const destacada = tipo === c.lado
-        return (
-          <Link
-            key={c.lado}
-            href={c.href}
-            onClick={onNavegar(c.href)}
-            className={`box-border flex w-full min-w-0 flex-col gap-1.5 break-words rounded-sm border px-4 py-3.5 transition-colors ${
-              destacada ? "border-[hsl(var(--gold))]/60 bg-[hsl(var(--gold))]/[0.08]" : "border-border"
-            }`}
-          >
-            <span className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
-              {destacada && <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-[hsl(var(--gold))]" />}
-              {c.etiqueta}
-            </span>
-            <span className="text-[0.9rem] leading-snug text-foreground/80">{c.frase}</span>
-            <span className="text-[0.9rem] font-semibold text-foreground">
-              {c.enlace} <span aria-hidden>→</span>
-            </span>
-          </Link>
-        )
-      })}
     </div>
   )
 }
