@@ -9,6 +9,10 @@ import { arrancarNext, type ServidorNext } from "./next-start"
   completo mide ~1.190 px en alemán y francés más 160 de márgenes, así que el
   menú de escritorio empieza en 1.440 px y por debajo hay hamburguesa.
 
+  CABECERA-COMPACTA: la barra completa vuelve desde 1.280 px (entre 1.280 y 1.439, más ceñida)
+  y la hamburguesa queda por debajo de 1.280. Además, entre los tres bloques de la barra
+  (logo, enlaces, idiomas/Portal/reservar) hay siempre al menos 16 px.
+
   Abre la página en un Chromium real, en los cuatro idiomas y en las anchuras de
   la tabla del PR, arriba y con scroll, y falla si: dos elementos de primer nivel
   de la cabecera se solapan o quedan a menos de 8 px, alguno ocupa dos líneas, o
@@ -16,7 +20,8 @@ import { arrancarNext, type ServidorNext } from "./next-start"
   máquina, se salta (CI de GitHub/Ubicloud no los lleva).
 */
 
-const ANCHURAS = [1024, 1280, 1366, 1440, 1536, 1728, 1920]
+const ANCHURAS = [1024, 1100, 1279, 1280, 1366, 1439, 1440, 1536, 1728, 1920]
+const ANCHO_MENU = 1280 // desde aquí, barra completa; por debajo, hamburguesa
 const IDIOMAS: Record<string, string> = { es: "/", en: "/en", fr: "/fr", de: "/de" }
 
 // Playwright no es dependencia del proyecto: tipos mínimos de lo que se usa.
@@ -70,7 +75,13 @@ function medir() {
       if (v < 0 && h < 0) problemas.push(`«${items[i].t}» y «${items[j].t}» se solapan`)
       else if (v < 0 && h < 8) problemas.push(`«${items[i].t}» y «${items[j].t}» a ${Math.round(h)} px`)
     }
-  return { problemas, n: items.length }
+  // Modo: la barra completa tiene los desplegables (SEDA OS, Portal); la hamburguesa, no.
+  const modo = visibles.some((e) => e.getAttribute("aria-haspopup") === "menu") ? "menu" : "burger"
+  // Huecos entre los tres bloques de la barra (logo | enlaces | idiomas+Portal+reservar): al menos 16 px.
+  const bloques = [...nav.children].map((c) => c.getBoundingClientRect()).filter((r) => r.width > 0).sort((a, b) => a.left - b.left)
+  const huecos = bloques.slice(1).map((r, i) => Math.round(r.left - bloques[i].right))
+  if (modo === "menu") for (const h of huecos) if (h < 16) problemas.push(`hueco entre bloques de ${h} px (mínimo 16)`)
+  return { problemas, n: items.length, modo, huecos }
 }
 
 const pw = cargarPlaywright()
@@ -108,6 +119,8 @@ describe("cabecera de escritorio: nada se parte ni se solapa", () => {
             const r = await p.evaluate(medir)
             expect(r.problemas, `${idioma} ${ancho}px`).toEqual([])
             expect(r.n).toBeGreaterThan(3)
+            expect(r.modo, `${idioma} ${ancho}px`).toBe(ancho >= ANCHO_MENU ? "menu" : "burger")
+            if (process.env.CABECERA_HUECOS) console.log(`HUECOS ${idioma} ${ancho} ${r.modo} ${r.huecos.join("/")}`)
           } finally {
             await p.close()
           }
