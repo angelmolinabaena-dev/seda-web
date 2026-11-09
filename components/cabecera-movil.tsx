@@ -26,7 +26,7 @@ export function BotonReservar({ tipo, solido }: { tipo: TipoPagina; solido: bool
     <Link
       href={r.href}
       data-barra-reservar={r.clave}
-      className={`inline-flex h-10 shrink-0 items-center justify-center whitespace-nowrap rounded-full px-3 text-[12px] font-semibold transition-colors duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current focus-visible:ring-offset-2 md:h-11 md:px-5 ${
+      className={`inline-flex h-[38px] shrink-0 items-center justify-center whitespace-nowrap rounded-full px-[18px] text-[13.5px] font-bold transition-colors duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current focus-visible:ring-offset-2 ${
         solido ? "bg-foreground text-background hover:opacity-90" : "bg-background text-foreground hover:opacity-90"
       }`}
     >
@@ -99,17 +99,11 @@ export function PortalMovil({ abierto, setAbierto, solido }: { abierto: boolean;
         aria-expanded={abierto}
         aria-controls={id}
         aria-haspopup="dialog"
-        className={`inline-flex h-10 shrink-0 items-center gap-1 whitespace-nowrap rounded-full border px-2 font-mono text-[10px] uppercase tracking-[0.14em] transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current ${
-          solido
-            ? abierto
-              ? "border-foreground/40 bg-foreground/[0.06] text-foreground"
-              : "border-foreground/30 text-foreground"
-            : abierto
-              ? "border-background/50 bg-background/[0.1] text-background"
-              : "border-background/35 text-background"
+        className={`inline-flex h-11 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-sm px-2 font-mono text-[10px] uppercase tracking-[0.18em] opacity-90 transition-colors duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current ${
+          solido ? "text-foreground" : "text-background"
         }`}
       >
-        <Lock className="h-3 w-3 shrink-0" strokeWidth={1.5} aria-hidden />
+        <Lock className="h-[13px] w-[13px] shrink-0" strokeWidth={1.5} aria-hidden />
         {t("movil.portal")}
       </button>
       {abierto && (
@@ -118,7 +112,7 @@ export function PortalMovil({ abierto, setAbierto, solido }: { abierto: boolean;
           role="dialog"
           aria-label={t("movil.portal_aria")}
           data-portal-movil-panel
-          className="absolute inset-x-2.5 top-[calc(60px+10px)] z-10 box-border rounded-[22px] border border-border bg-background p-2.5 text-foreground shadow-2xl md:hidden"
+          className="absolute inset-x-2.5 top-[calc(56px+10px)] z-10 box-border rounded-[22px] border border-border bg-background p-2.5 text-foreground shadow-2xl md:hidden"
         >
           <div className="grid grid-cols-[minmax(0,1fr)] gap-2">
             <TarjetaAcceso clave="huespedes" href={URL_GUEST_APP} Icono={Smartphone} etiqueta={t("movil.huespedes_etiqueta")} nombre={t("movil.huespedes_nombre")} linea={t("franja.huespedes_linea")} entrar={t("franja.entrar")} />
@@ -215,17 +209,11 @@ export function PortalMenu({ solido }: { solido: boolean }) {
         onClick={() => setAbierto((v) => !v)}
         aria-haspopup="menu"
         aria-expanded={abierto}
-        className={`inline-flex min-h-[44px] items-center gap-1.5 whitespace-nowrap rounded-full border px-4 font-mono text-[10px] uppercase tracking-[0.22em] transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current ${
-          solido
-            ? abierto
-              ? "border-foreground/40 bg-foreground/[0.04] text-foreground"
-              : "border-foreground/25 text-foreground hover:border-foreground/45 hover:bg-foreground/[0.04]"
-            : abierto
-              ? "border-background/40 bg-background/[0.06] text-background"
-              : "border-background/25 text-background hover:border-background/45 hover:bg-background/[0.06]"
+        className={`inline-flex min-h-[44px] items-center gap-1.5 whitespace-nowrap rounded-sm px-1 font-mono text-[10px] uppercase tracking-[0.18em] opacity-90 transition-colors duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current ${
+          solido ? "text-foreground" : "text-background"
         }`}
       >
-        <Lock className="h-3 w-3 shrink-0" strokeWidth={1.5} aria-hidden />
+        <Lock className="h-[13px] w-[13px] shrink-0" strokeWidth={1.5} aria-hidden />
         {t("nav.portal")}
         <span className={`ml-0.5 inline-block text-[8px] opacity-70 transition-transform duration-200 ${abierto ? "rotate-180" : ""}`}>▼</span>
       </button>
@@ -409,12 +397,12 @@ export function SelectorIdiomaCompacto({ solido }: { solido: boolean }) {
         aria-haspopup="menu"
         aria-expanded={abierto}
         aria-label={t("movil.idioma_actual", { idioma: locale.toUpperCase() })}
-        className={`inline-flex h-10 shrink-0 items-center gap-0.5 rounded-full border px-2 font-mono text-[11px] font-semibold uppercase tracking-[0.08em] transition-colors duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current md:h-11 md:px-3 ${
-          solido ? "border-foreground/20 bg-foreground/[0.07] text-foreground" : "border-background/25 bg-[rgba(20,16,14,0.55)] text-background"
+        className={`inline-flex h-11 shrink-0 items-center gap-0.5 rounded-sm px-1.5 font-mono text-[10px] font-semibold uppercase tracking-[0.12em] transition-colors duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current ${
+          solido ? "text-foreground" : "text-background"
         }`}
       >
         {locale}
-        <ChevronDown className={`h-3 w-3 transition-transform ${abierto ? "rotate-180" : ""}`} strokeWidth={2} aria-hidden />
+        <ChevronDown className={`h-2.5 w-2.5 transition-transform ${abierto ? "rotate-180" : ""}`} strokeWidth={2} aria-hidden />
       </button>
       {abierto && (
         <div role="menu" aria-label={t("movil.idioma")} className="absolute left-1/2 top-full z-10 mt-2 w-24 -translate-x-1/2 border border-border bg-background py-1 text-foreground shadow-xl">
@@ -438,10 +426,9 @@ export function SelectorIdiomaCompacto({ solido }: { solido: boolean }) {
   )
 }
 
-/** Botón del menú: píldora de contorno «MENÚ ═» ↔ «CERRAR ✕». Por debajo de 390 px, solo el icono (con aria-label). */
+/** Botón del menú: solo el icono de dos líneas (44 × 44, sin borde) ↔ X. El nombre accesible va en el aria-label. */
 export function BotonMenu({ abierto, solido, onClick }: { abierto: boolean; solido: boolean; onClick: () => void }) {
   const t = useTranslations()
-  const color = solido || abierto ? "border-foreground/30 text-foreground" : "border-background/35 text-background"
   return (
     <button
       type="button"
@@ -449,16 +436,15 @@ export function BotonMenu({ abierto, solido, onClick }: { abierto: boolean; soli
       data-boton-menu
       aria-label={abierto ? t("nav.close_menu") : t("nav.open_menu")}
       aria-expanded={abierto}
-      className={`inline-flex h-10 shrink-0 items-center justify-center gap-1 whitespace-nowrap rounded-full border px-2 font-mono text-[10px] uppercase tracking-[0.14em] transition-colors duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current max-[389px]:w-10 max-[389px]:px-0 md:h-11 md:px-3 ${color}`}
+      className={`inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-sm transition-colors duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current ${
+        solido || abierto ? "text-foreground" : "text-background"
+      }`}
     >
-      <span data-boton-menu-texto className="max-[389px]:hidden">
-        {abierto ? t("movil.cerrar") : t("movil.menu")}
-      </span>
       {abierto ? (
-        <X className="h-4 w-4" strokeWidth={1.5} aria-hidden />
+        <X className="h-5 w-5" strokeWidth={1.5} aria-hidden />
       ) : (
-        <svg viewBox="0 0 16 16" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" aria-hidden>
-          <path d="M2 5h12M2 11h12" />
+        <svg viewBox="0 0 20 20" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" aria-hidden>
+          <path d="M3 7h14M3 13h14" />
         </svg>
       )}
     </button>

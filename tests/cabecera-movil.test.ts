@@ -20,7 +20,7 @@ describe("Reservar / Valorar", () => {
 
 describe("medidas", () => {
   it("los puntos de corte y las alturas de barra son los del encargo", () => {
-    expect([ANCHO_ESCRITORIO, ANCHO_TABLET, ALTO_BARRA_MOVIL, ALTO_BARRA_TABLET]).toEqual([1280, 768, 60, 72])
+    expect([ANCHO_ESCRITORIO, ANCHO_TABLET, ALTO_BARRA_MOVIL, ALTO_BARRA_TABLET]).toEqual([1280, 768, 56, 72])
   })
 })
 

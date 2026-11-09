@@ -343,7 +343,7 @@ export function Navigation() {
         >
         {/* Por debajo de 1.280 px, rejilla 1fr · auto · 1fr: logo a la izquierda, el grupo central centrado de verdad en la
             pantalla y el botón del menú a la derecha. Desde 1.280 px, la barra de escritorio de siempre. */}
-        <nav className="grid min-h-[60px] grid-cols-[1fr_auto_1fr] items-center gap-1 px-3 py-2.5 md:min-h-[72px] md:gap-2 md:px-8 md:py-3 lg:px-20 min-[1280px]:flex min-[1280px]:min-h-0 min-[1280px]:justify-between min-[1280px]:gap-0 min-[1280px]:px-12 min-[1280px]:py-5 min-[1340px]:px-20">
+        <nav className="grid min-h-[56px] grid-cols-[1fr_auto_1fr] items-center gap-1 px-2 py-1.5 md:min-h-[72px] md:gap-2 md:px-8 md:py-3 lg:px-20 min-[1280px]:flex min-[1280px]:min-h-0 min-[1280px]:justify-between min-[1280px]:gap-0 min-[1280px]:px-12 min-[1280px]:py-5 min-[1340px]:px-20">
           <Link
             href="/"
             onClick={() => setIsOpen(false)}
@@ -558,7 +558,7 @@ export function Navigation() {
           </div>
 
           {/* Grupo central (< 1.280 px). Móvil: Portal · Reservar · idioma. Tablet: SEDA OS ▾ · Portal ▾ · Reservar · idioma. */}
-          <div data-grupo-central className="flex items-center justify-center gap-1 whitespace-nowrap md:gap-5 min-[1280px]:hidden">
+          <div data-grupo-central className="flex items-center justify-center gap-1 whitespace-nowrap md:gap-4 min-[1280px]:hidden">
             <div className="hidden md:block">
               <SedaOsMenu solido={scrolled || isOpen} />
             </div>
@@ -569,10 +569,13 @@ export function Navigation() {
               <PortalMenu solido={scrolled || isOpen} />
             </div>
             <BotonReservar tipo={tipo} solido={scrolled || isOpen} />
-            <SelectorIdiomaCompacto solido={scrolled || isOpen} />
           </div>
 
-          <div className="justify-self-end min-[1280px]:hidden">{botonMenu}</div>
+          {/* Derecha (< 1.280 px): idioma en texto («ES ▾») y el icono del menú. */}
+          <div className="flex items-center gap-1 justify-self-end min-[1280px]:hidden">
+            <SelectorIdiomaCompacto solido={scrolled || isOpen} />
+            {botonMenu}
+          </div>
         </nav>
         </div>
       </header>

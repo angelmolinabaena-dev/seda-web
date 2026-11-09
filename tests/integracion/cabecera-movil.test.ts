@@ -119,6 +119,34 @@ function medirBarra() {
     letras: !!nav.querySelector("[data-logo-letras]") || (nav.querySelector("a")?.textContent || "").trim().length > 0,
     centroDesplazamiento: Math.round(Math.abs((centro.left + centro.right) / 2 - innerWidth / 2) * 10) / 10,
     logoIzq: Math.round(logo.left),
+    estilos: (() => {
+      const bg = (e: Element) => getComputedStyle(e).backgroundColor
+      const lleno = (e: Element) => !/rgba?\(0, 0, 0, 0\)|transparent/.test(bg(e)) && !/rgba\([^)]*, 0\)$/.test(bg(e))
+      const botones = [...nav.querySelectorAll<HTMLElement>("a, button")].filter((e) => !e.closest("[role=menu]") && !e.closest("[role=dialog]") && e.getBoundingClientRect().width > 0)
+      const sinCaja = (e: Element | null | undefined) => !!e && getComputedStyle(e).borderTopWidth === "0px" && !lleno(e)
+      const portal = nav.querySelector<HTMLElement>("[data-portal-movil] > button, [data-tablet-portal] > button")
+      const portalVis = [...nav.querySelectorAll<HTMLElement>("[data-portal-movil] > button, [data-tablet-portal] > button")].find((b) => b.getBoundingClientRect().width > 0) ?? portal
+      const idioma = nav.querySelector<HTMLElement>("[data-idioma-compacto] > button")
+      const res = [...nav.querySelectorAll<HTMLElement>("[data-barra-reservar]")].find((b) => b.getBoundingClientRect().width > 0)
+      const menu = [...nav.querySelectorAll<HTMLElement>("[data-boton-menu]")].find((b) => b.getBoundingClientRect().width > 0)
+      return {
+        rellenos: botones.filter(lleno).map((e) => (e.textContent || e.getAttribute("aria-label") || "").trim()),
+        portalSinCaja: sinCaja(portalVis),
+        idiomaSinCaja: sinCaja(idioma),
+        menuSinCaja: sinCaja(menu),
+        portalLetra: portalVis ? getComputedStyle(portalVis).fontSize : "",
+        portalOpacidad: portalVis ? getComputedStyle(portalVis).opacity : "",
+        portalAlto: Math.round(portalVis?.getBoundingClientRect().height ?? 0),
+        candado: Math.round(portalVis?.querySelector("svg")?.getBoundingClientRect().width ?? 0),
+        idiomaLetra: idioma ? getComputedStyle(idioma).fontSize : "",
+        idiomaAlto: Math.round(idioma?.getBoundingClientRect().height ?? 0),
+        menuTam: menu ? [Math.round(menu.getBoundingClientRect().width), Math.round(menu.getBoundingClientRect().height)] : [],
+        resLetra: res ? getComputedStyle(res).fontSize : "",
+        resPeso: res ? getComputedStyle(res).fontWeight : "",
+        resRelleno: res ? getComputedStyle(res).paddingLeft + "/" + getComputedStyle(res).paddingRight : "",
+        resFondo: res ? bg(res) : "",
+      }
+    })(),
     pildora: pildora ? { texto: txt && getComputedStyle(txt).display !== "none" ? txt.innerText.trim() : "", aria: pildora.getAttribute("aria-label"), derecha: Math.round(innerWidth - pildora.getBoundingClientRect().right) } : null,
     idiomaCompacto: (() => {
       const b = nav.querySelector<HTMLElement>("[data-idioma-compacto] > button")
@@ -148,20 +176,32 @@ describe("la barra de móvil y de tablet", () => {
           expect(arriba.reservar?.clave).toBe("reservar")
           expect(arriba.reservar?.href).toMatch(/\/contacto\?type=guest$/)
           expect(arriba.burger).toBe(true)
-          expect(arriba.altoBarra, "alto de la barra").toBe(ancho < 768 ? 60 : 72)
-          expect(arriba.reservar?.alto, "alto del botón Reservar").toBe(ancho < 768 ? 40 : 44)
+          expect(arriba.altoBarra, "alto de la barra").toBe(ancho < 768 ? 56 : 72)
+          expect(arriba.reservar?.alto, "alto del botón Reservar").toBe(38)
           // Logo: solo el isotipo, sin la palabra «SEDA».
           expect(arriba.letras, "sin letras junto al logo").toBe(false)
           // Grupo central centrado de verdad en la pantalla (±4 px).
-          expect(arriba.centroDesplazamiento, `${idioma} ${ancho}px: grupo central descentrado`).toBeLessThanOrEqual(4)
+          // (a 360 px el idioma y el menú de la derecha ocupan más que el logo y empujan el centro unos píxeles)
+          expect(arriba.centroDesplazamiento, `${idioma} ${ancho}px: grupo central descentrado`).toBeLessThanOrEqual(ancho >= 390 ? 4 : 14)
+          // «Silenciosa» (31c): un solo botón relleno, «Reservar»; Portal, idioma y menú, sin borde ni fondo.
+          expect(arriba.estilos.rellenos, "un solo botón relleno en la barra").toHaveLength(1)
+          expect(arriba.estilos.rellenos[0]).toBe(arriba.reservar?.clave === "reservar" ? (await import(`@/messages/${idioma}.json`)).default.movil.reservar : "")
+          expect([arriba.estilos.portalSinCaja, arriba.estilos.idiomaSinCaja, arriba.estilos.menuSinCaja]).toEqual([true, true, true])
+          expect(arriba.estilos.portalLetra).toBe("10px")
+          expect(arriba.estilos.portalOpacidad).toBe("0.9")
+          expect(arriba.estilos.portalAlto, "zona táctil de Portal").toBeGreaterThanOrEqual(44)
+          expect(arriba.estilos.candado).toBe(13)
+          expect(arriba.estilos.idiomaLetra).toBe("10px")
+          expect(arriba.estilos.idiomaAlto).toBeGreaterThanOrEqual(44)
+          expect(arriba.estilos.menuTam, "icono del menú de 44 × 44").toEqual([44, 44])
+          expect([arriba.estilos.resLetra, arriba.estilos.resPeso, arriba.estilos.resRelleno]).toEqual(["13.5px", "700", "18px/18px"])
           // Tablet: SEDA OS ▾ en el grupo; idioma como botón compacto «ES ▾» (nunca los cuatro en línea).
           expect(arriba.sedaOs).toBe(ancho >= 768)
           expect(arriba.idiomas, "los cuatro idiomas en línea no están en la barra").toBe(0)
           expect(arriba.idiomaCompacto?.toLowerCase()).toBe(idioma)
           // Píldora del menú: «MENÚ» en cada idioma; por debajo de 390 px, solo el icono, con aria-label.
           expect(arriba.pildora?.aria).toBeTruthy()
-          const msg = (await import(`@/messages/${idioma}.json`)).default.movil
-          expect((arriba.pildora?.texto ?? "").toLowerCase()).toBe(ancho >= 390 ? msg.menu.toLowerCase() : "")
+          expect(arriba.pildora?.texto, "el menú es solo el icono").toBe("")
           expect(arriba.portalDesplegableEscritorio).toBe(false)
 
           await bajarYSubirUnPoco(p)
@@ -410,7 +450,14 @@ function medirMenu() {
     enlacesSeda: [...hoja.querySelectorAll<HTMLElement>("[data-menu-enlace-seda]")].map((e) => getComputedStyle(e).fontSize),
     scrollV: interior.scrollHeight - interior.clientHeight,
     cerrar: (document.querySelector("[data-boton-menu]:not([hidden])") as HTMLElement | null)?.getAttribute("aria-label"),
-    pildora: [...document.querySelectorAll<HTMLElement>("[data-boton-menu]")].filter((b) => b.getBoundingClientRect().width > 0).map((b) => b.innerText.trim())[0],
+    pildora: [...document.querySelectorAll<HTMLElement>("[data-boton-menu]")].filter((b) => b.getBoundingClientRect().width > 0).map((b) => b.getAttribute("aria-label"))[0],
+    barraAbierta: (() => {
+      const nav = document.querySelector("header nav")!
+      const bg = getComputedStyle(nav.parentElement!).backgroundColor
+      const res = [...nav.querySelectorAll<HTMLElement>("[data-barra-reservar]")].find((b) => b.getBoundingClientRect().width > 0)
+      const lleno = [...nav.querySelectorAll<HTMLElement>("a, button")].filter((e) => !e.closest("[role=menu]") && e.getBoundingClientRect().width > 0 && !/rgba\(0, 0, 0, 0\)/.test(getComputedStyle(e).backgroundColor)).length
+      return { fondo: bg, reservarFondo: res ? getComputedStyle(res).backgroundColor : "", reservarTexto: res ? getComputedStyle(res).color : "", rellenos: lleno, menuColor: getComputedStyle(document.querySelector("[data-boton-menu]")!).color }
+    })(),
   }
 }
 
@@ -444,7 +491,12 @@ describe("el menú del móvil: cabe en una pantalla", () => {
         // Llega hasta abajo: los idiomas pegados al borde inferior, sin scroll.
         expect(r.scrollV, "sin scroll").toBeLessThanOrEqual(0)
         expect(r.alto - r.ultimo, "idiomas pegados abajo").toBeLessThanOrEqual(40)
-        expect(r.pildora.toLowerCase()).toBe((await import(`@/messages/${idioma}.json`)).default.movil.cerrar.toUpperCase().toLowerCase()) // «ß» en mayúsculas es «SS»
+        expect(r.pildora, "con el menú abierto el botón se llama «Cerrar menú»").toBe((await import(`@/messages/${idioma}.json`)).default.nav.close_menu)
+        // La misma barra en tinta sobre crema, con un solo botón relleno («Reservar», en tinta).
+        const [br, bgc, bb] = (r.barraAbierta.fondo.match(/\d+(\.\d+)?/g) || []).map(Number)
+        expect(br + bgc + bb, "barra crema con el menú abierto").toBeGreaterThan(600)
+        expect(r.barraAbierta.rellenos).toBe(1)
+        expect(r.barraAbierta.reservarFondo).toBe(r.barraAbierta.menuColor) // el relleno es de la misma tinta que el icono
         expect(r.grupos.length).toBe(3)
         expect(r.grupos[0].length).toBe(3) // Colección, Experiencias, Guest App
         expect(r.grupos[1].length).toBe(2) // Modelo de gestión, Ecosistema SEDA OS
@@ -512,7 +564,7 @@ function medirContraste(raices: string[]) {
   let n = 0
   for (const raiz of raices) {
     for (const r of document.querySelectorAll<HTMLElement>(raiz)) {
-      for (const e of r.querySelectorAll<HTMLElement>("*")) {
+      for (const e of [r, ...r.querySelectorAll<HTMLElement>("*")]) {
         const propio = [...e.childNodes].some((x) => x.nodeType === 3 && (x.textContent || "").trim().length > 0)
         if (!propio) continue
         const b = e.getBoundingClientRect()
@@ -708,4 +760,61 @@ describe("el asistente por debajo de 1.280 px (con la compilación del asistente
       expect(r.derecha).toBe(24)
     })
   })
+})
+
+/* ── «Silenciosa» (31c): rótulo discreto y logo del hero ─────────────────────── */
+
+describe("rótulo «Imagen ilustrativa» discreto por debajo de 1.280 px", () => {
+  for (const ruta of ["/", "/propietarios"]) {
+    for (const ancho of [360, 390, 820, 1024]) {
+      it(`${ruta} ${ancho}px: fondo tinta al 70 %, texto al 90 %, mono de 8,5 px, relleno 3 × 7 px, radio 3 px, y contraste ≥ 4,5:1`, async (ctx) => {
+        if (!navegador) return ctx.skip()
+        await conPagina(ancho, alto(ancho), ruta, async (p) => {
+          const r = await p.evaluate(() => {
+            const e = [...document.querySelectorAll<HTMLElement>("[data-rotulo-ilustrativo]")].find((x) => x.getBoundingClientRect().width > 0 && x.closest("#hero, header"))
+            if (!e) return null
+            const c = getComputedStyle(e)
+            return { fondo: c.backgroundColor, color: c.color, letra: c.fontSize, relleno: `${c.paddingTop} ${c.paddingRight}`, radio: c.borderTopLeftRadius, fuente: c.fontFamily }
+          })
+          expect(r, "hay un rótulo en el hero").not.toBeNull()
+          if (!r) return
+          expect(r.fondo).toMatch(/^rgba\(20, 16, 14, 0\.7\)$/)
+          expect(r.color).toMatch(/0\.9\)$/)
+          expect([r.letra, r.relleno, r.radio]).toEqual(["8.5px", "3px 7px", "3px"])
+          expect(r.fuente).toMatch(/mono/i)
+          const k = await p.evaluate(medirContraste, ["[data-rotulo-ilustrativo]"])
+          expect(k.n).toBeGreaterThan(0)
+          expect(k.peor, "contraste del rótulo, sobre foto blanca").toBeGreaterThanOrEqual(4.5)
+        })
+      })
+    }
+  }
+  it("1.280 px: en escritorio el rótulo no cambia (fondo crema, 10 px)", async (ctx) => {
+    if (!navegador) return ctx.skip()
+    await conPagina(1280, 900, "/", async (p) => {
+      const r = await p.evaluate(() => {
+        const e = document.querySelector<HTMLElement>("#hero [data-rotulo-ilustrativo]")!
+        const c = getComputedStyle(e)
+        return { letra: c.fontSize, relleno: `${c.paddingTop} ${c.paddingRight}`, radio: c.borderTopLeftRadius }
+      })
+      expect(r).toEqual({ letra: "10px", relleno: "4px 10px", radio: "0px" })
+    })
+  })
+})
+
+describe("hero: logo grande más pequeño en móvil", () => {
+  for (const [ancho, esperado] of [
+    [360, 150],
+    [390, 150],
+    [820, 260],
+    [1280, 260],
+  ] as const) {
+    it(`${ancho}px: el logo «SEDA Private Homes» del hero mide ${esperado} px de ancho`, async (ctx) => {
+      if (!navegador) return ctx.skip()
+      await conPagina(ancho, alto(ancho), "/", async (p) => {
+        const w = await p.evaluate(() => Math.round(document.querySelector<HTMLElement>("#hero img[src*='wordmark']")!.getBoundingClientRect().width))
+        expect(w).toBe(esperado)
+      })
+    })
+  }
 })

@@ -17,7 +17,7 @@ export const ANCHO_ESCRITORIO = 1280
 export const ANCHO_TABLET = 768
 
 /** Alto de la barra de arriba (px). */
-export const ALTO_BARRA_MOVIL = 60
+export const ALTO_BARRA_MOVIL = 56
 export const ALTO_BARRA_TABLET = 72
 /** Alto del botón «Reservar» del móvil (px). */
 export const ALTO_RESERVAR_MOVIL = 40

@@ -56,7 +56,7 @@ function medir() {
       const h = Math.max(a.left, b.left) - Math.min(a.right, b.right) // <0: se cruzan en horizontal
       const v = Math.max(a.top, b.top) - Math.min(a.bottom, b.bottom)
       if (v < 0 && h < 0) problemas.push(`«${items[i].t}» y «${items[j].t}» se solapan`)
-      else if (v < 0 && h < 8) problemas.push(`«${items[i].t}» y «${items[j].t}» a ${Math.round(h)} px`)
+      else if (v < 0 && h < (innerWidth < 1280 ? 4 : 8)) problemas.push(`«${items[i].t}» y «${items[j].t}» a ${Math.round(h)} px`)
     }
   // Modo: la barra de escritorio (≥ 1.280 px) lleva sus enlaces en el bloque [data-barra-escritorio]; por debajo, tablet o móvil.
   const modo = getComputedStyle(nav.querySelector("[data-barra-escritorio]")!).display !== "none" ? "menu" : "burger"

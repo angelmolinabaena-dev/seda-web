@@ -92,7 +92,7 @@ export function Hero() {
     <section id="hero" ref={ref} className="relative min-h-[100dvh] flex flex-col overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 z-0">
-        <IllustrativeTag className="top-[4.5rem] right-4 md:top-[7.75rem] md:right-6 min-[1280px]:top-auto min-[1280px]:bottom-4" />
+        <IllustrativeTag sutil className="top-[4.5rem] right-4 md:top-[7.75rem] md:right-6 min-[1280px]:top-auto min-[1280px]:bottom-4" />
         <div ref={parallaxRef} className="absolute inset-0 will-change-transform bg-foreground">
           {/* The poster is a real <Image priority> under the video, not the
               video's `poster` attribute: Chrome never took the poster as LCP
@@ -148,7 +148,7 @@ export function Hero() {
               width={205}
               height={95}
               loading="eager"
-              className="w-[205px] h-[95px] md:w-[260px] md:h-[120px]"
+              className="w-[150px] h-[70px] md:w-[260px] md:h-[120px]"
             />
             <div className="w-[26px] md:w-[36px] h-px bg-[rgba(255,249,240,0.40)] mt-[26px] md:mt-[30px]" />
             <h1 className="mt-[24px] md:mt-[28px] font-serif font-light text-[clamp(2.5rem,7vw,6rem)] leading-[1.02] tracking-[-0.015em] text-background text-balance">
