@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest"
 import { routing } from "@/i18n/routing"
 import {
   ALFA,
+  ALFA_BARRA,
   CREMA_HSL,
   DESTINO_PROPIETARIOS,
   DESTINO_VIAJEROS,
@@ -109,9 +110,9 @@ describe("contraste del texto de la franja sobre la foto más clara (fondo blanc
     expect(leer("gold-light")).toEqual([...ORO_CLARO_HSL])
   })
   it.each([
-    ["etiqueta (crema al 60 %)", ALFA.etiqueta, "crema"],
-    ["frase (crema al 74 %)", ALFA.frase, "crema"],
-    ["frase de la mitad destacada (crema al 90 %)", ALFA.fraseDestacada, "crema"],
+    ["etiqueta de la franja", ALFA.etiqueta, "crema"],
+    ["frase de la franja", ALFA.frase, "crema"],
+    ["frase de la mitad destacada", ALFA.fraseDestacada, "crema"],
     ["enlace (crema)", ALFA.enlace, "crema"],
     ["etiqueta de la mitad destacada y enlace de propietarios (oro claro)", 1, "oro"],
   ] as const)("%s ≥ 4,5:1", (_, alfa, color) => {
@@ -122,6 +123,31 @@ describe("contraste del texto de la franja sobre la foto más clara (fondo blanc
     expect(Object.keys(ALFA).sort()).toEqual(["enlace", "etiqueta", "frase", "fraseDestacada"])
     expect(ALFA.enlace).toBe(1)
     expect(ALFA.fraseDestacada).toBeGreaterThan(ALFA.frase)
+  })
+  it.each([
+    ["enlace inactivo de la barra", ALFA_BARRA.enlaceInactivo],
+    ["idioma inactivo del selector de la barra", ALFA_BARRA.idiomaInactivo],
+    ["enlace activo y botones de la barra (crema al 100 %)", 1],
+  ] as const)("barra transparente (portada, arriba): %s ≥ 4,5:1", (_, alfa) => {
+    expect(ratio(mezcla(crema, alfa, fondo), fondo)).toBeGreaterThanOrEqual(4.5)
+  })
+  it("el velo es el mismo en la franja y en la barra y es el más bajo con el que todo pasa: 0,64 y 0,66 no bastan para el oro claro", () => {
+    const fondoCon = (v: number) => mezcla([...VELO_RGB], v, blanco)
+    expect(VELO_ALFA).toBe(0.68)
+    expect(ratio(oro, fondoCon(0.64))).toBeLessThan(4.5)
+    expect(ratio(oro, fondoCon(0.66))).toBeLessThan(4.5)
+    expect(ratio(oro, fondoCon(VELO_ALFA))).toBeGreaterThanOrEqual(4.5)
+  })
+  it("el código usa esos valores: velo de la barra, opacidades del texto de la barra y del selector de idiomas", async () => {
+    const { readFileSync } = await import("node:fs")
+    const nav = readFileSync("components/navigation.tsx", "utf8")
+    const idiomas = readFileSync("components/language-switcher.tsx", "utf8")
+    const franja = readFileSync("components/cabecera-franja.tsx", "utf8")
+    expect(nav).toContain(`bg-[rgba(${VELO_RGB.join(",")},${VELO_ALFA})]`)
+    expect(nav).toContain(`text-background/${ALFA_BARRA.enlaceInactivo * 100} hover:text-background`)
+    expect(idiomas).toContain(`text-background/${ALFA_BARRA.idiomaInactivo * 100} hover:text-background`)
+    expect(franja).toContain("VELO_ALFA") // la franja pinta su velo con la misma constante
+    expect(nav).not.toMatch(/rgba\(20,16,14,0\.72\)/)
   })
   it("cada opacidad de texto que define ALFA pasa 4,5:1 (la foto más clara posible es el blanco)", () => {
     for (const a of Object.values(ALFA)) expect(ratio(mezcla(crema, a, fondo), fondo)).toBeGreaterThanOrEqual(4.5)

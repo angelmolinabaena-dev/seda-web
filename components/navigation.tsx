@@ -316,7 +316,7 @@ export function Navigation() {
           className={`transition-[background-color,border-color,backdrop-filter] duration-500 ${
             scrolled || isOpen
               ? "bg-background/95 backdrop-blur-md border-b border-border"
-              : "bg-[rgba(20,16,14,0.72)] backdrop-blur-md"
+              : "bg-[rgba(20,16,14,0.68)] backdrop-blur-md"
           }`}
         >
         <nav className="flex items-center justify-between px-6 py-5 md:px-12 lg:px-20 min-[1280px]:px-12 min-[1340px]:px-20">

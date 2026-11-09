@@ -132,14 +132,6 @@ export function Hero() {
         <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-foreground/45 to-transparent pointer-events-none" />
       </div>
 
-      {/* Top meta strip (coords left + SEDA · 2026 right) */}
-      <div
-        className="hero-rise relative z-10 flex items-center justify-between px-6 md:px-12 lg:px-20 pt-24 md:pt-28 font-mono text-[11px] tracking-[0.25em] uppercase text-background/90 [--hero-rise-from:0] [animation-delay:500ms]"
-      >
-        <span>36°30&apos;N · 04°53&apos;W</span>
-        <span className="hidden sm:inline">SEDA · {new Date().getFullYear()}</span>
-      </div>
-
       <div className="flex-1" />
 
       {/* Content (bottom-anchored) */}

@@ -37,11 +37,13 @@ export const URL_GUEST_APP = "https://guests.sedaprivatehomes.com/acceso"
 export const URL_PORTAL_PROPIETARIO = "https://portal.sedaprivatehomes.com/"
 
 /* ── Colores ─────────────────────────────────────────────────────────────
-   Velo oscuro translúcido (con desenfoque), como el de la barra pero algo más
-   cerrado: lo justo para que el texto pase 4,5:1 sobre la foto más clara
-   (tests/franja-contraste.test.ts, peor caso: fondo blanco).               */
+   El velo es EL MISMO en la franja y en la barra sobre la foto (rgba(20,16,14,0.68)): 0,68 es
+   el valor más bajo con el que TODO el texto pasa 4,5:1 sobre la foto más clara (blanco). Con 0,64
+   y 0,66 el enlace de propietarios (oro claro, ya al 100 %) se queda en 3,95:1 y 4,24:1.
+   El texto sube de opacidad lo necesario (tests/franja-cabecera.test.ts y la medición en el
+   navegador de tests/integracion/cabecera-escritorio.test.ts).                       */
 export const VELO_RGB = [20, 16, 14] as const
-export const VELO_ALFA = 0.82
+export const VELO_ALFA = 0.68
 /** Crema de la web: `--background` (app/globals.css), hsl(36 38% 97%). */
 export const CREMA_HSL = [36, 38, 97] as const
 /** `--gold-light` (app/globals.css), hsl(38 60% 80%). */
@@ -50,12 +52,22 @@ export const ORO_CLARO_HSL = [38, 60, 80] as const
 /**
  * Opacidad del texto de la franja sobre el velo (crema). Nada se apaga: todo el texto de la
  * franja pasa 4,5:1 sobre la foto más clara. La mitad que corresponde al tipo de página se
- * distingue DESTACÁNDOLA (punto dorado, etiqueta en oro claro y frase al 90 %), no atenuando la otra.
+ * distingue DESTACÁNDOLA (punto dorado, etiqueta en oro claro y frase algo más clara), no apagando la otra.
  */
 export const ALFA = {
-  etiqueta: 0.6,
-  frase: 0.74,
+  etiqueta: 0.84,
+  frase: 0.88,
   enlace: 1,
-  /** Mitad destacada: la etiqueta va en `--gold-light` (opaco) y la frase sube al 90 %. */
-  fraseDestacada: 0.9,
+  /** Mitad destacada: la etiqueta va en `--gold-light` (opaco) y la frase sube. */
+  fraseDestacada: 0.94,
+} as const
+
+/**
+ * Opacidad (crema) de los textos de la barra sobre la foto, en su estado transparente (portada, arriba).
+ * Los pone Tailwind (`text-background/85`, `text-background/85` en el selector de idiomas): el test los
+ * ata a estos valores leyendo el código.
+ */
+export const ALFA_BARRA = {
+  enlaceInactivo: 0.85,
+  idiomaInactivo: 0.85,
 } as const
