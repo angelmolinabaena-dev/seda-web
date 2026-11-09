@@ -203,6 +203,12 @@
     @apply bg-background text-foreground;
     overflow-x: clip;
   }
+  /* Por debajo de 1.280 px el asistente flota abajo a la derecha: la página deja sitio para que no tape el último enlace. */
+  @media (max-width: 1279px) {
+    html[data-asistente] body {
+      padding-bottom: calc(22px + 44px + 18px + env(safe-area-inset-bottom));
+    }
+  }
   ::selection {
     background-color: hsl(var(--olive));
     color: hsl(var(--background));
@@ -220,5 +226,126 @@
   body:has([data-guia-imprimible]) {
     background: #fff !important;
     color: #000 !important;
+  }
+}
+
+/* ── Animaciones de la barra de móvil y tablet (< 1.280 px; cabecera-movil.tsx) ─────────────────────────
+   Solo transform y opacity: no mueven el diseño. Ninguna automática pasa de 5 s seguidos (WCAG 2.2.2):
+   halo de «Reservar» 3 × 1,6 s = 4,8 s; candado y subrayado de «Portal» 2 × 2,4 s = 4,8 s. Después de la carga,
+   un pulso/secuencia al volver arriba del todo (tras bajar más de 200 px) y otro al pasar el ratón o enfocar.
+   Con prefers-reduced-motion: reduce no hay ninguna (la flecha y la X cambian sin transición). */
+@keyframes halo-pulso {
+  from {
+    transform: scale(1);
+    opacity: 0.85;
+  }
+  to {
+    transform: scale(1.35);
+    opacity: 0;
+  }
+}
+@keyframes portal-arco {
+  /* El arco del candado sube y gira como si se abriera (abrir 0–30 %, mantener, cerrar 65–100 %). */
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  30%,
+  65% {
+    transform: translateY(-5.5px) rotate(-22deg); /* -5,5 unidades de un icono de 24 ≈ 3 px a 13 px */
+  }
+}
+@keyframes portal-linea {
+  /* La línea dorada se dibuja de izquierda a derecha, se mantiene y se apaga. */
+  0% {
+    transform: scaleX(0);
+    opacity: 1;
+  }
+  30%,
+  65% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scaleX(1);
+    opacity: 0;
+  }
+}
+.reservar-halo {
+  position: relative;
+  transition:
+    background-color 0.5s,
+    opacity 0.2s,
+    transform 0.12s;
+}
+.reservar-halo:active {
+  transform: scale(0.97);
+}
+.halo-reservar {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  border: 2px solid #ebd4ad;
+  pointer-events: none;
+  opacity: 0;
+  animation: halo-pulso 1.6s ease-out var(--pulsos, 1) both;
+}
+.portal-contenido {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+.portal-texto {
+  position: relative;
+  display: inline-block;
+}
+.portal-linea {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -3px;
+  height: 1px;
+  background: #ebd4ad;
+  transform-origin: left center;
+  transform: scaleX(0);
+  opacity: 0;
+  pointer-events: none;
+  animation: portal-linea 2.4s ease-in-out var(--pulsos, 1) both;
+}
+.portal-candado {
+  overflow: visible;
+}
+.portal-candado .portal-arco {
+  transform-box: view-box;
+  transform-origin: 17px 11px;
+  animation: portal-arco 2.4s ease-in-out var(--pulsos, 1) both;
+}
+.menu-icono line {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 250ms ease-in-out;
+}
+.boton-menu:hover:not([aria-expanded="true"]) .menu-linea-1 {
+  transform: translateY(-1.5px);
+}
+.boton-menu:hover:not([aria-expanded="true"]) .menu-linea-2 {
+  transform: translateY(1.5px);
+}
+.boton-menu[aria-expanded="true"] .menu-linea-1 {
+  transform: translateY(3px) rotate(45deg);
+}
+.boton-menu[aria-expanded="true"] .menu-linea-2 {
+  transform: translateY(-3px) rotate(-45deg);
+}
+@media (prefers-reduced-motion: reduce) {
+  .halo-reservar,
+  .portal-linea,
+  .portal-candado .portal-arco {
+    animation: none;
+  }
+  .reservar-halo,
+  .menu-icono line,
+  .flecha-portal-giro {
+    transition: none;
   }
 }

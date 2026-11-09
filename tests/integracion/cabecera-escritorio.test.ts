@@ -1,7 +1,6 @@
-import { execSync } from "node:child_process"
-import { createRequire } from "node:module"
 import { afterAll, beforeAll, describe, expect, it } from "vitest"
 import { arrancarNext, type ServidorNext } from "./next-start"
+import { cargarPlaywright, type Navegador } from "./playwright-util"
 
 /*
   Cabecera en escritorio (CABECERA-ESCRITORIO). Ángel la veía mal a ~1.730 px:
@@ -23,30 +22,9 @@ import { arrancarNext, type ServidorNext } from "./next-start"
   máquina, se salta (CI de GitHub/Ubicloud no los lleva).
 */
 
-const ANCHURAS = [1024, 1100, 1279, 1280, 1339, 1340, 1356, 1366, 1439, 1440, 1536, 1728, 1920]
+const ANCHURAS = [768, 820, 1024, 1100, 1279, 1280, 1339, 1340, 1356, 1366, 1439, 1440, 1536, 1728, 1920]
 const ANCHO_MENU = 1280 // desde aquí, barra completa; por debajo, hamburguesa
 const IDIOMAS: Record<string, string> = { es: "/", en: "/en", fr: "/fr", de: "/de" }
-
-// Playwright no es dependencia del proyecto: tipos mínimos de lo que se usa.
-type Pagina = {
-  goto(url: string, o: { waitUntil: "networkidle" }): Promise<unknown>
-  evaluate<T, A = undefined>(f: ((arg: A) => T) | string, arg?: A): Promise<T>
-  waitForTimeout(ms: number): Promise<void>
-  click(selector: string): Promise<void>
-  hover(selector: string): Promise<void>
-  close(): Promise<void>
-}
-type Navegador = { newPage(o: { viewport: { width: number; height: number } }): Promise<Pagina>; close(): Promise<void> }
-type Pw = { chromium: { launch(): Promise<Navegador> } }
-function cargarPlaywright(): Pw | null {
-  const intentos = [() => createRequire(import.meta.url)("playwright"), () => createRequire(`${execSync("npm root -g").toString().trim()}/`)("playwright")]
-  for (const f of intentos) {
-    try {
-      return f() as Pw
-    } catch {}
-  }
-  return null
-}
 
 function medir() {
   const nav = document.querySelector("header nav")!
@@ -78,10 +56,10 @@ function medir() {
       const h = Math.max(a.left, b.left) - Math.min(a.right, b.right) // <0: se cruzan en horizontal
       const v = Math.max(a.top, b.top) - Math.min(a.bottom, b.bottom)
       if (v < 0 && h < 0) problemas.push(`«${items[i].t}» y «${items[j].t}» se solapan`)
-      else if (v < 0 && h < 8) problemas.push(`«${items[i].t}» y «${items[j].t}» a ${Math.round(h)} px`)
+      else if (v < 0 && h < (innerWidth < 1280 ? 4 : 8)) problemas.push(`«${items[i].t}» y «${items[j].t}» a ${Math.round(h)} px`)
     }
-  // Modo: la barra completa tiene los desplegables (SEDA OS, Portal); la hamburguesa, no.
-  const modo = visibles.some((e) => e.getAttribute("aria-haspopup") === "menu") ? "menu" : "burger"
+  // Modo: la barra de escritorio (≥ 1.280 px) lleva sus enlaces en el bloque [data-barra-escritorio]; por debajo, tablet o móvil.
+  const modo = getComputedStyle(nav.querySelector("[data-barra-escritorio]")!).display !== "none" ? "menu" : "burger"
   // Huecos entre los tres bloques de la barra (logo | enlaces | idiomas+Portal+reservar): al menos 16 px.
   const bloques = [...nav.children].map((c) => c.getBoundingClientRect()).filter((r) => r.width > 0).sort((a, b) => a.left - b.left)
   const huecos = bloques.slice(1).map((r, i) => Math.round(r.left - bloques[i].right))
@@ -130,8 +108,8 @@ describe("cabecera de escritorio: nada se parte ni se solapa", () => {
             expect(r.n).toBeGreaterThan(3)
             expect(r.desalineado, "hay un texto de hero con el que comparar").not.toBeNull()
             // El logo cae sobre el margen del contenido salvo en la franja ceñida (1.280–1.339 px).
-            if (ancho < 1280 || ancho >= 1340) expect(r.desalineado, `${idioma} ${ancho}px: logo desalineado con el hero`).toBe(0)
-            else expect(r.desalineado).toBe(-32)
+            if (ancho >= 1024 && (ancho < 1280 || ancho >= 1340)) expect(r.desalineado, `${idioma} ${ancho}px: logo desalineado con el hero`).toBe(0)
+            else if (ancho >= 1280) expect(r.desalineado).toBe(-32)
             expect(r.modo, `${idioma} ${ancho}px`).toBe(ancho >= ANCHO_MENU ? "menu" : "burger")
             if (process.env.CABECERA_HUECOS) console.log(`HUECOS ${idioma} ${ancho} ${r.modo} ${r.huecos.join("/")}`)
           } finally {
@@ -217,7 +195,7 @@ function medirFranja() {
   }
 }
 
-const ANCHURAS_FRANJA = [1280, 1356, 1440, 1920]
+const ANCHURAS_FRANJA = [768, 820, 1024, 1279, 1280, 1356, 1440, 1920]
 
 describe("la franja fina: sin solapes, una línea, y se recoge al bajar", () => {
   for (const [idioma, ruta] of Object.entries(IDIOMAS)) {
@@ -308,23 +286,12 @@ describe("la franja fina: sin solapes, una línea, y se recoge al bajar", () => 
     }
   })
 
-  it("por debajo de 1.280 px la franja no se ve y sus dos enlaces van arriba del menú móvil, como dos tarjetas", async (ctx) => {
+  it("por debajo de 768 px la franja no se ve (Reservar/Valorar y Portal están en la barra y en el menú)", async (ctx) => {
     if (!navegador) return ctx.skip()
-    const p = await navegador.newPage({ viewport: { width: 1100, height: 900 } })
+    const p = await navegador.newPage({ viewport: { width: 600, height: 900 } })
     try {
       await p.goto(servidor.base, { waitUntil: "networkidle" })
       expect((await p.evaluate(medirFranja)).visible).toBe(false)
-      await p.click("button[aria-label][aria-expanded]")
-      await p.waitForTimeout(600)
-      const tarjetas = await p.evaluate(() => {
-        const t = document.querySelector("[data-franja-movil]")
-        const r = t?.getBoundingClientRect()
-        return { n: t?.querySelectorAll("a").length ?? 0, hrefs: [...(t?.querySelectorAll("a") ?? [])].map((a) => a.getAttribute("href")), visible: !!r && r.width > 0 && r.height > 0, arriba: r ? Math.round(r.top) : null }
-      })
-      expect(tarjetas.n).toBe(2)
-      expect(tarjetas.hrefs).toEqual(["/contacto?type=guest", "/contacto?type=owner"])
-      expect(tarjetas.visible).toBe(true)
-      expect(tarjetas.arriba as number).toBeLessThan(200)
     } finally {
       await p.close()
     }
@@ -338,7 +305,7 @@ describe("la franja fina: sin solapes, una línea, y se recoge al bajar", () => 
       await p.hover("button[aria-haspopup='menu']:has-text('Portal')")
       await p.waitForTimeout(400)
       const t = await p.evaluate(() =>
-        [...document.querySelectorAll<HTMLAnchorElement>("[data-portal-tarjeta]")].map((a) => ({
+        [...document.querySelectorAll<HTMLAnchorElement>("[data-portal-tarjeta]")].filter((a) => a.getBoundingClientRect().width > 0 && getComputedStyle(a.closest("[role=menu]")!).visibility === "visible").map((a) => ({
           clave: a.dataset.portalTarjeta,
           href: a.getAttribute("href"),
           texto: (a.textContent || "").replace(/\s+/g, " ").trim(),
@@ -379,7 +346,7 @@ describe("la franja fina: sin solapes, una línea, y se recoge al bajar", () => 
             const veloC = rgba(getComputedStyle(nav.parentElement!).backgroundColor)
             const fondo = [0, 1, 2].map((i) => veloC[i] * veloC[3] + 255 * (1 - veloC[3]))
             const textos = [...nav.querySelectorAll<HTMLElement>("a, button")].filter(
-              (e) => !e.closest("[role=menu]") && !e.closest("[inert]") && e.offsetParent !== null && e.getBoundingClientRect().width > 0 && (e.textContent || "").trim().length > 1,
+              (e) => !e.closest("[role=menu]") && !e.closest("[inert]") && e.offsetParent !== null && e.getBoundingClientRect().width > 0 && e.innerText.trim().length > 1,
             )
             let peor = Infinity
             let cual = ""
@@ -419,7 +386,8 @@ function medirContencion([selectorPanel, selectorTarjetas]: [string, string]) {
     if (r.left < c.left - margen || r.right > c.right + margen) problemas.push(`${que} se sale de su contenedor (${Math.round(r.left)}–${Math.round(r.right)} frente a ${Math.round(c.left)}–${Math.round(c.right)})`)
   }
   if (rp.left < -0.5 || rp.right > innerWidth + 0.5) problemas.push(`el panel se sale de la ventana (${Math.round(rp.left)}–${Math.round(rp.right)} de ${innerWidth})`)
-  const tarjetas = [...document.querySelectorAll<HTMLElement>(selectorTarjetas)]
+  // Solo las que se ven: la barra de tablet lleva su propia copia del desplegable, oculta en escritorio.
+  const tarjetas = [...document.querySelectorAll<HTMLElement>(selectorTarjetas)].filter((t) => t.getBoundingClientRect().width > 0)
   for (const t of tarjetas) {
     const rt = t.getBoundingClientRect()
     const nombre = (t.textContent || "").replace(/\s+/g, " ").trim().slice(0, 30)
@@ -463,35 +431,6 @@ describe("el desplegable Portal ▾ contiene sus tarjetas", () => {
       })
     }
   }
-
-  for (const [idioma, ruta] of Object.entries(IDIOMAS)) {
-    it(`${idioma} 390px (móvil): las tarjetas de la franja y los accesos de Portal del menú no se salen`, async (ctx) => {
-      if (!navegador) return ctx.skip()
-      const p = await navegador.newPage({ viewport: { width: 390, height: 844 } })
-      try {
-        await p.goto(servidor.base + ruta, { waitUntil: "networkidle" })
-        await p.click("button[aria-label][aria-expanded]")
-        await p.waitForTimeout(800)
-        const franja = (await p.evaluate(medirContencion, ["[data-franja-movil]", "[data-franja-movil] a"] as [string, string])) as { problemas: string[]; n: number }
-        expect(franja.problemas, `${idioma} tarjetas de la franja`).toEqual([])
-        expect(franja.n).toBe(2)
-        // Pie del menú móvil: «Acceso huéspedes · Acceso propietarios».
-        const pie = await p.evaluate(() => {
-          const enlaces = [...document.querySelectorAll<HTMLAnchorElement>("a[href*='sedaprivatehomes.com']")].filter((a) => a.getBoundingClientRect().width > 0 && a.closest("[aria-hidden='false'], [inert]") !== null && !a.closest("header"))
-          const fuera = enlaces.filter((a) => {
-            const r = a.getBoundingClientRect()
-            return r.left < -0.5 || r.right > innerWidth + 0.5
-          })
-          return { n: enlaces.length, fuera: fuera.map((a) => (a.textContent || "").trim()), scrollW: document.documentElement.scrollWidth, innerW: innerWidth }
-        })
-        expect(pie.n).toBeGreaterThanOrEqual(2)
-        expect(pie.fuera, "accesos de Portal fuera de la ventana").toEqual([])
-        expect(pie.scrollW, "scroll horizontal").toBeLessThanOrEqual(pie.innerW)
-      } finally {
-        await p.close()
-      }
-    })
-  }
 })
 
 /* ── Móvil: menú abierto frente al botón del asistente, y título del hero ────────
@@ -506,7 +445,7 @@ describe("móvil: el menú abierto queda por encima del asistente", () => {
       const p = await navegador.newPage({ viewport: { width: ancho, height: 900 } })
       try {
         await p.goto(servidor.base, { waitUntil: "networkidle" })
-        await p.click("button[aria-label][aria-expanded]")
+        await p.click("[data-boton-menu]:visible")
         await p.waitForTimeout(800)
         const r = await p.evaluate(() => {
           // Sonda: un elemento fixed z-index 40 que cubre toda la ventana, como el botón del asistente (fixed z-40).
@@ -515,7 +454,7 @@ describe("móvil: el menú abierto queda por encima del asistente", () => {
           sonda.id = "sonda-z40"
           sonda.style.cssText = "position:fixed;inset:0;z-index:40;background:transparent"
           document.body.appendChild(sonda)
-          const menu = document.querySelector<HTMLElement>("div.fixed.inset-0")!
+          const menu = document.querySelector<HTMLElement>("[data-hoja-menu]")!
           const enlaces = [...menu.querySelectorAll<HTMLAnchorElement>("a")].filter((a) => {
             const q = a.getBoundingClientRect()
             return q.width > 0 && q.height > 0 && q.top >= 0 && q.bottom <= innerHeight

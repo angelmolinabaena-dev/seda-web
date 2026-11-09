@@ -31,6 +31,28 @@
     "propietarios_linea": "Acceda al portal de su vivienda.",
     "entrar": "Entrar"
   },
+  "movil": {
+    "portal": "Portal",
+    "reservar": "Reservar",
+    "valorar": "Valorar",
+    "menu": "Menú",
+    "portal_seccion": "Portal",
+    "portal_aria": "Accesos de Portal",
+    "portal_texto": "Acceso privado para huéspedes y propietarios.",
+    "huespedes_etiqueta": "Huéspedes",
+    "huespedes_nombre": "Guest App",
+    "propietarios_etiqueta": "Propietarios",
+    "propietarios_nombre": "Portal del propietario",
+    "asistente_titulo": "Asistente SEDA",
+    "asistente_texto": "Pregúntenos",
+    "menu_huespedes": "Huéspedes",
+    "menu_propietarios": "Propietarios",
+    "menu_seda": "SEDA",
+    "cerrar": "Cerrar",
+    "idioma_actual": "Idioma: {idioma}",
+    "idioma": "Idioma",
+    "menu_aria": "Menú principal"
+  },
   "cta": {
     "solicitar_estancia": "Solicitar estancia",
     "valorar_propiedad": "Valorar mi propiedad",
@@ -1672,6 +1694,7 @@
   },
   "asistente": {
     "abrir": "Preguntar al asistente",
+    "corto": "Pregúntenos",
     "abrir_portada": "¿Es propietario? Pregúntenos",
     "abrir_portada_aria": "¿Es propietario? Pregúntenos: abre el asistente de SEDA",
     "titulo": "Asistente de SEDA",

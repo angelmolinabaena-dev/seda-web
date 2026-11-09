@@ -1,21 +1,20 @@
 "use client"
 
 import { useState, useEffect, useRef, useTransition, useCallback } from "react"
-import { Menu, X, ArrowUpRight, Lock } from "lucide-react"
+import { ArrowUpRight, Lock } from "lucide-react"
 import { useLocale, useTranslations } from "next-intl"
 import { Link, usePathname, useRouter } from "@/i18n/navigation"
 import { LanguageSwitcher } from "@/components/language-switcher"
 import { haySeccionGuias } from "@/lib/guias"
-import { FranjaCabecera, TarjetasFranjaMovil, TarjetasPortal } from "@/components/cabecera-franja"
-import { DESTINO_PROPIETARIOS, DESTINO_VIAJEROS, URL_GUEST_APP, URL_PORTAL_PROPIETARIO, tipoDePagina } from "@/lib/franja-cabecera"
+import { FranjaCabecera, TarjetasPortal } from "@/components/cabecera-franja"
+import { BotonMenu, BotonReservar, MenuMovil, PortalMenu, PortalMovil, SedaOsMenu, SelectorIdiomaCompacto } from "@/components/cabecera-movil"
+import { DESTINO_PROPIETARIOS, DESTINO_VIAJEROS, tipoDePagina } from "@/lib/franja-cabecera"
 
 // External app URLs — sourced from seda4/shared.jsx (Claude design reference).
 // Was a real reservation's UUID, exposed in this page's public HTML on every
 // route. /acceso is the generic sign-in (locator + email), not a specific stay.
-const GUEST_APP_URL = URL_GUEST_APP
 // Owner PORTAL home — was pointing at the internal /admin panel (bounces a
 // prospective owner to an admin login). "/" is the owner-facing portal home.
-const OWNERS_PORTAL_URL = URL_PORTAL_PROPIETARIO
 
 // Mobile mega-menu IA — reorganised to match professional luxury
 // hospitality patterns (Aman, Belmond, Le Collectionist, Oku).
@@ -130,6 +129,12 @@ export function Navigation() {
   const [isOpen, setIsOpen] = useState(false)
   const [pastHero, setPastHero] = useState(false)
   const [hidden, setHidden] = useState(false)
+  // Panel «Portal» del móvil (< 768 px). Menú y panel no conviven: abrir uno cierra el otro.
+  const [portalMovil, setPortalMovil] = useState(false)
+  const abrirPortalMovil = (v: boolean) => {
+    setPortalMovil(v)
+    if (v) setIsOpen(false)
+  }
   const [isAccessOpen, setIsAccessOpen] = useState(false)
   const accessRef = useRef<HTMLDivElement>(null)
   const [isSedaOsOpen, setIsSedaOsOpen] = useState(false)
@@ -248,7 +253,23 @@ export function Navigation() {
     setPrevPathnameForDrawer(pathname)
     setPrevLocaleForDrawer(locale)
     setIsOpen(false)
+    setPortalMovil(false)
   }
+
+  // Con el menú o el panel de Portal abiertos, la página lo sabe (el asistente se oculta: ver asistente-propietarios).
+  // Escape cierra el menú.
+  useEffect(() => {
+    const raiz = document.documentElement
+    if (isOpen || portalMovil) raiz.setAttribute("data-hoja-abierta", "")
+    else raiz.removeAttribute("data-hoja-abierta")
+    if (!isOpen) return () => raiz.removeAttribute("data-hoja-abierta")
+    const alPulsar = (e: KeyboardEvent) => e.key === "Escape" && setIsOpen(false)
+    document.addEventListener("keydown", alPulsar)
+    return () => {
+      raiz.removeAttribute("data-hoja-abierta")
+      document.removeEventListener("keydown", alPulsar)
+    }
+  }, [isOpen, portalMovil])
 
   // Lock body scroll when mega-menu is open
   useEffect(() => {
@@ -291,23 +312,24 @@ export function Navigation() {
     }
   }, [isSedaOsOpen])
 
-  // Ripple effect — contextual color per drawer group
-  const ripple = useCallback((e: React.PointerEvent<HTMLAnchorElement>, color: string) => {
-    const el = e.currentTarget
-    const rect = el.getBoundingClientRect()
-    const d = Math.max(el.offsetWidth, el.offsetHeight)
-    const span = document.createElement("span")
-    span.className = "ripple-wave"
-    span.style.cssText = `width:${d}px;height:${d}px;left:${e.clientX - rect.left - d / 2}px;top:${e.clientY - rect.top - d / 2}px;background:${color};`
-    el.appendChild(span)
-    span.addEventListener("animationend", () => span.remove(), { once: true })
-  }, [])
+  // Botón del menú (< 1.280 px): píldora «MENÚ ═» ↔ «CERRAR ✕».
+  const botonMenu = (
+    <BotonMenu
+      abierto={isOpen}
+      solido={scrolled || isOpen}
+      onClick={() => {
+        setPortalMovil(false)
+        setIsOpen(!isOpen)
+      }}
+    />
+  )
 
   return (
     <>
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-transform duration-500 ${
-          hidden && !isOpen ? "-translate-y-full" : "translate-y-0"
+          // Por debajo de 768 px la cabecera no se recoge: Portal y Reservar siempre a mano.
+          hidden && !isOpen ? "md:-translate-y-full" : "translate-y-0"
         }`}
       >
         {/* Franja fina encima de la barra; se recoge al bajar (pastHero). Solo desde 1.280 px. */}
@@ -319,12 +341,14 @@ export function Navigation() {
               : "bg-[rgba(20,16,14,0.68)] backdrop-blur-md"
           }`}
         >
-        <nav className="flex items-center justify-between px-6 py-5 md:px-12 lg:px-20 min-[1280px]:px-12 min-[1340px]:px-20">
+        {/* Por debajo de 1.280 px, rejilla 1fr · auto · 1fr: logo a la izquierda, el grupo central centrado de verdad en la
+            pantalla y el botón del menú a la derecha. Desde 1.280 px, la barra de escritorio de siempre. */}
+        <nav className="grid min-h-[56px] grid-cols-[1fr_auto_1fr] items-center gap-1 px-2 py-1.5 md:min-h-[72px] md:gap-2 md:px-8 md:py-3 lg:px-20 min-[1280px]:flex min-[1280px]:min-h-0 min-[1280px]:justify-between min-[1280px]:gap-0 min-[1280px]:px-12 min-[1280px]:py-5 min-[1340px]:px-20">
           <Link
             href="/"
             onClick={() => setIsOpen(false)}
             aria-label="SEDA Private Homes — inicio"
-            className="relative block shrink-0"
+            className="relative block shrink-0 justify-self-start"
           >
             {/* Isotipo (todos los breakpoints) — sello discreto; el lockup completo ya vive en el hero.
                 Crossfade blanco (hero) <-> ink (secciones claras). Ratio 1.4948:1. */}
@@ -359,7 +383,7 @@ export function Navigation() {
               francés la barra mide ~1.190 px con los huecos de 1.440. Por debajo de 1.280, hamburguesa (los idiomas siguen visibles en la
               cabecera). Nada se parte (whitespace-nowrap) ni se encoge (shrink-0). */}
           {/* Desktop nav: Colección · Experiencias | SEDA OS ▼ | Nosotros · Contacto */}
-          <div className="hidden min-[1280px]:flex items-center gap-5 min-[1440px]:gap-7 shrink-0 whitespace-nowrap">
+          <div data-barra-escritorio className="hidden min-[1280px]:flex items-center gap-5 min-[1440px]:gap-7 shrink-0 whitespace-nowrap">
             {/* Group 1: Estancia */}
             {desktopGroups[0].links.map((link) => {
               const isActive = pathname === link.href
@@ -533,292 +557,44 @@ export function Navigation() {
             </div>
           </div>
 
-          {/* Mobile right cluster — language switcher + burger.
-              Switcher lives in the header (visible at all times) rather
-              than inside the drawer so that the locale decision is a
-              top-level affordance, not buried behind a menu tap. The
-              divider mirrors the desktop spacing on the right side of
-              `min-[1280px]:flex` (border-r → mr-1 pr-3). */}
-          <div className="min-[1280px]:hidden flex items-center gap-3 shrink-0 whitespace-nowrap">
-            <div
-              className={`pr-3 border-r transition-colors duration-500 ${
-                scrolled || isOpen ? "border-border" : "border-background/25"
-              }`}
-            >
-              <LanguageSwitcher darkOnLight={scrolled || isOpen} />
+          {/* Grupo central (< 1.280 px). Móvil: Portal · Reservar · idioma. Tablet: SEDA OS ▾ · Portal ▾ · Reservar · idioma. */}
+          <div data-grupo-central className="flex items-center justify-center gap-1 whitespace-nowrap md:gap-4 min-[1280px]:hidden">
+            <div className="hidden md:block">
+              <SedaOsMenu solido={scrolled || isOpen} />
             </div>
-            {/* Hamburger → X morph: both icons layered, cross-fade
-                with counter-rotation so the transition reads as a single
-                continuous gesture. cubic-bezier matches the CTA pill. */}
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className={`relative -mr-2 w-10 h-10 flex items-center justify-center transition-colors duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current rounded-sm ${
-                scrolled || isOpen ? "text-foreground" : "text-background"
-              }`}
-              aria-label={isOpen ? t("nav.close_menu") : t("nav.open_menu")}
-              aria-expanded={isOpen}
-            >
-              <Menu
-                className={`absolute h-5 w-5 transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] ${
-                  isOpen ? "opacity-0 rotate-45 scale-75" : "opacity-100 rotate-0 scale-100"
-                }`}
-                strokeWidth={1.5}
-              />
-              <X
-                className={`absolute h-5 w-5 transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] ${
-                  isOpen ? "opacity-100 rotate-0 scale-100" : "opacity-0 -rotate-45 scale-75"
-                }`}
-                strokeWidth={1.5}
-              />
-            </button>
+            <div className="md:hidden">
+              <PortalMovil abierto={portalMovil} setAbierto={abrirPortalMovil} solido={scrolled || isOpen} />
+            </div>
+            <div className="hidden md:block">
+              <PortalMenu solido={scrolled || isOpen} />
+            </div>
+            <BotonReservar tipo={tipo} solido={scrolled || isOpen} />
+          </div>
+
+          {/* Derecha (< 1.280 px): idioma en texto («ES ▾») y el icono del menú. */}
+          <div className="flex items-center gap-1 justify-self-end min-[1280px]:hidden">
+            <SelectorIdiomaCompacto solido={scrolled || isOpen} />
+            {botonMenu}
           </div>
         </nav>
         </div>
       </header>
 
-      {/* Mobile mega-menu — fullscreen overlay.
-          Architecture rationale:
-          - Full-height flex column with `overflow-y-auto`.
-          - The footer uses `mt-auto`, NOT `sticky bottom-0`. The sticky
-            version jittered on iOS Safari when momentum scroll bounced
-            past the bottom edge. With `mt-auto` the footer simply lives
-            below the scrollable content and reaches the viewport bottom
-            naturally when content fits — short menus pin it; long menus
-            scroll past it. Either way: no jitter.
-          - Container uses opacity transition for the overlay itself,
-            but the interior children get a staggered slide+fade via
-            per-element transition-delay (see below). The combined
-            effect reads like an editorial curtain reveal. */}
+      {/* Hoja del menú (< 1.280 px): crema, a pantalla completa bajo la cabecera. Ordenada para que quepa en
+          390 × 844 sin desplazamiento (ver MenuMovil). z-[45]: por encima del asistente y por debajo de la cabecera. */}
       <div
-        // z-[45]: por encima del botón del asistente (z-40, también fixed y posterior en el DOM, que antes quedaba
-        // encima del botón «Solicitar estancia» del menú) y por debajo de la cabecera (z-50) y del panel del asistente.
         className={`min-[1280px]:hidden fixed inset-0 z-[45] bg-background/[0.98] backdrop-blur-md ${
           isOpen
             ? "opacity-100 pointer-events-auto transition-opacity duration-200 ease-out"
             : "opacity-0 pointer-events-none transition-opacity duration-150 ease-in"
         }`}
         aria-hidden={!isOpen}
-        // `inert` while closed: the links inside must not take keyboard focus
-        // either. aria-hidden alone hid them from screen readers but left them
-        // in the tab order (Lighthouse `aria-hidden-focus`). Safari ≥ 15.5.
+        // `inert` cerrada: sus enlaces no pueden recibir foco (Lighthouse `aria-hidden-focus`).
         inert={!isOpen}
-        // Transition shortened from 400ms → 200ms so taps feel snappy:
-        // user perceives "closed" within a single frame after their tap.
+        data-hoja-menu={isOpen ? "abierta" : "cerrada"}
       >
-        <div className="h-full flex flex-col pt-20 pb-6 px-6 md:px-12 overflow-y-auto overscroll-contain">
-          <TarjetasFranjaMovil tipo={tipo} onNavegar={handleNavTap} />
-          {/* Three differentiated sections — each group has its own visual
-              identity, not just spatial separation:
-              - HUÉSPEDES (primary audience, warm): default cream bg, gold
-                accent, bold serif large.
-              - PROPIETARIOS (B2B-leaning, professional): full-width olive-
-                tinted bleed section that breaks the rhythm. Olive accent
-                on eyebrow + active dot. Same bold serif size.
-              - SEDA (utility, brand): no special bg, neutral muted eyebrow,
-                font-medium (not bold) + smaller serif. Reads as quieter
-                tier — "the rest" — without losing editorial register.
-
-              Stagger across all 3 sections is preserved via a manual
-              flat index (eyebrow1, item1.1, 1.2, 1.3, eyebrow2, item2.1,
-              2.2, eyebrow3, item3.1, 3.2, 3.3 — 12 positions). */}
-
-          {/* GROUP 1 — Huéspedes (warm primary) */}
-          <section>
-            <p
-              className={`font-mono text-[10px] tracking-[0.3em] uppercase text-[hsl(var(--gold))] mb-4 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-                isOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
-              }`}
-              style={{ transitionDelay: isOpen ? "120ms" : "0ms" }}
-            >
-              — {t(navGroups[0].titleKey)}
-            </p>
-            <ul className="space-y-2.5">
-              {navGroups[0].links.map((link, idx) => {
-                const isActive = pathname === link.href
-                const delay = 165 + idx * 45
-                return (
-                  <li
-                    key={link.tKey}
-                    className={`transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-                      isOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
-                    }`}
-                    style={{ transitionDelay: isOpen ? `${delay}ms` : "0ms" }}
-                  >
-                    <Link
-                      href={link.href}
-                      onClick={handleNavTap(link.href)}
-                      onPointerDown={(e) => ripple(e, "hsl(38 50% 50% / 0.2)")}
-                      aria-current={isActive ? "page" : undefined}
-                      className={`group relative overflow-hidden flex items-baseline gap-2.5 -mx-2 px-2 py-0.5 transition-colors ${
-                        isActive
-                          ? "bg-gradient-to-r from-[hsl(var(--gold))]/12 via-transparent to-transparent"
-                          : ""
-                      }`}
-                    >
-                      <span
-                        aria-hidden
-                        className={`inline-block w-1.5 h-1.5 rounded-full shrink-0 translate-y-[-0.3em] transition-colors ${
-                          isActive ? "bg-[hsl(var(--gold))]" : "bg-transparent"
-                        }`}
-                      />
-                      <span className="font-serif font-bold text-[1.55rem] md:text-[1.7rem] leading-[1.1] tracking-tight text-foreground group-hover:text-foreground/65 transition-colors">
-                        {t(link.tKey)}
-                      </span>
-                    </Link>
-                  </li>
-                )
-              })}
-            </ul>
-          </section>
-
-          {/* GROUP 2 — Propietarios (olive bleed section, distinct).
-              `-mx-6 px-6` extends the tint to the full viewport width
-              (cancels the parent's px-6) for a magazine-spread feel. */}
-          <section className="mt-8 -mx-6 px-6 md:-mx-12 md:px-12 py-7 bg-[hsl(var(--olive))]/[0.07] border-y border-[hsl(var(--olive))]/20">
-            <p
-              className={`font-mono text-[10px] tracking-[0.3em] uppercase text-[hsl(var(--gold))] mb-4 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-                isOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
-              }`}
-              style={{ transitionDelay: isOpen ? "300ms" : "0ms" }}
-            >
-              — {t(navGroups[1].titleKey)}
-            </p>
-            <ul className="space-y-2.5">
-              {navGroups[1].links.map((link, idx) => {
-                const isActive = pathname === link.href
-                const delay = 345 + idx * 45
-                return (
-                  <li
-                    key={link.tKey}
-                    className={`transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-                      isOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
-                    }`}
-                    style={{ transitionDelay: isOpen ? `${delay}ms` : "0ms" }}
-                  >
-                    <Link
-                      href={link.href}
-                      onClick={handleNavTap(link.href)}
-                      onPointerDown={(e) => ripple(e, "hsl(88 18% 32% / 0.18)")}
-                      aria-current={isActive ? "page" : undefined}
-                      className={`group relative overflow-hidden flex items-baseline gap-2.5 -mx-2 px-2 py-0.5 transition-colors ${
-                        isActive
-                          ? "bg-gradient-to-r from-[hsl(var(--olive))]/15 via-transparent to-transparent"
-                          : ""
-                      }`}
-                    >
-                      <span
-                        aria-hidden
-                        className={`inline-block w-1.5 h-1.5 rounded-full shrink-0 translate-y-[-0.3em] transition-colors ${
-                          isActive ? "bg-[hsl(var(--olive))]" : "bg-transparent"
-                        }`}
-                      />
-                      <span className="font-serif font-bold text-[1.55rem] md:text-[1.7rem] leading-[1.1] tracking-tight text-foreground group-hover:text-foreground/65 transition-colors">
-                        {t(link.tKey)}
-                      </span>
-                    </Link>
-                  </li>
-                )
-              })}
-            </ul>
-          </section>
-
-          {/* GROUP 3 — SEDA (utility tier, quieter).
-              Smaller, font-medium serif, neutral eyebrow — reads as the
-              support layer ("acerca de" + "ayuda") rather than a primary
-              destination. */}
-          <section className="mt-8">
-            <p
-              className={`font-mono text-[10px] tracking-[0.3em] uppercase text-[hsl(var(--gold))] mb-3 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-                isOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
-              }`}
-              style={{ transitionDelay: isOpen ? "440ms" : "0ms" }}
-            >
-              — {t(navGroups[2].titleKey)}
-            </p>
-            <ul className="space-y-1.5">
-              {navGroups[2].links.map((link, idx) => {
-                const isActive = pathname === link.href
-                const delay = 485 + idx * 40
-                return (
-                  <li
-                    key={link.tKey}
-                    className={`transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-                      isOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
-                    }`}
-                    style={{ transitionDelay: isOpen ? `${delay}ms` : "0ms" }}
-                  >
-                    <Link
-                      href={link.href}
-                      onClick={handleNavTap(link.href)}
-                      onPointerDown={(e) => ripple(e, "hsl(36 8% 12% / 0.1)")}
-                      aria-current={isActive ? "page" : undefined}
-                      className={`group relative overflow-hidden flex items-baseline gap-2 -mx-2 px-2 py-0.5 transition-colors ${
-                        isActive
-                          ? "bg-gradient-to-r from-foreground/8 via-transparent to-transparent"
-                          : ""
-                      }`}
-                    >
-                      <span
-                        aria-hidden
-                        className={`inline-block w-1 h-1 rounded-full shrink-0 translate-y-[-0.35em] transition-colors ${
-                          isActive ? "bg-foreground" : "bg-transparent"
-                        }`}
-                      />
-                      <span className="font-serif font-bold text-[1.55rem] md:text-[1.7rem] leading-[1.1] tracking-tight text-muted-foreground group-hover:text-foreground transition-colors">
-                        {t(link.tKey)}
-                      </span>
-                    </Link>
-                  </li>
-                )
-              })}
-            </ul>
-          </section>
-
-          {/* Footer block — pushed to the bottom by mt-auto without sticky.
-              Animates in with a single block delay (after all items have
-              landed). Secondary buttons upgraded from ghost-border to
-              solid `bg-secondary` so they read as confident affordances
-              rather than tertiary placeholders.
-              Tightened to fit iPhone SE (375×667) without scroll. */}
-          <div
-            className={`mt-auto pt-5 border-t border-border space-y-2.5 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-              isOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
-            }`}
-            style={{ transitionDelay: isOpen ? "560ms" : "0ms" }}
-          >
-            {/* Primary CTA — taller (py-5 → ~56px height), bigger label
-                (text-[13px]), and font-semibold for stronger presence.
-                Requires weight 600 loaded in JetBrains_Mono (see layout.tsx). */}
-            <Link
-              href={primaryCta.href}
-              onClick={handleNavTap(primaryCta.href)}
-              className="group flex items-center justify-between px-5 py-5 bg-foreground text-background font-mono font-semibold text-[13px] tracking-[0.22em] uppercase hover:bg-foreground/90 transition-colors"
-            >
-              <span>{primaryCta.label}</span>
-              <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" strokeWidth={1.75} />
-            </Link>
-            <div className="flex items-center gap-4 pt-1 font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground">
-              <a
-                href={GUEST_APP_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => setIsOpen(false)}
-                className="hover:text-foreground transition-colors"
-              >
-                {t("nav.acceso_huespedes")}
-              </a>
-              <span aria-hidden className="text-border">·</span>
-              <a
-                href={OWNERS_PORTAL_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => setIsOpen(false)}
-                className="hover:text-foreground transition-colors"
-              >
-                {t("nav.acceso_propietarios")}
-              </a>
-            </div>
-          </div>
+        <div className="h-full overflow-y-auto overscroll-contain px-5 pb-[calc(1.25rem+env(safe-area-inset-bottom))] pt-[4.5rem] md:px-12 md:pt-[7.5rem]">
+          <MenuMovil grupos={navGroups} cerrar={() => setIsOpen(false)} onNavegar={handleNavTap} />
         </div>
       </div>
     </>

@@ -31,6 +31,28 @@
     "propietarios_linea": "Open the portal for your home.",
     "entrar": "Sign in"
   },
+  "movil": {
+    "portal": "Portal",
+    "reservar": "Book",
+    "valorar": "Value",
+    "menu": "Menu",
+    "portal_seccion": "Portal",
+    "portal_aria": "Portal access",
+    "portal_texto": "Private access for guests and owners.",
+    "huespedes_etiqueta": "Guests",
+    "huespedes_nombre": "Guest App",
+    "propietarios_etiqueta": "Owners",
+    "propietarios_nombre": "Owner Portal",
+    "asistente_titulo": "SEDA Assistant",
+    "asistente_texto": "Ask us",
+    "menu_huespedes": "Guests",
+    "menu_propietarios": "Owners",
+    "menu_seda": "SEDA",
+    "cerrar": "Close",
+    "idioma_actual": "Language: {idioma}",
+    "idioma": "Language",
+    "menu_aria": "Main menu"
+  },
   "cta": {
     "solicitar_estancia": "Request a stay",
     "valorar_propiedad": "Value my property",
@@ -1672,6 +1694,7 @@
   },
   "asistente": {
     "abrir": "Ask the assistant",
+    "corto": "Ask the assistant",
     "abrir_portada": "Owner? Ask the assistant",
     "abrir_portada_aria": "Are you an owner? Ask the assistant",
     "titulo": "SEDA assistant",

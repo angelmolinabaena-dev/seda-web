@@ -98,17 +98,17 @@ describe.each(routing.locales)("botón (%s)", (locale) => {
   it("portada: dice para quién es y tiene nombre accesible completo", async () => {
     const m = (await import(`@/messages/${locale}.json`)).default.asistente as Record<string, string>
     const html = entidades(await boton(locale, "portada"))
-    expect(html).toContain(`>${m.abrir_portada}</button>`)
+    expect(html).toContain(`<span class="hidden md:inline">${m.abrir_portada}</span>`)
     expect(html).toContain(`aria-label="${m.abrir_portada_aria}"`)
     // WCAG 2.5.3 (etiqueta en el nombre): el nombre accesible contiene el texto visible entero.
     expect(m.abrir_portada_aria.toLowerCase()).toContain(m.abrir_portada.toLowerCase())
-    expect(html).not.toContain(`>${m.abrir}</button>`)
+    expect(html).not.toContain(`<span class="hidden md:inline">${m.abrir}</span>`)
   })
   it("propietarios (por defecto): el texto de siempre, sin aria-label", async () => {
     const m = (await import(`@/messages/${locale}.json`)).default.asistente as Record<string, string>
     for (const v of [undefined, "propietarios" as const]) {
       const html = entidades(await boton(locale, v))
-      expect(html).toContain(`>${m.abrir}</button>`)
+      expect(html).toContain(`<span class="hidden md:inline">${m.abrir}</span>`)
       expect(html).not.toContain("aria-label")
     }
   })

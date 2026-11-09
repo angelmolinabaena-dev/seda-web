@@ -414,7 +414,7 @@ export function PropietariosContent({ calculadora = false }: { calculadora?: boo
       {/* HERO con SedaOS dashboard overlay */}
       <header className="relative overflow-hidden text-background min-h-[760px] flex items-center pt-40 pb-24">
         <div className="absolute inset-0 z-0">
-          <IllustrativeTag className="bottom-4 right-6" />
+          <IllustrativeTag sutil className="top-[4.5rem] right-4 md:top-[7.75rem] md:right-6 min-[1280px]:top-auto min-[1280px]:bottom-4" />
           <Image
             src="/villas/portal-tablet.jpg"
             width={1254}

@@ -6,6 +6,7 @@ import { MessageCircle } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { iniciarBotIdUnaVez } from "@/lib/asistente/botid-cliente"
 import { capturarCarta, tomarCartaAsistente } from "@/lib/carta-qr"
+import { registrarAsistente } from "@/lib/asistente/montaje"
 
 /*
   Botón del asistente de propietarios (/propietarios, la calculadora, la portada y founding-owners).
@@ -60,8 +61,9 @@ export function AsistentePropietarios({ variante = "propietarios" }: { variante?
     let heroVisible = true
     const evaluar = () => {
       const bannerPx = parseFloat(document.documentElement.style.getPropertyValue("--banner-cookies-h")) || 0
-      const movil = window.matchMedia("(max-width: 767px)").matches
-      setApartado(heroVisible && (movil || bannerPx > 0))
+      // Solo en escritorio (≥ 1.280 px): por debajo, el hero reserva sitio abajo y el botón flota sin tapar nada.
+      const escritorio = window.matchMedia("(min-width: 1280px)").matches
+      setApartado(heroVisible && escritorio && bannerPx > 0)
     }
     const io = new IntersectionObserver(([e]) => {
       heroVisible = e.isIntersecting
@@ -77,6 +79,19 @@ export function AsistentePropietarios({ variante = "propietarios" }: { variante?
       window.removeEventListener("resize", evaluar)
     }
   }, [portada])
+
+  // La cabecera (menú del móvil) sabe así que el asistente está montado y puede abrirlo; <html data-asistente>
+  // deja sitio abajo en la página por debajo de 1.280 px (app/globals.css, hero).
+  useEffect(() => {
+    const raiz = document.documentElement
+    raiz.setAttribute("data-asistente", "")
+    // Abrir desde el menú es lo mismo que pulsar el botón (que también inicia BotID).
+    const quitar = registrarAsistente(() => boton.current?.click())
+    return () => {
+      raiz.removeAttribute("data-asistente")
+      quitar()
+    }
+  }, [])
 
   useEffect(() => {
     capturarCarta()
@@ -116,15 +131,18 @@ export function AsistentePropietarios({ variante = "propietarios" }: { variante?
           aria-label={portada ? t("abrir_portada_aria") : undefined}
           data-asistente-boton={variante}
           // --banner-cookies-h: altura del aviso de cookies cuando está en pantalla (0 si no); el botón se sube sobre él.
-          // En la portada, además, 3,5 rem más: el rótulo «Imagen ilustrativa» del hero ocupa la esquina inferior derecha.
-          className={`fixed z-40 right-4 md:right-6 ${
+          // Por debajo de 1.280 px: abajo a la derecha (16 px del borde, 22 px + zona segura del fondo), y se oculta con
+          // el menú o el panel de Portal abiertos (<html data-hoja-abierta>). En escritorio, como siempre; en la
+          // portada, 3 rem más porque el rótulo «Imagen ilustrativa» del hero ocupa la esquina inferior derecha.
+          className={`fixed z-40 right-4 min-[1280px]:right-6 bottom-[calc(22px+env(safe-area-inset-bottom)+var(--banner-cookies-h,0px))] ${
             portada
-              ? "bottom-[calc(max(1rem,env(safe-area-inset-bottom))+3.5rem+var(--banner-cookies-h,0px))] md:bottom-[calc(1.5rem+3rem+var(--banner-cookies-h,0px))]"
-              : "bottom-[calc(max(1rem,env(safe-area-inset-bottom))+var(--banner-cookies-h,0px))] md:bottom-[calc(1.5rem+var(--banner-cookies-h,0px))]"
-          } ${apartado ? "hidden" : "inline-flex"} items-center gap-2.5 pl-4 pr-5 py-3 rounded-full bg-[hsl(var(--olive))] text-background shadow-xl font-mono text-[10px] tracking-[0.2em] uppercase whitespace-nowrap hover:bg-[hsl(var(--olive))]/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--gold))] focus-visible:ring-offset-2`}
+              ? "min-[1280px]:bottom-[calc(1.5rem+3rem+var(--banner-cookies-h,0px))]"
+              : "min-[1280px]:bottom-[calc(1.5rem+var(--banner-cookies-h,0px))]"
+          } ${apartado ? "hidden" : "inline-flex"} [html[data-hoja-abierta]_&]:max-[1279px]:hidden h-11 items-center gap-2.5 pl-4 pr-5 rounded-full bg-[hsl(var(--olive))] text-background shadow-xl font-mono text-[10px] tracking-[0.2em] uppercase whitespace-nowrap hover:bg-[hsl(var(--olive))]/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--gold))] focus-visible:ring-offset-2`}
         >
           <MessageCircle className="h-4 w-4 text-[hsl(var(--gold-light))]" strokeWidth={1.75} aria-hidden />
-          {portada ? t("abrir_portada") : t("abrir")}
+          <span className="md:hidden">{t("corto")}</span>
+          <span className="hidden md:inline">{portada ? t("abrir_portada") : t("abrir")}</span>
         </button>
       )}
       {/* Una vez abierto, el panel sigue montado aunque se cierre: la conversación no se pierde al cerrarlo. */}
