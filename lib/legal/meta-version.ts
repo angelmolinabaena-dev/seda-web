@@ -15,5 +15,8 @@
   8-nov-2026 (MOT-M04): la privacidad base sube a 2026-11-08 (Upstash como
   encargado) y esta fecha la acompaña, porque la variante con Meta incluye ese
   mismo cambio y no puede llevar una fecha anterior. El flag sigue apagado.
+
+  9-nov-2026 (ASISTENTE-EN-PORTADA): la privacidad base sube a 2026-11-09 (el asistente
+  también está en la portada y en founding-owners) y esta fecha la acompaña.
 */
-export const ACTUALIZADO_CON_META = "2026-11-08"
+export const ACTUALIZADO_CON_META = "2026-11-09"

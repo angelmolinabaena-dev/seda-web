@@ -91,7 +91,8 @@ describe("MOT-M04: Upstash en la política de privacidad", () => {
     }
   }
 
-  it("la «Última actualización» sube al día del cambio (2026-11-08)", () => {
-    expect(PRIVACIDAD.actualizado).toBe("2026-11-08")
+  it("la «Última actualización» no es anterior al día del cambio (2026-11-08)", () => {
+    // Cambios posteriores del texto (p. ej. 2026-11-09, el asistente en la portada) la suben; nunca puede bajar de aquí.
+    expect(PRIVACIDAD.actualizado >= "2026-11-08").toBe(true)
   })
 })

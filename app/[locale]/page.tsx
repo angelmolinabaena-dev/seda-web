@@ -18,6 +18,7 @@ import { faqPortada } from "@/lib/faq"
 import { faqPageJsonLd } from "@/lib/jsonld"
 import { calculadoraPropietariosActiva } from "@/lib/calculadora-propietarios"
 import { pageMetadata } from "@/lib/site-pages"
+import { montarAsistente } from "@/components/asistente/montar-asistente"
 
 // Título, descripción, Open Graph y Twitter salen de `home.meta.*` de cada
 // idioma (ver `pageMetadata` en lib/site-pages.ts), igual que el resto de páginas.
@@ -33,8 +34,11 @@ export default async function Page({ params }: LocaleParams) {
   // FAQPage JSON-LD — the same `home.faq.items.q1..q7` list (lib/faq.ts)
   // that `FaqSection` renders as real DOM `<details>` elements (no new copy).
   const t = await getTranslations()
+  // Asistente de propietarios (SEDA_FLAG_ASISTENTE_PROPIETARIOS=1): apagado, null y la página no cambia.
+  const asistente = await montarAsistente("portada")
 
   return (
+    <>
     <main id="main-content">
       <JsonLdScript data={faqPageJsonLd(faqPortada(t))} />
       <Hero />
@@ -54,5 +58,7 @@ export default async function Page({ params }: LocaleParams) {
       <FaqSection />
       <ContactSection />
     </main>
+    {asistente}
+    </>
   )
 }

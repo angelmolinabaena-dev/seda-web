@@ -101,7 +101,7 @@ import type { DocumentoLegalMultilingue } from "./types"
 export const PRIVACIDAD: DocumentoLegalMultilingue = {
   id: "privacidad",
   ruta: "/privacidad",
-  actualizado: "2026-11-08",
+  actualizado: "2026-11-09",
   traducciones: {
     es: {
       titulo: "Política de privacidad",
@@ -382,7 +382,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "En /propietarios y en la calculadora puede haber un chat: el asistente de propietarios. Es una inteligencia artificial, no una persona, y lo dice en su primer mensaje (artículo 50 del Reglamento (UE) 2024/1689, de inteligencia artificial). Responde sobre el servicio de SEDA, su tarifa, la normativa de vivienda turística en Andalucía y la calculadora. No escribas en él datos sensibles: documentos, cuentas bancarias, tarjetas ni contraseñas.",
+                "En la portada, en /propietarios, en /founding-owners y en la calculadora puede haber un chat: el asistente de propietarios. Es una inteligencia artificial, no una persona, y lo dice en su primer mensaje (artículo 50 del Reglamento (UE) 2024/1689, de inteligencia artificial). Responde sobre el servicio de SEDA, su tarifa, la normativa de vivienda turística en Andalucía y la calculadora. No escribas en él datos sensibles: documentos, cuentas bancarias, tarjetas ni contraseñas.",
             },
             {
               tipo: "tabla",
@@ -836,7 +836,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "On /propietarios and on the calculator there may be a chat: the owners' assistant. It is an artificial intelligence, not a person, and it says so in its first message (Article 50 of Regulation (EU) 2024/1689, the Artificial Intelligence Act). It answers questions about SEDA's service, its fees, the holiday-rental regulations in Andalusia and the calculator. Do not write sensitive data in it: documents, bank accounts, cards or passwords.",
+                "On the home page, on /propietarios, on /founding-owners and on the calculator there may be a chat: the owners' assistant. It is an artificial intelligence, not a person, and it says so in its first message (Article 50 of Regulation (EU) 2024/1689, the Artificial Intelligence Act). It answers questions about SEDA's service, its fees, the holiday-rental regulations in Andalusia and the calculator. Do not write sensitive data in it: documents, bank accounts, cards or passwords.",
             },
             {
               tipo: "tabla",
@@ -1287,7 +1287,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Sur /propietarios et sur le calculateur, il peut y avoir un chat : l'assistant pour propriétaires. C'est une intelligence artificielle, pas une personne, et il le dit dans son premier message (article 50 du règlement (UE) 2024/1689 sur l'intelligence artificielle). Il répond sur le service de SEDA, son tarif, la réglementation des logements touristiques en Andalousie et le calculateur. N'y écrivez pas de données sensibles : pièces d'identité, comptes bancaires, cartes ou mots de passe.",
+                "Sur la page d'accueil, sur /propietarios, sur /founding-owners et sur le calculateur, il peut y avoir un chat : l'assistant pour propriétaires. C'est une intelligence artificielle, pas une personne, et il le dit dans son premier message (article 50 du règlement (UE) 2024/1689 sur l'intelligence artificielle). Il répond sur le service de SEDA, son tarif, la réglementation des logements touristiques en Andalousie et le calculateur. N'y écrivez pas de données sensibles : pièces d'identité, comptes bancaires, cartes ou mots de passe.",
             },
             {
               tipo: "tabla",
@@ -1738,7 +1738,7 @@ export const PRIVACIDAD: DocumentoLegalMultilingue = {
             {
               tipo: "parrafo",
               texto:
-                "Auf /propietarios und im Rechner kann es einen Chat geben: den Assistenten für Eigentümer. Er ist eine künstliche Intelligenz, kein Mensch, und sagt das in seiner ersten Nachricht (Artikel 50 der Verordnung (EU) 2024/1689 über künstliche Intelligenz). Er beantwortet Fragen zum Service von SEDA, zum Tarif, zu den Vorschriften für Ferienwohnungen in Andalusien und zum Rechner. Schreiben Sie dort keine sensiblen Daten: keine Ausweise, Bankkonten, Karten oder Passwörter.",
+                "Auf der Startseite, auf /propietarios, auf /founding-owners und im Rechner kann es einen Chat geben: den Assistenten für Eigentümer. Er ist eine künstliche Intelligenz, kein Mensch, und sagt das in seiner ersten Nachricht (Artikel 50 der Verordnung (EU) 2024/1689 über künstliche Intelligenz). Er beantwortet Fragen zum Service von SEDA, zum Tarif, zu den Vorschriften für Ferienwohnungen in Andalusien und zum Rechner. Schreiben Sie dort keine sensiblen Daten: keine Ausweise, Bankkonten, Karten oder Passwörter.",
             },
             {
               tipo: "tabla",

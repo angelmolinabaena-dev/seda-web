@@ -1660,6 +1660,8 @@
   },
   "asistente": {
     "abrir": "Ask the assistant",
+    "abrir_portada": "Owner? Ask the assistant",
+    "abrir_portada_aria": "Are you an owner? Ask the assistant",
     "titulo": "SEDA assistant",
     "subtitulo": "Artificial intelligence · we do not keep the conversation",
     "cerrar": "Close the assistant",
