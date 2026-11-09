@@ -359,8 +359,12 @@ export function Navigation() {
             </span>
           </Link>
 
+          {/* El menú completo (cuatro enlaces + SEDA OS + idiomas + Portal + reservar) mide
+              ~1.190 px en alemán/francés más 160 de márgenes: no cabe con holgura por debajo
+              de 1.440 px. Por debajo, hamburguesa (los idiomas siguen visibles en la cabecera).
+              Nada se parte (whitespace-nowrap) ni se encoge (shrink-0). */}
           {/* Desktop nav: Colección · Experiencias | SEDA OS ▼ | Nosotros · Contacto */}
-          <div className="hidden lg:flex items-center gap-5 xl:gap-7">
+          <div className="hidden min-[1440px]:flex items-center gap-7 shrink-0 whitespace-nowrap">
             {/* Group 1: Estancia */}
             {desktopGroups[0].links.map((link) => {
               const isActive = pathname === link.href
@@ -457,7 +461,7 @@ export function Navigation() {
             })}
           </div>
 
-          <div className="hidden lg:flex items-center gap-2 xl:gap-3 flex-shrink-0">
+          <div className="hidden min-[1440px]:flex items-center gap-3 shrink-0 whitespace-nowrap">
             {/* Language switcher — ES/EN, persists in localStorage */}
             <div className={`pr-3 mr-1 border-r transition-colors duration-500 ${
               scrolled ? "border-border" : "border-background/25"
@@ -540,8 +544,8 @@ export function Navigation() {
               than inside the drawer so that the locale decision is a
               top-level affordance, not buried behind a menu tap. The
               divider mirrors the desktop spacing on the right side of
-              `lg:flex` (border-r → mr-1 pr-3). */}
-          <div className="lg:hidden flex items-center gap-3">
+              `min-[1440px]:flex` (border-r → mr-1 pr-3). */}
+          <div className="min-[1440px]:hidden flex items-center gap-3 shrink-0 whitespace-nowrap">
             <div
               className={`pr-3 border-r transition-colors duration-500 ${
                 scrolled || isOpen ? "border-border" : "border-background/25"
@@ -591,7 +595,7 @@ export function Navigation() {
             per-element transition-delay (see below). The combined
             effect reads like an editorial curtain reveal. */}
       <div
-        className={`lg:hidden fixed inset-0 z-40 bg-background/[0.98] backdrop-blur-md ${
+        className={`min-[1440px]:hidden fixed inset-0 z-40 bg-background/[0.98] backdrop-blur-md ${
           isOpen
             ? "opacity-100 pointer-events-auto transition-opacity duration-200 ease-out"
             : "opacity-0 pointer-events-none transition-opacity duration-150 ease-in"
