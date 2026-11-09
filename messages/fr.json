@@ -19,6 +19,18 @@
     "open_menu": "Ouvrir le menu",
     "close_menu": "Fermer le menu"
   },
+  "franja": {
+    "viajeros": "Voyageurs",
+    "propietarios": "Propriétaires",
+    "frase_viajeros": "Maisons privées avec service d'hôtel",
+    "frase_propietarios": "Gestion intégrale de votre bien avec SEDA OS",
+    "aria": "Pour les voyageurs et pour les propriétaires",
+    "huespedes_titulo": "Voyageurs · Guest App",
+    "huespedes_linea": "Accédez à l'application de votre séjour.",
+    "propietarios_titulo": "Propriétaires · Portail propriétaire",
+    "propietarios_linea": "Accédez au portail de votre bien.",
+    "entrar": "Entrer"
+  },
   "cta": {
     "solicitar_estancia": "Demander un séjour",
     "valorar_propiedad": "Estimer ma propriété",

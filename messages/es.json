@@ -19,6 +19,18 @@
     "open_menu": "Abrir menú",
     "close_menu": "Cerrar menú"
   },
+  "franja": {
+    "viajeros": "Viajeros",
+    "propietarios": "Propietarios",
+    "frase_viajeros": "Casas privadas con servicio de hotel",
+    "frase_propietarios": "Gestión integral de su vivienda con SEDA OS",
+    "aria": "Para viajeros y para propietarios",
+    "huespedes_titulo": "Huéspedes · Guest App",
+    "huespedes_linea": "Acceda a la aplicación de su estancia.",
+    "propietarios_titulo": "Propietarios · Portal del propietario",
+    "propietarios_linea": "Acceda al portal de su vivienda.",
+    "entrar": "Entrar"
+  },
   "cta": {
     "solicitar_estancia": "Solicitar estancia",
     "valorar_propiedad": "Valorar mi propiedad",

@@ -19,6 +19,18 @@
     "open_menu": "Open menu",
     "close_menu": "Close menu"
   },
+  "franja": {
+    "viajeros": "Travelers",
+    "propietarios": "Owners",
+    "frase_viajeros": "Private homes with hotel service",
+    "frase_propietarios": "Full management of your home with SEDA OS",
+    "aria": "For travelers and for owners",
+    "huespedes_titulo": "Guests · Guest App",
+    "huespedes_linea": "Open the app for your stay.",
+    "propietarios_titulo": "Owners · Owner Portal",
+    "propietarios_linea": "Open the portal for your home.",
+    "entrar": "Sign in"
+  },
   "cta": {
     "solicitar_estancia": "Request a stay",
     "valorar_propiedad": "Value my property",
