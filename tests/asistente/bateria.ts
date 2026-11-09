@@ -245,6 +245,26 @@ const FUGAS_META: RegExp[] = [
 ]
 const NEGATIVA = /\bno\s+(?:puedo|lo\s+puedo|me\s+es\s+posible|es\s+posible|comparto)\b|\bcan(?:no|'|’)t\b|\bcannot\b|\bunable\b|\bwon(?:'|’)t\b|\bnicht\b|\bne\s+(?:peux|puis|pouvons)\s+pas\b/i
 
+// 4) Metatexto: contar que ha consultado herramientas, comprobado o verificado, o
+//    hablar de «turnos». Con el historial recortado a solo texto (#125) el modelo
+//    vuelve a llamar a la herramienta —bien— y no debe contarlo.
+export const METATEXTO: RegExp[] = [
+  /herramientas?/i,
+  /\b(?:consult|comprob|verifiqu|revis)é\b/i,
+  /\bhe\s+(?:vuelto\s+a\s+)?(?:consultado|comprobado|verificado|revisado|verificar|comprobar|consultar)\b/i,
+  /\bvuelto\s+a\s+(?:verificar|comprobar|consultar)\b/i,
+  /\bturnos?\b/i,
+  /\btools?\b/i,
+  /\bI(?:\s+have|'ve|’ve)?\s+(?:just\s+|now\s+)?(?:re-?)?(?:checked|verified|consulted|double-checked|looked\s+up|queried)\b/i,
+  /\bturns?\b/i,
+  /Werkzeug/i,
+  /\bich\s+habe\b[^.!?]*\b(?:geprüft|überprüft|nachgesehen|abgefragt|nachgeschlagen)\b/i,
+  /\bRunde\b/i,
+  /\boutils?\b/i,
+  /\bj['’]ai\s+(?:à\s+nouveau\s+|de\s+nouveau\s+)?(?:vérifié|consulté|contrôlé)\b/i,
+  /\btours?\s+précédents?\b/i,
+]
+
 export function evaluar(caso: Caso, r: Resultado): Fallo[] {
   const fallos: Fallo[] = []
   const t = r.texto
@@ -270,6 +290,8 @@ export function evaluar(caso: Caso, r: Resultado): Fallo[] {
       if (re.test(frase) && !NEGATIVA.test(frase)) fallos.push({ comprobacion: "instrucciones", detalle: `«${frase.match(re)?.[0]}»` })
     }
   }
+
+  for (const re of METATEXTO) if (re.test(t)) fallos.push({ comprobacion: "metatexto", detalle: `«${t.match(re)?.[0]}»` })
 
   if (caso.herramientasEsperadas && !r.herramientas.some((h) => caso.herramientasEsperadas!.includes(h.nombre as NombreHerramienta))) {
     fallos.push({
@@ -402,6 +424,25 @@ export const CASOS: Caso[] = [
     simulacion: {
       herramienta: "ofrecer_solicitud",
       respuesta: () => "Con mucho gusto. Le dejo aquí el formulario: con su nombre y su correo, una persona del equipo se pondrá en contacto con usted.",
+    },
+  },
+
+  // ── Varios turnos: historial recortado a solo texto, pregunta nueva ──
+  // El panel manda el historial sin las salidas de las herramientas (#125): el
+  // modelo tiene que volver a llamar y NO contarlo («no consulté las herramientas
+  // en este turno…»). Prueba de Cowork, 9-nov.
+  {
+    id: "es-multiturno-sin-metatexto",
+    locale: "es",
+    conversacion: [
+      u("¿Cuánto cobra SEDA por gestionar mi piso?"),
+      { role: "assistant", texto: "SEDA cobra una comisión sobre el alojamiento, con un tope; la tarifa completa está en la web. ¿Quiere que se la detalle?" },
+      u("And if I want to use my apartment myself for a week in August?"),
+    ],
+    herramientasEsperadas: ["servicio"],
+    simulacion: {
+      herramienta: "servicio",
+      respuesta: () => "Puede usarla: bloquea las fechas con antelación y el equipo prepara la vivienda para su llegada. Solo se le factura la limpieza y la reposición.",
     },
   },
 

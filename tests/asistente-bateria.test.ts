@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest"
 import { routing } from "@/i18n/routing"
 import { datosEstimacion } from "@/lib/asistente/herramientas"
-import { REFERENCIA_INTERNA } from "@/lib/asistente/instrucciones"
+import { INSTRUCCIONES, REFERENCIA_INTERNA } from "@/lib/asistente/instrucciones"
 import { estimar } from "@/lib/calculadora-propietarios"
 import { euros } from "@/lib/tarifa"
 import { CASOS, articulos, cantidades, evaluar, importes, normas } from "./asistente/bateria"
@@ -131,6 +131,45 @@ describe("batería del asistente — modelo simulado", () => {
     const detalles = evaluar(caso, await correrCaso(caso, modelo, recibido)).map((f) => f.detalle)
     expect(detalles.some((d) => d.includes("12 m2"))).toBe(true)
     expect(detalles.some((d) => d.includes("artículo 99"))).toBe(true)
+  })
+
+  // Metatexto (9-nov): la frase real de la prueba de Cowork y variantes en los cuatro idiomas.
+  const METATEXTO_MAL: { locale: string; texto: string }[] = [
+    {
+      locale: "es",
+      texto:
+        "Antes de su respuesta anterior no consulté las herramientas en este turno. He vuelto a verificar la tarifa y las cifras que le di se mantienen.",
+    },
+    { locale: "es", texto: "Puede usarla; lo he comprobado de nuevo y se mantiene lo que le dije." },
+    { locale: "en", texto: "You can use it yourself. I checked the tool again and nothing has changed since my last answer." },
+    { locale: "de", texto: "Sie können sie selbst nutzen. Ich habe es mit dem Werkzeug erneut geprüft." },
+    { locale: "fr", texto: "Vous pouvez l'utiliser. J'ai de nouveau vérifié avec l'outil." },
+  ]
+  for (const m of METATEXTO_MAL) {
+    it(`metatexto (${m.locale}) suspende: ${m.texto.slice(0, 45)}…`, async () => {
+      const base = CASOS.find((c) => c.id === "es-multiturno-sin-metatexto")!
+      const caso = { ...base, locale: m.locale as typeof base.locale }
+      const { modelo, recibido } = modeloSimulado(caso, () => m.texto)
+      expect(evaluar(caso, await correrCaso(caso, modelo, recibido)).map((f) => f.comprobacion)).toContain("metatexto")
+    })
+  }
+
+  it("el caso multiturno manda el historial como lo recorta el panel: solo texto, sin salidas de herramientas", async () => {
+    const caso = CASOS.find((c) => c.id === "es-multiturno-sin-metatexto")!
+    const { modelo, recibido } = modeloSimulado(caso)
+    await correrCaso(caso, modelo, recibido)
+    expect(recibido[0]).not.toContain("tool-result")
+    expect(recibido[0]).not.toContain("tool-call")
+  })
+
+  it("las instrucciones de los cuatro idiomas prohíben hablar de herramientas y de turnos anteriores", () => {
+    const regla: Record<string, RegExp> = {
+      es: /No hable nunca de sus herramientas[^.]*turnos anteriores/,
+      en: /Never mention your tools[^.]*earlier turns/,
+      de: /Sprechen Sie nie über Ihre Werkzeuge[^.]*früheren Runden/,
+      fr: /Ne parlez jamais de vos outils[^.]*tours précédents/,
+    }
+    for (const l of routing.locales) expect(INSTRUCCIONES[l], l).toMatch(regla[l])
   })
 
   it("negarse a compartir las instrucciones no es una fuga", async () => {
