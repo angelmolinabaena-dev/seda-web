@@ -436,3 +436,52 @@ describe("dock móvil: todo el texto ≥ 4,5:1 en el peor caso", () => {
     }
   }
 })
+
+describe("dock móvil: el rótulo «Imagen ilustrativa» no queda bajo el dock", () => {
+  const ALTOS: Record<number, number[]> = { 390: [800, 844], 820: [900, 1100, 1180] }
+  for (const ruta of ["/", "/propietarios"]) {
+    for (const [ancho, altos] of Object.entries(ALTOS)) {
+      for (const altoVentana of altos) {
+        it(`${ruta} a ${ancho}×${altoVentana}: el rótulo no se solapa con el dock (ni con el botón del asistente)`, async (ctx) => {
+          if (!navegador) return ctx.skip()
+          const p = await navegador.newPage({ viewport: { width: Number(ancho), height: altoVentana } })
+          try {
+            await p.goto(servidor.base + ruta, { waitUntil: "networkidle" })
+            // El rótulo va en el borde de abajo de su bloque (el hero): se mira con ese borde pegado al de abajo de la
+            // ventana, que es donde el dock lo taparía (en /propietarios el hero es más alto que la ventana).
+            await p.evaluate(() => {
+              const tag = [...document.querySelectorAll<HTMLElement>("span.pointer-events-none.absolute")].find((e) => /ilustrativa|illustrative|Symbolbild|illustr/i.test(e.textContent || ""))
+              const bloque = tag?.closest<HTMLElement>("header, section")
+              if (bloque) window.scrollTo(0, Math.max(0, bloque.getBoundingClientRect().bottom + window.scrollY - innerHeight))
+            })
+            await p.waitForTimeout(700)
+            const r = await p.evaluate(() => {
+              const cajas = [document.querySelector<HTMLElement>("[data-dock]"), document.querySelector<HTMLElement>("[data-asistente-boton]")]
+                .filter((e): e is HTMLElement => !!e)
+                .map((e) => e.getBoundingClientRect())
+              // Los rótulos son <span> absolutos, sin eventos, con el texto de `img.illustrative` en cualquier idioma.
+              const tags = [...document.querySelectorAll<HTMLElement>("span.pointer-events-none.absolute")].filter((e) => /ilustrativa|illustrative|illustr|Symbolbild|Illustration/i.test(e.textContent || ""))
+              const visibles = tags.filter((e) => {
+                const q = e.getBoundingClientRect()
+                return q.width > 0 && q.bottom > 0 && q.top < innerHeight
+              })
+              const solapan = visibles
+                .filter((e) => {
+                  const q = e.getBoundingClientRect()
+                  return cajas.some((c) => q.left < c.right && c.left < q.right && q.top < c.bottom && c.top < q.bottom)
+                })
+                .map((e) => (e.textContent || "").trim())
+              const dock = cajas[0]
+              const margen = visibles.map((e) => Math.round(dock.top - e.getBoundingClientRect().bottom))
+              return { total: tags.length, visibles: visibles.length, solapan, margen }
+            })
+            expect(r.total, "la página lleva el rótulo").toBeGreaterThan(0)
+            expect(r.solapan, "rótulos tapados por el dock o el asistente").toEqual([])
+          } finally {
+            await p.close()
+          }
+        })
+      }
+    }
+  }
+})

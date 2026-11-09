@@ -71,6 +71,11 @@ describe("medidas y colores del dock (los del diseño)", () => {
     expect(asistente).toContain(`bg-[${OLIVA_HEX}]`)
     expect(asistente).toContain("--dock-asistente")
     expect(asistente).toContain("ASISTENTE_ANCHO + ASISTENTE_SEPARACION") // 72 px que se resta al dock
+    // El rótulo «Imagen ilustrativa» del hero y de /propietarios sube por encima del dock: el mismo hueco que la página.
+    const hueco = `bottom-[calc(${DOCK_ABAJO}px+${DOCK_ALTO}px+env(safe-area-inset-bottom)+14px)]`
+    for (const f of ["components/hero.tsx", "app/[locale]/propietarios/PropietariosContent.tsx"]) {
+      expect(readFileSync(f, "utf8"), f).toContain(`<IllustrativeTag className="${hueco} right-6 min-[1280px]:bottom-4" />`)
+    }
     const dock = readFileSync("components/dock-movil.tsx", "utf8")
     expect(dock).toContain("right-[calc(12px+var(--dock-asistente,0px))]")
     expect(dock).toContain("blur(16px) saturate(140%)")

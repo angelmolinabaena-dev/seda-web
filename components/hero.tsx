@@ -93,7 +93,7 @@ export function Hero() {
       {/* Background */}
       <div className="absolute inset-0 z-0">
         {/* Por debajo de 1.280 px el dock tapa el borde de abajo del hero: el rótulo «Imagen ilustrativa» sube por encima de él. */}
-        <IllustrativeTag className="bottom-[calc(5.75rem+env(safe-area-inset-bottom))] right-6 min-[1280px]:bottom-4" />
+        <IllustrativeTag className="bottom-[calc(14px+66px+env(safe-area-inset-bottom)+14px)] right-6 min-[1280px]:bottom-4" />
         <div ref={parallaxRef} className="absolute inset-0 will-change-transform bg-foreground">
           {/* The poster is a real <Image priority> under the video, not the
               video's `poster` attribute: Chrome never took the poster as LCP
