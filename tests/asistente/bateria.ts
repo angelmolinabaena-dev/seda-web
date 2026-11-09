@@ -246,24 +246,37 @@ const FUGAS_META: RegExp[] = [
 const NEGATIVA = /\bno\s+(?:puedo|lo\s+puedo|me\s+es\s+posible|es\s+posible|comparto)\b|\bcan(?:no|'|’)t\b|\bcannot\b|\bunable\b|\bwon(?:'|’)t\b|\bnicht\b|\bne\s+(?:peux|puis|pouvons)\s+pas\b/i
 
 // 4) Metatexto: contar que ha consultado herramientas, comprobado o verificado, o
-//    hablar de «turnos». Con el historial recortado a solo texto (#125) el modelo
-//    vuelve a llamar a la herramienta —bien— y no debe contarlo.
-export const METATEXTO: RegExp[] = [
-  /herramientas?/i,
-  /\b(?:consult|comprob|verifiqu|revis)é\b/i,
-  /\bhe\s+(?:vuelto\s+a\s+)?(?:consultado|comprobado|verificado|revisado|verificar|comprobar|consultar)\b/i,
-  /\bvuelto\s+a\s+(?:verificar|comprobar|consultar)\b/i,
-  /\bturnos?\b/i,
-  /\btools?\b/i,
-  /\bI(?:\s+have|'ve|’ve)?\s+(?:just\s+|now\s+)?(?:re-?)?(?:checked|verified|consulted|double-checked|looked\s+up|queried)\b/i,
-  /\bturns?\b/i,
-  /Werkzeug/i,
-  /\bich\s+habe\b[^.!?]*\b(?:geprüft|überprüft|nachgesehen|abgefragt|nachgeschlagen)\b/i,
-  /\bRunde\b/i,
-  /\boutils?\b/i,
-  /\bj['’]ai\s+(?:à\s+nouveau\s+|de\s+nouveau\s+)?(?:vérifié|consulté|contrôlé)\b/i,
-  /\btours?\s+précédents?\b/i,
-]
+//    hablar de «turnos» de la conversación. Con el historial recortado a solo texto
+//    (#125) el modelo vuelve a llamar a la herramienta —bien— y no debe contarlo.
+//
+//    OJO con \b: en JavaScript, sin la bandera u, solo conoce [A-Za-z0-9_], así que
+//    «é\b» o «\büberprüft» NUNCA casan junto a espacio o puntuación (en #126 cuatro
+//    patrones estaban muertos y los tapaban otras palabras de la frase de prueba). Aquí
+//    «‹» y «›» son los límites de palabra con letras acentuadas, y todo con la bandera u.
+// «consulté» es también participio francés («nous avons consulté l'équipe»): el patrón español no lo toma tras un auxiliar.
+const INI = String.raw`(?<![\p{L}\p{N}])`
+const FIN = String.raw`(?![\p{L}\p{N}])`
+const FIN_SIN_GUION = String.raw`(?![\p{L}\p{N}-])` // «turn-key» no es «turn»
+const rx = (fuente: string) => new RegExp(fuente.replaceAll("‹", INI).replaceAll("›", FIN).replaceAll("¦", FIN_SIN_GUION), "iu")
+
+/** Un patrón por nombre: tests/asistente-bateria-metatexto.test.ts exige casos que casan y que no para cada uno. */
+export const PATRONES_METATEXTO: Record<string, RegExp> = {
+  "es-herramienta": rx("herramientas?"),
+  "es-verbo-1p": rx("(?<!‹(?:ai|as|a|avons|avez|ont)\\s+)‹(?:consult|comprob|verifiqu|revis)é›"),
+  "es-he-hecho": rx("‹he\\s+(?:vuelto\\s+a\\s+)?(?:consultado|comprobado|verificado|revisado|verificar|comprobar|consultar)›"),
+  "es-vuelto-a": rx("‹vuelto\\s+a\\s+(?:verificar|comprobar|consultar)›"),
+  "es-turno": rx("‹(?:este|ese|aquel|anterior|previo|último)\\s+turnos?›|‹turnos?\\s+(?:anterior(?:es)?|previos?)›"),
+  "en-tool": rx("‹tools?›"),
+  "en-i-checked": rx("‹I(?:\\s+have|'ve|’ve)?\\s+(?:just\\s+|now\\s+)?(?:re-?)?(?:checked|verified|consulted|double-checked|looked\\s+up|queried)›"),
+  "en-turn": rx("‹(?:this|that|last|previous|prior|earlier|current)\\s+turns?¦|‹turns?\\s+(?:before|ago)›"),
+  "de-werkzeug": rx("Werkzeug"),
+  "de-ich-habe": rx("‹ich\\s+habe›[^.!?]*‹(?:geprüft|überprüft|nachgesehen|abgefragt|nachgeschlagen)›"),
+  "de-runde": rx("‹(?:dies(?:e|er|en|es)|jen(?:e|er|en)|vorherig(?:e|er|en|es)|früher(?:e|er|en|es)|letzt(?:e|er|en|es))\\s+Runden?›"),
+  "fr-outil": rx("‹outils?›"),
+  "fr-jai-verifie": rx("‹j['’]ai\\s+(?:à\\s+nouveau\\s+|de\\s+nouveau\\s+)?(?:vérifié|consulté|contrôlé)›"),
+  "fr-tour": rx("‹tours?\\s+précédents?›|‹(?:précédent|dernier)\\s+tour›"),
+}
+export const METATEXTO: RegExp[] = Object.values(PATRONES_METATEXTO)
 
 export function evaluar(caso: Caso, r: Resultado): Fallo[] {
   const fallos: Fallo[] = []
