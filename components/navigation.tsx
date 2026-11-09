@@ -326,7 +326,7 @@ export function Navigation() {
             : "bg-[rgba(20,16,14,0.72)] backdrop-blur-md"
         }`}
       >
-        <nav className="flex items-center justify-between px-6 py-5 md:px-12 lg:px-20 min-[1280px]:px-12 min-[1440px]:px-20">
+        <nav className="flex items-center justify-between px-6 py-5 md:px-12 lg:px-20 min-[1280px]:px-12 min-[1340px]:px-20">
           <Link
             href="/"
             onClick={() => setIsOpen(false)}
@@ -360,9 +360,10 @@ export function Navigation() {
           </Link>
 
           {/* Barra completa (cuatro enlaces + SEDA OS + idiomas + Portal + reservar) desde 1.280 px.
-              Entre 1.280 y 1.439 px, la misma barra más ceñida (gap-5 / gap-2 y margen lateral de
-              3rem, en vez de gap-7 / gap-3 y 5rem): en alemán y francés mide ~1.190 px con los
-              huecos de 1.440. Por debajo de 1.280, hamburguesa (los idiomas siguen visibles en la
+              Entre 1.280 y 1.439 px, la misma barra más ceñida (gap-5 / gap-2 en vez de gap-7 / gap-3);
+              el margen lateral baja a 3rem solo de 1.280 a 1.339 px y desde 1.340 vuelve a 5rem, el del
+              contenido de la página (el logo queda alineado con el texto de debajo). En alemán y
+              francés la barra mide ~1.190 px con los huecos de 1.440. Por debajo de 1.280, hamburguesa (los idiomas siguen visibles en la
               cabecera). Nada se parte (whitespace-nowrap) ni se encoge (shrink-0). */}
           {/* Desktop nav: Colección · Experiencias | SEDA OS ▼ | Nosotros · Contacto */}
           <div className="hidden min-[1280px]:flex items-center gap-5 min-[1440px]:gap-7 shrink-0 whitespace-nowrap">
