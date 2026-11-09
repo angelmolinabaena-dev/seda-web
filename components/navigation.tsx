@@ -6,14 +6,16 @@ import { useLocale, useTranslations } from "next-intl"
 import { Link, usePathname, useRouter } from "@/i18n/navigation"
 import { LanguageSwitcher } from "@/components/language-switcher"
 import { haySeccionGuias } from "@/lib/guias"
+import { FranjaCabecera, TarjetasFranjaMovil, TarjetasPortal } from "@/components/cabecera-franja"
+import { DESTINO_PROPIETARIOS, DESTINO_VIAJEROS, URL_GUEST_APP, URL_PORTAL_PROPIETARIO, tipoDePagina } from "@/lib/franja-cabecera"
 
 // External app URLs — sourced from seda4/shared.jsx (Claude design reference).
 // Was a real reservation's UUID, exposed in this page's public HTML on every
 // route. /acceso is the generic sign-in (locator + email), not a specific stay.
-const GUEST_APP_URL = "https://guests.sedaprivatehomes.com/acceso"
+const GUEST_APP_URL = URL_GUEST_APP
 // Owner PORTAL home — was pointing at the internal /admin panel (bounces a
 // prospective owner to an admin login). "/" is the owner-facing portal home.
-const OWNERS_PORTAL_URL = "https://portal.sedaprivatehomes.com/"
+const OWNERS_PORTAL_URL = URL_PORTAL_PROPIETARIO
 
 // Mobile mega-menu IA — reorganised to match professional luxury
 // hospitality patterns (Aman, Belmond, Le Collectionist, Oku).
@@ -102,22 +104,6 @@ const sedaOsItems = [
   { tKey: "nav.propietarios", href: "/propietarios" },
 ]
 
-// Portal dropdown — external sign-in portals only.
-const portalItems = [
-  { tKey: "nav.acceso_huespedes",    href: GUEST_APP_URL },
-  { tKey: "nav.acceso_propietarios", href: OWNERS_PORTAL_URL },
-]
-
-// Routes where the visitor is in "owner intent" mode — primary CTA mirrors that.
-// Anywhere else (home, /coleccion, /experiencias, /guestapp, /villa/*, /faq, /descubre)
-// we assume guest intent and offer "Solicitar estancia" instead.
-const OWNER_ROUTES = ["/propietarios", "/ecosistema"]
-
-function isOwnerRoute(pathname: string | null) {
-  if (!pathname) return false
-  return OWNER_ROUTES.some((p) => pathname === p || pathname.startsWith(`${p}/`))
-}
-
 export function Navigation() {
   const pathname = usePathname()
   const t = useTranslations()
@@ -134,10 +120,12 @@ export function Navigation() {
   const isHome = pathname === "/"
   // Adaptive primary CTA: speak owners' language on owner routes,
   // guests' language everywhere else.
-  const ownerCtx = isOwnerRoute(pathname)
-  const primaryCta = ownerCtx
-    ? { label: t("cta.valorar_propiedad"), href: "/contacto?type=owner" }
-    : { label: t("cta.solicitar_estancia"), href: "/contacto?type=guest" }
+  // Tipo de cliente de la página (lib/franja-cabecera.ts): propietarios → «Valorar mi propiedad»; el resto → «Solicitar estancia».
+  const tipo = tipoDePagina(pathname)
+  const primaryCta =
+    tipo === "propietarios"
+      ? { label: t("cta.valorar_propiedad"), href: DESTINO_PROPIETARIOS }
+      : { label: t("cta.solicitar_estancia"), href: DESTINO_VIAJEROS }
 
   const [isOpen, setIsOpen] = useState(false)
   const [pastHero, setPastHero] = useState(false)
@@ -318,14 +306,19 @@ export function Navigation() {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-transform duration-500 ${
           hidden && !isOpen ? "-translate-y-full" : "translate-y-0"
-        } ${
-          scrolled || isOpen
-            ? "bg-background/95 backdrop-blur-md border-b border-border"
-            : "bg-[rgba(20,16,14,0.72)] backdrop-blur-md"
         }`}
       >
+        {/* Franja fina encima de la barra; se recoge al bajar (pastHero). Solo desde 1.280 px. */}
+        <FranjaCabecera tipo={tipo} recogida={pastHero} />
+        <div
+          className={`transition-[background-color,border-color,backdrop-filter] duration-500 ${
+            scrolled || isOpen
+              ? "bg-background/95 backdrop-blur-md border-b border-border"
+              : "bg-[rgba(20,16,14,0.72)] backdrop-blur-md"
+          }`}
+        >
         <nav className="flex items-center justify-between px-6 py-5 md:px-12 lg:px-20 min-[1280px]:px-12 min-[1340px]:px-20">
           <Link
             href="/"
@@ -503,42 +496,41 @@ export function Navigation() {
               </button>
               <div
                 role="menu"
-                className={`absolute right-0 top-full pt-2 transition-all duration-200 min-w-[240px] z-10 ${
+                className={`absolute right-0 top-full pt-2 transition-all duration-200 w-[300px] z-10 ${
                   isAccessOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"
                 }`}
               >
-                <div className="bg-background border border-border shadow-xl py-2">
-                  {portalItems.map((item) => (
-                    <a
-                      key={item.tKey}
-                      href={item.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      role="menuitem"
-                      className="flex items-center justify-between gap-3 px-5 py-3 font-mono text-[10px] tracking-[0.22em] uppercase text-muted-foreground hover:text-foreground hover:bg-secondary/60 transition-colors"
-                    >
-                      {t(item.tKey)}
-                      <ArrowUpRight className="h-3 w-3 shrink-0" strokeWidth={1.5} />
-                    </a>
-                  ))}
+                <div className="bg-background border border-border shadow-xl">
+                  <TarjetasPortal />
                 </div>
               </div>
             </div>
 
-            <Link
-              href={primaryCta.href}
-              className={`group inline-flex items-center gap-3 pl-5 pr-1.5 py-1.5 rounded-full font-mono text-[10px] tracking-[0.22em] uppercase transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current focus-visible:ring-offset-2 ${
-                scrolled
-                  ? "bg-foreground text-background hover:opacity-90"
-                  : "bg-background text-foreground hover:opacity-90"
+            {/* Un solo botón en la barra, según el tipo de página; aparece cuando la franja se recoge (pastHero).
+                El margen negativo cancela el gap del bloque mientras el botón está oculto. */}
+            <div
+              data-barra-cta={pastHero ? "visible" : "oculto"}
+              aria-hidden={pastHero ? undefined : true}
+              inert={!pastHero}
+              className={`shrink-0 overflow-hidden transition-[max-width,margin,opacity] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] motion-reduce:transition-none ${
+                pastHero ? "ml-0 max-w-[22rem] opacity-100" : "-ml-2 max-w-0 opacity-0 min-[1440px]:-ml-3"
               }`}
             >
-              {primaryCta.label}
-              {/* Arrow circle — w-8 h-8 makes the overall button ~44px tall */}
-              <span className="w-8 h-8 rounded-full bg-current/[0.12] flex items-center justify-center transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:scale-110">
-                <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={1.75} />
-              </span>
-            </Link>
+              <Link
+                href={primaryCta.href}
+                className={`group inline-flex items-center gap-3 pl-5 pr-1.5 py-1.5 rounded-full font-mono text-[10px] tracking-[0.22em] uppercase transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current focus-visible:ring-offset-2 ${
+                  scrolled
+                    ? "bg-foreground text-background hover:opacity-90"
+                    : "bg-background text-foreground hover:opacity-90"
+                }`}
+              >
+                {primaryCta.label}
+                {/* Arrow circle — w-8 h-8 makes the overall button ~44px tall */}
+                <span className="w-8 h-8 rounded-full bg-current/[0.12] flex items-center justify-center transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:scale-110">
+                  <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={1.75} />
+                </span>
+              </Link>
+            </div>
           </div>
 
           {/* Mobile right cluster — language switcher + burger.
@@ -581,6 +573,7 @@ export function Navigation() {
             </button>
           </div>
         </nav>
+        </div>
       </header>
 
       {/* Mobile mega-menu — fullscreen overlay.
@@ -611,6 +604,7 @@ export function Navigation() {
         // user perceives "closed" within a single frame after their tap.
       >
         <div className="h-full flex flex-col pt-20 pb-6 px-6 md:px-12 overflow-y-auto overscroll-contain">
+          <TarjetasFranjaMovil tipo={tipo} onNavegar={handleNavTap} />
           {/* Three differentiated sections — each group has its own visual
               identity, not just spatial separation:
               - HUÉSPEDES (primary audience, warm): default cream bg, gold

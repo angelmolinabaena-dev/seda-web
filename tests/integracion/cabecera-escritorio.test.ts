@@ -32,6 +32,8 @@ type Pagina = {
   goto(url: string, o: { waitUntil: "networkidle" }): Promise<unknown>
   evaluate<T>(f: (() => T) | string): Promise<T>
   waitForTimeout(ms: number): Promise<void>
+  click(selector: string): Promise<void>
+  hover(selector: string): Promise<void>
   close(): Promise<void>
 }
 type Navegador = { newPage(o: { viewport: { width: number; height: number } }): Promise<Pagina>; close(): Promise<void> }
@@ -49,7 +51,7 @@ function cargarPlaywright(): Pw | null {
 function medir() {
   const nav = document.querySelector("header nav")!
   const visibles = [...nav.querySelectorAll<HTMLElement>("a,button")].filter(
-    (e) => !e.closest("[role=menu]") && e.offsetParent !== null && e.getBoundingClientRect().width > 0,
+    (e) => !e.closest("[role=menu]") && !e.closest("[inert]") && e.offsetParent !== null && e.getBoundingClientRect().width > 0,
   )
   const lineas = (e: HTMLElement) => {
     const medios: number[] = []
@@ -121,7 +123,7 @@ describe("cabecera de escritorio: nada se parte ni se solapa", () => {
             await p.goto(servidor.base + ruta, { waitUntil: "networkidle" })
             if (scroll) {
               await p.evaluate(() => window.scrollTo(0, 900))
-              await p.waitForTimeout(700)
+              await p.waitForTimeout(1000)
             }
             const r = await p.evaluate(medir)
             expect(r.problemas, `${idioma} ${ancho}px`).toEqual([])
@@ -139,4 +141,194 @@ describe("cabecera de escritorio: nada se parte ni se solapa", () => {
       }
     }
   }
+})
+
+
+/* ── La franja fina (CABECERA-FRANJA) ──────────────────────────────────────── */
+
+function medirFranja() {
+  const franja = document.querySelector<HTMLElement>("[data-franja]")!
+  const visible = (e: HTMLElement) => e.offsetParent !== null && e.getBoundingClientRect().width > 0
+  const hijos = [...franja.querySelectorAll<HTMLElement>("[data-franja-mitad] > *")].filter(visible)
+  const lineas = (e: HTMLElement) => {
+    const medios: number[] = []
+    const w = document.createTreeWalker(e, NodeFilter.SHOW_TEXT)
+    for (let n = w.nextNode(); n; n = w.nextNode()) {
+      if (!n.textContent?.trim()) continue
+      const r = document.createRange()
+      r.selectNodeContents(n)
+      for (const c of r.getClientRects()) medios.push((c.top + c.bottom) / 2)
+    }
+    medios.sort((a, b) => a - b)
+    return medios.filter((m, i) => i === 0 || m - medios[i - 1] > 6).length
+  }
+  const problemas: string[] = []
+  const caja = hijos.map((e) => ({ t: (e.textContent || "").trim().slice(0, 22), r: e.getBoundingClientRect(), l: lineas(e) }))
+  for (const c of caja) if (c.l > 1) problemas.push(`«${c.t}» ocupa ${c.l} líneas`)
+  for (let i = 0; i < caja.length; i++)
+    for (let j = i + 1; j < caja.length; j++) {
+      const a = caja[i].r
+      const b = caja[j].r
+      if (a.left < b.right - 0.5 && b.left < a.right - 0.5 && a.top < b.bottom - 0.5 && b.top < a.bottom - 0.5) problemas.push(`«${caja[i].t}» y «${caja[j].t}» se solapan`)
+    }
+  const mitades = [...franja.querySelectorAll<HTMLElement>("[data-franja-mitad]")]
+  for (const m of mitades) if (m.scrollWidth > m.clientWidth + 0.5) problemas.push(`la mitad «${m.dataset.franjaMitad}» desborda ${m.scrollWidth - m.clientWidth} px`)
+  const [m1, m2] = mitades.map((m) => m.getBoundingClientRect())
+  if (m1 && m2 && m1.right > m2.left + 1) problemas.push("las dos mitades se solapan")
+  const frase = !![...franja.querySelectorAll<HTMLElement>("[data-franja-mitad] span")].find((e) => e.className.includes("text-[12.5px]") && visible(e))
+  const interior = franja.firstElementChild as HTMLElement
+  return {
+    problemas,
+    frase,
+    alto: Math.round(franja.getBoundingClientRect().height),
+    altoInterior: Math.round(interior.getBoundingClientRect().height),
+    visible: visible(franja),
+    recogida: franja.dataset.franjaRecogida,
+    inert: franja.hasAttribute("inert"),
+    estados: Object.fromEntries(mitades.map((m) => [m.dataset.franjaMitad, m.dataset.franjaEstado])),
+    tipo: franja.dataset.franjaTipo,
+    cta: (() => {
+      const c = document.querySelector<HTMLElement>("[data-barra-cta]")
+      return c ? { estado: c.dataset.barraCta, texto: (c.textContent || "").trim(), href: c.querySelector("a")?.getAttribute("href") } : null
+    })(),
+    enlaces: [...franja.querySelectorAll("a")].map((a) => a.getAttribute("href")),
+  }
+}
+
+const ANCHURAS_FRANJA = [1280, 1356, 1440, 1920]
+
+describe("la franja fina: sin solapes, una línea, y se recoge al bajar", () => {
+  for (const [idioma, ruta] of Object.entries(IDIOMAS)) {
+    for (const ancho of ANCHURAS_FRANJA) {
+      it(`${idioma} ${ancho}px: arriba (36 px, sin solapes, frase solo desde 1.440) y recogida al bajar`, async (ctx) => {
+        if (!navegador) return ctx.skip()
+        const p = await navegador.newPage({ viewport: { width: ancho, height: 900 } })
+        try {
+          await p.goto(servidor.base + ruta, { waitUntil: "networkidle" })
+          const arriba = await p.evaluate(medirFranja)
+          expect(arriba.problemas, `${idioma} ${ancho}px arriba`).toEqual([])
+          expect(arriba.visible).toBe(true)
+          expect(arriba.alto, "alto de la franja").toBe(36)
+          expect(arriba.altoInterior).toBe(36)
+          expect(arriba.frase, "la frase se ve solo desde 1.440 px").toBe(ancho >= 1440)
+          expect(arriba.recogida).toBe("no")
+          expect(arriba.inert).toBe(false)
+          expect(arriba.cta?.estado, "sin botón en la barra mientras la franja está").toBe("oculto")
+          // Con prefijo de idioma (`/en/…`, `/fr/…`, `/de/…`); en español, sin él.
+          expect(arriba.enlaces.map((h) => h?.replace(/^\/(en|fr|de)(?=\/)/, ""))).toEqual(["/contacto?type=guest", "/contacto?type=owner"])
+
+          await p.evaluate(() => window.scrollTo(0, 900))
+          await p.waitForTimeout(1000)
+          const abajo = await p.evaluate(medirFranja)
+          expect(abajo.recogida).toBe("si")
+          expect(abajo.alto, "la franja se recoge").toBe(0)
+          expect(abajo.inert, "recogida, sin foco").toBe(true)
+          expect(abajo.cta?.estado, "un solo botón en la barra").toBe("visible")
+        } finally {
+          await p.close()
+        }
+      })
+    }
+  }
+
+  // Mitad destacada y botón de la barra según la ruta.
+  const RUTAS: [string, "propietarios" | "viajeros" | "neutro", string][] = [
+    ["/", "neutro", "Solicitar estancia"],
+    ["/propietarios", "propietarios", "Valorar mi propiedad"],
+    ["/founding-owners", "propietarios", "Valorar mi propiedad"],
+    ["/ecosistema", "propietarios", "Valorar mi propiedad"],
+    ["/coleccion", "viajeros", "Solicitar estancia"],
+    ["/experiencias", "viajeros", "Solicitar estancia"],
+    ["/guestapp", "viajeros", "Solicitar estancia"],
+    ["/descubre", "viajeros", "Solicitar estancia"],
+    ["/faq", "neutro", "Solicitar estancia"],
+  ]
+  for (const [ruta, tipo, boton] of RUTAS) {
+    it(`${ruta}: ${tipo} → mitades ${tipo === "neutro" ? "iguales" : "con " + tipo + " plena"}; botón «${boton}» tras bajar`, async (ctx) => {
+      if (!navegador) return ctx.skip()
+      const p = await navegador.newPage({ viewport: { width: 1440, height: 900 } })
+      try {
+        await p.goto(servidor.base + ruta, { waitUntil: "networkidle" })
+        const r = await p.evaluate(medirFranja)
+        expect(r.tipo).toBe(tipo)
+        const esperado = {
+          propietarios: { propietarios: "plena", viajeros: "atenuada" },
+          viajeros: { propietarios: "atenuada", viajeros: "plena" },
+          neutro: { propietarios: "igual", viajeros: "igual" },
+        }[tipo]
+        expect(r.estados).toEqual(esperado)
+        await p.evaluate(() => window.scrollTo(0, 900))
+        await p.waitForTimeout(1000)
+        const abajo = await p.evaluate(medirFranja)
+        expect(abajo.cta?.texto).toBe(boton)
+        expect(abajo.cta?.href).toBe(tipo === "propietarios" ? "/contacto?type=owner" : "/contacto?type=guest")
+      } finally {
+        await p.close()
+      }
+    })
+  }
+
+  // La mitad destacada lleva un punto dorado delante (+16 px): el alemán a 1.440 px es el caso más justo.
+  for (const ruta of ["/de/propietarios", "/de/coleccion", "/fr/propietarios", "/fr/coleccion"]) it(`${ruta} a 1.440 px: con la mitad destacada tampoco hay desbordes ni solapes`, async (ctx) => {
+    if (!navegador) return ctx.skip()
+    const p = await navegador.newPage({ viewport: { width: 1440, height: 900 } })
+    try {
+      await p.goto(servidor.base + ruta, { waitUntil: "networkidle" })
+      const r = await p.evaluate(medirFranja)
+      expect(r.problemas).toEqual([])
+      expect(Object.values(r.estados)).toContain("plena")
+    } finally {
+      await p.close()
+    }
+  })
+
+  it("por debajo de 1.280 px la franja no se ve y sus dos enlaces van arriba del menú móvil, como dos tarjetas", async (ctx) => {
+    if (!navegador) return ctx.skip()
+    const p = await navegador.newPage({ viewport: { width: 1100, height: 900 } })
+    try {
+      await p.goto(servidor.base, { waitUntil: "networkidle" })
+      expect((await p.evaluate(medirFranja)).visible).toBe(false)
+      await p.click("button[aria-label][aria-expanded]")
+      await p.waitForTimeout(600)
+      const tarjetas = await p.evaluate(() => {
+        const t = document.querySelector("[data-franja-movil]")
+        const r = t?.getBoundingClientRect()
+        return { n: t?.querySelectorAll("a").length ?? 0, hrefs: [...(t?.querySelectorAll("a") ?? [])].map((a) => a.getAttribute("href")), visible: !!r && r.width > 0 && r.height > 0, arriba: r ? Math.round(r.top) : null }
+      })
+      expect(tarjetas.n).toBe(2)
+      expect(tarjetas.hrefs).toEqual(["/contacto?type=guest", "/contacto?type=owner"])
+      expect(tarjetas.visible).toBe(true)
+      expect(tarjetas.arriba as number).toBeLessThan(200)
+    } finally {
+      await p.close()
+    }
+  })
+
+  it("Portal ▾: dos tarjetas («Huéspedes · Guest App» y «Propietarios · Portal del propietario») con «Entrar →», a los destinos de siempre", async (ctx) => {
+    if (!navegador) return ctx.skip()
+    const p = await navegador.newPage({ viewport: { width: 1440, height: 900 } })
+    try {
+      await p.goto(servidor.base, { waitUntil: "networkidle" })
+      await p.hover("button[aria-haspopup='menu']:has-text('Portal')")
+      await p.waitForTimeout(400)
+      const t = await p.evaluate(() =>
+        [...document.querySelectorAll<HTMLAnchorElement>("[data-portal-tarjeta]")].map((a) => ({
+          clave: a.dataset.portalTarjeta,
+          href: a.getAttribute("href"),
+          texto: (a.textContent || "").replace(/\s+/g, " ").trim(),
+          visible: a.getBoundingClientRect().width > 0 && getComputedStyle(a.closest("[role=menu]")!).visibility === "visible",
+        })),
+      )
+      expect(t.map((x) => x.clave)).toEqual(["huespedes", "propietarios"])
+      expect(t.map((x) => x.href)).toEqual(["https://guests.sedaprivatehomes.com/acceso", "https://portal.sedaprivatehomes.com/"])
+      expect(t[0].texto).toContain("Huéspedes · Guest App")
+      expect(t[1].texto).toContain("Propietarios · Portal del propietario")
+      for (const x of t) {
+        expect(x.texto).toContain("Entrar →")
+        expect(x.visible).toBe(true)
+      }
+    } finally {
+      await p.close()
+    }
+  })
 })

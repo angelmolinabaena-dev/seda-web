@@ -19,6 +19,18 @@
     "open_menu": "Menü öffnen",
     "close_menu": "Menü schließen"
   },
+  "franja": {
+    "viajeros": "Reisende",
+    "propietarios": "Eigentümer",
+    "frase_viajeros": "Private Häuser mit Hotelservice",
+    "frase_propietarios": "Umfassende Verwaltung Ihrer Immobilie mit SEDA OS",
+    "aria": "Für Reisende und für Eigentümer",
+    "huespedes_titulo": "Gäste · Guest App",
+    "huespedes_linea": "Öffnen Sie die App für Ihren Aufenthalt.",
+    "propietarios_titulo": "Eigentümer · Eigentümerportal",
+    "propietarios_linea": "Öffnen Sie das Portal für Ihre Immobilie.",
+    "entrar": "Anmelden"
+  },
   "cta": {
     "solicitar_estancia": "Aufenthalt anfragen",
     "valorar_propiedad": "Meine Immobilie bewerten",
