@@ -18,7 +18,6 @@ import { arrancarNext, type ServidorNext } from "./next-start"
 
 const ANCHURAS = [1024, 1280, 1366, 1440, 1536, 1728, 1920]
 const IDIOMAS: Record<string, string> = { es: "/", en: "/en", fr: "/fr", de: "/de" }
-const HUECO_MIN = 8
 
 // Playwright no es dependencia del proyecto: tipos mínimos de lo que se usa.
 type Pagina = {
