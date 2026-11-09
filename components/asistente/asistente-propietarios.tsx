@@ -5,6 +5,7 @@ import dynamic from "next/dynamic"
 import { MessageCircle } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { iniciarBotIdUnaVez } from "@/lib/asistente/botid-cliente"
+import { ANCHO_ESCRITORIO, ASISTENTE_ANCHO, ASISTENTE_SEPARACION } from "@/lib/dock-movil"
 import { capturarCarta, tomarCartaAsistente } from "@/lib/carta-qr"
 
 /*
@@ -45,10 +46,19 @@ export function AsistentePropietarios({ variante = "propietarios" }: { variante?
   const [cargado, setCargado] = useState(false)
   const boton = useRef<HTMLButtonElement>(null)
   const carta = useRef<string | null>(null)
-  // Portada: mientras el hero está en pantalla, el botón se aparta si taparía algo: en móvil, los CTA del hero
-  // (ocupan todo el ancho abajo) y, en cualquier ancho, el titular cuando el aviso de cookies empuja el botón hacia arriba.
-  // Arranca oculto (también en el HTML del servidor) para no parpadear sobre los CTA antes de hidratar.
+  // Portada, en escritorio (≥ 1.280 px): mientras el hero está en pantalla y el aviso de cookies está a la vista, el
+  // botón se aparta (subiría hasta el titular). Arranca oculto (también en el HTML del servidor) para no parpadear.
+  // Por debajo de 1.280 px el botón es un cuadrado junto al dock y nunca se aparta.
   const [apartado, setApartado] = useState(portada)
+
+  // Deja sitio al botón junto al dock: el dock se estrecha ese ancho (+ la separación) por la derecha.
+  useEffect(() => {
+    const raiz = document.documentElement
+    raiz.style.setProperty("--dock-asistente", `${ASISTENTE_ANCHO + ASISTENTE_SEPARACION}px`)
+    return () => {
+      raiz.style.removeProperty("--dock-asistente")
+    }
+  }, [])
 
   useEffect(() => {
     if (!portada) return
@@ -60,8 +70,7 @@ export function AsistentePropietarios({ variante = "propietarios" }: { variante?
     let heroVisible = true
     const evaluar = () => {
       const bannerPx = parseFloat(document.documentElement.style.getPropertyValue("--banner-cookies-h")) || 0
-      const movil = window.matchMedia("(max-width: 767px)").matches
-      setApartado(heroVisible && (movil || bannerPx > 0))
+      setApartado(heroVisible && bannerPx > 0 && window.innerWidth >= ANCHO_ESCRITORIO)
     }
     const io = new IntersectionObserver(([e]) => {
       heroVisible = e.isIntersecting
@@ -115,16 +124,18 @@ export function AsistentePropietarios({ variante = "propietarios" }: { variante?
           aria-controls="asistente-propietarios"
           aria-label={portada ? t("abrir_portada_aria") : undefined}
           data-asistente-boton={variante}
+          // < 1.280 px: cuadrado verde oliva de 64 × 66 junto al dock (a su derecha, misma altura, 8 px de separación),
+          // solo con el icono; el nombre accesible sigue siendo el de siempre. ≥ 1.280 px: la píldora de siempre.
           // --banner-cookies-h: altura del aviso de cookies cuando está en pantalla (0 si no); el botón se sube sobre él.
-          // En la portada, además, 3,5 rem más: el rótulo «Imagen ilustrativa» del hero ocupa la esquina inferior derecha.
-          className={`fixed z-40 right-4 md:right-6 ${
+          // En la portada (escritorio), además, 3 rem más: el rótulo «Imagen ilustrativa» del hero ocupa esa esquina.
+          className={`fixed z-[46] right-3 bottom-[calc(14px+env(safe-area-inset-bottom)+var(--banner-cookies-h,0px))] h-[66px] w-16 items-center justify-center rounded-3xl bg-[#536043] text-background shadow-xl hover:bg-[#536043]/90 min-[1280px]:z-40 min-[1280px]:right-6 min-[1280px]:h-auto min-[1280px]:w-auto min-[1280px]:gap-2.5 min-[1280px]:rounded-full min-[1280px]:py-3 min-[1280px]:pl-4 min-[1280px]:pr-5 min-[1280px]:bg-[hsl(var(--olive))] min-[1280px]:hover:bg-[hsl(var(--olive))]/90 ${
             portada
-              ? "bottom-[calc(max(1rem,env(safe-area-inset-bottom))+3.5rem+var(--banner-cookies-h,0px))] md:bottom-[calc(1.5rem+3rem+var(--banner-cookies-h,0px))]"
-              : "bottom-[calc(max(1rem,env(safe-area-inset-bottom))+var(--banner-cookies-h,0px))] md:bottom-[calc(1.5rem+var(--banner-cookies-h,0px))]"
-          } ${apartado ? "hidden" : "inline-flex"} items-center gap-2.5 pl-4 pr-5 py-3 rounded-full bg-[hsl(var(--olive))] text-background shadow-xl font-mono text-[10px] tracking-[0.2em] uppercase whitespace-nowrap hover:bg-[hsl(var(--olive))]/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--gold))] focus-visible:ring-offset-2`}
+              ? "min-[1280px]:bottom-[calc(1.5rem+3rem+var(--banner-cookies-h,0px))]"
+              : "min-[1280px]:bottom-[calc(1.5rem+var(--banner-cookies-h,0px))]"
+          } ${apartado ? "inline-flex min-[1280px]:hidden" : "inline-flex"} font-mono text-[10px] tracking-[0.2em] uppercase whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--gold))] focus-visible:ring-offset-2`}
         >
-          <MessageCircle className="h-4 w-4 text-[hsl(var(--gold-light))]" strokeWidth={1.75} aria-hidden />
-          {portada ? t("abrir_portada") : t("abrir")}
+          <MessageCircle className="h-6 w-6 text-[hsl(var(--gold-light))] min-[1280px]:h-4 min-[1280px]:w-4" strokeWidth={1.75} aria-hidden />
+          <span className="sr-only min-[1280px]:not-sr-only">{portada ? t("abrir_portada") : t("abrir")}</span>
         </button>
       )}
       {/* Una vez abierto, el panel sigue montado aunque se cierre: la conversación no se pierde al cerrarlo. */}

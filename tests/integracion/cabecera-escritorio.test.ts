@@ -81,7 +81,8 @@ function medir() {
       else if (v < 0 && h < 8) problemas.push(`«${items[i].t}» y «${items[j].t}» a ${Math.round(h)} px`)
     }
   // Modo: la barra completa tiene los desplegables (SEDA OS, Portal); la hamburguesa, no.
-  const modo = visibles.some((e) => e.getAttribute("aria-haspopup") === "menu") ? "menu" : "burger"
+  const escritorio = nav.querySelector<HTMLElement>("[data-barra-escritorio]")
+  const modo = escritorio && escritorio.offsetParent !== null ? "menu" : "dock"
   // Huecos entre los tres bloques de la barra (logo | enlaces | idiomas+Portal+reservar): al menos 16 px.
   const bloques = [...nav.children].map((c) => c.getBoundingClientRect()).filter((r) => r.width > 0).sort((a, b) => a.left - b.left)
   const huecos = bloques.slice(1).map((r, i) => Math.round(r.left - bloques[i].right))
@@ -132,7 +133,7 @@ describe("cabecera de escritorio: nada se parte ni se solapa", () => {
             // El logo cae sobre el margen del contenido salvo en la franja ceñida (1.280–1.339 px).
             if (ancho < 1280 || ancho >= 1340) expect(r.desalineado, `${idioma} ${ancho}px: logo desalineado con el hero`).toBe(0)
             else expect(r.desalineado).toBe(-32)
-            expect(r.modo, `${idioma} ${ancho}px`).toBe(ancho >= ANCHO_MENU ? "menu" : "burger")
+            expect(r.modo, `${idioma} ${ancho}px`).toBe(ancho >= ANCHO_MENU ? "menu" : "dock")
             if (process.env.CABECERA_HUECOS) console.log(`HUECOS ${idioma} ${ancho} ${r.modo} ${r.huecos.join("/")}`)
           } finally {
             await p.close()
@@ -308,23 +309,12 @@ describe("la franja fina: sin solapes, una línea, y se recoge al bajar", () => 
     }
   })
 
-  it("por debajo de 1.280 px la franja no se ve y sus dos enlaces van arriba del menú móvil, como dos tarjetas", async (ctx) => {
+  it("por debajo de 1.280 px la franja no se ve (sus dos enlaces están en la hoja del menú del dock)", async (ctx) => {
     if (!navegador) return ctx.skip()
     const p = await navegador.newPage({ viewport: { width: 1100, height: 900 } })
     try {
       await p.goto(servidor.base, { waitUntil: "networkidle" })
       expect((await p.evaluate(medirFranja)).visible).toBe(false)
-      await p.click("button[aria-label][aria-expanded]")
-      await p.waitForTimeout(600)
-      const tarjetas = await p.evaluate(() => {
-        const t = document.querySelector("[data-franja-movil]")
-        const r = t?.getBoundingClientRect()
-        return { n: t?.querySelectorAll("a").length ?? 0, hrefs: [...(t?.querySelectorAll("a") ?? [])].map((a) => a.getAttribute("href")), visible: !!r && r.width > 0 && r.height > 0, arriba: r ? Math.round(r.top) : null }
-      })
-      expect(tarjetas.n).toBe(2)
-      expect(tarjetas.hrefs).toEqual(["/contacto?type=guest", "/contacto?type=owner"])
-      expect(tarjetas.visible).toBe(true)
-      expect(tarjetas.arriba as number).toBeLessThan(200)
     } finally {
       await p.close()
     }
@@ -360,7 +350,7 @@ describe("la franja fina: sin solapes, una línea, y se recoge al bajar", () => 
 
   // La barra sobre la foto (portada, arriba): su velo y TODOS sus textos, medidos en el navegador sobre la foto más clara.
   for (const [idioma, ruta] of Object.entries(IDIOMAS)) {
-    for (const ancho of [1280, 1440]) {
+    for (const ancho of [390, 820, 1280, 1440]) {
       it(`${idioma} ${ancho}px: la barra transparente de la portada, todo su texto ≥ 4,5:1 sobre foto blanca`, async (ctx) => {
         if (!navegador) return ctx.skip()
         const p = await navegador.newPage({ viewport: { width: ancho, height: 900 } })
@@ -378,8 +368,10 @@ describe("la franja fina: sin solapes, una línea, y se recoge al bajar", () => 
             const lum = (c: number[]) => 0.2126 * lin(c[0]) + 0.7152 * lin(c[1]) + 0.0722 * lin(c[2])
             const veloC = rgba(getComputedStyle(nav.parentElement!).backgroundColor)
             const fondo = [0, 1, 2].map((i) => veloC[i] * veloC[3] + 255 * (1 - veloC[3]))
-            const textos = [...nav.querySelectorAll<HTMLElement>("a, button")].filter(
-              (e) => !e.closest("[role=menu]") && !e.closest("[inert]") && e.offsetParent !== null && e.getBoundingClientRect().width > 0 && (e.textContent || "").trim().length > 1,
+            // Elementos con texto propio y a la vista (el nombre «SEDA» del logo solo existe por debajo de 1.280 px).
+            const propio = (e: HTMLElement) => [...e.childNodes].some((c) => c.nodeType === 3 && (c.textContent || "").trim().length > 1)
+            const textos = [...nav.querySelectorAll<HTMLElement>("a, button, [data-logo-nombre]")].filter(
+              (e) => !e.closest("[role=menu]") && !e.closest("[inert]") && e.getBoundingClientRect().width > 0 && propio(e),
             )
             let peor = Infinity
             let cual = ""
@@ -396,7 +388,7 @@ describe("la franja fina: sin solapes, una línea, y se recoge al bajar", () => 
             return { velo: veloC[3], n: textos.length, peor, cual }
           })
           expect(r.velo, "velo de la barra sobre la foto").toBeCloseTo(0.68, 2)
-          expect(r.n).toBeGreaterThan(8)
+          expect(r.n).toBeGreaterThan(ancho >= 1280 ? 8 : 1)
           expect(r.peor, `peor texto de la barra: «${r.cual}»`).toBeGreaterThanOrEqual(4.5)
         } finally {
           await p.close()
@@ -463,99 +455,9 @@ describe("el desplegable Portal ▾ contiene sus tarjetas", () => {
       })
     }
   }
-
-  for (const [idioma, ruta] of Object.entries(IDIOMAS)) {
-    it(`${idioma} 390px (móvil): las tarjetas de la franja y los accesos de Portal del menú no se salen`, async (ctx) => {
-      if (!navegador) return ctx.skip()
-      const p = await navegador.newPage({ viewport: { width: 390, height: 844 } })
-      try {
-        await p.goto(servidor.base + ruta, { waitUntil: "networkidle" })
-        await p.click("button[aria-label][aria-expanded]")
-        await p.waitForTimeout(800)
-        const franja = (await p.evaluate(medirContencion, ["[data-franja-movil]", "[data-franja-movil] a"] as [string, string])) as { problemas: string[]; n: number }
-        expect(franja.problemas, `${idioma} tarjetas de la franja`).toEqual([])
-        expect(franja.n).toBe(2)
-        // Pie del menú móvil: «Acceso huéspedes · Acceso propietarios».
-        const pie = await p.evaluate(() => {
-          const enlaces = [...document.querySelectorAll<HTMLAnchorElement>("a[href*='sedaprivatehomes.com']")].filter((a) => a.getBoundingClientRect().width > 0 && a.closest("[aria-hidden='false'], [inert]") !== null && !a.closest("header"))
-          const fuera = enlaces.filter((a) => {
-            const r = a.getBoundingClientRect()
-            return r.left < -0.5 || r.right > innerWidth + 0.5
-          })
-          return { n: enlaces.length, fuera: fuera.map((a) => (a.textContent || "").trim()), scrollW: document.documentElement.scrollWidth, innerW: innerWidth }
-        })
-        expect(pie.n).toBeGreaterThanOrEqual(2)
-        expect(pie.fuera, "accesos de Portal fuera de la ventana").toEqual([])
-        expect(pie.scrollW, "scroll horizontal").toBeLessThanOrEqual(pie.innerW)
-      } finally {
-        await p.close()
-      }
-    })
-  }
 })
 
-/* ── Móvil: menú abierto frente al botón del asistente, y título del hero ────────
-   Con el menú abierto (fixed inset-0) el botón del asistente (fixed z-40, posterior en el DOM)
-   quedaba encima del botón «Solicitar estancia» del menú; y por debajo de md el <br> del título del
-   hero está oculto y se leía «inteligente.Alma». */
-
-describe("móvil: el menú abierto queda por encima del asistente", () => {
-  for (const ancho of [390, 820]) {
-    it(`${ancho}px: con el menú abierto, nada con z-index 40 (el botón del asistente) tapa ningún enlace del menú`, async (ctx) => {
-      if (!navegador) return ctx.skip()
-      const p = await navegador.newPage({ viewport: { width: ancho, height: 900 } })
-      try {
-        await p.goto(servidor.base, { waitUntil: "networkidle" })
-        await p.click("button[aria-label][aria-expanded]")
-        await p.waitForTimeout(800)
-        const r = await p.evaluate(() => {
-          // Sonda: un elemento fixed z-index 40 que cubre toda la ventana, como el botón del asistente (fixed z-40).
-          // Si el menú está por encima, el punto central de cada enlace del menú sigue siendo del menú.
-          const sonda = document.createElement("div")
-          sonda.id = "sonda-z40"
-          sonda.style.cssText = "position:fixed;inset:0;z-index:40;background:transparent"
-          document.body.appendChild(sonda)
-          const menu = document.querySelector<HTMLElement>("div.fixed.inset-0")!
-          const enlaces = [...menu.querySelectorAll<HTMLAnchorElement>("a")].filter((a) => {
-            const q = a.getBoundingClientRect()
-            return q.width > 0 && q.height > 0 && q.top >= 0 && q.bottom <= innerHeight
-          })
-          const tapados = enlaces
-            .filter((a) => {
-              const q = a.getBoundingClientRect()
-              const el = document.elementFromPoint(q.left + q.width / 2, q.top + q.height / 2)
-              return !(el && (a === el || a.contains(el)))
-            })
-            .map((a) => (a.textContent || "").trim().slice(0, 24))
-          // Y el botón real del asistente, si esta compilación lo lleva (solo con SEDA_FLAG_ASISTENTE_PROPIETARIOS=1).
-          const boton = document.querySelector<HTMLElement>("[data-asistente-boton]")
-          let botonTapa: string[] = []
-          if (boton) {
-            const b = boton.getBoundingClientRect()
-            botonTapa = enlaces
-              .filter((a) => {
-                const q = a.getBoundingClientRect()
-                const x = Math.min(Math.max(q.left + q.width / 2, b.left + 1), b.right - 1)
-                const y = Math.min(Math.max(q.top + q.height / 2, b.top + 1), b.bottom - 1)
-                const dentro = x >= q.left && x <= q.right && y >= q.top && y <= q.bottom && b.width > 0
-                if (!dentro) return false
-                const el = document.elementFromPoint(x, y)
-                return !(el && (a === el || a.contains(el)))
-              })
-              .map((a) => (a.textContent || "").trim().slice(0, 24))
-          }
-          return { n: enlaces.length, tapados, botonTapa, conBoton: !!boton, zMenu: getComputedStyle(menu).zIndex }
-        })
-        expect(r.n, "enlaces del menú visibles").toBeGreaterThan(3)
-        expect(Number(r.zMenu), "el menú queda por encima de z-40").toBeGreaterThan(40)
-        expect(r.tapados, "enlaces del menú tapados por algo de z-40").toEqual([])
-        expect(r.botonTapa, "enlaces del menú tapados por el botón del asistente").toEqual([])
-      } finally {
-        await p.close()
-      }
-    })
-  }
-})
+/* ── Hero de la portada (por debajo de md el <br> del título está oculto) ── */
 
 describe("hero de la portada: espacio entre las dos frases del título", () => {
   for (const [idioma, ruta] of Object.entries(IDIOMAS)) {

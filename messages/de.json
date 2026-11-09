@@ -31,6 +31,27 @@
     "propietarios_linea": "Öffnen Sie das Portal für Ihre Immobilie.",
     "entrar": "Anmelden"
   },
+  "dock": {
+    "aria": "Hauptnavigation",
+    "coleccion": "Kollektion",
+    "experiencias": "Erlebnisse",
+    "propietarios": "Eigentümer",
+    "portal": "Portal",
+    "menu": "Menü",
+    "cerrar": "Schließen",
+    "idioma": "Sprache",
+    "idioma_actual": "Sprache: {idioma}",
+    "portal_titulo": "Portal",
+    "portal_texto": "Privater Zugang für Gäste und Eigentümer.",
+    "huespedes_etiqueta": "Gäste",
+    "huespedes_nombre": "Guest App",
+    "propietarios_etiqueta": "Eigentümer",
+    "propietarios_nombre": "Eigentümerportal",
+    "aun_no_cliente": "Noch kein Kunde?",
+    "menu_titulo": "Menü",
+    "portal_propietario": "Eigentümerportal",
+    "asa": "Fenster schließen"
+  },
   "cta": {
     "solicitar_estancia": "Aufenthalt anfragen",
     "valorar_propiedad": "Meine Immobilie bewerten",

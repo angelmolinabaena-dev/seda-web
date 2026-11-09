@@ -222,3 +222,11 @@
     color: #000 !important;
   }
 }
+
+/* Dock móvil y de tablet (< 1.280 px): la página deja abajo el hueco del dock (alto, márgenes y zona segura)
+   para que el último enlace del pie se pueda tocar. Ver lib/dock-movil.ts y components/dock-movil.tsx. */
+@media (max-width: 1279px) {
+  body {
+    padding-bottom: calc(14px + 66px + env(safe-area-inset-bottom) + 14px);
+  }
+}

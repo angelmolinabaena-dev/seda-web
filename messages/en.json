@@ -31,6 +31,27 @@
     "propietarios_linea": "Open the portal for your home.",
     "entrar": "Sign in"
   },
+  "dock": {
+    "aria": "Main navigation",
+    "coleccion": "Collection",
+    "experiencias": "Experiences",
+    "propietarios": "Owners",
+    "portal": "Portal",
+    "menu": "Menu",
+    "cerrar": "Close",
+    "idioma": "Language",
+    "idioma_actual": "Language: {idioma}",
+    "portal_titulo": "Portal",
+    "portal_texto": "Private access for guests and owners.",
+    "huespedes_etiqueta": "Guests",
+    "huespedes_nombre": "Guest App",
+    "propietarios_etiqueta": "Owners",
+    "propietarios_nombre": "Owner Portal",
+    "aun_no_cliente": "Not a client yet?",
+    "menu_titulo": "Menu",
+    "portal_propietario": "Owner Portal",
+    "asa": "Close sheet"
+  },
   "cta": {
     "solicitar_estancia": "Request a stay",
     "valorar_propiedad": "Value my property",

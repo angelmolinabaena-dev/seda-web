@@ -31,6 +31,27 @@
     "propietarios_linea": "Accédez au portail de votre bien.",
     "entrar": "Entrer"
   },
+  "dock": {
+    "aria": "Navigation principale",
+    "coleccion": "Collection",
+    "experiencias": "Expériences",
+    "propietarios": "Propriétaires",
+    "portal": "Portail",
+    "menu": "Menu",
+    "cerrar": "Fermer",
+    "idioma": "Langue",
+    "idioma_actual": "Langue : {idioma}",
+    "portal_titulo": "Portail",
+    "portal_texto": "Accès privé pour les voyageurs et les propriétaires.",
+    "huespedes_etiqueta": "Voyageurs",
+    "huespedes_nombre": "Guest App",
+    "propietarios_etiqueta": "Propriétaires",
+    "propietarios_nombre": "Portail propriétaire",
+    "aun_no_cliente": "Pas encore client ?",
+    "menu_titulo": "Menu",
+    "portal_propietario": "Portail propriétaire",
+    "asa": "Fermer la feuille"
+  },
   "cta": {
     "solicitar_estancia": "Demander un séjour",
     "valorar_propiedad": "Estimer ma propriété",

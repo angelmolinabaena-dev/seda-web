@@ -124,41 +124,6 @@ export function FranjaCabecera({ tipo, recogida }: { tipo: TipoPagina; recogida:
   )
 }
 
-/** Dos tarjetas arriba del menú móvil (por debajo de 1.280 px la franja no se ve). */
-export function TarjetasFranjaMovil({ tipo, onNavegar }: { tipo: TipoPagina; onNavegar: (href: string) => (e: React.MouseEvent<HTMLAnchorElement>) => void }) {
-  const t = useTranslations()
-  const tarjetas = [
-    { lado: "viajeros" as const, etiqueta: t("franja.viajeros"), frase: t("franja.frase_viajeros"), enlace: t("cta.solicitar_estancia"), href: DESTINO_VIAJEROS },
-    { lado: "propietarios" as const, etiqueta: t("franja.propietarios"), frase: t("franja.frase_propietarios"), enlace: t("cta.valorar_propiedad"), href: DESTINO_PROPIETARIOS },
-  ]
-  return (
-    <div data-franja-movil className="mb-8 grid grid-cols-[minmax(0,1fr)] gap-3 sm:grid-cols-2">
-      {tarjetas.map((c) => {
-        const destacada = tipo === c.lado
-        return (
-          <Link
-            key={c.lado}
-            href={c.href}
-            onClick={onNavegar(c.href)}
-            className={`box-border flex w-full min-w-0 flex-col gap-1.5 break-words rounded-sm border px-4 py-3.5 transition-colors ${
-              destacada ? "border-[hsl(var(--gold))]/60 bg-[hsl(var(--gold))]/[0.08]" : "border-border"
-            }`}
-          >
-            <span className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
-              {destacada && <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-[hsl(var(--gold))]" />}
-              {c.etiqueta}
-            </span>
-            <span className="text-[0.9rem] leading-snug text-foreground/80">{c.frase}</span>
-            <span className="text-[0.9rem] font-semibold text-foreground">
-              {c.enlace} <span aria-hidden>→</span>
-            </span>
-          </Link>
-        )
-      })}
-    </div>
-  )
-}
-
 /** Desplegable «Portal»: dos tarjetas, a los mismos destinos de siempre. */
 export function TarjetasPortal() {
   const t = useTranslations()

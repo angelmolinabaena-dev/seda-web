@@ -92,7 +92,8 @@ export function Hero() {
     <section id="hero" ref={ref} className="relative min-h-[100dvh] flex flex-col overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 z-0">
-        <IllustrativeTag className="bottom-4 right-6" />
+        {/* Por debajo de 1.280 px el dock tapa el borde de abajo del hero: el rótulo «Imagen ilustrativa» sube por encima de él. */}
+        <IllustrativeTag className="bottom-[calc(5.75rem+env(safe-area-inset-bottom))] right-6 min-[1280px]:bottom-4" />
         <div ref={parallaxRef} className="absolute inset-0 will-change-transform bg-foreground">
           {/* The poster is a real <Image priority> under the video, not the
               video's `poster` attribute: Chrome never took the poster as LCP
@@ -137,7 +138,7 @@ export function Hero() {
       {/* Content (bottom-anchored) */}
       <div
         ref={contentRef}
-        className="relative z-10 px-6 pb-16 md:px-12 lg:px-20 md:pb-20 will-change-transform"
+        className="relative z-10 px-6 pb-[calc(8rem+env(safe-area-inset-bottom))] md:px-12 lg:px-20 min-[1280px]:pb-20 will-change-transform"
       >
         <div className="max-w-5xl">
           <div className="hero-rise [animation-delay:900ms]">

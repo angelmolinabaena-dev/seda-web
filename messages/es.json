@@ -31,6 +31,27 @@
     "propietarios_linea": "Acceda al portal de su vivienda.",
     "entrar": "Entrar"
   },
+  "dock": {
+    "aria": "Navegación principal",
+    "coleccion": "Colección",
+    "experiencias": "Experiencias",
+    "propietarios": "Propietarios",
+    "portal": "Portal",
+    "menu": "Menú",
+    "cerrar": "Cerrar",
+    "idioma": "Idioma",
+    "idioma_actual": "Idioma: {idioma}",
+    "portal_titulo": "Portal",
+    "portal_texto": "Acceso privado para huéspedes y propietarios.",
+    "huespedes_etiqueta": "Huéspedes",
+    "huespedes_nombre": "Guest App",
+    "propietarios_etiqueta": "Propietarios",
+    "propietarios_nombre": "Portal del propietario",
+    "aun_no_cliente": "¿Aún no es cliente?",
+    "menu_titulo": "Menú",
+    "portal_propietario": "Portal del propietario",
+    "asa": "Cerrar hoja"
+  },
   "cta": {
     "solicitar_estancia": "Solicitar estancia",
     "valorar_propiedad": "Valorar mi propiedad",
