@@ -48,6 +48,9 @@
     "menu_huespedes": "Voyageurs",
     "menu_propietarios": "Propriétaires",
     "menu_seda": "SEDA",
+    "cerrar": "Fermer",
+    "idioma_actual": "Langue : {idioma}",
+    "idioma": "Langue",
     "menu_aria": "Menu principal"
   },
   "cta": {

@@ -1,13 +1,13 @@
 "use client"
 
 import { useState, useEffect, useRef, useTransition, useCallback } from "react"
-import { Menu, X, ArrowUpRight, Lock } from "lucide-react"
+import { ArrowUpRight, Lock } from "lucide-react"
 import { useLocale, useTranslations } from "next-intl"
 import { Link, usePathname, useRouter } from "@/i18n/navigation"
 import { LanguageSwitcher } from "@/components/language-switcher"
 import { haySeccionGuias } from "@/lib/guias"
 import { FranjaCabecera, TarjetasPortal } from "@/components/cabecera-franja"
-import { BotonReservar, MenuMovil, PortalMenu, PortalMovil, SedaOsMenu } from "@/components/cabecera-movil"
+import { BotonMenu, BotonReservar, MenuMovil, PortalMenu, PortalMovil, SedaOsMenu, SelectorIdiomaCompacto } from "@/components/cabecera-movil"
 import { DESTINO_PROPIETARIOS, DESTINO_VIAJEROS, tipoDePagina } from "@/lib/franja-cabecera"
 
 // External app URLs — sourced from seda4/shared.jsx (Claude design reference).
@@ -312,34 +312,16 @@ export function Navigation() {
     }
   }, [isSedaOsOpen])
 
-  // Botón del menú (< 1.280 px): hamburguesa ↔ X.
+  // Botón del menú (< 1.280 px): píldora «MENÚ ═» ↔ «CERRAR ✕».
   const botonMenu = (
-    <button
-      type="button"
+    <BotonMenu
+      abierto={isOpen}
+      solido={scrolled || isOpen}
       onClick={() => {
         setPortalMovil(false)
         setIsOpen(!isOpen)
       }}
-      data-boton-menu
-      className={`relative -mr-2 flex h-10 w-10 shrink-0 items-center justify-center rounded-sm transition-colors duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current ${
-        scrolled || isOpen ? "text-foreground" : "text-background"
-      }`}
-      aria-label={isOpen ? t("nav.close_menu") : t("nav.open_menu")}
-      aria-expanded={isOpen}
-    >
-      <Menu
-        className={`absolute h-5 w-5 transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] ${
-          isOpen ? "scale-75 rotate-45 opacity-0" : "scale-100 rotate-0 opacity-100"
-        }`}
-        strokeWidth={1.5}
-      />
-      <X
-        className={`absolute h-5 w-5 transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] ${
-          isOpen ? "scale-100 rotate-0 opacity-100" : "scale-75 -rotate-45 opacity-0"
-        }`}
-        strokeWidth={1.5}
-      />
-    </button>
+    />
   )
 
   return (
@@ -359,12 +341,14 @@ export function Navigation() {
               : "bg-[rgba(20,16,14,0.68)] backdrop-blur-md"
           }`}
         >
-        <nav className="flex min-h-[60px] items-center justify-between gap-3 px-4 py-2.5 md:min-h-[72px] md:px-8 md:py-3 lg:px-20 min-[1280px]:min-h-0 min-[1280px]:px-12 min-[1280px]:py-5 min-[1340px]:px-20">
+        {/* Por debajo de 1.280 px, rejilla 1fr · auto · 1fr: logo a la izquierda, el grupo central centrado de verdad en la
+            pantalla y el botón del menú a la derecha. Desde 1.280 px, la barra de escritorio de siempre. */}
+        <nav className="grid min-h-[60px] grid-cols-[1fr_auto_1fr] items-center gap-1 px-3 py-2.5 md:min-h-[72px] md:gap-2 md:px-8 md:py-3 lg:px-20 min-[1280px]:flex min-[1280px]:min-h-0 min-[1280px]:justify-between min-[1280px]:gap-0 min-[1280px]:px-12 min-[1280px]:py-5 min-[1340px]:px-20">
           <Link
             href="/"
             onClick={() => setIsOpen(false)}
             aria-label="SEDA Private Homes — inicio"
-            className="relative flex shrink-0 items-center gap-2.5"
+            className="relative block shrink-0 justify-self-start"
           >
             {/* Isotipo (todos los breakpoints) — sello discreto; el lockup completo ya vive en el hero.
                 Crossfade blanco (hero) <-> ink (secciones claras). Ratio 1.4948:1. */}
@@ -389,16 +373,6 @@ export function Navigation() {
                   scrolled || isOpen ? "opacity-100" : "opacity-0"
                 }`}
               />
-            </span>
-            {/* Letras «SEDA» por debajo de 1.280 px (en escritorio, solo el isotipo); se esconden por debajo de 375 px. */}
-            <span
-              aria-hidden
-              data-logo-letras
-              className={`font-serif text-[1.15rem] font-medium tracking-[0.22em] transition-colors duration-500 max-[374px]:hidden min-[1280px]:hidden ${
-                scrolled || isOpen ? "text-foreground" : "text-background"
-              }`}
-            >
-              SEDA
             </span>
           </Link>
 
@@ -583,21 +557,22 @@ export function Navigation() {
             </div>
           </div>
 
-          {/* Menos de 768 px: Portal (siempre visible), Reservar/Valorar y el botón del menú. */}
-          <div className="flex shrink-0 items-center gap-2 whitespace-nowrap md:hidden">
-            <PortalMovil abierto={portalMovil} setAbierto={abrirPortalMovil} solido={scrolled || isOpen} />
+          {/* Grupo central (< 1.280 px). Móvil: Portal · Reservar · idioma. Tablet: SEDA OS ▾ · Portal ▾ · Reservar · idioma. */}
+          <div data-grupo-central className="flex items-center justify-center gap-1 whitespace-nowrap md:gap-5 min-[1280px]:hidden">
+            <div className="hidden md:block">
+              <SedaOsMenu solido={scrolled || isOpen} />
+            </div>
+            <div className="md:hidden">
+              <PortalMovil abierto={portalMovil} setAbierto={abrirPortalMovil} solido={scrolled || isOpen} />
+            </div>
+            <div className="hidden md:block">
+              <PortalMenu solido={scrolled || isOpen} />
+            </div>
             <BotonReservar tipo={tipo} solido={scrolled || isOpen} />
-            {botonMenu}
+            <SelectorIdiomaCompacto solido={scrolled || isOpen} />
           </div>
 
-          {/* De 768 a 1.279 px: SEDA OS, Portal (mismos desplegables que el escritorio), Reservar, idiomas y menú. */}
-          <div className="hidden shrink-0 items-center gap-3 whitespace-nowrap md:flex min-[1280px]:hidden lg:gap-5">
-            <SedaOsMenu solido={scrolled || isOpen} />
-            <PortalMenu solido={scrolled || isOpen} />
-            <BotonReservar tipo={tipo} solido={scrolled || isOpen} />
-            <LanguageSwitcher darkOnLight={scrolled || isOpen} />
-            {botonMenu}
-          </div>
+          <div className="justify-self-end min-[1280px]:hidden">{botonMenu}</div>
         </nav>
         </div>
       </header>

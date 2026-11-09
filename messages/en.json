@@ -48,6 +48,9 @@
     "menu_huespedes": "Guests",
     "menu_propietarios": "Owners",
     "menu_seda": "SEDA",
+    "cerrar": "Close",
+    "idioma_actual": "Language: {idioma}",
+    "idioma": "Language",
     "menu_aria": "Main menu"
   },
   "cta": {

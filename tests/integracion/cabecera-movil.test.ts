@@ -104,7 +104,10 @@ function medirBarra() {
   }
   const reservar = [...document.querySelectorAll<HTMLElement>("[data-barra-reservar]")].find((x) => x.getBoundingClientRect().width > 0)
   const portal = [...nav.querySelectorAll<HTMLElement>("[data-portal-movil] > button, [data-tablet-portal] > button")].find((x) => x.getBoundingClientRect().width > 0)
-  const letras = nav.querySelector<HTMLElement>("[data-logo-letras]")
+  const centro = nav.querySelector<HTMLElement>("[data-grupo-central]")!.getBoundingClientRect()
+  const pildora = [...document.querySelectorAll<HTMLElement>("[data-boton-menu]")].find((b) => b.getBoundingClientRect().width > 0)
+  const txt = pildora?.querySelector<HTMLElement>("[data-boton-menu-texto]")
+  const logo = nav.querySelector("a")!.getBoundingClientRect()
   const barra = nav.getBoundingClientRect()
   return {
     problemas,
@@ -113,7 +116,14 @@ function medirBarra() {
     portalVisible: visible("[data-portal-movil] > button, [data-tablet-portal] > button"),
     reservar: reservar ? { clave: reservar.dataset.barraReservar, href: reservar.getAttribute("href"), alto: Math.round(reservar.getBoundingClientRect().height) } : null,
     portalTexto: (portal?.textContent || "").trim(),
-    letras: letras ? getComputedStyle(letras).display !== "none" : false,
+    letras: !!nav.querySelector("[data-logo-letras]") || (nav.querySelector("a")?.textContent || "").trim().length > 0,
+    centroDesplazamiento: Math.round(Math.abs((centro.left + centro.right) / 2 - innerWidth / 2) * 10) / 10,
+    logoIzq: Math.round(logo.left),
+    pildora: pildora ? { texto: txt && getComputedStyle(txt).display !== "none" ? txt.innerText.trim() : "", aria: pildora.getAttribute("aria-label"), derecha: Math.round(innerWidth - pildora.getBoundingClientRect().right) } : null,
+    idiomaCompacto: (() => {
+      const b = nav.querySelector<HTMLElement>("[data-idioma-compacto] > button")
+      return b && b.getBoundingClientRect().width > 0 ? b.innerText.trim() : null
+    })(),
     altoBarra: Math.round(barra.height),
     sedaOs: !!nav.querySelector("[data-tablet-sedaos]") && (nav.querySelector("[data-tablet-sedaos]") as HTMLElement).getBoundingClientRect().width > 0,
     idiomas: [...nav.querySelectorAll<HTMLElement>("[role=group] button")].filter((b) => b.getBoundingClientRect().width > 0).length,
@@ -140,11 +150,18 @@ describe("la barra de móvil y de tablet", () => {
           expect(arriba.burger).toBe(true)
           expect(arriba.altoBarra, "alto de la barra").toBe(ancho < 768 ? 60 : 72)
           expect(arriba.reservar?.alto, "alto del botón Reservar").toBe(ancho < 768 ? 40 : 44)
-          // Letras «SEDA» junto al isotipo por debajo de 1.280 px; se esconden por debajo de 375 px.
-          expect(arriba.letras).toBe(ancho >= 375)
-          // Tablet: SEDA OS ▾ y los idiomas en la barra; móvil: ninguno de los dos (los idiomas van en el menú).
+          // Logo: solo el isotipo, sin la palabra «SEDA».
+          expect(arriba.letras, "sin letras junto al logo").toBe(false)
+          // Grupo central centrado de verdad en la pantalla (±4 px).
+          expect(arriba.centroDesplazamiento, `${idioma} ${ancho}px: grupo central descentrado`).toBeLessThanOrEqual(4)
+          // Tablet: SEDA OS ▾ en el grupo; idioma como botón compacto «ES ▾» (nunca los cuatro en línea).
           expect(arriba.sedaOs).toBe(ancho >= 768)
-          expect(arriba.idiomas).toBe(ancho >= 768 ? 4 : 0)
+          expect(arriba.idiomas, "los cuatro idiomas en línea no están en la barra").toBe(0)
+          expect(arriba.idiomaCompacto?.toLowerCase()).toBe(idioma)
+          // Píldora del menú: «MENÚ» en cada idioma; por debajo de 390 px, solo el icono, con aria-label.
+          expect(arriba.pildora?.aria).toBeTruthy()
+          const msg = (await import(`@/messages/${idioma}.json`)).default.movil
+          expect((arriba.pildora?.texto ?? "").toLowerCase()).toBe(ancho >= 390 ? msg.menu.toLowerCase() : "")
           expect(arriba.portalDesplegableEscritorio).toBe(false)
 
           await bajarYSubirUnPoco(p)
@@ -182,12 +199,13 @@ describe("la barra de móvil y de tablet", () => {
         burger: [...document.querySelectorAll<HTMLElement>("[data-boton-menu]")].some((b) => b.getBoundingClientRect().width > 0),
         portalMovil: [...document.querySelectorAll<HTMLElement>("[data-portal-movil], [data-tablet-portal], [data-tablet-sedaos]")].some((b) => b.getBoundingClientRect().width > 0),
         reservarMovil: [...document.querySelectorAll<HTMLElement>("[data-barra-reservar]")].some((b) => b.getBoundingClientRect().width > 0),
-        letras: [...document.querySelectorAll<HTMLElement>("[data-logo-letras]")].some((b) => b.getBoundingClientRect().width > 0),
+        idiomaCompacto: [...document.querySelectorAll<HTMLElement>("[data-idioma-compacto]")].some((b) => b.getBoundingClientRect().width > 0),
+        isotipoSolo: (document.querySelector("header nav a")?.textContent || "").trim() === "",
         franja: Math.round(document.querySelector("[data-franja]")!.getBoundingClientRect().height),
         barra: Math.round(document.querySelector("header nav")!.getBoundingClientRect().height),
         hoja: getComputedStyle(document.querySelector("[data-hoja-menu]")!).display,
       }))
-      expect(r).toEqual({ escritorio: true, burger: false, portalMovil: false, reservarMovil: false, letras: false, franja: 36, barra: 84, hoja: "none" })
+      expect(r).toEqual({ escritorio: true, burger: false, portalMovil: false, reservarMovil: false, idiomaCompacto: false, isotipoSolo: true, franja: 36, barra: 84, hoja: "none" })
     })
   })
 })
@@ -384,6 +402,15 @@ function medirMenu() {
     alturaContenido: Math.round(menu.getBoundingClientRect().height),
     ultimo: Math.round(idiomas[0]?.getBoundingClientRect().bottom ?? 0),
     alto: innerHeight,
+    // Letras y filas (MOVIL-A2 31b)
+    ctas: [...hoja.querySelectorAll<HTMLElement>("[data-menu-cta]")].map((e) => ({ alto: Math.round(e.getBoundingClientRect().height), letra: getComputedStyle(e).fontSize })),
+    nombresPortal: [...hoja.querySelectorAll<HTMLElement>("[data-menu-portal-nombre]")].map((e) => ({ letra: getComputedStyle(e).fontSize, fuente: getComputedStyle(e).fontFamily })),
+    enlacesGrandes: [...hoja.querySelectorAll<HTMLElement>("[data-menu-enlace-grande]")].map((e) => ({ letra: getComputedStyle(e).fontSize, alto: Math.round(e.getBoundingClientRect().height), x: Math.round(e.getBoundingClientRect().left), fuente: getComputedStyle(e).fontFamily })),
+    etiquetas: [...hoja.querySelectorAll<HTMLElement>("[data-menu-etiqueta]")].map((e) => ({ letra: getComputedStyle(e).fontSize, fuente: getComputedStyle(e).fontFamily })),
+    enlacesSeda: [...hoja.querySelectorAll<HTMLElement>("[data-menu-enlace-seda]")].map((e) => getComputedStyle(e).fontSize),
+    scrollV: interior.scrollHeight - interior.clientHeight,
+    cerrar: (document.querySelector("[data-boton-menu]:not([hidden])") as HTMLElement | null)?.getAttribute("aria-label"),
+    pildora: [...document.querySelectorAll<HTMLElement>("[data-boton-menu]")].filter((b) => b.getBoundingClientRect().width > 0).map((b) => b.innerText.trim())[0],
   }
 }
 
@@ -403,6 +430,21 @@ describe("el menú del móvil: cabe en una pantalla", () => {
         expect(r.botones.map((b) => b.href?.replace(/^\/(en|fr|de)(?=\/)/, ""))).toEqual(["/contacto?type=guest", "/contacto?type=owner"])
         expect(r.portal.map((t) => t.href)).toEqual([GUEST, PORTAL])
         expect(r.portal[1].x, "las tarjetas de Portal, en dos columnas").toBeGreaterThan(r.portal[0].x + 100)
+        // Letras grandes (31b)
+        expect(r.ctas).toEqual([{ alto: 56, letra: "15px" }, { alto: 56, letra: "15px" }])
+        expect(r.nombresPortal.map((n) => n.letra)).toEqual(["24px", "24px"])
+        expect(r.nombresPortal[0].fuente).toMatch(/Cormorant|serif/i)
+        expect(r.enlacesGrandes.map((e) => e.letra)).toEqual(Array(5).fill("30px"))
+        expect(r.enlacesGrandes.map((e) => e.alto)).toEqual(Array(5).fill(48))
+        expect(new Set(r.enlacesGrandes.map((e) => e.x)).size, "Huéspedes y Propietarios, en una sola columna").toBe(1)
+        expect(r.enlacesGrandes[0].fuente).toBe(r.nombresPortal[0].fuente)
+        expect(r.etiquetas.map((e) => e.letra)).toEqual(["11px", "11px"])
+        expect(r.etiquetas[0].fuente).toMatch(/mono/i)
+        expect(r.enlacesSeda.every((x) => x === "17px")).toBe(true)
+        // Llega hasta abajo: los idiomas pegados al borde inferior, sin scroll.
+        expect(r.scrollV, "sin scroll").toBeLessThanOrEqual(0)
+        expect(r.alto - r.ultimo, "idiomas pegados abajo").toBeLessThanOrEqual(40)
+        expect(r.pildora.toLowerCase()).toBe((await import(`@/messages/${idioma}.json`)).default.movil.cerrar.toUpperCase().toLowerCase()) // «ß» en mayúsculas es «SS»
         expect(r.grupos.length).toBe(3)
         expect(r.grupos[0].length).toBe(3) // Colección, Experiencias, Guest App
         expect(r.grupos[1].length).toBe(2) // Modelo de gestión, Ecosistema SEDA OS
