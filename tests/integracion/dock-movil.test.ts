@@ -438,23 +438,27 @@ describe("dock móvil: todo el texto ≥ 4,5:1 en el peor caso", () => {
 })
 
 describe("dock móvil: el rótulo «Imagen ilustrativa» no queda bajo el dock", () => {
+  // Alturas de ventana de móviles y tablets habituales (390 × 800/844; 820 × 900/1.100/1.180).
   const ALTOS: Record<number, number[]> = { 390: [800, 844], 820: [900, 1100, 1180] }
-  for (const ruta of ["/", "/propietarios"]) {
+  // Rutas que llevan el rótulo en una imagen (/ y /propietarios lo llevan siempre; las demás, según el contenido publicado).
+  const RUTAS: [string, boolean][] = [
+    ["/", true],
+    ["/propietarios", true],
+    ["/coleccion", false],
+    ["/founding-owners", false],
+    ["/ecosistema", false],
+    ["/experiencias", false],
+    ["/descubre", false],
+  ]
+  for (const [ruta, obligatorio] of RUTAS) {
     for (const [ancho, altos] of Object.entries(ALTOS)) {
       for (const altoVentana of altos) {
-        it(`${ruta} a ${ancho}×${altoVentana}: el rótulo no se solapa con el dock (ni con el botón del asistente)`, async (ctx) => {
+        it(`${ruta} a ${ancho}×${altoVentana}: ningún rótulo a la vista se solapa con el dock (ni con el botón del asistente)`, async (ctx) => {
           if (!navegador) return ctx.skip()
           const p = await navegador.newPage({ viewport: { width: Number(ancho), height: altoVentana } })
           try {
             await p.goto(servidor.base + ruta, { waitUntil: "networkidle" })
-            // El rótulo va en el borde de abajo de su bloque (el hero): se mira con ese borde pegado al de abajo de la
-            // ventana, que es donde el dock lo taparía (en /propietarios el hero es más alto que la ventana).
-            await p.evaluate(() => {
-              const tag = [...document.querySelectorAll<HTMLElement>("span.pointer-events-none.absolute")].find((e) => /ilustrativa|illustrative|Symbolbild|illustr/i.test(e.textContent || ""))
-              const bloque = tag?.closest<HTMLElement>("header, section")
-              if (bloque) window.scrollTo(0, Math.max(0, bloque.getBoundingClientRect().bottom + window.scrollY - innerHeight))
-            })
-            await p.waitForTimeout(700)
+            await p.waitForTimeout(600)
             const r = await p.evaluate(() => {
               const cajas = [document.querySelector<HTMLElement>("[data-dock]"), document.querySelector<HTMLElement>("[data-asistente-boton]")]
                 .filter((e): e is HTMLElement => !!e)
@@ -470,12 +474,10 @@ describe("dock móvil: el rótulo «Imagen ilustrativa» no queda bajo el dock",
                   const q = e.getBoundingClientRect()
                   return cajas.some((c) => q.left < c.right && c.left < q.right && q.top < c.bottom && c.top < q.bottom)
                 })
-                .map((e) => (e.textContent || "").trim())
-              const dock = cajas[0]
-              const margen = visibles.map((e) => Math.round(dock.top - e.getBoundingClientRect().bottom))
-              return { total: tags.length, visibles: visibles.length, solapan, margen }
+                .map((e) => `${(e.textContent || "").trim()} @${Math.round(e.getBoundingClientRect().top)}–${Math.round(e.getBoundingClientRect().bottom)} (dock desde ${Math.round(cajas[0].top)})`)
+              return { total: tags.length, visibles: visibles.length, solapan }
             })
-            expect(r.total, "la página lleva el rótulo").toBeGreaterThan(0)
+            if (obligatorio) expect(r.total, "la página lleva el rótulo").toBeGreaterThan(0)
             expect(r.solapan, "rótulos tapados por el dock o el asistente").toEqual([])
           } finally {
             await p.close()

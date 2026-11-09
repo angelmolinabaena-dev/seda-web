@@ -414,8 +414,10 @@ export function PropietariosContent({ calculadora = false }: { calculadora?: boo
       {/* HERO con SedaOS dashboard overlay */}
       <header className="relative overflow-hidden text-background min-h-[760px] flex items-center pt-40 pb-24">
         <div className="absolute inset-0 z-0">
-          {/* Por debajo de 1.280 px el rótulo sube por encima del dock (el mismo hueco que deja la página abajo). */}
-          <IllustrativeTag className="bottom-[calc(14px+66px+env(safe-area-inset-bottom)+14px)] right-6 min-[1280px]:bottom-4" />
+          {/* Este hero es más alto que la ventana, así que su borde de abajo cae donde quiera respecto al dock (que va fijo
+              abajo por debajo de 1.280 px): el rótulo pasa a la esquina de arriba a la derecha, bajo la barra, donde nunca
+              coincide con el dock al cargar. Desde 1.280 px, abajo a la derecha como siempre. */}
+          <IllustrativeTag className="top-[6.25rem] right-6 min-[1280px]:top-auto min-[1280px]:bottom-4" />
           <Image
             src="/villas/portal-tablet.jpg"
             width={1254}
