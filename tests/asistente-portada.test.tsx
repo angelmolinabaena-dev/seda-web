@@ -7,6 +7,7 @@ import { AsistentePropietarios } from "@/components/asistente/asistente-propieta
 import { montarAsistente } from "@/components/asistente/montar-asistente"
 import { PRIVACIDAD } from "@/lib/legal/privacidad"
 import { RUTAS_BOTID } from "@/lib/asistente/config"
+import { iniciarBotIdUnaVez, reiniciarBotIdParaTests } from "@/lib/asistente/botid-cliente"
 
 /*
   ASISTENTE-EN-PORTADA: el botón del asistente también está en la portada y en
@@ -24,7 +25,8 @@ vi.mock("@/i18n/navigation", () => ({
   useRouter: () => ({}),
 }))
 // El botón llama a initBotId al montarse (useEffect); renderToStaticMarkup no ejecuta efectos, pero se importa el módulo.
-vi.mock("botid/client/core", () => ({ initBotId: () => {} }))
+const { initBotIdMock } = vi.hoisted(() => ({ initBotIdMock: vi.fn() }))
+vi.mock("botid/client/core", () => ({ initBotId: initBotIdMock }))
 
 afterEach(() => vi.unstubAllEnvs())
 
@@ -98,7 +100,8 @@ describe.each(routing.locales)("botón (%s)", (locale) => {
     const html = entidades(await boton(locale, "portada"))
     expect(html).toContain(`>${m.abrir_portada}</button>`)
     expect(html).toContain(`aria-label="${m.abrir_portada_aria}"`)
-    expect(m.abrir_portada_aria.toLowerCase()).toContain(m.abrir_portada.replace(/[?¿]/g, "").toLowerCase().split(" ")[0])
+    // WCAG 2.5.3 (etiqueta en el nombre): el nombre accesible contiene el texto visible entero.
+    expect(m.abrir_portada_aria.toLowerCase()).toContain(m.abrir_portada.toLowerCase())
     expect(html).not.toContain(`>${m.abrir}</button>`)
   })
   it("propietarios (por defecto): el texto de siempre, sin aria-label", async () => {
@@ -112,11 +115,12 @@ describe.each(routing.locales)("botón (%s)", (locale) => {
 })
 
 describe("lo que necesita el asistente en cualquier página", () => {
-  it("BotID protege las dos rutas del asistente y el componente lo inicia (no depende de la página)", async () => {
+  it("BotID protege las dos rutas del asistente y se inicia con ellas (no depende de la página)", () => {
     expect(RUTAS_BOTID.map((r) => r.path)).toEqual(["/api/asistente", "/api/asistente/solicitud"])
-    const { readFileSync } = await import("node:fs")
-    const src = readFileSync("components/asistente/asistente-propietarios.tsx", "utf8")
-    expect(src).toContain("initBotId({ protect: RUTAS_BOTID })")
+    reiniciarBotIdParaTests()
+    initBotIdMock.mockClear()
+    iniciarBotIdUnaVez()
+    expect(initBotIdMock).toHaveBeenCalledWith({ protect: RUTAS_BOTID })
   })
   it("la privacidad nombra la portada y founding-owners en los cuatro idiomas", () => {
     const FRASE = {
@@ -129,5 +133,35 @@ describe("lo que necesita el asistente en cualquier página", () => {
       const s = PRIVACIDAD.traducciones[l].secciones.find((x) => x.id === "asistente")
       expect(JSON.stringify(s), l).toMatch(FRASE[l])
     }
+  })
+})
+
+describe("BotID solo cuando alguien va a usar el chat", () => {
+  it("renderizar el botón (montarlo) no inicia BotID, en ninguna variante", async () => {
+    reiniciarBotIdParaTests()
+    initBotIdMock.mockClear()
+    for (const v of ["portada", "propietarios"] as const) await boton("es", v)
+    expect(initBotIdMock).not.toHaveBeenCalled()
+  })
+
+  it("iniciarBotIdUnaVez: una sola vez por carga, por mucho que se llame", () => {
+    reiniciarBotIdParaTests()
+    initBotIdMock.mockClear()
+    for (let i = 0; i < 5; i++) iniciarBotIdUnaVez()
+    expect(initBotIdMock).toHaveBeenCalledTimes(1)
+  })
+
+  // Sin DOM en este entorno (no hay jsdom ni react-test-renderer): los manejadores se comprueban en el código del
+  // componente, y el comportamiento real (hover, foco, clic) con Playwright, descrito en el PR.
+  it("el componente lo llama en onPointerEnter, onFocus y onClick, y no en un efecto de montaje", async () => {
+    const { readFileSync } = await import("node:fs")
+    const src = readFileSync("components/asistente/asistente-propietarios.tsx", "utf8")
+    for (const ev of ["onPointerEnter", "onFocus", "onClick"]) {
+      const trozo = src.slice(src.indexOf(`${ev}={`), src.indexOf(`${ev}={`) + 160)
+      expect(trozo, ev).toContain("iniciarBotIdUnaVez()")
+    }
+    expect(src).not.toMatch(/useEffect\(\(\) => \{[^}]*iniciarBotIdUnaVez/)
+    expect(src).not.toContain("initBotId(")
+    expect(src.match(/iniciarBotIdUnaVez\(\)/g)).toHaveLength(3)
   })
 })

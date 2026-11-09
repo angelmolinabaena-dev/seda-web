@@ -4,8 +4,7 @@ import { useEffect, useRef, useState } from "react"
 import dynamic from "next/dynamic"
 import { MessageCircle } from "lucide-react"
 import { useTranslations } from "next-intl"
-import { initBotId } from "botid/client/core"
-import { RUTAS_BOTID } from "@/lib/asistente/config"
+import { iniciarBotIdUnaVez } from "@/lib/asistente/botid-cliente"
 import { capturarCarta, tomarCartaAsistente } from "@/lib/carta-qr"
 
 /*
@@ -24,12 +23,11 @@ import { capturarCarta, tomarCartaAsistente } from "@/lib/carta-qr"
 
   Vercel BotID (lib/asistente/bots.ts): se inicia aquí, y no en
   instrumentation-client.ts, para que solo lo carguen las páginas que tienen el
-  asistente y solo con el interruptor encendido. Firma las peticiones a
-  /api/asistente y /api/asistente/solicitud; en desarrollo no hace nada.
+  asistente y solo con el interruptor encendido; y no al montar el botón sino la primera vez
+  que la persona lo apunta, le da el foco o lo pulsa (lib/asistente/botid-cliente.ts): quien no
+  toca el botón no carga nada de BotID. Firma las peticiones a /api/asistente y
+  /api/asistente/solicitud; en desarrollo no hace nada.
 */
-
-/* BotID: `botIdIniciado` es del módulo, así que se inicia una sola vez por carga aunque cambie de página. */
-let botIdIniciado = false
 
 const AsistentePanel = dynamic(() => import("./asistente-panel"), { ssr: false })
 
@@ -51,13 +49,6 @@ export function AsistentePropietarios({ variante = "propietarios" }: { variante?
   // (ocupan todo el ancho abajo) y, en cualquier ancho, el titular cuando el aviso de cookies empuja el botón hacia arriba.
   // Arranca oculto (también en el HTML del servidor) para no parpadear sobre los CTA antes de hidratar.
   const [apartado, setApartado] = useState(portada)
-
-  useEffect(() => {
-    if (!botIdIniciado) {
-      botIdIniciado = true
-      initBotId({ protect: RUTAS_BOTID })
-    }
-  }, [])
 
   useEffect(() => {
     if (!portada) return
@@ -107,12 +98,19 @@ export function AsistentePropietarios({ variante = "propietarios" }: { variante?
           ref={boton}
           type="button"
           onClick={() => {
+            iniciarBotIdUnaVez()
             setCargado(true)
             setAbierto(true)
           }}
           // Precarga del panel al acercarse al botón: abre sin espera.
-          onPointerEnter={() => void import("./asistente-panel")}
-          onFocus={() => void import("./asistente-panel")}
+          onPointerEnter={() => {
+            iniciarBotIdUnaVez()
+            void import("./asistente-panel")
+          }}
+          onFocus={() => {
+            iniciarBotIdUnaVez()
+            void import("./asistente-panel")
+          }}
           aria-expanded={false}
           aria-controls="asistente-propietarios"
           aria-label={portada ? t("abrir_portada_aria") : undefined}

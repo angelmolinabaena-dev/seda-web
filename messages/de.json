@@ -1660,8 +1660,8 @@
   },
   "asistente": {
     "abrir": "Den Assistenten fragen",
-    "abrir_portada": "Eigentümer? Fragen Sie",
-    "abrir_portada_aria": "Sind Sie Eigentümer? Fragen Sie den Assistenten",
+    "abrir_portada": "Eigentümer? Fragen Sie uns",
+    "abrir_portada_aria": "Eigentümer? Fragen Sie uns: öffnet den Assistenten von SEDA",
     "titulo": "SEDA-Assistent",
     "subtitulo": "Künstliche Intelligenz · wir speichern das Gespräch nicht",
     "cerrar": "Assistenten schließen",

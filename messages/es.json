@@ -1660,8 +1660,8 @@
   },
   "asistente": {
     "abrir": "Preguntar al asistente",
-    "abrir_portada": "¿Es propietario? Pregunte",
-    "abrir_portada_aria": "¿Es propietario? Pregunte al asistente",
+    "abrir_portada": "¿Es propietario? Pregúntenos",
+    "abrir_portada_aria": "¿Es propietario? Pregúntenos: abre el asistente de SEDA",
     "titulo": "Asistente de SEDA",
     "subtitulo": "Inteligencia artificial · no guardamos la conversación",
     "cerrar": "Cerrar el asistente",
