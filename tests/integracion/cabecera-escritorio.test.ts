@@ -357,4 +357,51 @@ describe("la franja fina: sin solapes, una línea, y se recoge al bajar", () => 
       await p.close()
     }
   })
+
+  // La barra sobre la foto (portada, arriba): su velo y TODOS sus textos, medidos en el navegador sobre la foto más clara.
+  for (const [idioma, ruta] of Object.entries(IDIOMAS)) {
+    for (const ancho of [1280, 1440]) {
+      it(`${idioma} ${ancho}px: la barra transparente de la portada, todo su texto ≥ 4,5:1 sobre foto blanca`, async (ctx) => {
+        if (!navegador) return ctx.skip()
+        const p = await navegador.newPage({ viewport: { width: ancho, height: 900 } })
+        try {
+          await p.goto(servidor.base + ruta, { waitUntil: "networkidle" })
+          const r = await p.evaluate(() => {
+            const nav = document.querySelector("header nav")!
+            const num = (c: string) => (c.match(/-?\d*\.?\d+/g) || []).map(Number)
+            const rgba = (c: string): [number, number, number, number] => {
+              const n = num(c)
+              const f = c.startsWith("color(") ? 255 : 1
+              return [n[0] * f, n[1] * f, n[2] * f, n.length > 3 ? n[3] : 1]
+            }
+            const lin = (v: number) => ((v /= 255) <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4)
+            const lum = (c: number[]) => 0.2126 * lin(c[0]) + 0.7152 * lin(c[1]) + 0.0722 * lin(c[2])
+            const veloC = rgba(getComputedStyle(nav.parentElement!).backgroundColor)
+            const fondo = [0, 1, 2].map((i) => veloC[i] * veloC[3] + 255 * (1 - veloC[3]))
+            const textos = [...nav.querySelectorAll<HTMLElement>("a, button")].filter(
+              (e) => !e.closest("[role=menu]") && !e.closest("[inert]") && e.offsetParent !== null && e.getBoundingClientRect().width > 0 && (e.textContent || "").trim().length > 1,
+            )
+            let peor = Infinity
+            let cual = ""
+            for (const e of textos) {
+              const c = rgba(getComputedStyle(e).color)
+              const t = [0, 1, 2].map((i) => c[i] * c[3] + fondo[i] * (1 - c[3]))
+              const [hi, lo] = [lum(t), lum(fondo)].sort((a, b) => b - a)
+              const k = (hi + 0.05) / (lo + 0.05)
+              if (k < peor) {
+                peor = k
+                cual = (e.textContent || "").trim().slice(0, 18)
+              }
+            }
+            return { velo: veloC[3], n: textos.length, peor, cual }
+          })
+          expect(r.velo, "velo de la barra sobre la foto").toBeCloseTo(0.68, 2)
+          expect(r.n).toBeGreaterThan(8)
+          expect(r.peor, `peor texto de la barra: «${r.cual}»`).toBeGreaterThanOrEqual(4.5)
+        } finally {
+          await p.close()
+        }
+      })
+    }
+  }
 })

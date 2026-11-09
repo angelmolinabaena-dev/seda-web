@@ -65,7 +65,7 @@ export function LanguageSwitcher({
                     : "text-background font-semibold"
                   : darkOnLight
                   ? "text-muted-foreground hover:text-foreground"
-                  : "text-background/55 hover:text-background"
+                  : "text-background/85 hover:text-background"
               }`}
             >
               {l.label}
