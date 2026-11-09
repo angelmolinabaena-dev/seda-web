@@ -496,11 +496,11 @@ export function Navigation() {
               </button>
               <div
                 role="menu"
-                className={`absolute right-0 top-full pt-2 transition-all duration-200 w-[300px] z-10 ${
+                className={`absolute right-0 top-full pt-2 transition-all duration-200 w-[22rem] max-w-[calc(100vw-2rem)] whitespace-normal z-10 ${
                   isAccessOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"
                 }`}
               >
-                <div className="bg-background border border-border shadow-xl">
+                <div data-portal-panel className="box-border w-full bg-background border border-border shadow-xl">
                   <TarjetasPortal />
                 </div>
               </div>
