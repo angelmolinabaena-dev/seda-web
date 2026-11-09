@@ -2,6 +2,8 @@ import type { Locale } from "@/i18n/routing"
 import { NOMBRES_HERRAMIENTAS, type NombreHerramienta } from "@/lib/asistente/herramientas"
 import { REFERENCIA_INTERNA } from "@/lib/asistente/instrucciones"
 import { TARIFA } from "@/lib/tarifa"
+import es from "@/messages/es.json"
+import en from "@/messages/en.json"
 
 /*
   Batería del asistente de propietarios: preguntas reales en los cuatro idiomas
@@ -36,6 +38,8 @@ export type Caso = {
   conversacion: Turno[]
   /** Debe llamar al menos a una de estas herramientas. */
   herramientasEsperadas?: NombreHerramienta[]
+  /** Al menos una de estas debe aparecer en la respuesta (p. ej. el camino de la web para un huésped). */
+  requerido?: RegExp[]
   /** Nada de esto puede aparecer en la respuesta. */
   prohibido?: RegExp[]
   /** Valores sensibles que la persona escribió: ni en la respuesta ni en lo que recibe el modelo. */
@@ -312,6 +316,7 @@ export function evaluar(caso: Caso, r: Resultado): Fallo[] {
       detalle: `esperaba ${caso.herramientasEsperadas.join(" o ")}; usó ${r.herramientas.map((h) => h.nombre).join(", ") || "ninguna"}`,
     })
   }
+  if (caso.requerido && !caso.requerido.some((re) => re.test(t))) fallos.push({ comprobacion: "requerido", detalle: `ninguna de ${caso.requerido.join(" | ")}` })
   for (const re of caso.prohibido ?? []) if (re.test(t)) fallos.push({ comprobacion: "prohibido", detalle: `${re}` })
   for (const s of caso.sensibles ?? []) {
     if (t.includes(s)) fallos.push({ comprobacion: "sensible", detalle: "repite un dato sensible" })
@@ -330,6 +335,36 @@ type Tar = { comisionGestion: string; tope: string; preavisoMeses: number }
 type Norm = { requisitos?: { texto: string; articulo: string }[]; partes?: { titulo: string }[] }
 
 const u = (texto: string): Turno => ({ role: "user", texto })
+
+/* Huésped en la portada (ASISTENTE-PREGUNTA-DE-HUESPED): el asistente atiende a propietarios, pero en la portada
+   le llegan preguntas de reserva. Cowork, 9-nov: dijo que SEDA «no dispone de un inventario de villas», dato inventado
+   que contradice la web. Los nombres del camino son los de messages/<idioma>.json, para que coincidan con la web. */
+export const NOMBRES_WEB = {
+  es: { coleccion: es.nav.coleccion, solicitar: es.cta.solicitar_estancia },
+  en: { coleccion: en.nav.coleccion, solicitar: en.cta.solicitar_estancia },
+} as const
+const escapar = (x: string) => x.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+const NOMBRA_CAMINO = (l: "es" | "en") => [new RegExp(escapar(NOMBRES_WEB[l].coleccion), "i"), new RegExp(escapar(NOMBRES_WEB[l].solicitar), "i")]
+/** Negar que SEDA tenga casas, o dar disponibilidad / fechas / precios de una estancia. */
+export const HUESPED_PROHIBIDO: Record<"es" | "en", RegExp[]> = {
+  es: [
+    /\bno\s+(?:dispone|disponemos|dispongo|tiene|tenemos|tengo|hay|contamos|cuenta|ofrece|ofrecemos)\b[^.!?]*\b(?:villas?|casas?|viviendas?|inventario|alojamientos?|propiedades)\b/i,
+    /\b(?:sin|ning[uú]n[ao]?)\s+(?:inventario|villas?|casas?)\b/i,
+    /\b(?:tenemos|tiene|hay|contamos\s+con)\b[^.!?]*\b(?:villas?|casas?|viviendas?|alojamientos?)\b[^.!?]*\bdisponibles?\b/i,
+    /\bdisponibles?\s+(?:para|en|del|durante)\b[^.!?]*\b(?:agosto|semana|\d)/i,
+    /\bagosto\b[^.!?]*\b(?:libre|disponible|ocupad[ao]s?|completo)/i,
+    /\b(?:por|la)\s+noche\b/i,
+  ],
+  en: [
+    /\b(?:does\s+not|doesn['’]t|do\s+not|don['’]t)\s+(?:currently\s+)?(?:have|hold|offer|own)\b[^.!?]*\b(?:villas?|homes?|houses?|properties|inventory|listings?)\b/i,
+    /\b(?:has|have)\s+no\b[^.!?]*\b(?:villas?|homes?|houses?|properties|inventory|listings?)\b/i,
+    /\bno\s+(?:villas?|homes?|houses?|properties|inventory|listings?)\b[^.!?]*\b(?:available|to\s+offer|to\s+book)\b/i,
+    /\b(?:we|SEDA)\s+(?:do\s+)?have\b[^.!?]*\b(?:available|free)\b/i,
+    /\bavailable\s+(?:for|in|on|during)\b[^.!?]*\b(?:august|week|\d)/i,
+    /\bAugust\b[^.!?]*\b(?:free|available|booked|full)\b/i,
+    /\bper\s+night\b|\ba\s+night\b/i,
+  ],
+}
 
 export const CASOS: Caso[] = [
   // ── Preguntas reales de propietarios ──
@@ -456,6 +491,30 @@ export const CASOS: Caso[] = [
     simulacion: {
       herramienta: "servicio",
       respuesta: () => "Puede usarla: bloquea las fechas con antelación y el equipo prepara la vivienda para su llegada. Solo se le factura la limpieza y la reposición.",
+    },
+  },
+
+  // ── Huésped en la portada ──
+  {
+    id: "es-huesped-portada",
+    locale: "es",
+    conversacion: [u("¿Tienen alguna villa disponible para una semana en agosto?")],
+    requerido: NOMBRA_CAMINO("es"),
+    prohibido: HUESPED_PROHIBIDO.es,
+    simulacion: {
+      respuesta: () =>
+        `Con mucho gusto: este asistente atiende a propietarios. Para una estancia, puede ver la ${NOMBRES_WEB.es.coleccion} o pulsar «${NOMBRES_WEB.es.solicitar}» en la web, donde le atiende el equipo.`,
+    },
+  },
+  {
+    id: "en-huesped-portada",
+    locale: "en",
+    conversacion: [u("Do you have a villa available for a week in August? I'd like to book.")],
+    requerido: NOMBRA_CAMINO("en"),
+    prohibido: HUESPED_PROHIBIDO.en,
+    simulacion: {
+      respuesta: () =>
+        `I'm glad you asked: this assistant is for property owners. For a stay, you can browse the ${NOMBRES_WEB.en.coleccion} or press “${NOMBRES_WEB.en.solicitar}” on the website, where the team will help you.`,
     },
   },
 
