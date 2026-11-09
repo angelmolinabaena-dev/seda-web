@@ -108,10 +108,34 @@ export function ConsentimientoCookies({ pixelId, textos }: { pixelId: string; te
   return null
 }
 
+/**
+ * Publica la altura del aviso (o del panel) como `--banner-cookies-h` en <html> mientras está en pantalla,
+ * y la quita al desmontarse: el botón del asistente se sube sobre él en vez de quedar tapado (z-40 < z-50).
+ */
+function useAlturaBanner() {
+  const ref = useRef<HTMLElement>(null)
+  useEffect(() => {
+    const el = ref.current
+    if (!el || typeof ResizeObserver === "undefined") return
+    const raiz = document.documentElement
+    const poner = () => raiz.style.setProperty("--banner-cookies-h", `${Math.ceil(el.getBoundingClientRect().height)}px`)
+    poner()
+    const obs = new ResizeObserver(poner)
+    obs.observe(el)
+    return () => {
+      obs.disconnect()
+      raiz.style.removeProperty("--banner-cookies-h")
+    }
+  }, [])
+  return ref
+}
+
 export function Aviso({ textos, controlador }: { textos: TextosConsentimiento; controlador: ControladorConsentimiento }) {
   const titulo = useId()
+  const ref = useAlturaBanner()
   return (
     <section
+      ref={ref}
       role="region"
       aria-label={textos.region}
       className="fixed inset-x-0 bottom-0 z-50 border-t border-border bg-background px-6 py-5 shadow-[0_-8px_30px_rgba(0,0,0,0.08)] md:px-12 lg:px-20"
@@ -153,6 +177,7 @@ export function Panel({
   marketingInicial: boolean
   controlador: ControladorConsentimiento
 }) {
+  const alturaRef = useAlturaBanner()
   const titulo = useId()
   const casilla = useId()
   const cabecera = useRef<HTMLHeadingElement>(null)
@@ -170,6 +195,7 @@ export function Panel({
 
   return (
     <section
+      ref={alturaRef}
       role="dialog"
       aria-modal="false"
       aria-labelledby={titulo}

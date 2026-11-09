@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import { getTranslations, setRequestLocale } from "next-intl/server"
 import type { LocaleParams } from "@/i18n/routing"
 import { localizedMetadata } from "@/lib/site-pages"
+import { montarAsistente } from "@/components/asistente/montar-asistente"
 
 // Title and description in the URL's language (messages/<locale>.json,
 // `founding.meta`). The root layout appends « · SEDA Private Homes».
@@ -49,7 +50,11 @@ export default async function FoundingOwnersPage({
     ctaBtn: t("ctaBtn"),
   }
 
+  // Asistente de propietarios (SEDA_FLAG_ASISTENTE_PROPIETARIOS=1): apagado, null y la página no cambia.
+  const asistente = await montarAsistente("propietarios")
+
   return (
+    <>
     <main id="main-content">
       {/* HERO — dark */}
       <section className="relative bg-foreground text-background overflow-hidden pt-40 pb-28 md:pt-48 md:pb-36">
@@ -211,5 +216,7 @@ export default async function FoundingOwnersPage({
         </div>
       </section>
     </main>
+    {asistente}
+    </>
   )
 }

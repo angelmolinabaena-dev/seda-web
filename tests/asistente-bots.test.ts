@@ -104,7 +104,9 @@ describe("BotID en el navegador y en el enrutado", () => {
   })
 
   it("se inicia en el componente del asistente (solo con el interruptor), no en todas las páginas", () => {
-    expect(readFileSync("components/asistente/asistente-propietarios.tsx", "utf8")).toMatch(/initBotId\(\{ protect: RUTAS_BOTID \}\)/)
+    // Desde ASISTENTE-EN-PORTADA la llamada vive en lib/asistente/botid-cliente.ts y el componente la dispara al primer hover/foco/clic.
+    expect(readFileSync("lib/asistente/botid-cliente.ts", "utf8")).toMatch(/initBotId\(\{ protect: RUTAS_BOTID \}\)/)
+    expect(readFileSync("components/asistente/asistente-propietarios.tsx", "utf8")).toMatch(/iniciarBotIdUnaVez\(\)/)
     expect(() => readFileSync("instrumentation-client.ts", "utf8")).toThrow()
     expect(readFileSync("next.config.mjs", "utf8")).toMatch(/withBotId\(withNextIntl\(nextConfig\)\)/)
   })
